@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Транскриптор</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style></style>
+    </head>
+    <body>
+        <h1>Транскриптор</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- Page main body -->
+
+        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
+            <label for='text' style='margin-right: 4px;'>Введите текст:</label>
+            <input type='text' id='text' style='flex-grow: 1;'>
+        </div>
+
+        <ul id='transcription'></ul>
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов.
+        </div>
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** * @type {HTMLInputElement} */
+            let text = document.getElementById('text');
+            /** * @type {HTMLUListElement} */
+            let transcription = document.getElementById('transcription');
+            /**
+             * @typedef {Object} RuleSet
+             * @property {string} name
+             * @property {string[][]} map
+             * @property {string[][]} exceptions
+            */
+            /** * @type {RuleSet[]} */
+            let ruleSets = [
+                {
+                    name: 'ГОСТ 7.79-2000',
+                    map: [
+                        ['А', 'A'],
+                        ['Б', 'B'],
+                        ['В', 'V'],
+                        ['Г', 'G'],
+                        ['Д', 'D'],
+                        ['Е', 'E'],
+                        ['Ё', 'Yo'],
+                        ['Ж', 'Zh'],
+                        ['З', 'Z'],
+                        ['И', 'I'],
+                        ['Й', 'J'],
+                        ['К', 'K'],
+                        ['Л', 'L'],
+                        ['М', 'M'],
+                        ['Н', 'N'],
+                        ['О', 'O'],
+                        ['П', 'P'],
+                        ['Р', 'R'],
+                        ['С', 'S'],
+                        ['Т', 'T'],
+                        ['У', 'U'],
+                        ['Ф', 'F'],
+                        ['Х', 'X'],
+                        ['Ц', 'C'],
+                        ['Ч', 'Ch'],
+                        ['Ш', 'Sh'],
+                        ['Щ', 'Shh'],
+                        ['Ъ', '``'],
+                        ['Ы', 'Y`'],
+                        ['Ь', '`'],
+                        ['Э', 'E`'],
+                        ['Ю', 'Yu'],
+                        ['Я', 'Ya'],
+                    ]
+                }
+            ];
+
+            text.addEventListener('mouseenter', function () { this.select(); });
+            text.addEventListener('input', function () {
+                while (transcription.hasChildNodes()) transcription.lastChild.remove();
+
+                ruleSets.forEach(s => {
+                    let copy = text.value;
+                    s.map.forEach(c => {
+                        if (c.length === 2) {
+                            copy = copy
+                                .replace(new RegExp(c[0], 'g'), c[1])
+                                .replace(new RegExp(c[0].toLowerCase(), 'g'), c[1].toLowerCase());
+                        }
+                    });
+
+                    transcription.appendChild(
+                        document.createElement('li')
+                    ).appendChild(
+                        document.createElement('b')
+                    ).innerText = s.name;
+
+                    transcription.appendChild(
+                        document.createElement('p')
+                    ).innerText = copy;
+                });
+            });
+        </script>
+    </body>
+</html>

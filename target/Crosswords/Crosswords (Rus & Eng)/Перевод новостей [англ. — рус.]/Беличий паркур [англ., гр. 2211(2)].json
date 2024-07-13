@@ -1,0 +1,154 @@
+[
+  {
+    "word": "adjacent",
+    "description": "Смежный, прилегающий",
+    "column": 12,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "paw",
+    "description": "Лапка",
+    "column": 10,
+    "row": 4,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "midair",
+    "description": "В воздухе",
+    "column": 10,
+    "row": 6,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "holistic",
+    "description": "Целостный",
+    "column": 6,
+    "row": 8,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "rotate",
+    "description": "Вращаться",
+    "column": 8,
+    "row": 9,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "obstacle",
+    "description": "Препятствие",
+    "column": 13,
+    "row": 9,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "bendiness",
+    "description": "Гибкость",
+    "column": 5,
+    "row": 10,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "arboreal",
+    "description": "Древесный",
+    "column": 9,
+    "row": 10,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "presumably",
+    "description": "Предположительно",
+    "column": 1,
+    "row": 11,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "overstory",
+    "description": "Крона дерева",
+    "column": 2,
+    "row": 12,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "rodent",
+    "description": "Грызун",
+    "column": 2,
+    "row": 14,
+    "isVertical": false,
+    "number": 5
+  },
+  {
+    "word": "assess",
+    "description": "Оценивать",
+    "column": 12,
+    "row": 14,
+    "isVertical": false,
+    "number": 6
+  },
+  {
+    "word": "clunkily",
+    "description": "Неуклюже",
+    "column": 15,
+    "row": 15,
+    "isVertical": true,
+    "number": 7
+  },
+  {
+    "word": "velocity",
+    "description": "Скорость",
+    "column": 10,
+    "row": 16,
+    "isVertical": false,
+    "number": 7
+  },
+  {
+    "word": "mesmerize",
+    "description": "Завораживать",
+    "column": 0,
+    "row": 17,
+    "isVertical": false,
+    "number": 8
+  },
+  {
+    "word": "zip",
+    "description": "Проноситься",
+    "column": 3,
+    "row": 21,
+    "isVertical": true,
+    "number": 8
+  },
+  {
+    "word": "flimsy",
+    "description": "Хлипкий",
+    "column": 6,
+    "row": 21,
+    "isVertical": true,
+    "number": 9
+  },
+  {
+    "word": "unwitting",
+    "description": "Невольный",
+    "column": 8,
+    "row": 21,
+    "isVertical": false,
+    "number": 9
+  },
+  {
+    "word": "simultaneously",
+    "description": "Одновременно",
+    "column": 1,
+    "row": 23,
+    "isVertical": false,
+    "number": 10
+  }
+]

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Баллда</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            .listItemLabel {
+                margin-left: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 title='Подсчёт баллов за письменный перевод'>Баллда</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <label>Виды ошибок:</label>
+
+        <!-- #region Mistakes -->
+        <div>
+            <div class='box'>
+                <input
+                    id='meaning'
+                    type='number'
+                    min='0'
+                    max='100'
+                    onmouseenter='focus()'
+                    onmouseleave='blur()'
+                    onchange='valueChange()'
+                    value='0'
+                />
+                <label for='meaning' class='listItemLabel'>Смысловая</label>
+            </div>
+
+            <div class='box'>
+                <input
+                    id='inaccuracy'
+                    type='number'
+                    min='0'
+                    max='100'
+                    onmouseenter='focus()'
+                    onmouseleave='blur()'
+                    onchange='valueChange()'
+                    value='0'
+                />
+                <label for='inaccuracy' class='listItemLabel'>Неточность</label>
+            </div>
+
+            <div class='box'>
+                <input
+                    id='grammar'
+                    type='number'
+                    min='0'
+                    max='100'
+                    onmouseenter='focus()'
+                    onmouseleave='blur()'
+                    onchange='valueChange()'
+                    value='0'
+                />
+                <label for='grammar' class='listItemLabel'>Грамматика</label>
+            </div>
+
+            <div class='box'>
+                <input
+                    id='vocabulary'
+                    type='number'
+                    min='0'
+                    max='100'
+                    onmouseenter='focus()'
+                    onmouseleave='blur()'
+                    onchange='valueChange()'
+                    value='0'
+                />
+                <label for='vocabulary' class='listItemLabel'>Лексика</label>
+            </div>
+
+            <div class='box'>
+                <input
+                    id='style'
+                    type='number'
+                    min='0'
+                    max='100'
+                    onmouseenter='focus()'
+                    onmouseleave='blur()'
+                    onchange='valueChange()'
+                    value='0'
+                />
+                <label for='style' class='listItemLabel'>Стиль</label>
+            </div>
+
+            <div class='box'>
+                <input
+                    id='orthpunc'
+                    type='number'
+                    min='0'
+                    max='100'
+                    onmouseenter='focus()'
+                    onmouseleave='blur()'
+                    onchange='valueChange()'
+                    value='0'
+                />
+                <label for='orthpunc' class='listItemLabel'
+                    >Орфография и пунктуация</label
+                >
+            </div>
+        </div>
+        <!-- #endregion -->
+
+        <hr />
+
+        <!-- #region Clear button -->
+        <button id='reset' onclick='resetValues()'><b>Сброс</b></button>
+        <!-- #endregion -->
+
+        <hr />
+
+        <!-- #region Results -->
+        <div>
+            <table style='width: 100%'>
+                <tr>
+                    <th>Число ошибок</th>
+                    <th>Вес ошибок</th>
+                    <th>Итоговый балл</th>
+                </tr>
+
+                <tr>
+                    <td id='mistakesCount'>…</td>
+                    <td id='mistakesWeight'>…</td>
+                    <td id='resultingMark'>…</td>
+                </tr>
+            </table>
+        </div>
+        <!-- #endregion -->
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов. За помощь спасибо Максиму Чинкину
+            и wmysterio!
+        </div>
+
+        <!-- #region Help -->
+        <details>
+            <summary>Справка по видам ошибок</summary>
+            <ul>
+                <li>
+                    <b>Смысловая ошибка</b> — полное искажение смысла, опущение
+                    существенной информации, привнесение неверной информации.
+                </li>
+                <li>
+                    <b>Неточность</b> — опущение несущественной информации,
+                    привнесение лишней информации, не приводящее к существенному
+                    изменению смысла (не совсем точное толкование текста, не
+                    ведущее к его искажению).
+                </li>
+                <li>
+                    <b>Грамматическая ошибка</b> — ошибка в передаче значения
+                    грамматической формы (несогласование членов предложения,
+                    неправильное употребление артикля, неправильное оформление
+                    временных форм глагола, не приводящее к существенному
+                    изменению смысла, и т.п.).
+                </li>
+                <li>
+                    <b>Лексическая ошибка</b> — ошибка в передаче
+                    контекстуального значения слова, не носящего стилистического
+                    характера (использование слова в его наиболее
+                    распространённом словарном значении, отсутствие необходимой
+                    адекватности замены, обусловленной контекстом и нормами
+                    данного языка).
+                </li>
+                <li>
+                    <b>Стилистическая ошибка</b> — отступление от стилистических
+                    норм языка для данного стиля речи (ошибочное употребление
+                    синонимов, нарушение правил сочетаемости и т.п.).
+                </li>
+                <li>
+                    <b>Орфографическая/пунктуационная ошибка</b> — нарушение
+                    норм орфографии или пунктуации.
+                </li>
+                <li><b>Повторяющаяся ошибка</b> считается за одну ошибку.</li>
+            </ul>
+        </details>
+        <!-- #endregion -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            let meaning = document.getElementById('meaning'),
+                inaccuracy = document.getElementById('inaccuracy'),
+                grammar = document.getElementById('grammar'),
+                vocabulary = document.getElementById('vocabulary'),
+                style = document.getElementById('style'),
+                orthpunc = document.getElementById('orthpunc'),
+                mistakesCount = document.getElementById('mistakesCount'),
+                mistakesWeight = document.getElementById('mistakesWeight'),
+                resultingMark = document.getElementById('resultingMark');
+
+            // Script variables
+            let inputFields = [
+                meaning,
+                inaccuracy,
+                grammar,
+                vocabulary,
+                style,
+                orthpunc,
+            ];
+            valueChange();
+
+            function valueChange() {
+                inputFields.forEach((field) => {
+                    field.value =
+                        field.value > 0
+                            ? field.value < 101
+                                ? field.value
+                                : 100
+                            : 0;
+                    field.innerHTML = field.value;
+                });
+
+                let totalMistakesNumber, totalMistakesWeight;
+
+                totalMistakesNumber =
+                    parseInt(meaning.value) +
+                    parseInt(inaccuracy.value) +
+                    parseInt(grammar.value) +
+                    parseInt(vocabulary.value) +
+                    parseInt(style.value) +
+                    parseInt(orthpunc.value);
+
+                totalMistakesWeight =
+                    parseInt(meaning.value) * 14 +
+                    parseInt(inaccuracy.value) * 5 +
+                    parseInt(grammar.value) * 4 +
+                    parseInt(vocabulary.value) * 3.66 +
+                    parseInt(style.value) * 3.33 +
+                    parseInt(orthpunc.value) * 2.5;
+
+                mistakesCount.innerHTML = totalMistakesNumber;
+                mistakesWeight.innerHTML = totalMistakesWeight
+                    .toFixed(1)
+                    .replace('.', ',');
+
+                let mark = Math.round(100 - totalMistakesWeight),
+                    letter = '';
+
+                if (mark > 94) letter = 'A';
+                else if (mark > 82) letter = 'B';
+                else if (mark > 67) letter = 'C';
+                else if (mark > 55) letter = 'D';
+                else if (mark > 49) letter = 'E';
+                else if (mark > 19) letter = 'FX';
+                else letter = 'F';
+
+                resultingMark.innerHTML = `${mark > 0 ? mark : 0} (${letter})`;
+            }
+
+            function resetValues() {
+                inputFields.forEach((field) => {
+                    field.value = '0';
+                });
+                valueChange();
+            }
+        </script>
+    </body>
+</html>

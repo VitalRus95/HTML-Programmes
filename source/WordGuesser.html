@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Word Guesser</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --cell-min-height: calc(36px + 1.5vmax);
+            }
+
+            .cell {
+                display: flex;
+                aspect-ratio: 1/1;
+                min-height: var(--cell-min-height);
+                border-color: var(--secondary-colour);
+                background-color: var(--primary-colour);
+                color: var(--primary-colour);
+                border-radius: 20%;
+                border-style: inset;
+                border-width: calc(2px + 0.1vmax);
+                font-size: calc(12px + 1.3vmax);
+                font-weight: bold;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                margin: 1.2px;
+            }
+
+            .cell:hover,
+            .cell:focus {
+                background-color: var(--accent2);
+                color: var(--accent2);
+                cursor: grab;
+            }
+
+            @keyframes letterOpen {
+                0% {
+                    transform: scaleX(1);
+                }
+                50% {
+                    transform: scaleX(0);
+                }
+                100% {
+                    transform: scaleX(1);
+                }
+            }
+
+            .correct {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                transition: background-color 1.7s ease-in;
+                animation: letterOpen 1.25s ease-out;
+            }
+
+            .correct:hover,
+            .correct:focus {
+                background-color: var(--accent2);
+                color: var(--accent1);
+                transition: color 1s ease-in;
+                cursor: cell;
+            }
+
+            @keyframes rotation {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .letterInput {
+                aspect-ratio: 1/1;
+                background-color: var(--accent2);
+                border-radius: 50%;
+                border-width: 2px;
+                outline-color: var(--secondary-colour);
+                outline-style: dashed;
+                height: 1.9em;
+                font-size: 1.4em;
+                font-weight: 600;
+                text-align: center;
+            }
+
+            .letterInput::selection {
+                background-color: var(--accent2);
+                text-shadow: 1px 1px 2px var(--primary-colour);
+            }
+
+            .letterInput:disabled {
+                outline-width: calc(2px + 0.2vmax);
+                transition: outline-width 0.3s ease-in;
+                animation: rotation 1.5s ease-out;
+            }
+
+            .letterInput:not(:disabled) {
+                outline-width: calc(1px + 0.05vmax);
+                transition: outline-width 0.5s ease-out;
+            }
+
+            #wordCells {
+                display: flex;
+                flex-wrap: wrap;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Буквогад</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- Page main body -->
+        <div>
+            <label for='wordInput'>Загадайте слово:</label>
+            <input id='wordInput' type='password' oninput='fillWord()' />
+        </div>
+
+        <hr />
+
+        <div id='wordCells'></div>
+
+        <hr />
+
+        <div style='display: flex; flex-wrap: wrap; justify-content: space-evenly'>
+            <div style='display: flex; align-items: center;'>
+                <label for='letterInput'>Назовите букву:</label>
+                <input
+                    id='letterInput'
+                    type='text'
+                    maxlength='1'
+                    class='letterInput'
+                    style='margin-left: 8px;'
+                    disabled
+                />
+            </div>
+
+            <div style='display: flex; align-items: center;'>
+                <label for='lettersCount'>Всего букв:</label>
+                <input
+                    id='lettersCount'
+                    type='text'
+                    class='letterInput'
+                    style='margin-left: 8px;'
+                    placeholder='0'
+                    disabled
+                />
+            </div>
+        </div>
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов.
+        </div>
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** * @type {HTMLInputElement} */
+            let wordInput = document.getElementById('wordInput');
+            /** * @type {HTMLDivElement} */
+            let wordCells = document.getElementById('wordCells');
+            /** * @type {HTMLInputElement} */
+            let letterInput = document.getElementById('letterInput');
+            /** * @type {HTMLInputElement} */
+            let lettersCount = document.getElementById('lettersCount');
+
+            letterInput.addEventListener('mouseenter', function () { this.select(); });
+            letterInput.addEventListener('click', function () { this.select(); });
+            letterInput.addEventListener('input', function () {
+                this.disabled = true;
+                this.value = this.value.toUpperCase();
+            });
+            letterInput.addEventListener('animationend', function () {
+                this.disabled = false;
+                guessLetter(this.value);
+            });
+
+            letterInput.value = '';
+            lettersCount.value = '';
+            letterInput.disabled = true;
+
+            function fillWord() {
+                let word = wordInput.value;
+                let font = localStorage.getItem('pageFont');
+
+                wordCells.innerHTML = '';
+                word.split('').forEach((l) => {
+                    let letter = wordCells.appendChild(
+                        document.createElement('button')
+                    );
+                    letter.id = '';
+                    letter.className = 'cell';
+                    letter.ariaHidden = 'true';
+                    letter.tabIndex = '0';
+                    letter.style.fontFamily = font;
+                    letter.innerText = l.toUpperCase();
+                    letter.addEventListener('click', function () {
+                        revealLetter(this);
+                    });
+                });
+                lettersCount.value = word.length;
+                letterInput.value = '';
+            }
+
+            /** * @param {string} letter */
+            function guessLetter(letter) {
+                if (wordInput.value) {
+                    wordCells.childNodes.forEach((c) => {
+                        if (c.innerHTML === letter) {
+                            c.className = 'cell correct';
+                            c.ariaHidden = 'false';
+                            c.style.cursor = 'not-allowed';
+                        }
+                    });
+                    letterInput.select();
+                } else {
+                    wordInput.focus();
+                }
+            }
+
+            /**
+             * @param {HTMLDivElement} cell
+             */
+            function revealLetter(cell) {
+                if (cell.className === 'cell') {
+                    // Reveal only this cell's letter if it's unknown
+                    cell.className = 'cell correct';
+                    cell.ariaHidden = 'false';
+                } else {
+                    // Otherwise reveal all occurrences of this letter
+                    guessLetter(cell.innerHTML);
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Multiple Choice</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --accent1: #774936;
+                --accent2: #D69F7E;
+                --primary-colour: #eeebbd;
+                --secondary-colour: #050609;
+            }
+            
+            * {
+                background-color: inherit;
+                box-sizing: border-box;
+                color: inherit;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 14pt;
+                margin-top: 1.5px;
+                margin-bottom: 1.5px;
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                accent-color: var(--accent1);
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                margin: auto;
+                min-width: 85%;
+                max-width: 85%;
+            }
+            
+            a.button,
+            button {
+                display: inline-flex;
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                cursor: pointer;
+                padding: 1px;
+                margin: 1px;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            button:disabled {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                cursor: not-allowed;
+            }
+            
+            button:focus,
+            button:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            details {
+                cursor: default;
+                width: 100%;
+            }
+            
+            details>summary {
+                background-color: var(--accent2);
+                border-radius: 7px 0px 7px 0px;
+                cursor: pointer;
+                padding: 2px;
+            }
+            
+            details>summary:focus,
+            details>summary:hover {
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+            }
+            
+            @keyframes detailsOpening {
+                0% {
+                    transform: translateX(0%);
+                }
+                50% {
+                    transform: translateX(1%);
+                }
+                100% {
+                    transform: translateX(0%)
+                }
+            }
+            
+            details[open] {
+                animation: detailsOpening 0.7s ease-out;
+            }
+            
+            details[open]>summary {
+                border-bottom-color: var(--secondary-colour);
+                border-bottom-style: inset;
+                border-bottom-width: 2px;
+                font-size: 1.05em;
+                font-weight: 600;
+                padding-bottom: 2px;
+            }
+            
+            details[open]>summary:focus,
+            details[open]>summary:hover {
+                border-bottom-color: var(--accent2);
+            }
+            
+            h1 {
+                align-self: center;
+                border-bottom-style: dotted;
+                border-bottom-width: 4px;
+                border-color: var(--accent1);
+                font-size: 1.5em;
+                padding: 0px 4px;
+                margin-bottom: 3px;
+            }
+            
+            h1:focus,
+            h1:hover {
+                border-bottom-style: solid;
+                border-bottom-left-radius: 10%;
+                border-bottom-right-radius: 10%;
+            }
+            
+            h2 {
+                border-bottom-style: ridge;
+                border-bottom-width: 3px;
+                border-bottom-color: var(--secondary-colour);
+                border-radius: 0px 0px 7px 0px;
+                padding-left: 4px;
+                font-size: 1.4em;
+            }
+            
+            hr {
+                border-color: var(--accent1);
+                width: 100%;
+            }
+            
+            input {
+                border-color: var(--secondary-colour);
+                accent-color: var(--accent2);
+            }
+            
+            input[type='number'] {
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                text-align: center;
+                font-weight: 600;
+            }
+            
+            input[type='number']:focus {
+                color: var(--secondary-colour);
+                background-color: var(--accent2);
+            }
+            
+            kbd {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border: 1px solid var(--secondary-colour);
+                border-radius: 3px;
+                box-shadow: 1px 1px 1px var(--secondary-colour);
+                font-weight: 600;
+                margin-right: 2px;
+                padding: 0px 2px;
+            }
+            
+            option:checked {
+                background-color: var(--accent2);
+            }
+            
+            p {
+                margin: 1px;
+            }
+            
+            select {
+                background-color: var(--primary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                border-style: inset;
+                border-width: 2px;
+                color: var(--secondary-colour);
+            }
+            
+            select:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            table {
+                width: 100%;
+            }
+            
+            th,
+            td {
+                border-color: var(--secondary-colour);
+                border-style: inset;
+                border-width: 2px;
+                padding: 2px;
+                text-align: center;
+            }
+            
+            th {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-radius: 5px 5px 0px 0px;
+                font-size: 13pt;
+                font-weight: bold;
+            }
+            
+            td {
+                border-radius: 0px 0px 5px 0px;
+                font-weight: 600;
+            }
+            
+            th:focus,
+            th:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            td:focus,
+            td:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            .box {
+                display: flex;
+                flex-direction: row;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 2px;
+            }
+            
+            .box:focus,
+            .box:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            li:focus,
+            li:hover {
+                list-style: square;
+            }
+
+            .score {
+                display: flex;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                opacity: 95%;
+                font-size: 1.1em;
+                align-items: baseline;
+                justify-content: center;
+                position: sticky;
+                top: 0%;
+            }
+
+            .score:focus,
+            .score:hover {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+            }
+
+            .right {
+                font-weight: 600;
+                text-decoration-line: underline;
+                text-decoration-thickness: 3px;
+                text-decoration-color: var(--accent2);
+                text-decoration-skip-ink: none;
+            }
+
+            .right:before {
+                content: '✔';
+                margin-right: 2px;
+            }
+
+            .wrong {
+                text-decoration-line: line-through;
+                text-decoration-thickness: 4px;
+                text-decoration-color: var(--accent1);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Выбирайка</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- Page main body -->
+
+        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
+            <label id="numQuestionsLabel" for='numQuestionsInput'>Число вопросов:</label>
+            <input id='numQuestionsInput' type='number' min='1' max='10' value='10' style='flex-grow: 1;'>
+        </div>
+
+        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
+            <label id="numVariantsLabel" for='numVariantsInput'>Число вариантов:</label>
+            <input id='numVariantsInput' type='number' min='2' max='5' value='4' style='flex-grow: 1;'>
+        </div>
+
+        <div
+            class='box'
+            style='display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;'
+            ><label
+                for='loadTest'
+                style='flex-grow: 1; cursor: pointer;'
+            >
+                &#128193; Загрузить тест
+            </label>
+            <input
+                id='loadTest'
+                type='file'
+                accept='.json'
+                style='cursor: pointer;'>
+        </div>
+
+        <button id='startTest'>Начать тест</button>
+
+        <div id='testBody' style='position: relative;'></div>
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов.
+        </div>
+
+        <script>
+            /**
+             * JavaScript logic for HTML programmes by Vital (Vitaly Pavlovich Ulyanov)
+             */
+            
+            // Stored values and style variables
+            let storedPrimaryColour =
+                localStorage.getItem('--primary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--primary-colour');
+            let storedSecondaryColour =
+                localStorage.getItem('--secondary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--secondary-colour');
+            let storedAccentColour1 =
+                localStorage.getItem('--accent1') ??
+                getComputedStyle(document.body).getPropertyValue('--accent1');
+            let storedAccentColour2 =
+                localStorage.getItem('--accent2') ??
+                getComputedStyle(document.body).getPropertyValue('--accent2');
+            
+            document.body.style.setProperty('--primary-colour', storedPrimaryColour);
+            document.body.style.setProperty('--secondary-colour', storedSecondaryColour);
+            document.body.style.setProperty('--accent1', storedAccentColour1);
+            document.body.style.setProperty('--accent2', storedAccentColour2);
+            
+            /** * @type {HTMLDetailsElement} */
+            let settings = document.getElementById('settings');
+            
+            // Append settings with unified ones
+            let fullscreen = settings.parentElement.appendChild(
+                document.createElement('button')
+            );
+            let font = settings.appendChild(document.createElement('div'));
+            let setDiv = settings.appendChild(document.createElement('div'));
+            let primDiv = setDiv.appendChild(document.createElement('div'));
+            let secDiv = setDiv.appendChild(document.createElement('div'));
+            let acc1Div = setDiv.appendChild(document.createElement('div'));
+            let acc2Div = setDiv.appendChild(document.createElement('div'));
+            let load = settings.appendChild(document.createElement('div'));
+            let save = settings.appendChild(document.createElement('a'));
+            
+            setDiv.style.display = 'flex';
+            setDiv.style.flexWrap = 'wrap';
+            
+            //#region Fullscreen button
+            const up = '&#9650;';
+            const down = '&#9660;';
+            
+            fullscreen.id = 'fullscreenButton';
+            fullscreen.innerHTML = up;
+            fullscreen.style.fontWeight = 600;
+            fullscreen.style.borderWidth = 0;
+            fullscreen.style.opacity = '50%';
+            fullscreen.style.position = 'fixed';
+            fullscreen.style.top = '5px';
+            fullscreen.style.right = '5px';
+            fullscreen.addEventListener('click', function () {
+                let page = document.documentElement;
+                if (document.fullscreenElement) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                } else {
+                    if (page.requestFullscreen) page.requestFullscreen();
+                }
+            });
+            
+            document.addEventListener('fullscreenchange', function () {
+                if (document.fullscreenElement) fullscreen.innerHTML = down;
+                else fullscreen.innerHTML = up;
+            });
+            //#endregion
+            
+            //#region Font
+            let fontDiv = font.appendChild(document.createElement('div'));
+            fontDiv.style.display = 'flex';
+            fontDiv.style.alignItems = 'baseline';
+            
+            let fontLabel = fontDiv.appendChild(document.createElement('label'));
+            let fontInput = fontDiv.appendChild(document.createElement('input'));
+            
+            fontLabel.id = 'fontLabel';
+            fontLabel.htmlFor = 'fontInput';
+            fontLabel.className = 'preserveFont';
+            fontLabel.innerText = 'Шрифт';
+            fontLabel.style.marginRight = '2px';
+            
+            fontInput.id = 'fontInput';
+            fontInput.type = 'text';
+            fontInput.placeholder = 'Введите название шрифта и нажмите Enter';
+            fontInput.style.width = '100%';
+            fontInput.addEventListener('change', function () {
+                localStorage.setItem('pageFont', this.value);
+                loadFont();
+            });
+            //#endregion
+            
+            //#region Primary colour
+            primDiv.style.display = 'flex';
+            primDiv.style.minWidth = '50%';
+            primDiv.style.alignItems = 'center';
+            
+            let primInput = primDiv.appendChild(document.createElement('input'));
+            primInput.id = 'primCol';
+            primInput.type = 'color';
+            primInput.value = storedPrimaryColour;
+            primInput.addEventListener('input', function () {
+                colourChange('primary', this.value);
+            });
+            
+            let primLabel = primDiv.appendChild(document.createElement('label'));
+            primLabel.htmlFor = primInput.id;
+            primLabel.innerText = 'Фоновый цвет';
+            primLabel.style.marginLeft = '2px';
+            primLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Secondary colour
+            secDiv.style.display = 'flex';
+            secDiv.style.alignItems = 'center';
+            
+            let secInput = secDiv.appendChild(document.createElement('input'));
+            secInput.id = 'secCol';
+            secInput.type = 'color';
+            secInput.value = storedSecondaryColour;
+            secInput.addEventListener('input', function () {
+                colourChange('secondary', this.value);
+            });
+            
+            let secLabel = secDiv.appendChild(document.createElement('label'));
+            secLabel.htmlFor = secInput.id;
+            secLabel.innerText = 'Цвет текста';
+            secLabel.style.marginLeft = '2px';
+            secLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 1
+            acc1Div.style.display = 'flex';
+            acc1Div.style.minWidth = '50%';
+            acc1Div.style.alignItems = 'center';
+            
+            let acc1Input = acc1Div.appendChild(document.createElement('input'));
+            acc1Input.id = 'acc1Col';
+            acc1Input.type = 'color';
+            acc1Input.value = storedAccentColour1;
+            acc1Input.addEventListener('input', function () {
+                colourChange('accent1', this.value);
+            });
+            
+            let acc1Label = acc1Div.appendChild(document.createElement('label'));
+            acc1Label.htmlFor = acc1Input.id;
+            acc1Label.innerText = 'Контрастный цвет 1';
+            acc1Label.style.marginLeft = '2px';
+            acc1Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 2
+            acc2Div.style.display = 'flex';
+            acc2Div.style.alignItems = 'center';
+            
+            let acc2Input = acc2Div.appendChild(document.createElement('input'));
+            acc2Input.id = 'acc2Col';
+            acc2Input.type = 'color';
+            acc2Input.value = storedAccentColour2;
+            acc2Input.addEventListener('input', function () {
+                colourChange('accent2', this.value);
+            });
+            
+            let acc2Label = acc2Div.appendChild(document.createElement('label'));
+            acc2Label.htmlFor = acc2Input.id;
+            acc2Label.innerText = 'Контрастный цвет 2';
+            acc2Label.style.marginLeft = '2px';
+            acc2Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Load button
+            load.className = 'box';
+            load.style.display = 'flex';
+            load.style.flexWrap = 'wrap';
+            load.style.alignItems = 'center';
+            load.style.justifyContent = 'space-between';
+            
+            let loadLabel = load.appendChild(document.createElement('label'));
+            loadLabel.htmlFor = 'loadColoursButton';
+            loadLabel.innerHTML = '&#128193; Загрузить цвета';
+            loadLabel.style.flexGrow = 1;
+            loadLabel.style.cursor = 'pointer';
+            
+            let loadInput = load.appendChild(document.createElement('input'));
+            loadInput.id = 'loadColoursButton';
+            loadInput.type = 'file';
+            loadInput.accept = '.json';
+            loadInput.style.cursor = 'pointer';
+            loadInput.addEventListener('change', loadColours);
+            //#endregion
+            
+            //#region Save button
+            save.id = 'saveColoursButton';
+            save.href = '';
+            save.download = 'ColourScheme.json';
+            save.className = 'box';
+            save.innerHTML = '&#128190; Сохранить цвета';
+            save.style.textDecoration = 'none';
+            save.addEventListener('click', saveColours);
+            //#endregion
+            
+            function colourChange(colourType, colour) {
+                switch (colourType) {
+                    case 'primary':
+                        document.body.style.setProperty('--primary-colour', colour);
+                        localStorage.setItem('--primary-colour', colour);
+                        break;
+                    case 'secondary':
+                        document.body.style.setProperty('--secondary-colour', colour);
+                        localStorage.setItem('--secondary-colour', colour);
+                        break;
+                    case 'accent1':
+                        document.body.style.setProperty('--accent1', colour);
+                        localStorage.setItem('--accent1', colour);
+                        break;
+                    case 'accent2':
+                        document.body.style.setProperty('--accent2', colour);
+                        localStorage.setItem('--accent2', colour);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            /**
+             * @typedef {Object} ColourScheme
+             * @property {string} primary
+             * @property {string} secondary
+             * @property {string} accent1
+             * @property {string} accent2
+             */
+            
+            function saveColours() {
+                /** * @type {ColourScheme}  */
+                let colours = {
+                    primary: document.body.style.getPropertyValue('--primary-colour'),
+                    secondary: document.body.style.getPropertyValue('--secondary-colour'),
+                    accent1: document.body.style.getPropertyValue('--accent1'),
+                    accent2: document.body.style.getPropertyValue('--accent2'),
+                };
+                let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
+                saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
+            async function loadColours() {
+                await loadColoursButton.files[0].text().then((content) => {
+                    try {
+                        /** * @type {ColourScheme} */
+                        let data = JSON.parse(content);
+                        if (data) {
+                            if (data.primary) {
+                                colourChange('primary', data.primary);
+                                primInput.value = data.primary;
+                            }
+                            if (data.secondary) {
+                                colourChange('secondary', data.secondary);
+                                secInput.value = data.secondary;
+                            }
+                            if (data.accent1) {
+                                colourChange('accent1', data.accent1);
+                                acc1Input.value = data.accent1;
+                            }
+                            if (data.accent2) {
+                                colourChange('accent2', data.accent2);
+                                acc2Input.value = data.accent2;
+                            }
+                        }
+                    } catch (error) {
+                        alert(
+                            `Ошибка при чтении файла цветов: ${error}`
+                        );
+                    }
+                });
+            }
+            
+            function loadFont() {
+                let font = localStorage.getItem('pageFont');
+                document.getElementById('fontInput').value = font;
+                document.body.querySelectorAll('*').forEach((e) => {
+                    if (!e.className.includes('preserveFont')) e.style.fontFamily = font;
+                });
+            }
+            
+            loadFont();
+
+		</script>
+        <script>
+            // Elements
+            /** * @type {string[][]} */
+            let test = [];
+            /** * @type {number} */
+            let score = 0;
+            /** * @type {HTMLInputElement} */
+            let numQuestionsInput = document.getElementById('numQuestionsInput');
+            /** * @type {HTMLInputElement} */
+            let numVariantsInput = document.getElementById('numVariantsInput');
+            /** * @type {HTMLInputElement} */
+            let loadTest = document.getElementById('loadTest');
+            /** * @type {HTMLButtonElement} */
+            let startTest = document.getElementById('startTest');
+            /** * @type {HTMLDivElement} */
+            let testBody = document.getElementById('testBody');
+
+            startTest.disabled = true;
+            numQuestionsInput.disabled = true;
+            numVariantsInput.disabled = true;
+
+            numQuestionsInput.addEventListener('input', limitInput);
+            numVariantsInput.addEventListener('input', limitInput);
+            loadTest.addEventListener('change', async function () {
+                await this.files[0].text().then((content) => {
+                    try {
+                        /** * @type {string[][]} */
+                        let data = JSON.parse(content);
+                        if (data && data.length > 0) {
+                            test = data;
+                            startTest.disabled = false;
+                            numQuestionsInput.disabled = false;
+                            numVariantsInput.disabled = false;
+                            numQuestionsInput.max = test.length;
+                            numVariantsInput.max = test.length;
+                        }
+                    } catch (error) {
+                        alert(
+                            `Ошибка при чтении файла теста: ${error}`
+                        );
+                    }
+                });
+            });
+            startTest.addEventListener('click', function () {
+                score = 0;
+                while (testBody.hasChildNodes()) testBody.lastChild.remove();
+
+                let resultDiv = testBody.appendChild(document.createElement('div'));
+                resultDiv.className = 'score';
+
+                let resultText = resultDiv.appendChild(document.createElement('p'));
+                resultText.innerText = 'Результат: ';
+                resultText.style.marginRight = '4px';
+                resultText.style.fontSize = 'inherit';
+
+                let scoreText = resultDiv.appendChild(document.createElement('b'));
+                scoreText.id = 'scoreText';
+                scoreText.tabIndex = 0;
+                scoreText.innerText = `0/${numQuestionsInput.value}`;
+                scoreText.style.fontSize = 'inherit';
+
+                let questions = [];
+                let copyQuestions = test.map((e) => e);
+
+                while (questions.length < numQuestionsInput.value) {
+                    let randomIndex = getRandomIndex(copyQuestions);
+                    questions.push(copyQuestions[randomIndex]);
+                    copyQuestions.splice(randomIndex, 1);
+                }
+
+                questions.forEach((q, qi) => {
+                    const question = q[0];
+                    const answer = q[1];
+
+                    let questionDiv = testBody.appendChild(document.createElement('div'));
+                    let questionHeader = questionDiv.appendChild(document.createElement('h2'));
+                    let optionsList = questionDiv.appendChild(document.createElement('ol'));
+                    questionHeader.tabIndex = 0;
+                    questionHeader.innerText = `${qi + 1}. ${question}`;
+                    questionHeader.style.cursor = 'help';
+
+                    let options = [];
+                    let copyOptions = test.map((e) => e[1]);
+
+                    while (options.length < numVariantsInput.value) {
+                        let randomIndex = getRandomIndex(copyOptions);
+                        options.push(copyOptions[randomIndex]);
+                        copyOptions.splice(randomIndex, 1);
+                    }
+
+                    if (!doesContainItem(options, answer)) {
+                        options[getRandomIndex(options)] = answer;
+                    }
+
+                    options.forEach((o, oi) => {
+                        let option = optionsList.appendChild(document.createElement('li'));
+                        option.innerText = o;
+                        option.dataset.right = (o === answer);
+                        option.tabIndex = 0;
+                        option.style.cursor = 'grab';
+                        option.addEventListener('click', processChoice);
+                        option.addEventListener('keydown', processChoice);
+                    });
+                });
+            });
+
+            /**
+             * @param {InputEvent} event
+            */
+            function limitInput(event) {
+                /** @type {HTMLInputElement} */
+                let input = event.target;
+                let min = parseInt(input.min);
+                let max = parseInt(input.max);
+                let val = parseInt(input.value) || min;
+                input.value =
+                    val > max ? max :
+                    val < min ? min : val;
+            }
+
+            /**
+             * @param {any[]} array
+             * @param {any} item
+            */
+            function doesContainItem(array, item) {
+                for (const i of array) {
+                    if (i === item) return true;
+                }
+                return false;
+            }
+
+            function getRandomIndex(array) {
+                return Math.floor(Math.random() * array.length);
+            }
+
+            /**
+             * @param {MouseEvent | KeyboardEvent} event
+            */
+            function processChoice(event) {
+                if (
+                    (event.type !== 'click' && event.type !== 'keydown') ||
+                    (event.type === 'keydown' && event.key !== ' ' && event.key !== 'Enter')
+                ) return;
+
+                event.preventDefault();
+
+                /** @type {HTMLElement} */
+                let option = event.target;
+
+                if (option.dataset.right == 'true') {
+                    option.className = 'right';
+                    score++;
+                } else {
+                    option.className = 'wrong';
+                }
+                option.blur();
+                option.style.cursor = 'not-allowed';
+                option.removeEventListener('click', processChoice);
+                option.removeEventListener('keydown', processChoice);
+                let scoreText = document.getElementById('scoreText');
+                if (scoreText) scoreText.innerText = `${score}/${numQuestionsInput.value}`;
+            }
+        </script>
+    </body>
+</html>

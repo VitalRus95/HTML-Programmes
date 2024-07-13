@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='UTF-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <title>Полезное</title>
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --accent1: #774936;
+                --accent2: #D69F7E;
+                --primary-colour: #eeebbd;
+                --secondary-colour: #050609;
+            }
+            
+            * {
+                background-color: inherit;
+                box-sizing: border-box;
+                color: inherit;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 14pt;
+                margin-top: 1.5px;
+                margin-bottom: 1.5px;
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                accent-color: var(--accent1);
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                margin: auto;
+                min-width: 85%;
+                max-width: 85%;
+            }
+            
+            a.button,
+            button {
+                display: inline-flex;
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                cursor: pointer;
+                padding: 1px;
+                margin: 1px;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            button:disabled {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                cursor: not-allowed;
+            }
+            
+            button:focus,
+            button:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            details {
+                cursor: default;
+                width: 100%;
+            }
+            
+            details>summary {
+                background-color: var(--accent2);
+                border-radius: 7px 0px 7px 0px;
+                cursor: pointer;
+                padding: 2px;
+            }
+            
+            details>summary:focus,
+            details>summary:hover {
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+            }
+            
+            @keyframes detailsOpening {
+                0% {
+                    transform: translateX(0%);
+                }
+                50% {
+                    transform: translateX(1%);
+                }
+                100% {
+                    transform: translateX(0%)
+                }
+            }
+            
+            details[open] {
+                animation: detailsOpening 0.7s ease-out;
+            }
+            
+            details[open]>summary {
+                border-bottom-color: var(--secondary-colour);
+                border-bottom-style: inset;
+                border-bottom-width: 2px;
+                font-size: 1.05em;
+                font-weight: 600;
+                padding-bottom: 2px;
+            }
+            
+            details[open]>summary:focus,
+            details[open]>summary:hover {
+                border-bottom-color: var(--accent2);
+            }
+            
+            h1 {
+                align-self: center;
+                border-bottom-style: dotted;
+                border-bottom-width: 4px;
+                border-color: var(--accent1);
+                font-size: 1.5em;
+                padding: 0px 4px;
+                margin-bottom: 3px;
+            }
+            
+            h1:focus,
+            h1:hover {
+                border-bottom-style: solid;
+                border-bottom-left-radius: 10%;
+                border-bottom-right-radius: 10%;
+            }
+            
+            h2 {
+                border-bottom-style: ridge;
+                border-bottom-width: 3px;
+                border-bottom-color: var(--secondary-colour);
+                border-radius: 0px 0px 7px 0px;
+                padding-left: 4px;
+                font-size: 1.4em;
+            }
+            
+            hr {
+                border-color: var(--accent1);
+                width: 100%;
+            }
+            
+            input {
+                border-color: var(--secondary-colour);
+                accent-color: var(--accent2);
+            }
+            
+            input[type='number'] {
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                text-align: center;
+                font-weight: 600;
+            }
+            
+            input[type='number']:focus {
+                color: var(--secondary-colour);
+                background-color: var(--accent2);
+            }
+            
+            kbd {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border: 1px solid var(--secondary-colour);
+                border-radius: 3px;
+                box-shadow: 1px 1px 1px var(--secondary-colour);
+                font-weight: 600;
+                margin-right: 2px;
+                padding: 0px 2px;
+            }
+            
+            option:checked {
+                background-color: var(--accent2);
+            }
+            
+            p {
+                margin: 1px;
+            }
+            
+            select {
+                background-color: var(--primary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                border-style: inset;
+                border-width: 2px;
+                color: var(--secondary-colour);
+            }
+            
+            select:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            table {
+                width: 100%;
+            }
+            
+            th,
+            td {
+                border-color: var(--secondary-colour);
+                border-style: inset;
+                border-width: 2px;
+                padding: 2px;
+                text-align: center;
+            }
+            
+            th {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-radius: 5px 5px 0px 0px;
+                font-size: 13pt;
+                font-weight: bold;
+            }
+            
+            td {
+                border-radius: 0px 0px 5px 0px;
+                font-weight: 600;
+            }
+            
+            th:focus,
+            th:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            td:focus,
+            td:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            .box {
+                display: flex;
+                flex-direction: row;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 2px;
+            }
+            
+            .box:focus,
+            .box:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            li {
+                margin-block: 4px;
+            }
+
+            p {
+                text-indent: 12px;
+            }
+
+            span {
+                border-radius: 3px;
+                box-shadow: 0px 1px 2px;
+                padding: 0px 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Полезное</h1>
+
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- 📘 Словари, корпусы, уроки -->
+        <details>
+            <summary>📘 Словари, корпусы, уроки</summary>
+            <ul>
+                <li>Многоязычные словари:</li>
+                <ul>
+                    <li><a href='https://lingvolive.com/ru-ru'>ABBYY Lingvo Live</a></li>
+                    <li><a href='https://thefreedictionary.com/'>The Free Dictionary</a></li>
+                    <li><a href='https://multitran.com/'>Мультитран</a></li>
+                </ul>
+
+                <li>Англоязычные словари:</li>
+                <ul>
+                    <li>
+                        <a href='https://collinsdictionary.com/'>Collins English Dictionary</a> с
+                        <a href='https://grammar.collinsdictionary.com/easy-learning'>грамматической справкой</a>
+                    </li>
+                    <li><a href='http://ozdic.com/'>English Collocations Dictionary</a></li>
+                    <li><a href='https://ldoceonline.com/'>Longman Dictionary of Contemporary English</a></li>
+                    <li><a href='https://etymonline.com/'>Online Etymology Dictionary</a></li>
+                    <li><a href='https://rhymezone.com/'>RhymeZone rhyming dictionary and thesaurus</a></li>
+                    <li><a href='https://dictionary.com/'>Dictionary.com</a></li>
+                </ul>
+
+                <li>Русскоязычные словари:</li>
+                <ul>
+                    <li><a href='https://dic.academic.ru/'>Академик</a></li>
+                    <li><a href='http://gramota.ru/'>Грамота.ру</a></li>
+                    <li><a href='https://kartaslov.ru/'>Карта слов и выражений русского языка</a></li>
+                    <li><a href='https://ru.wiktionary.org/wiki/Приложение:Ложные_друзья_переводчика_(английский)'>Ложные друзья переводчика</a></li>
+                </ul>
+
+                <li>Корпусы текстов:</li>
+                <ul>
+                    <li><a href='https://english-corpora.org/'>English Corpora</a></li>
+                    <li><a href='https://context.reverso.net/перевод/'>Reverso Context</a></li>
+                    <li><a href='https://ruscorpora.ru/new/'>Национальный корпус русского языка</a></li>
+                </ul>
+
+                <li>Программы:</li>
+                <ul>
+                    <li>
+                        <a href='https://inkscape.org/'>Inkscape</a> — векторный графический редактор
+                    </li>
+                    <li>
+                        <a href='https://microsoft.com/en-us/download/details.aspx?id=102134'>Microsoft Keyboard Layout Creator</a> — редактор раскладок клавиатуры
+                    </li>
+                    <li>
+                        <a href='https://omegat.org/'>OmegaT</a> — средство автоматизированного перевода
+                    </li>
+                </ul>
+
+                <li>Уроки, примеры и прочее моего авторства:</li>
+                <ul>
+                    <li><a href='https://youtube.com/watch?v=10ZRVL7ukfo'>Видеоурок по основам OmegaT</a></li>
+                    <li><a href='https://disk.yandex.ru/d/e21Ho-aPMe9FPQ'>Две раскладки клавиатуры</a> (справка в PDF в комплекте)</li>
+                </ul>
+            </ul>
+        </details>
+
+        <!-- Закономерности англоязычных новостных заголовков -->
+        <details>
+            <summary>📰 Закономерности англоязычных новостных заголовков</summary>
+            <ul>
+                <li>все значимые слова — с большой буквы</li>
+                <li>числительные — цифрами</li>
+                <li>союзы → знаки препинания (напр., <span>and</span> → <span>,</span>)</li>
+                <li>вспомогательные глаголы — опускаются</li>
+                <li>артикли, кроме устойчивых и значимых по смыслу, — опускаются</li>
+                <li>часто встречаются аббревиатуры</li>
+                <li>использование препозиционных определений</li>
+                <li>
+                    замена некоторых слов со значением речи (напр., <span>say</span>, <span>comment</span>, <span>tell</span>, <span>argue</span>, <span>announce</span>, <span>shout</span>) на двоеточие (напр., <span>Mr Jones: “They’re not taking my house!”</span>)
+                </li>
+                <li>замена времён:</li>
+                <ul>
+                    <li>продолжительные (Continuous) и перфектные (Perfect) → простые (Simple)</li>
+                    <li>прошедшее → настоящее</li>
+                    <li>будущее → инфинитив</li>
+                </ul>
+            </ul>
+
+            <h2>Что почитать по теме:</h2>
+            <ul>
+                <li>
+                    <a href='https://englishlessonsbrighton.co.uk/8-grammar-rules-writing-newspaper-headlines/'>
+                        English Lessons Brighton
+                    </a>
+                </li>
+                <li>
+                    <a href='https://www.englishpractice.com/improve/newspaper-headlines-grammar/'>
+                        English Practice
+                    </a>
+                </li>
+                <li>
+                    <a href='https://www.thoughtco.com/understanding-newspaper-headlines-p2-1211336'>
+                        ThoughtCo.
+                    </a>
+                </li>
+            </ul>
+        </details>
+
+        <!-- Ускоряем работу с текстами -->
+        <details>
+            <summary>⌨️ Ускоряем работу с текстами</summary>
+            <p>
+                Чем реже руки отвлекаются от набора текста на клавиатуре на действия с мышью, тем проще, быстрее и приятнее становится с текстом работать. Здесь я перечислю некоторые способы, как этого достичь:
+            </p>
+
+            <ul>
+                <li>
+                    отдельные кнопки:
+                    <ul>
+                        <li><kbd>Home</kbd> — перемещение в начало строки</li>
+                        <li><kbd>End</kbd> — перемещение в конец строки</li>
+                        <li><kbd>Backspace</kbd> — удалить символ слева</li>
+                        <li><kbd>Delete</kbd> — удалить символ справа</li>
+                    </ul>
+                </li>
+
+                <li>
+                    сочетания с <kbd>Ctrl</kbd>:
+                    <ul>
+                        <li><kbd>Home</kbd> — в начало текста</li>
+                        <li><kbd>End</kbd> — в конец текста</li>
+                        <li><kbd>Backspace</kbd> — удалить слово слева</li>
+                        <li><kbd>Delete</kbd> — удалить слово справа</li>
+                        <li>
+                            <kbd>←</kbd>/<kbd>→</kbd> — перемещение между словами
+                        </li>
+                        <li>
+                            <kbd>↑</kbd>/<kbd>↓</kbd> — перемещение между абзацами (курсор ставится на начало)
+                        </li>
+                        <li><kbd>A</kbd> — выделить всё</li>
+                        <li>
+                            <kbd>B</kbd>/<kbd>I</kbd>/<kbd>U</kbd> — полужирный/курсив/подчёркнутый
+                        </li>
+                        <li>
+                            <kbd>C</kbd>/<kbd>X</kbd>/<kbd>V</kbd> — копировать/вырезать/вставить
+                        </li>
+                        <li>
+                            <kbd>L</kbd>/<kbd>E</kbd>/<kbd>R</kbd>/<kbd>J</kbd> — выровнить по левому краю/центру/правому краю/ширине
+                        </li>
+                        <li><kbd>S</kbd> — сохранить</li>
+                        <li><kbd>колёсико мыши</kbd> — изменить масштаб</li>
+                    </ul>
+                </li>
+
+                <li>
+                    сочетания с <kbd>Shift</kbd>:
+                    <ul>
+                        <li>
+                            <kbd>Home</kbd> — выделить от текущего символа до начала строки
+                        </li>
+                        <li>
+                            <kbd>End</kbd> — выделить от текущего символа до конца строки
+                        </li>
+                        <li>
+                            <kbd>←</kbd>/<kbd>→</kbd> — выделить символ слева/справа
+                        </li>
+                        <li>
+                            <kbd>↑</kbd>/<kbd>↓</kbd> — выделить строку выше/ниже
+                        </li>
+                        <li>
+                            <kbd>колёсико мыши</kbd> — горизонтальная прокрутка
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    сочетания с <kbd>Ctrl + Shift</kbd>:
+                    <ul>
+                        <li>
+                            <kbd>Home</kbd> — выделить от текущего символа до начала текста
+                        </li>
+                        <li>
+                            <kbd>End</kbd> — выделить от текущего символа до конца текста
+                        </li>
+                        <li>
+                            <kbd>←</kbd>/<kbd>→</kbd> — выделить слово слева/справа
+                        </li>
+                        <li>
+                            <kbd>↑</kbd>/<kbd>↓</kbd> — выделить абзац выше/ниже
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </details>
+
+        <!-- ✒️ Полезные функции Word -->
+        <details>
+            <summary>✒️ Полезные функции Word</summary>
+            <ul style='list-style: none;'>
+                <li>
+                    <details>
+                        <summary>Автоматическое оглавление</summary>
+                    </details>
+                </li>
+
+                <li>
+                    <details>
+                        <summary>Автоматическая сортировка</summary>
+                    </details>
+                </li>
+
+                <li>
+                    <details>
+                        <summary>Вставка разрывов</summary>
+                    </details>
+                </li>
+
+                <li>
+                    <details>
+                        <summary>Вставка сноски</summary>
+                        <p>
+                            Чтобы добавить сноску, поставьте курсор в том месте, где нужно её создать, и нажмите <kbd>Ctrl + Alt + F</kbd> или кнопку «<span>Вставить сноску</span>» в разделе «<span>Сноски</span>» вкладки «<span>Ссылки</span>». Сноска должна появиться в нижней части страница или документа.
+                        </p>
+                        <p>
+                            Для изменения настроек сносок щёлкните <kbd>ПКМ</kbd> по области сносок внизу и в появившемся контекстном меню выберите «<span>Параметры заметки</span>». Откроется окошко, где можно задать различные свойства сносок: положение в тексте, деление на столбцы, внешний вид нумерации и её характер (продолжать по всему документу либо начинать заново в каждом разделе или на каждой странице). Внеся необходимые изменения, нажмите кнопку «<span>Применить</span>».
+                        </p>
+                    </details>
+                </li>
+            </ul>
+        </details>
+
+        <div class='box'>Автор — Виталий Павлович Ульянов</div>
+
+        <script>
+            /**
+             * JavaScript logic for HTML programmes by Vital (Vitaly Pavlovich Ulyanov)
+             */
+            
+            // Stored values and style variables
+            let storedPrimaryColour =
+                localStorage.getItem('--primary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--primary-colour');
+            let storedSecondaryColour =
+                localStorage.getItem('--secondary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--secondary-colour');
+            let storedAccentColour1 =
+                localStorage.getItem('--accent1') ??
+                getComputedStyle(document.body).getPropertyValue('--accent1');
+            let storedAccentColour2 =
+                localStorage.getItem('--accent2') ??
+                getComputedStyle(document.body).getPropertyValue('--accent2');
+            
+            document.body.style.setProperty('--primary-colour', storedPrimaryColour);
+            document.body.style.setProperty('--secondary-colour', storedSecondaryColour);
+            document.body.style.setProperty('--accent1', storedAccentColour1);
+            document.body.style.setProperty('--accent2', storedAccentColour2);
+            
+            /** * @type {HTMLDetailsElement} */
+            let settings = document.getElementById('settings');
+            
+            // Append settings with unified ones
+            let fullscreen = settings.parentElement.appendChild(
+                document.createElement('button')
+            );
+            let font = settings.appendChild(document.createElement('div'));
+            let setDiv = settings.appendChild(document.createElement('div'));
+            let primDiv = setDiv.appendChild(document.createElement('div'));
+            let secDiv = setDiv.appendChild(document.createElement('div'));
+            let acc1Div = setDiv.appendChild(document.createElement('div'));
+            let acc2Div = setDiv.appendChild(document.createElement('div'));
+            let load = settings.appendChild(document.createElement('div'));
+            let save = settings.appendChild(document.createElement('a'));
+            
+            setDiv.style.display = 'flex';
+            setDiv.style.flexWrap = 'wrap';
+            
+            //#region Fullscreen button
+            const up = '&#9650;';
+            const down = '&#9660;';
+            
+            fullscreen.id = 'fullscreenButton';
+            fullscreen.innerHTML = up;
+            fullscreen.style.fontWeight = 600;
+            fullscreen.style.borderWidth = 0;
+            fullscreen.style.opacity = '50%';
+            fullscreen.style.position = 'fixed';
+            fullscreen.style.top = '5px';
+            fullscreen.style.right = '5px';
+            fullscreen.addEventListener('click', function () {
+                let page = document.documentElement;
+                if (document.fullscreenElement) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                } else {
+                    if (page.requestFullscreen) page.requestFullscreen();
+                }
+            });
+            
+            document.addEventListener('fullscreenchange', function () {
+                if (document.fullscreenElement) fullscreen.innerHTML = down;
+                else fullscreen.innerHTML = up;
+            });
+            //#endregion
+            
+            //#region Font
+            let fontDiv = font.appendChild(document.createElement('div'));
+            fontDiv.style.display = 'flex';
+            fontDiv.style.alignItems = 'baseline';
+            
+            let fontLabel = fontDiv.appendChild(document.createElement('label'));
+            let fontInput = fontDiv.appendChild(document.createElement('input'));
+            
+            fontLabel.id = 'fontLabel';
+            fontLabel.htmlFor = 'fontInput';
+            fontLabel.className = 'preserveFont';
+            fontLabel.innerText = 'Шрифт';
+            fontLabel.style.marginRight = '2px';
+            
+            fontInput.id = 'fontInput';
+            fontInput.type = 'text';
+            fontInput.placeholder = 'Введите название шрифта и нажмите Enter';
+            fontInput.style.width = '100%';
+            fontInput.addEventListener('change', function () {
+                localStorage.setItem('pageFont', this.value);
+                loadFont();
+            });
+            //#endregion
+            
+            //#region Primary colour
+            primDiv.style.display = 'flex';
+            primDiv.style.minWidth = '50%';
+            primDiv.style.alignItems = 'center';
+            
+            let primInput = primDiv.appendChild(document.createElement('input'));
+            primInput.id = 'primCol';
+            primInput.type = 'color';
+            primInput.value = storedPrimaryColour;
+            primInput.addEventListener('input', function () {
+                colourChange('primary', this.value);
+            });
+            
+            let primLabel = primDiv.appendChild(document.createElement('label'));
+            primLabel.htmlFor = primInput.id;
+            primLabel.innerText = 'Фоновый цвет';
+            primLabel.style.marginLeft = '2px';
+            primLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Secondary colour
+            secDiv.style.display = 'flex';
+            secDiv.style.alignItems = 'center';
+            
+            let secInput = secDiv.appendChild(document.createElement('input'));
+            secInput.id = 'secCol';
+            secInput.type = 'color';
+            secInput.value = storedSecondaryColour;
+            secInput.addEventListener('input', function () {
+                colourChange('secondary', this.value);
+            });
+            
+            let secLabel = secDiv.appendChild(document.createElement('label'));
+            secLabel.htmlFor = secInput.id;
+            secLabel.innerText = 'Цвет текста';
+            secLabel.style.marginLeft = '2px';
+            secLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 1
+            acc1Div.style.display = 'flex';
+            acc1Div.style.minWidth = '50%';
+            acc1Div.style.alignItems = 'center';
+            
+            let acc1Input = acc1Div.appendChild(document.createElement('input'));
+            acc1Input.id = 'acc1Col';
+            acc1Input.type = 'color';
+            acc1Input.value = storedAccentColour1;
+            acc1Input.addEventListener('input', function () {
+                colourChange('accent1', this.value);
+            });
+            
+            let acc1Label = acc1Div.appendChild(document.createElement('label'));
+            acc1Label.htmlFor = acc1Input.id;
+            acc1Label.innerText = 'Контрастный цвет 1';
+            acc1Label.style.marginLeft = '2px';
+            acc1Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 2
+            acc2Div.style.display = 'flex';
+            acc2Div.style.alignItems = 'center';
+            
+            let acc2Input = acc2Div.appendChild(document.createElement('input'));
+            acc2Input.id = 'acc2Col';
+            acc2Input.type = 'color';
+            acc2Input.value = storedAccentColour2;
+            acc2Input.addEventListener('input', function () {
+                colourChange('accent2', this.value);
+            });
+            
+            let acc2Label = acc2Div.appendChild(document.createElement('label'));
+            acc2Label.htmlFor = acc2Input.id;
+            acc2Label.innerText = 'Контрастный цвет 2';
+            acc2Label.style.marginLeft = '2px';
+            acc2Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Load button
+            load.className = 'box';
+            load.style.display = 'flex';
+            load.style.flexWrap = 'wrap';
+            load.style.alignItems = 'center';
+            load.style.justifyContent = 'space-between';
+            
+            let loadLabel = load.appendChild(document.createElement('label'));
+            loadLabel.htmlFor = 'loadColoursButton';
+            loadLabel.innerHTML = '&#128193; Загрузить цвета';
+            loadLabel.style.flexGrow = 1;
+            loadLabel.style.cursor = 'pointer';
+            
+            let loadInput = load.appendChild(document.createElement('input'));
+            loadInput.id = 'loadColoursButton';
+            loadInput.type = 'file';
+            loadInput.accept = '.json';
+            loadInput.style.cursor = 'pointer';
+            loadInput.addEventListener('change', loadColours);
+            //#endregion
+            
+            //#region Save button
+            save.id = 'saveColoursButton';
+            save.href = '';
+            save.download = 'ColourScheme.json';
+            save.className = 'box';
+            save.innerHTML = '&#128190; Сохранить цвета';
+            save.style.textDecoration = 'none';
+            save.addEventListener('click', saveColours);
+            //#endregion
+            
+            function colourChange(colourType, colour) {
+                switch (colourType) {
+                    case 'primary':
+                        document.body.style.setProperty('--primary-colour', colour);
+                        localStorage.setItem('--primary-colour', colour);
+                        break;
+                    case 'secondary':
+                        document.body.style.setProperty('--secondary-colour', colour);
+                        localStorage.setItem('--secondary-colour', colour);
+                        break;
+                    case 'accent1':
+                        document.body.style.setProperty('--accent1', colour);
+                        localStorage.setItem('--accent1', colour);
+                        break;
+                    case 'accent2':
+                        document.body.style.setProperty('--accent2', colour);
+                        localStorage.setItem('--accent2', colour);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            /**
+             * @typedef {Object} ColourScheme
+             * @property {string} primary
+             * @property {string} secondary
+             * @property {string} accent1
+             * @property {string} accent2
+             */
+            
+            function saveColours() {
+                /** * @type {ColourScheme}  */
+                let colours = {
+                    primary: document.body.style.getPropertyValue('--primary-colour'),
+                    secondary: document.body.style.getPropertyValue('--secondary-colour'),
+                    accent1: document.body.style.getPropertyValue('--accent1'),
+                    accent2: document.body.style.getPropertyValue('--accent2'),
+                };
+                let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
+                saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
+            async function loadColours() {
+                await loadColoursButton.files[0].text().then((content) => {
+                    try {
+                        /** * @type {ColourScheme} */
+                        let data = JSON.parse(content);
+                        if (data) {
+                            if (data.primary) {
+                                colourChange('primary', data.primary);
+                                primInput.value = data.primary;
+                            }
+                            if (data.secondary) {
+                                colourChange('secondary', data.secondary);
+                                secInput.value = data.secondary;
+                            }
+                            if (data.accent1) {
+                                colourChange('accent1', data.accent1);
+                                acc1Input.value = data.accent1;
+                            }
+                            if (data.accent2) {
+                                colourChange('accent2', data.accent2);
+                                acc2Input.value = data.accent2;
+                            }
+                        }
+                    } catch (error) {
+                        alert(
+                            `Ошибка при чтении файла цветов: ${error}`
+                        );
+                    }
+                });
+            }
+            
+            function loadFont() {
+                let font = localStorage.getItem('pageFont');
+                document.getElementById('fontInput').value = font;
+                document.body.querySelectorAll('*').forEach((e) => {
+                    if (!e.className.includes('preserveFont')) e.style.fontFamily = font;
+                });
+            }
+            
+            loadFont();
+
+		</script>
+    </body>
+</html>

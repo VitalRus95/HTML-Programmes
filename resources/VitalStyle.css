@@ -1,0 +1,237 @@
+:root {
+    --accent1: #774936;
+    --accent2: #D69F7E;
+    --primary-colour: #eeebbd;
+    --secondary-colour: #050609;
+}
+
+* {
+    background-color: inherit;
+    box-sizing: border-box;
+    color: inherit;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14pt;
+    margin-top: 1.5px;
+    margin-bottom: 1.5px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    accent-color: var(--accent1);
+    background-color: var(--primary-colour);
+    color: var(--secondary-colour);
+    margin: auto;
+    min-width: 85%;
+    max-width: 85%;
+}
+
+a.button,
+button {
+    display: inline-flex;
+    background-color: var(--accent2);
+    color: var(--secondary-colour);
+    border-color: var(--accent1);
+    border-radius: 7px 0px 7px 0px;
+    border-style: outset;
+    cursor: pointer;
+    padding: 1px;
+    margin: 1px;
+    align-items: center;
+    justify-content: center;
+}
+
+button:disabled {
+    background-color: var(--primary-colour);
+    color: var(--secondary-colour);
+    cursor: not-allowed;
+}
+
+button:focus,
+button:hover {
+    background-color: var(--secondary-colour);
+    color: var(--primary-colour);
+}
+
+details {
+    cursor: default;
+    width: 100%;
+}
+
+details>summary {
+    background-color: var(--accent2);
+    border-radius: 7px 0px 7px 0px;
+    cursor: pointer;
+    padding: 2px;
+}
+
+details>summary:focus,
+details>summary:hover {
+    background-color: var(--secondary-colour);
+    color: var(--accent2);
+}
+
+@keyframes detailsOpening {
+    0% {
+        transform: translateX(0%);
+    }
+    50% {
+        transform: translateX(1%);
+    }
+    100% {
+        transform: translateX(0%)
+    }
+}
+
+details[open] {
+    animation: detailsOpening 0.7s ease-out;
+}
+
+details[open]>summary {
+    border-bottom-color: var(--secondary-colour);
+    border-bottom-style: inset;
+    border-bottom-width: 2px;
+    font-size: 1.05em;
+    font-weight: 600;
+    padding-bottom: 2px;
+}
+
+details[open]>summary:focus,
+details[open]>summary:hover {
+    border-bottom-color: var(--accent2);
+}
+
+h1 {
+    align-self: center;
+    border-bottom-style: dotted;
+    border-bottom-width: 4px;
+    border-color: var(--accent1);
+    font-size: 1.5em;
+    padding: 0px 4px;
+    margin-bottom: 3px;
+}
+
+h1:focus,
+h1:hover {
+    border-bottom-style: solid;
+    border-bottom-left-radius: 10%;
+    border-bottom-right-radius: 10%;
+}
+
+h2 {
+    border-bottom-style: ridge;
+    border-bottom-width: 3px;
+    border-bottom-color: var(--secondary-colour);
+    border-radius: 0px 0px 7px 0px;
+    padding-left: 4px;
+    font-size: 1.4em;
+}
+
+hr {
+    border-color: var(--accent1);
+    width: 100%;
+}
+
+input {
+    border-color: var(--secondary-colour);
+    accent-color: var(--accent2);
+}
+
+input[type='number'] {
+    border-color: var(--accent1);
+    border-radius: 7px 0px 0px 0px;
+    text-align: center;
+    font-weight: 600;
+}
+
+input[type='number']:focus {
+    color: var(--secondary-colour);
+    background-color: var(--accent2);
+}
+
+kbd {
+    background-color: var(--secondary-colour);
+    color: var(--primary-colour);
+    border: 1px solid var(--secondary-colour);
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px var(--secondary-colour);
+    font-weight: 600;
+    margin-right: 2px;
+    padding: 0px 2px;
+}
+
+option:checked {
+    background-color: var(--accent2);
+}
+
+p {
+    margin: 1px;
+}
+
+select {
+    background-color: var(--primary-colour);
+    border-color: var(--accent1);
+    border-radius: 7px 0px 0px 0px;
+    border-style: inset;
+    border-width: 2px;
+    color: var(--secondary-colour);
+}
+
+select:focus {
+    background-color: var(--secondary-colour);
+    color: var(--primary-colour);
+}
+
+table {
+    width: 100%;
+}
+
+th,
+td {
+    border-color: var(--secondary-colour);
+    border-style: inset;
+    border-width: 2px;
+    padding: 2px;
+    text-align: center;
+}
+
+th {
+    background-color: var(--secondary-colour);
+    color: var(--primary-colour);
+    border-radius: 5px 5px 0px 0px;
+    font-size: 13pt;
+    font-weight: bold;
+}
+
+td {
+    border-radius: 0px 0px 5px 0px;
+    font-weight: 600;
+}
+
+th:focus,
+th:hover {
+    background-color: var(--accent2);
+    color: var(--secondary-colour);
+}
+
+td:focus,
+td:hover {
+    background-color: var(--accent2);
+    color: var(--secondary-colour);
+}
+
+.box {
+    display: flex;
+    flex-direction: row;
+    border-color: var(--accent1);
+    border-radius: 7px 0px;
+    border-style: outset;
+    border-width: 2px;
+    padding: 2px;
+}
+
+.box:focus,
+.box:hover {
+    background-color: var(--secondary-colour);
+    color: var(--primary-colour);
+}

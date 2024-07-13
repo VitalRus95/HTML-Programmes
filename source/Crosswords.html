@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Crosswords</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --cell-min-height: calc(20px + 1.5vmax);
+                --cell-max-height: calc(56px + 1.5vmax);
+            }
+
+            li {
+                font-weight: 600;
+            }
+
+            li:hover,
+            li:focus,
+            .question:hover,
+            .question:focus {
+                background-color: var(--primary-colour);
+                color: var(--accent1);
+            }
+
+            textarea {
+                resize: none;
+            }
+
+            .cell {
+                display: flex;
+                aspect-ratio: 1/1;
+                min-height: var(--cell-min-height);
+                max-height: var(--cell-max-height);
+                border-color: var(--secondary-colour);
+                border-style: inset;
+                border-width: calc(2px + 0.1vmax);
+                font-size: calc(8px + 1.3vmax);
+                font-weight: bold;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+                margin: 1.2px;
+            }
+
+            .cell:hover {
+                background-color: var(--accent2);
+            }
+
+            .constructorPopUp {
+                display: none;
+                position: absolute;
+                left: 0%;
+                top: 100%;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                opacity: 85%;
+                padding: 3px;
+                width: 100%;
+                min-width: 40%;
+                max-width: 100%;
+                min-height: 425%;
+                max-height: 80vh;
+            }
+
+            .constructorPopUp:hover,
+            .constructorPopUp:active,
+            .constructorPopUp:focus-within {
+                opacity: 100%;
+            }
+
+            @keyframes letterOpen {
+                0% {
+                    transform: scaleX(1);
+                }
+                50% {
+                    transform: scaleX(0);
+                }
+                100% {
+                    transform: scaleX(1);
+                }
+            }
+
+            .correct {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                transition: background-color 1.7s ease-in;
+                animation: letterOpen 1.25s ease-out;
+            }
+
+            .correct:hover {
+                background-color: var(--primary-colour);
+                color: var(--accent1);
+                transition: none;
+            }
+
+            .empty,
+            .empty:not(:hover) {
+                background-color: transparent;
+                border-style: outset;
+                opacity: 8%;
+                transition: opacity 2.2s ease;
+            }
+
+            .empty:hover {
+                background-color: transparent;
+                border-style: outset;
+                outline-style: none;
+                opacity: 30%;
+                transition: opacity 0.11s ease;
+            }
+
+            .inputCell {
+                background-color: transparent;
+                border-style: none;
+                height: 100%;
+                width: 100%;
+            }
+
+            .inputCell:focus,
+            .inputCell:hover {
+                outline-color: var(--secondary-colour);
+                outline-style: solid;
+                outline-width: calc(2px + 0.5vmax);
+                transition: outline-width 0.3s ease;
+            }
+
+            @keyframes numberResizing {
+                from {
+                    transform: scale(1, 1);
+                }
+                to {
+                    transform: scale(0.9, 0.9);
+                }
+            }
+
+            .number {
+                display: flex;
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                border-style: none;
+                border-width: 4px;
+                outline-style: outset;
+                outline-color: var(--secondary-colour);
+                outline-width: 0;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: calc(10px + 1.3vmax);
+                font-weight: 700;
+                user-select: none;
+                transition: outline-width 0.25s ease;
+            }
+
+            .number:focus,
+            .number:hover {
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                color: var(--secondary-colour);
+                outline-width: calc(2px + 0.2vw);
+                transition: outline-width 0.25s ease;
+                animation: numberResizing 1.5s ease infinite alternate;
+            }
+
+            .horizontal,
+            .horizontal:hover {
+                align-items: center;
+                justify-content: end;
+                border-radius: 50% 4px 4px 50%;
+                border-right-style: solid;
+                padding-right: 2px;
+            }
+
+            .vertical,
+            .vertical:hover {
+                align-items: end;
+                justify-content: center;
+                border-radius: 50% 50% 4px 4px;
+                border-bottom-style: solid;
+            }
+
+            .popUpButton {
+                display: flex;
+                position: relative;
+                cursor: context-menu;
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                opacity: 95%;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                font-weight: 600;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+                margin-top: 0.3%;
+            }
+
+            .popUpButton:hover > .constructorPopUp,
+            .popUpButton:active > .constructorPopUp,
+            .popUpButton:focus-within > .constructorPopUp {
+                display: flex;
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+            }
+
+            .question {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-radius: 0;
+                border-style: none;
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .spoiler {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                font-weight: 600;
+                border-style: none;
+                cursor: help;
+                padding: 0px;
+                padding-inline: 2px;
+                margin: 0px;
+                margin-left: 4px;
+            }
+
+            .tooltip {
+                display: flex;
+                flex-direction: column;
+                position: sticky;
+                top: 0%;
+                z-index: 1;
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                opacity: 95%;
+                flex-wrap: wrap;
+                font-weight: 400;
+                text-align: center;
+                justify-content: center;
+                border-color: var(--secondary-colour);
+                border-radius: 7px 0px;
+                border-style: inset;
+                border-width: 3px;
+                margin-top: 3px;
+                padding: 2px;
+                width: 100%;
+                height: fit-content;
+            }
+
+            .wordProperty {
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+
+            .wordsCategory {
+                background-color: var(--accent2);
+                border-color: var(--accent2);
+                border-style: inset;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                padding: 1px;
+                padding-inline: 4px;
+                font-weight: 500;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Кроссворды</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+
+            <div style='display: flex; flex-wrap: wrap'>
+                <div style='display: flex; align-items: baseline; margin-right: 2%'>
+                    <input id='showAnswers' type='checkbox' onclick='if(crosswordGrid.innerHTML) generateCrossword()' />
+                    <label for='showAnswers'>Ответы</label>
+                </div>
+
+                <div style='display: flex; align-items: baseline; margin-right: 2%'>
+                    <input id='toggleConstructor' type='checkbox' onclick='setConstructorState()' />
+                    <label for='toggleConstructor'>Конструктор</label>
+                </div>
+
+                <div style='display: flex; align-items: center'>
+                    <label for='cellEdgeRadius'>Скругление ячеек</label>
+                    <input id='cellEdgeRadius' type='range' min='0' max='50' list='cellEdgeRadiusList' style='min-width: 30vw; max-width: 50vw' oninput='setCellRoundness()' />
+                    <label id='cellEdgeRadiusValue'></label>
+
+                    <datalist id='cellEdgeRadiusList'>
+                        <option value='10' label='10'></option>
+                        <option value='20' label='20'></option>
+                        <option value='25' label='25'></option>
+                        <option value='30' label='30'></option>
+                        <option value='40' label='40'></option>
+                    </datalist>
+                </div>
+            </div>
+        </details>
+
+        <!-- Load button -->
+        <div class='box' style='display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between'>
+            <label for='loadButton' style='flex-grow: 1; cursor: pointer'>&#128193; Открыть кроссворд</label>
+            <input id='loadButton' type='file' accept='.json' style='cursor: pointer' onchange='loadCrossword()' />
+        </div>
+        <a download='Crossword.json' href='' id='saveCrossword' class='box' style='display: none; text-decoration: none; width: 100%' onclick='saveCrossword()'> &#128190; Сохранить кроссворд </a>
+
+        <!-- Constructor, questions, grid -->
+        <div style='display: flex; flex-direction: column'>
+            <details open>
+                <summary>Вопросы</summary>
+                <p class='wordsCategory' tabindex='1'>По горизонтали:</p>
+                <ol id='horizontalQuestions'></ol>
+                <p class='wordsCategory' tabindex='1'>По вертикали:</p>
+                <ol id='verticalQuestions'></ol>
+            </details>
+
+            <details open style='position: relative'>
+                <summary>Кроссворд</summary>
+                <div style='position: sticky; top: 0%; z-index: 1'>
+                    <span id='questionTooltip' class='tooltip' style='height: 11vh; min-height: 1.7em; max-height: 20vh; resize: vertical; overflow: auto'>Загрузите кроссворд из внешнего файла или создайте новый. </span>
+
+                    <div id='constructor' style='display: none'>
+                        <!-- Words input -->
+                        <div class='popUpButton' tabindex='1'>
+                            Поле ввода
+                            <div class='constructorPopUp' style='resize: both; overflow: hidden'>
+                                <textarea id='textWords' cols='20' rows='4' tabindex='1' style='width: 100%; height: 100%; border-style: none' oninput='fillWordsList()' placeholder='Вводите слова сюда (разделитель — пробел или перенос строки).'></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Words menu -->
+                        <div class='popUpButton' tabindex='1'>
+                            <div id='headerWordsMenu' style='background-color: transparent'>Меню слов</div>
+                            <div class='constructorPopUp' style='flex-direction: column; resize: both; overflow: auto'>
+                                <select id='menuWords' multiple tabindex='1' style='width: 100%; height: 100%; border-style: none' onchange='wordChosen()'></select>
+
+                                <div class='wordProperty'>
+                                    <label for='wordDescription'>Описание</label>
+                                    <input id='wordDescription' type='text' tabindex='1' style='margin-left: 2px; margin-right: 1px; width: 100%' oninput='wordPropertiesUpdate(undefined)' />
+                                </div>
+
+                                <div style='display: flex; width: 100%; justify-items: stretch'>
+                                    <button id='removeOrAddWord' title='Добавить на сетку/Убрать с сетки' tabindex='1' onclick='wordPropertiesUpdate("switch")' style='font-weight: 900; width: 100%'>+</button>
+
+                                    <p style='border: 3px ridge var(--secondary-colour)'></p>
+
+                                    <button id='moveLeft' title='Влево' tabindex='1' onclick='wordPropertiesUpdate("left")' style='width: 100%'>&#9664;</button>
+                                    <button id='moveRight' title='Вправо' tabindex='1' onclick='wordPropertiesUpdate("right")' style='width: 100%'>&#9654;</button>
+                                    <button id='moveUp' title='Вверх' tabindex='1' onclick='wordPropertiesUpdate("up")' style='width: 100%'>&#9650;</button>
+                                    <button id='moveDown' title='Вниз' tabindex='1' onclick='wordPropertiesUpdate("down")' style='width: 100%'>&#9660;</button>
+                                    <button id='rotate' title='Повернуть' tabindex='1' onclick='wordPropertiesUpdate("rotate")' style='font-weight: 900; width: 100%'>&#8635;</button>
+
+                                    <p style='border: 3px ridge var(--secondary-colour)'></p>
+
+                                    <button id='selectUsed' title='Выбрать все слова на сетке' tabindex='1' onclick='selectUsedWords()' style='font-weight: 900; width: 100%'>&#10004;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style='overflow: auto'>
+                    <div id='crosswordGrid' style='width: fit-content; min-width: min-content; max-width: 100%; width: 100%; resize: horizontal; overflow: auto; padding: calc(4px + 0.2vw); cursor: crosshair'></div>
+                </div>
+            </details>
+        </div>
+
+        <div class='box' style='font-style: italic'>Автор — Виталий Павлович Ульянов. Помогали: Максим Чинкин.</div>
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            /**
+             * @typedef {Object} Word
+             * @property {string} word
+             * @property {string} description
+             * @property {number} column
+             * @property {number} row
+             * @property {boolean} isVertical
+             * @property {number} number
+             */
+            // Elements and variables
+            /** * @type {HTMLTableElement} */
+            let crosswordGrid = document.getElementById('crosswordGrid');
+            /** * @type {HTMLOListElement} */
+            let horizontalQuestions = document.getElementById('horizontalQuestions');
+            /** * @type {HTMLOListElement} */
+            let verticalQuestions = document.getElementById('verticalQuestions');
+            /** * @type {HTMLInputElement} */
+            let showAnswers = document.getElementById('showAnswers');
+            /** * @type {HTMLTextAreaElement} */
+            let textWords = document.getElementById('textWords');
+            /** * @type {HTMLAnchorElement} */
+            let saveButton = document.getElementById('saveCrossword');
+            /** * @type {HTMLInputElement} */
+            let loadButton = document.getElementById('loadButton');
+            /** * @type {HTMLInputElement} */
+            let switchWordButton = document.getElementById('removeOrAddWord');
+            /** * @type {HTMLSelectElement} */
+            let menuWords = document.getElementById('menuWords');
+            /** * @type {HTMLInputElement} */
+            let wordDescription = document.getElementById('wordDescription');
+            /** * @type {HTMLSpanElement} */
+            let questionTooltip = document.getElementById('questionTooltip');
+            /** * @type {HTMLParagraphElement} */
+            let headerWordsMenu = document.getElementById('headerWordsMenu');
+            /** * @type {HTMLInputElement} */
+            let toggleConstructor = document.getElementById('toggleConstructor');
+            /** * @type {HTMLInputElement} */
+            let cellEdgeRadius = document.getElementById('cellEdgeRadius');
+            /** * @type {HTMLLabelElement} */
+            let cellEdgeRadiusValue = document.getElementById('cellEdgeRadiusValue');
+            /** * @type {HTMLDivElement} */
+            let constructor = document.getElementById('constructor');
+
+            const gridMinX = 0;
+            const gridMinY = 0;
+            const gridMaxX = 49;
+            const gridMaxY = 49;
+            const checkMarkIcon = '&#10004;';
+            const statusBarIcon = '&#10002;';
+            const deleteIcon = '&#10006;';
+            const switchIcon = '&#8646;';
+            const cellMinHeight = getComputedStyle(document.body).getPropertyValue('--cell-min-height');
+            const cellMaxHeight = getComputedStyle(document.body).getPropertyValue('--cell-max-height');
+
+            /** * @type {Word[]} */
+            let words = [];
+            let crosswordName = '';
+
+            // Continuous input when a word number is pressed instead of tabbing or moving the cursor
+            /** * @type {HTMLButtonElement} */
+            let inputFlowLastNumber = undefined;
+            let inputFlowRow = undefined;
+            let inputFlowColumn = undefined;
+            let inputFlowVertical = false;
+
+            loadButton.value = '';
+            cellEdgeRadius.value = localStorage.getItem('cellRoundness') ?? 20;
+
+            document.querySelectorAll('[title]').forEach((e) => {
+                e.addEventListener('mouseenter', function () {
+                    updateTooltip(e.title);
+                });
+                e.addEventListener('mouseleave', function () {
+                    updateTooltip(undefined);
+                });
+            });
+
+            function clamp(value, min, max) {
+                return value > max ? max : value < min ? min : value;
+            }
+
+            function getNextCellId(row, column, incrementRow, incrementColumn) {
+                return `${row + incrementRow};${column + incrementColumn}`;
+            }
+
+            function generateCrossword() {
+                /** * @type {HTMLElement[][]} */
+                let grid = [];
+                let maxColumn = 0;
+                let maxRow = 0;
+                let horizontalCounter = 0;
+                let verticalCounter = 0;
+
+                [horizontalQuestions, verticalQuestions, crosswordGrid].forEach((e) => {
+                    while (e.hasChildNodes()) e.lastChild.remove();
+                });
+
+                // Add check mark icon to used words in the menu
+                for (var i = 0; i < menuWords.options.length; i++) {
+                    const o = menuWords.options[i];
+                    let index = words.findIndex((w) => w.word === o.value);
+                    if (isWordOutOfBounds(words[index])) o.innerHTML = o.value;
+                    else o.innerHTML = `${checkMarkIcon} ${o.value}`;
+                }
+
+                // Iterate over words to determine the grid's max column and row
+                words.forEach((w) => {
+                    if (isWordOutOfBounds(w)) return;
+                    const c = w.column;
+                    const r = w.row;
+
+                    if (w.isVertical) {
+                        if (maxColumn < c) maxColumn = c;
+                        if (maxRow < r + w.word.length) maxRow = r + w.word.length;
+                    } else {
+                        if (maxColumn < c + w.word.length) maxColumn = c + w.word.length;
+                        if (maxRow < r) maxRow = r;
+                    }
+                });
+
+                // Add one cell for inserting numbers
+                maxColumn++;
+                maxRow++;
+
+                // Sort by column and row
+                words.sort((a, b) => a.column - b.column).sort((a, b) => a.row - b.row);
+
+                // Prepare an empty grid
+                for (var r = 0; r < maxRow; r++) {
+                    grid.push([]);
+                    for (var c = 0; c < maxColumn; c++) {
+                        grid[r].push(undefined);
+                    }
+                }
+
+                // Filling the grid and the questions
+                let font = localStorage.getItem('pageFont');
+
+                words.forEach((w, wi) => {
+                    if (isWordOutOfBounds(w)) return;
+                    const c = w.column;
+                    const r = w.row;
+
+                    // Add +1 to questions count
+                    if (w.isVertical) verticalCounter++;
+                    else horizontalCounter++;
+
+                    // Assign a number derived from questions quantity
+                    w.number = w.isVertical ? verticalCounter : horizontalCounter;
+
+                    // Add a list item to the questions
+                    let container = w.isVertical ? verticalQuestions.appendChild(document.createElement('li')) : horizontalQuestions.appendChild(document.createElement('li'));
+
+                    let question = container.appendChild(document.createElement('button'));
+                    let questionTooltipText = `№${w.number}. ${w.description} [букв: ${w.word.length}]`;
+                    question.className = 'question';
+                    question.style.display = 'block';
+                    question.style.textAlign = 'left';
+                    question.style.fontFamily = font;
+                    question.addEventListener('click', function (event) {
+                        /** * @type {HTMLButtonElement} */
+                        if (question !== event.target) return;
+                        let button = document.getElementById(`${r};${c}`);
+                        button.focus();
+                        inputFlow(w.isVertical ? r + 1 : r, w.isVertical ? c : c + 1, w.isVertical, button);
+                        updateTooltip(questionTooltipText);
+                    });
+                    question.innerText = `${w.description} — `;
+
+                    // Add the question's answer in a spoiler
+                    let spoiler = question.appendChild(document.createElement('button'));
+                    spoiler.className = 'spoiler';
+                    spoiler.style.fontFamily = font;
+                    spoiler.innerText = '?';
+                    spoiler.addEventListener('click', function () {
+                        this.innerText = this.innerText === '?' ? w.word : '?';
+                    });
+
+                    // Add the question number
+                    /** * @type {HTMLButtonElement} */
+                    let number = document.createElement('button');
+                    number.id = `${r};${c}`;
+                    number.className = `cell number preserveFont ${w.isVertical ? 'vertical' : 'horizontal'}`;
+                    number.tabIndex = 1;
+                    number.innerText = w.number;
+
+                    //#region Number events
+                    number.addEventListener('mouseenter', function () {
+                        if (toggleConstructor.checked) {
+                            this.draggable = true;
+                            this.style.cursor = 'grab';
+                        } else {
+                            this.draggable = false;
+                            this.style.cursor = !showAnswers.checked ? 'pointer' : 'help';
+                        }
+                        if (document.activeElement !== this && document.activeElement.tagName !== 'INPUT') this.focus();
+                    });
+                    number.addEventListener('focus', function () {
+                        updateTooltip(questionTooltipText);
+                    });
+                    number.addEventListener('blur', function () {
+                        updateTooltip(undefined);
+                    });
+                    number.addEventListener('click', function () {
+                        if (toggleConstructor.checked) {
+                            w.isVertical = !w.isVertical;
+                            generateCrossword();
+                        } else if (!showAnswers.checked) {
+                            inputFlow(w.isVertical ? r + 1 : r, w.isVertical ? c : c + 1, w.isVertical, number);
+                            updateTooltip(questionTooltipText);
+                        }
+                    });
+                    number.addEventListener('dragstart', function (event) {
+                        event.dataTransfer.setData('text/plain', `${wi}`);
+                    });
+                    number.addEventListener('keydown', function (event) {
+                        if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+
+                        let changeR = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
+                        let changeC = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+
+                        let nextId = getNextCellId(r, c, changeR, changeC);
+                        let nextCell = document.getElementById(nextId);
+
+                        if (nextCell) {
+                            event.preventDefault();
+                            inputFlow(r + changeR, c + changeC, ['ArrowUp', 'ArrowDown'].includes(event.key), undefined);
+                        }
+                    });
+                    //#endregion
+
+                    grid[r][c] = number;
+
+                    // Add the word's letters
+                    for (var i = 0; i < w.word.length; i++) {
+                        let letter = w.word[i];
+                        let letterRow = w.isVertical ? r + 1 + i : r;
+                        let letterColumn = w.isVertical ? c : c + 1 + i;
+                        let letterId = `${letterRow};${letterColumn}`;
+
+                        let cell = document.createElement('div');
+                        cell.id = letterId;
+                        cell.className = 'cell';
+                        cell.addEventListener('drop', function (event) {
+                            cellDrop(event);
+                        });
+                        cell.addEventListener('dragover', function (event) {
+                            event.preventDefault();
+                        });
+
+                        // Cell content
+                        if (showAnswers.checked || toggleConstructor.checked) {
+                            cell.innerText = w.word[i].toUpperCase();
+                        } else {
+                            let input = cell.appendChild(document.createElement('input'));
+
+                            if (!grid[letterRow][letterColumn]?.id) {
+                                input.dataset.tooltip = questionTooltipText;
+                            } else {
+                                input.dataset.tooltip = `${questionTooltipText} / ${grid[letterRow][letterColumn].firstChild?.dataset.tooltip}`;
+                            }
+
+                            input.id = `i${letterId}`;
+                            input.className = 'cell inputCell';
+                            input.style.fontFamily = font;
+                            input.type = 'text';
+                            input.maxLength = 1;
+                            input.tabIndex = 0;
+                            input.addEventListener('focus', function () {
+                                this.select();
+                                updateTooltip(this.dataset.tooltip);
+                            });
+                            input.addEventListener('input', function () {
+                                check(this, letter);
+                            });
+                            input.addEventListener('keydown', function (event) {
+                                if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+
+                                let changeR = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
+                                let changeC = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+
+                                let nextId = getNextCellId(letterRow, letterColumn, changeR, changeC);
+                                let nextCell = document.getElementById(nextId);
+
+                                if (nextCell) {
+                                    event.preventDefault();
+                                    inputFlow(letterRow + changeR, letterColumn + changeC, ['ArrowUp', 'ArrowDown'].includes(event.key), undefined);
+                                }
+                            });
+                        }
+                        grid[w.isVertical ? r + 1 + i : r][w.isVertical ? c : c + 1 + i] = cell;
+                    }
+                });
+
+                // Draw the grid
+                for (var r = 0; r < maxRow; r++) {
+                    /** * @type {HTMLDivElement}  */
+                    let row = crosswordGrid.appendChild(document.createElement('div'));
+                    row.style.display = 'flex';
+                    row.style.aspectRatio = `${maxColumn / 1}`;
+                    row.style.maxHeight = `${cellMaxHeight}`;
+
+                    for (var c = 0; c < maxColumn; c++) {
+                        if (grid[r][c] === undefined) {
+                            /** * @type {HTMLDivElement} */
+                            let column = row.appendChild(document.createElement('div'));
+                            column.id = `e${r};${c}`;
+                            column.className = 'cell empty';
+                            column.addEventListener('drop', function (event) {
+                                cellDrop(event);
+                            });
+                            column.addEventListener('dragover', function (event) {
+                                event.preventDefault();
+                            });
+                            grid[r][c] = column;
+                        }
+                        grid[r][c].dataset.row = r;
+                        grid[r][c].dataset.column = c;
+                        row.appendChild(grid[r][c]);
+                    }
+                }
+
+                questionTooltip.innerHTML = `${statusBarIcon} ${crosswordName}`;
+                headerWordsMenu.innerText = `Меню слов [${[...menuWords.options].filter((o) => o.innerText !== o.value).length}/${words.length}]`;
+
+                setCellRoundness();
+            }
+
+            /**
+             * @param {DragEvent} event
+             */
+            function cellDrop(event) {
+                if (!toggleConstructor.checked) return;
+                /** @type {HTMLDivElement} */
+                event.preventDefault();
+                /** @type {HTMLDivElement} */
+                let target = event.target;
+                let i = parseInt(event.dataTransfer.getData('text/plain'));
+                let r = parseInt(target.dataset.row);
+                let c = parseInt(target.dataset.column);
+                if (r !== undefined && c !== undefined) {
+                    words[i].row = r > gridMaxY ? gridMaxY : r;
+                    words[i].column = c > gridMaxX ? gridMaxX : c;
+                    generateCrossword();
+                }
+            }
+
+            function saveCrossword() {
+                let data = encodeURIComponent(JSON.stringify(words, undefined, 2));
+                saveButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            async function loadCrossword() {
+                await loadButton.files[0].text().then((content) => {
+                    try {
+                        let data = JSON.parse(content);
+                        if (data) {
+                            words = data;
+                            let wordsList = '';
+                            words.forEach((w) => {
+                                wordsList += `${w.word} `;
+                            });
+                            textWords.value = wordsList;
+                            crosswordName = `${loadButton.files[0].name.replace('.json', '')} [слов: ${words.length}]`;
+                            resetInputFlow();
+                            fillWordsList();
+                        }
+                    } catch (error) {
+                        alert(`Ошибка при чтении файла или создании кроссворда: ${error}`);
+                    }
+                });
+            }
+
+            /**
+             * @param {Word} word
+             */
+            function isWordOutOfBounds(word) {
+                const c = word.column;
+                const r = word.row;
+                return c < gridMinX || r < gridMinY || c > gridMaxX || r > gridMaxY;
+            }
+
+            function fillWordsList() {
+                let wordsList = [...new Set(textWords.value.split(/[\n\s]+/))].filter((w) => w !== '');
+
+                // Delete words from the global list that are not present in the text area
+                for (var i = words.length - 1; i >= 0; i--) {
+                    if (!wordsList.includes(words[i].word)) words.splice(i, 1);
+                }
+
+                // Fill the global words list
+                wordsList.forEach((w, i) => {
+                    if (!words.map((w) => w.word).includes(w))
+                        words.push({
+                            word: w,
+                            description: '',
+                            column: -1,
+                            row: i,
+                            isVertical: false,
+                            number: 0,
+                        });
+                });
+
+                while (menuWords.hasChildNodes()) menuWords.lastChild.remove();
+                words.forEach((w, wi) => {
+                    /** * @type {HTMLOptionElement} */
+                    let option = menuWords.appendChild(document.createElement('option'));
+                    option.value = w.word;
+                    option.innerText = w.word;
+                    option.style.fontFamily = font;
+                    option.addEventListener('click', function () {
+                        if (menuWords.selectedOptions.length === 0) wordDescription.value = '';
+                    });
+                });
+                generateCrossword();
+            }
+
+            function selectUsedWords() {
+                for (var i = 0; i < menuWords.options.length; i++) {
+                    const o = menuWords.options[i];
+                    if (o.innerText !== o.value) o.selected = true;
+                    else o.selected = false;
+                }
+                wordChosen();
+            }
+
+            function wordChosen() {
+                if (menuWords.selectedIndex === -1) return;
+
+                let index = words.findIndex((w) => w.word === menuWords[menuWords.selectedIndex].value);
+
+                if (menuWords.selectedOptions.length === 1) {
+                    wordDescription.value = words[index].description;
+                    if (isWordOutOfBounds(words[index])) {
+                        switchWordButton.innerHTML = '+';
+                    } else {
+                        switchWordButton.innerHTML = deleteIcon;
+                    }
+                } else {
+                    wordDescription.value = '...';
+                    switchWordButton.innerHTML = switchIcon;
+                }
+            }
+
+            function moveWord(index, moveDirection) {
+                if (moveDirection === 'switch') {
+                    if (isWordOutOfBounds(words[index])) {
+                        words[index].column = clamp(words[index].column, gridMinX, gridMaxX);
+                        words[index].row = clamp(words[index].row, gridMinY, gridMaxY);
+                    } else {
+                        words[index].column = -1;
+                        words[index].isVertical = false;
+                    }
+                } else if (!isWordOutOfBounds(words[index])) {
+                    switch (moveDirection) {
+                        case 'left':
+                            words[index].column--;
+                            break;
+                        case 'right':
+                            words[index].column++;
+                            break;
+                        case 'up':
+                            words[index].row--;
+                            break;
+                        case 'down':
+                            words[index].row++;
+                            break;
+                        case 'rotate':
+                            words[index].isVertical = !words[index].isVertical;
+                            break;
+                        default:
+                            break;
+                    }
+                    words[index].column = clamp(words[index].column, gridMinX, gridMaxX);
+                    words[index].row = clamp(words[index].row, gridMinY, gridMaxY);
+                }
+
+                resetInputFlow();
+            }
+
+            function wordPropertiesUpdate(moveDirection) {
+                if (menuWords.selectedIndex === -1) return;
+
+                // Change description if only one word is chosen
+                if (menuWords.selectedOptions.length === 1) {
+                    let index = words.findIndex((w) => w.word === menuWords[menuWords.selectedIndex].value);
+                    words[index].description = wordDescription.value;
+                }
+                // Move/add/remove words
+                if (moveDirection) {
+                    for (var i = 0; i < menuWords.selectedOptions.length; i++) {
+                        let index = words.findIndex((w) => w.word === menuWords.selectedOptions[i].value);
+                        moveWord(index, moveDirection);
+                    }
+                }
+                generateCrossword();
+                wordChosen();
+            }
+
+            /**
+             * @param {HTMLInputElement} input
+             * @param {string} answer
+             */
+            function check(input, answer) {
+                input.value = input.value.toUpperCase();
+
+                if (input.value == answer.toUpperCase()) {
+                    input.parentElement.className = 'cell correct';
+                } else {
+                    input.parentElement.className = 'cell';
+                    if (input.value === ' ') {
+                        input.value = '';
+                    } else {
+                        input.select();
+                        return;
+                    }
+                }
+
+                // Input flow: continue typing by automatically selecting the next cell
+                if (input.id === `i${inputFlowRow};${inputFlowColumn}`) {
+                    inputFlowRow += inputFlowVertical ? 1 : 0;
+                    inputFlowColumn += inputFlowVertical ? 0 : 1;
+
+                    /** * @type {HTMLInputElement} */
+                    let nextCell = document.getElementById(`i${inputFlowRow};${inputFlowColumn}`);
+                    if (nextCell) nextCell.focus();
+                    else if (inputFlowLastNumber) {
+                        inputFlowLastNumber.focus();
+                        inputFlowLastNumber = undefined;
+                    }
+                }
+            }
+
+            /**
+             * @param {number} row
+             * @param {number} column
+             * @param {boolean} vertical
+             * @param {HTMLButtonElement} button
+             */
+            function inputFlow(row, column, vertical, button) {
+                if (toggleConstructor.checked || showAnswers.checked) return;
+
+                /** * @type {HTMLInputElement} */
+                let cell = document.getElementById(`i${row};${column}`) ?? document.getElementById(`${row};${column}`);
+                if (cell) cell.focus();
+                else return;
+
+                inputFlowRow = row;
+                inputFlowColumn = column;
+                inputFlowVertical = vertical;
+                inputFlowLastNumber = button;
+            }
+
+            function resetInputFlow() {
+                inputFlowLastNumber = undefined;
+                inputFlowRow = undefined;
+                inputFlowColumn = undefined;
+                inputFlowVertical = false;
+            }
+
+            function updateTooltip(value) {
+                if (value && questionTooltip.innerHTML !== `${statusBarIcon} ${value}`) {
+                    questionTooltip.innerHTML = `${statusBarIcon} ${value}`;
+                } else if (questionTooltip.innerHTML !== `${statusBarIcon} ${crosswordName}`) {
+                    questionTooltip.innerHTML = `${statusBarIcon} ${crosswordName}`;
+                }
+            }
+
+            function setConstructorState() {
+                [saveButton, constructor].forEach((e) => {
+                    e.style.display = toggleConstructor.checked ? 'flex' : 'none';
+                });
+                generateCrossword();
+            }
+
+            function setCellRoundness() {
+                /** * @type {Number} */
+                let roundness = clamp(cellEdgeRadius.value, 0, 50);
+                let percent = `${roundness}%`;
+                let inverted = `${clamp(50 - roundness, 15, 45)}%`;
+
+                cellEdgeRadius.value = roundness;
+                cellEdgeRadiusValue.innerText = `${roundness}`.padStart(2, '0');
+                localStorage.setItem('cellRoundness', roundness);
+                document.body.querySelectorAll('.cell').forEach((c) => {
+                    if (!c.className.includes('number')) c.style.borderRadius = percent;
+                    else if (c.className.includes('horizontal')) c.style.borderRadius = `${inverted} ${percent} ${percent} ${inverted}`;
+                    else c.style.borderRadius = `${inverted} ${inverted} ${percent} ${percent}`;
+                });
+            }
+
+            setConstructorState();
+        </script>
+    </body>
+</html>

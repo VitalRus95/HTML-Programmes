@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>English Grammar</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            body {
+                max-width: 80%;
+            }
+
+            li::marker {
+                color: var(--accent1);
+                font-weight: 600;
+            }
+
+            span {
+                display: flex;
+                background-color: var(--secondary-colour);
+                border-color: var(
+                                        --accent2);
+                border-radius: 0px 0px 7px 0px;
+                border-style: ridge;
+                color: var(
+                                        --primary-colour);
+                margin-top: 4px;
+                padding: 1px;
+                font-size: 1.05em;
+                font-weight: 600;
+            }
+
+            th {
+                cursor: pointer;
+                overflow: auto;
+                resize: horizontal;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>English Grammar</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- Page main body -->
+        <details open>
+            <summary>Modal verbs</summary>
+
+            <ul style='list-style: none;' id='modalVerbs'></ul>
+        </details>
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов. Использованы материалы Collins
+            English Dictionary.
+        </div>
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            /**
+             * @typedef {Object} ModalVerb
+             * @property {string} verb
+             * @property {string[]} funcs
+             * @property {string[]} grammar
+             * @property {string[]} notes
+             * @property {string[]} examples
+             */
+            /** * @type {ModalVerb[]} */
+            let modalVerbs = [
+                {
+                    verb: 'Can',
+                    funcs: [
+                        'Ability',
+                        'Permission',
+                        'Plan',
+                        'Possibility',
+                        'Request',
+                    ],
+                    grammar: ['Not used for past time'],
+                    notes: [
+                        'Ability of a more general nature that includes ‘is permitted to’',
+                    ],
+                    examples: [
+                        'She can speak Spanish.',
+                        'Can I borrow the car tomorrow evening, Mum?',
+                        'We can go to Paris next week since you are free.',
+                    ],
+                },
+                {
+                    verb: 'Could',
+                    funcs: [
+                        'Ability',
+                        'Permission',
+                        'Plan',
+                        'Possibility',
+                        'Request',
+                    ],
+                    grammar: [
+                        'Used instead of <i>can</i> in past time, reported speech',
+                    ],
+                    notes: [
+                        'Ability of a more general nature that includes ‘is permitted to’',
+                        'A more tentative request than <i>can</i>',
+                        'Actions that were possible but did not happen: <i>could</i> + the perfect form of <i>have</i>',
+                    ],
+                    examples: [
+                        'When I was younger I could play tennis really well.',
+                        'Could I come with you on the trip?',
+                        'We could go to Paris next week if you are free.',
+                        'Mary could have stopped the fight but she didn’t.',
+                    ],
+                },
+                {
+                    verb: 'May',
+                    funcs: ['Permission', 'Possibility', 'Request'],
+                    grammar: [
+                        'Used for the present and future',
+                        'Becomes <i>could</i> in reported speech',
+                    ],
+                    notes: [
+                        'A more formal permission than <i>can</i>, particularly used when applied to you, he, she, they or a proper noun',
+                        'Is often used for politeness',
+                    ],
+                    examples: [
+                        '‘May I come with you?’ Nicky asked.',
+                        'May I use your ruler? I’ve lost mine.',
+                        'You may go now.',
+                        'The weather may be better tomorrow.',
+                    ],
+                },
+                {
+                    verb: 'Might',
+                    funcs: ['Possibility', 'Request'],
+                    grammar: [
+                        'Used for the present and future',
+                        'When used in a conditional sentence, the if clause can be in the <i>present</i> or the <i>past</i> tense',
+                    ],
+                    notes: [
+                        'Is occasionally used in formal situations',
+                        'A more tentative possibility than <i>may</i>',
+                        'Makes the speaker more remote from the request',
+                        'Occasionally means persuasion, perhaps with some degree of irritation [a little old-fashioned]',
+                    ],
+                    examples: [
+                        'Might I ask you your name?',
+                        'Might I suggest a different solution?',
+                        'The weather might be better tomorrow.',
+                        'You might give that idea a bit more consideration.',
+                        'You might give me some cake too, Lucy.',
+                        'If Louisa comes/came, she might look after the children.',
+                    ],
+                },
+                {
+                    verb: 'Must',
+                    funcs: ['Obligation', 'Order', 'Advice'],
+                    grammar: [
+                        'Used only for the present and future',
+                        'For the past use <i>have to</i>',
+                        'Becomes <i>have to</i> in reported speech'
+                    ],
+                    notes: [
+                        'Can be used to speculate about the truth of something (with negative and interrogative, <i>can</i> is used instead)',
+                        '<i>Must</i> with a negative is used to <i>forbid</i> something or to indicate something is <i>unacceptable</i>'
+                    ],
+                    examples: [
+                        'All pupils must bring a packed lunch tomorrow.',
+                        'You must go to sleep now.',
+                        'You must see ‘Nim’s Island’ – it’s brilliant.',
+                        'There must be some mistake.',
+                        'You must not cross when the light is red.',
+                        'The whale must not become extinct.'
+                    ],
+                },
+            ];
+
+            /**
+             * @param {string} tableId
+             * @param {Object[]} data
+             * @param {Object} headers
+             */
+            function generateTable(tableId, data, headers) {
+                // Get the table element
+                let table = document.getElementById(tableId);
+                if (!table) return;
+
+                // Clear the table
+                while (table.hasChildNodes()) table.lastChild.remove();
+
+                // Add head and body elements
+                let tableHead = table.appendChild(
+                    document.createElement('thead')
+                );
+                let tableBody = table.appendChild(
+                    document.createElement('tbody')
+                );
+
+                // Add headers
+                let tableHeadRow = tableHead.appendChild(
+                    document.createElement('tr')
+                );
+
+                Object.keys(headers).forEach((h) => {
+                    let header = tableHeadRow
+                        .appendChild(document.createElement('th'))
+                        .appendChild(document.createElement('div'));
+                    if (lastSortedColumn.header === h) {
+                        header.innerHTML = lastSortedColumn.dirAZ
+                            ? `${headers[h]}&#0160;&#11015;`
+                            : `${headers[h]}&#0160;&#11014;`;
+                    } else {
+                        header.innerText = headers[h];
+                    }
+                    header.addEventListener('click', function () {
+                        if (lastSortedColumn.header !== h)
+                            lastSortedColumn.dirAZ = true;
+
+                        let sorted = lastSortedColumn.dirAZ
+                            ? // A > Z
+                              [...data].sort((a, b) =>
+                                  a[h] > b[h] ? 1 : b[h] > a[h] ? -1 : 0
+                              )
+                            : // Z > A
+                              [...data].sort((a, b) =>
+                                  b[h] > a[h] ? 1 : a[h] > b[h] ? -1 : 0
+                              );
+
+                        lastSortedColumn.header = h;
+                        generateTable(tableId, sorted, headers);
+                        lastSortedColumn.dirAZ = !lastSortedColumn.dirAZ;
+                    });
+                });
+
+                // Add rows and columns
+                data.forEach((e, i) => {
+                    let tableBodyRow = tableBody.appendChild(
+                        document.createElement('tr')
+                    );
+
+                    Object.keys(e).forEach((p, pi) => {
+                        let cell = tableBodyRow.appendChild(
+                            document.createElement('td')
+                        );
+                        cell.innerHTML = e[p];
+                    });
+                });
+            }
+
+            /**
+             * @param {ModalVerb[]} data
+             */
+            function fillModalVerbs(data) {
+                let div = document.getElementById('modalVerbs');
+
+                data.forEach((v) => {
+                    let details = div.appendChild(
+                        document.createElement('li')
+                    ).appendChild(
+                        document.createElement('details')
+                    );
+
+                    let header = details.appendChild(document.createElement('summary'));
+                    header.innerText = v.verb;
+
+                    details.appendChild(document.createElement('span')).innerText =
+                        'Functions';
+
+                    let functions = details.appendChild(
+                        document.createElement('ol')
+                    );
+                    v.funcs.forEach((f) => {
+                        let func = functions.appendChild(
+                            document.createElement('li')
+                        );
+                        func.innerHTML = f;
+                    });
+
+                    details.appendChild(document.createElement('span')).innerText =
+                        'Grammar notes';
+
+                    let grammar = details.appendChild(document.createElement('ul'));
+                    v.grammar.forEach((g) => {
+                        let gramNote = grammar.appendChild(
+                            document.createElement('li')
+                        );
+                        gramNote.innerHTML = g;
+                    });
+
+                    details.appendChild(document.createElement('span')).innerText =
+                        'Usage notes';
+
+                    let usage = details.appendChild(document.createElement('ul'));
+                    v.notes.forEach((n) => {
+                        let usageNote = usage.appendChild(
+                            document.createElement('li')
+                        );
+                        usageNote.innerHTML = n;
+                    });
+
+                    details.appendChild(document.createElement('span')).innerText =
+                        'Examples';
+
+                    let examples = details.appendChild(
+                        document.createElement('ul')
+                    );
+                    v.examples.forEach((e) => {
+                        let example = examples.appendChild(
+                            document.createElement('li')
+                        );
+                        example.innerHTML = e;
+                    });
+                });
+            }
+
+            fillModalVerbs(modalVerbs);
+        </script>
+    </body>
+</html>

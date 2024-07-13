@@ -1,0 +1,90 @@
+[
+  {
+    "word": "permutation",
+    "description": "A combination of items made by reordering",
+    "column": 6,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "procreate",
+    "description": "To produce (young); beget (offspring)",
+    "column": 11,
+    "row": 0,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "personhood",
+    "description": "The state or fact of being an individual or having human characteristics and feelings",
+    "column": 3,
+    "row": 3,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "accord",
+    "description": "To grant; bestow",
+    "column": 8,
+    "row": 4,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "straitjacket",
+    "description": "A special jacket used to tie the arms of a violent person tightly around their body",
+    "column": 0,
+    "row": 6,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "monstrosity",
+    "description": "The state or quality of being outrageous or ugly",
+    "column": 1,
+    "row": 8,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "attenuate",
+    "description": "To weaken or become weak; reduce in size, strength, density, or value",
+    "column": 5,
+    "row": 12,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "conjugal",
+    "description": "Relating to marriage or a married couple's relationship",
+    "column": 7,
+    "row": 12,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "risible",
+    "description": "Causing laughter; ridiculous",
+    "column": 10,
+    "row": 12,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "advance",
+    "description": "To bring or be brought to a further stage of development; improve",
+    "column": 1,
+    "row": 13,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "parallel",
+    "description": "To happen at the same time or to be similar, and often to seem to be connected",
+    "column": 3,
+    "row": 19,
+    "isVertical": false,
+    "number": 5
+  }
+]

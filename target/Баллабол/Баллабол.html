@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Баллабол</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --accent1: #774936;
+                --accent2: #D69F7E;
+                --primary-colour: #eeebbd;
+                --secondary-colour: #050609;
+            }
+            
+            * {
+                background-color: inherit;
+                box-sizing: border-box;
+                color: inherit;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 14pt;
+                margin-top: 1.5px;
+                margin-bottom: 1.5px;
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                accent-color: var(--accent1);
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                margin: auto;
+                min-width: 85%;
+                max-width: 85%;
+            }
+            
+            a.button,
+            button {
+                display: inline-flex;
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                cursor: pointer;
+                padding: 1px;
+                margin: 1px;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            button:disabled {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                cursor: not-allowed;
+            }
+            
+            button:focus,
+            button:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            details {
+                cursor: default;
+                width: 100%;
+            }
+            
+            details>summary {
+                background-color: var(--accent2);
+                border-radius: 7px 0px 7px 0px;
+                cursor: pointer;
+                padding: 2px;
+            }
+            
+            details>summary:focus,
+            details>summary:hover {
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+            }
+            
+            @keyframes detailsOpening {
+                0% {
+                    transform: translateX(0%);
+                }
+                50% {
+                    transform: translateX(1%);
+                }
+                100% {
+                    transform: translateX(0%)
+                }
+            }
+            
+            details[open] {
+                animation: detailsOpening 0.7s ease-out;
+            }
+            
+            details[open]>summary {
+                border-bottom-color: var(--secondary-colour);
+                border-bottom-style: inset;
+                border-bottom-width: 2px;
+                font-size: 1.05em;
+                font-weight: 600;
+                padding-bottom: 2px;
+            }
+            
+            details[open]>summary:focus,
+            details[open]>summary:hover {
+                border-bottom-color: var(--accent2);
+            }
+            
+            h1 {
+                align-self: center;
+                border-bottom-style: dotted;
+                border-bottom-width: 4px;
+                border-color: var(--accent1);
+                font-size: 1.5em;
+                padding: 0px 4px;
+                margin-bottom: 3px;
+            }
+            
+            h1:focus,
+            h1:hover {
+                border-bottom-style: solid;
+                border-bottom-left-radius: 10%;
+                border-bottom-right-radius: 10%;
+            }
+            
+            h2 {
+                border-bottom-style: ridge;
+                border-bottom-width: 3px;
+                border-bottom-color: var(--secondary-colour);
+                border-radius: 0px 0px 7px 0px;
+                padding-left: 4px;
+                font-size: 1.4em;
+            }
+            
+            hr {
+                border-color: var(--accent1);
+                width: 100%;
+            }
+            
+            input {
+                border-color: var(--secondary-colour);
+                accent-color: var(--accent2);
+            }
+            
+            input[type='number'] {
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                text-align: center;
+                font-weight: 600;
+            }
+            
+            input[type='number']:focus {
+                color: var(--secondary-colour);
+                background-color: var(--accent2);
+            }
+            
+            kbd {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border: 1px solid var(--secondary-colour);
+                border-radius: 3px;
+                box-shadow: 1px 1px 1px var(--secondary-colour);
+                font-weight: 600;
+                margin-right: 2px;
+                padding: 0px 2px;
+            }
+            
+            option:checked {
+                background-color: var(--accent2);
+            }
+            
+            p {
+                margin: 1px;
+            }
+            
+            select {
+                background-color: var(--primary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                border-style: inset;
+                border-width: 2px;
+                color: var(--secondary-colour);
+            }
+            
+            select:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            table {
+                width: 100%;
+            }
+            
+            th,
+            td {
+                border-color: var(--secondary-colour);
+                border-style: inset;
+                border-width: 2px;
+                padding: 2px;
+                text-align: center;
+            }
+            
+            th {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-radius: 5px 5px 0px 0px;
+                font-size: 13pt;
+                font-weight: bold;
+            }
+            
+            td {
+                border-radius: 0px 0px 5px 0px;
+                font-weight: 600;
+            }
+            
+            th:focus,
+            th:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            td:focus,
+            td:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            .box {
+                display: flex;
+                flex-direction: row;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 2px;
+            }
+            
+            .box:focus,
+            .box:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            @keyframes scaling {
+                from {
+                    transform: scale(1);
+                }
+                to {
+                    transform: scale(1.5);
+                }
+            }
+
+            input:checked {
+                animation: scaling 0.5s ease forwards;
+            }
+
+            input[type='text'] {
+                border-radius: 7px 0px 0px 7px;
+            }
+
+            td {
+                width: 50%;
+            }
+
+            .mistakeClassification td {
+                text-align: left;
+            }
+
+            .mistakeClassification td:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            .roundedButton {
+                border-radius: 7px;
+                cursor: pointer;
+                font-family: monospace;
+                font-size: 14pt;
+                font-weight: 600;
+                width: 28px;
+                height: 28px;
+                margin-right: 3px;
+                padding-inline: 4px;
+            }
+
+            .smaller {
+                font-size: 12pt;
+                width: 24px;
+                height: 24px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1 title='Подсчёт баллов за письменный перевод'>Баллабол</h1>
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- Clear button -->
+        <button id='reset' onclick='resetValues()'><b>Сброс</b></button>
+
+        <!-- #region Mistakes -->
+        <details open>
+            <summary>Добавить ошибку</summary>
+
+            <div
+                style='
+                    display: flex;
+                    flex-direction: row;
+                    margin: 2px;
+                    align-items: center;
+                '
+            >
+                <button
+                    id='addButton'
+                    class='roundedButton'
+                    onclick='addMistake()'
+                    disabled
+                >
+                    +
+                </button>
+                <input
+                    type='text'
+                    id='description'
+                    oninput='mAdd()'
+                    placeholder='Текст ошибки'
+                    style='width: 100%'
+                    ondragenter='this.value = ""'
+                    onmouseover='select()'
+                    title='Скопируйте сюда часть проверяемого текста, содержащую ошибку'
+                />
+            </div>
+
+            <table class='mistakeClassification'>
+                <!-- Mistake type -->
+                <tr>
+                    <td style='text-align: center'>
+                        <label for='mType'>Вид ошибки</label>
+                    </td>
+
+                    <td>
+                        <div>
+                            <label for='grammar'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='grammar'
+                                    style='vertical-align: middle'
+                                    checked
+                                />
+                                грамматическая</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='vocabulary'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='vocabulary'
+                                    style='vertical-align: middle'
+                                />
+                                лексическая</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='orthography'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='orthography'
+                                    style='vertical-align: middle'
+                                />
+                                орфографическая</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='punctuation'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='punctuation'
+                                    style='vertical-align: middle'
+                                />
+                                пунктуационная</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='complex'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='complex'
+                                    style='vertical-align: middle'
+                                />
+                                комплексная</label
+                            >
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Mistake subtype -->
+                <tr>
+                    <td style='text-align: center'>
+                        <label for='mSubtype'>Подвид ошибки</label>
+                    </td>
+
+                    <td>
+                        <div>
+                            <label for='deletion'
+                                ><input
+                                    type='radio'
+                                    name='mSubtype'
+                                    id='deletion'
+                                    style='vertical-align: middle'
+                                />
+                                опущение</label
+                            >
+                        </div>
+                        <div>
+                            <label for='modification'
+                                ><input
+                                    type='radio'
+                                    name='mSubtype'
+                                    id='modification'
+                                    style='vertical-align: middle'
+                                    checked
+                                />
+                                изменение</label
+                            >
+                        </div>
+                        <div>
+                            <label for='addition'
+                                ><input
+                                    type='radio'
+                                    name='mSubtype'
+                                    id='addition'
+                                    style='vertical-align: middle'
+                                />
+                                добавление</label
+                            >
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Meaning clearness -->
+                <tr>
+                    <td style='text-align: center'>
+                        <label for='mMeaning'>Понимание текста</label>
+                    </td>
+
+                    <td>
+                        <div>
+                            <label for='retained'
+                                ><input
+                                    type='radio'
+                                    name='mMeaning'
+                                    id='retained'
+                                    style='vertical-align: middle'
+                                    checked
+                                />
+                                не затруднено</label
+                            >
+                        </div>
+                        <div>
+                            <label for='obscured'
+                                ><input
+                                    type='radio'
+                                    name='mMeaning'
+                                    id='obscured'
+                                    style='vertical-align: middle'
+                                />
+                                затруднено</label
+                            >
+                        </div>
+                        <div>
+                            <label for='lost'
+                                ><input
+                                    type='radio'
+                                    name='mMeaning'
+                                    id='lost'
+                                    style='vertical-align: middle'
+                                />
+                                невозможно</label
+                            >
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </details>
+        <!-- #endregion -->
+
+        <div style='display: flex; align-items: center'>
+            <label for='resultingMark'><b>Итоги:</b></label>
+            <p id='resultingMark' style='padding-left: 5px'></p>
+        </div>
+
+        <!-- #region Results -->
+        <div style='display: flex'>
+            <button id='copyMark' style='width: 50%' onclick='copy(false)'>
+                <b>Копировать балл</b>
+            </button>
+            <button id='copyAll' style='width: 50%' onclick='copy(true)'>
+                <b>Копировать отчёт</b>
+            </button>
+        </div>
+        <!-- #endregion -->
+
+        <hr />
+
+        <!-- #region Mistakes list -->
+        <label for='mistakesList'><b>Обнаруженные ошибки:</b></label>
+        <ol id='mistakesList'></ol>
+        <!-- #endregion -->
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов. Помогали: Максим Чинкин,
+            wmysterio, Seemann.
+        </div>
+
+        <!-- #region Help -->
+        <details>
+            <summary>Справка по программе</summary>
+            <ol>
+                <li><b>Вид ошибки:</b></li>
+                <ul>
+                    <li>
+                        <b>Грамматическая</b> — ошибка в передаче значения
+                        грамматической формы (неверное время,
+                        склонение,спряжение, артикль и т.п.).
+                    </li>
+                    <li>
+                        <b>Лексическая</b> — ошибка в передаче значения слова
+                        (неверное слово, сочетаемость, стиль и т.п.).
+                    </li>
+                    <li><b>Орфографическая</b> — ошибка в написании слова.</li>
+                    <li>
+                        <b>Пунктуационная</b> — ошибка в расстановке знаков
+                        препинания.
+                    </li>
+                    <li>
+                        <b>Комплексная</b> — грубая ошибка или сочетание ошибок
+                        при переводе большей, чем знак или слово, единицы текста
+                        (словосочетания, предложения).
+                    </li>
+                </ul>
+
+                <li><b>Подвид ошибки:</b></li>
+                <ul>
+                    <li><b>Опущение</b> — удаление нужного элемента.</li>
+                    <li>
+                        <b>Изменение</b> — замена правильного элемента
+                        неправильным.
+                    </li>
+                    <li><b>Добавление</b> — привнесение лишнего элемента.</li>
+                </ul>
+
+                <li><b>Понимание текста:</b></li>
+                <ul>
+                    <li>
+                        <b>Не затруднено</b> — ошибка не искажает смысл текста и
+                        не мешает его считывать.
+                    </li>
+                    <li>
+                        <b>Затруднено</b> — ошибка усложняет считывание смысла,
+                        заставляет обращаться к ближайшему контексту.
+                    </li>
+                    <li>
+                        <b>Невозможно</b> — ошибка сильно искажает смысл,
+                        восстановить его по ближайшему контексту нельзя.
+                    </li>
+                </ul>
+            </ol>
+            <hr />
+            <ul>
+                <u>Примечания:</u>
+                <li><b>Повторяющаяся ошибка</b> считается за одну ошибку.</li>
+                <li>
+                    <b>Ближайшим контекстом</b> для удобства можно считать
+                    <i>весь текст до</i> разбираемого фрагмента,
+                    <i>сам этот фрагмент</i> и
+                    <i>одно предложение после</i> него.
+                </li>
+            </ul>
+        </details>
+        <!-- #endregion -->
+
+        <script>
+            /**
+             * JavaScript logic for HTML programmes by Vital (Vitaly Pavlovich Ulyanov)
+             */
+            
+            // Stored values and style variables
+            let storedPrimaryColour =
+                localStorage.getItem('--primary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--primary-colour');
+            let storedSecondaryColour =
+                localStorage.getItem('--secondary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--secondary-colour');
+            let storedAccentColour1 =
+                localStorage.getItem('--accent1') ??
+                getComputedStyle(document.body).getPropertyValue('--accent1');
+            let storedAccentColour2 =
+                localStorage.getItem('--accent2') ??
+                getComputedStyle(document.body).getPropertyValue('--accent2');
+            
+            document.body.style.setProperty('--primary-colour', storedPrimaryColour);
+            document.body.style.setProperty('--secondary-colour', storedSecondaryColour);
+            document.body.style.setProperty('--accent1', storedAccentColour1);
+            document.body.style.setProperty('--accent2', storedAccentColour2);
+            
+            /** * @type {HTMLDetailsElement} */
+            let settings = document.getElementById('settings');
+            
+            // Append settings with unified ones
+            let fullscreen = settings.parentElement.appendChild(
+                document.createElement('button')
+            );
+            let font = settings.appendChild(document.createElement('div'));
+            let setDiv = settings.appendChild(document.createElement('div'));
+            let primDiv = setDiv.appendChild(document.createElement('div'));
+            let secDiv = setDiv.appendChild(document.createElement('div'));
+            let acc1Div = setDiv.appendChild(document.createElement('div'));
+            let acc2Div = setDiv.appendChild(document.createElement('div'));
+            let load = settings.appendChild(document.createElement('div'));
+            let save = settings.appendChild(document.createElement('a'));
+            
+            setDiv.style.display = 'flex';
+            setDiv.style.flexWrap = 'wrap';
+            
+            //#region Fullscreen button
+            const up = '&#9650;';
+            const down = '&#9660;';
+            
+            fullscreen.id = 'fullscreenButton';
+            fullscreen.innerHTML = up;
+            fullscreen.style.fontWeight = 600;
+            fullscreen.style.borderWidth = 0;
+            fullscreen.style.opacity = '50%';
+            fullscreen.style.position = 'fixed';
+            fullscreen.style.top = '5px';
+            fullscreen.style.right = '5px';
+            fullscreen.addEventListener('click', function () {
+                let page = document.documentElement;
+                if (document.fullscreenElement) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                } else {
+                    if (page.requestFullscreen) page.requestFullscreen();
+                }
+            });
+            
+            document.addEventListener('fullscreenchange', function () {
+                if (document.fullscreenElement) fullscreen.innerHTML = down;
+                else fullscreen.innerHTML = up;
+            });
+            //#endregion
+            
+            //#region Font
+            let fontDiv = font.appendChild(document.createElement('div'));
+            fontDiv.style.display = 'flex';
+            fontDiv.style.alignItems = 'baseline';
+            
+            let fontLabel = fontDiv.appendChild(document.createElement('label'));
+            let fontInput = fontDiv.appendChild(document.createElement('input'));
+            
+            fontLabel.id = 'fontLabel';
+            fontLabel.htmlFor = 'fontInput';
+            fontLabel.className = 'preserveFont';
+            fontLabel.innerText = 'Шрифт';
+            fontLabel.style.marginRight = '2px';
+            
+            fontInput.id = 'fontInput';
+            fontInput.type = 'text';
+            fontInput.placeholder = 'Введите название шрифта и нажмите Enter';
+            fontInput.style.width = '100%';
+            fontInput.addEventListener('change', function () {
+                localStorage.setItem('pageFont', this.value);
+                loadFont();
+            });
+            //#endregion
+            
+            //#region Primary colour
+            primDiv.style.display = 'flex';
+            primDiv.style.minWidth = '50%';
+            primDiv.style.alignItems = 'center';
+            
+            let primInput = primDiv.appendChild(document.createElement('input'));
+            primInput.id = 'primCol';
+            primInput.type = 'color';
+            primInput.value = storedPrimaryColour;
+            primInput.addEventListener('input', function () {
+                colourChange('primary', this.value);
+            });
+            
+            let primLabel = primDiv.appendChild(document.createElement('label'));
+            primLabel.htmlFor = primInput.id;
+            primLabel.innerText = 'Фоновый цвет';
+            primLabel.style.marginLeft = '2px';
+            primLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Secondary colour
+            secDiv.style.display = 'flex';
+            secDiv.style.alignItems = 'center';
+            
+            let secInput = secDiv.appendChild(document.createElement('input'));
+            secInput.id = 'secCol';
+            secInput.type = 'color';
+            secInput.value = storedSecondaryColour;
+            secInput.addEventListener('input', function () {
+                colourChange('secondary', this.value);
+            });
+            
+            let secLabel = secDiv.appendChild(document.createElement('label'));
+            secLabel.htmlFor = secInput.id;
+            secLabel.innerText = 'Цвет текста';
+            secLabel.style.marginLeft = '2px';
+            secLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 1
+            acc1Div.style.display = 'flex';
+            acc1Div.style.minWidth = '50%';
+            acc1Div.style.alignItems = 'center';
+            
+            let acc1Input = acc1Div.appendChild(document.createElement('input'));
+            acc1Input.id = 'acc1Col';
+            acc1Input.type = 'color';
+            acc1Input.value = storedAccentColour1;
+            acc1Input.addEventListener('input', function () {
+                colourChange('accent1', this.value);
+            });
+            
+            let acc1Label = acc1Div.appendChild(document.createElement('label'));
+            acc1Label.htmlFor = acc1Input.id;
+            acc1Label.innerText = 'Контрастный цвет 1';
+            acc1Label.style.marginLeft = '2px';
+            acc1Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 2
+            acc2Div.style.display = 'flex';
+            acc2Div.style.alignItems = 'center';
+            
+            let acc2Input = acc2Div.appendChild(document.createElement('input'));
+            acc2Input.id = 'acc2Col';
+            acc2Input.type = 'color';
+            acc2Input.value = storedAccentColour2;
+            acc2Input.addEventListener('input', function () {
+                colourChange('accent2', this.value);
+            });
+            
+            let acc2Label = acc2Div.appendChild(document.createElement('label'));
+            acc2Label.htmlFor = acc2Input.id;
+            acc2Label.innerText = 'Контрастный цвет 2';
+            acc2Label.style.marginLeft = '2px';
+            acc2Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Load button
+            load.className = 'box';
+            load.style.display = 'flex';
+            load.style.flexWrap = 'wrap';
+            load.style.alignItems = 'center';
+            load.style.justifyContent = 'space-between';
+            
+            let loadLabel = load.appendChild(document.createElement('label'));
+            loadLabel.htmlFor = 'loadColoursButton';
+            loadLabel.innerHTML = '&#128193; Загрузить цвета';
+            loadLabel.style.flexGrow = 1;
+            loadLabel.style.cursor = 'pointer';
+            
+            let loadInput = load.appendChild(document.createElement('input'));
+            loadInput.id = 'loadColoursButton';
+            loadInput.type = 'file';
+            loadInput.accept = '.json';
+            loadInput.style.cursor = 'pointer';
+            loadInput.addEventListener('change', loadColours);
+            //#endregion
+            
+            //#region Save button
+            save.id = 'saveColoursButton';
+            save.href = '';
+            save.download = 'ColourScheme.json';
+            save.className = 'box';
+            save.innerHTML = '&#128190; Сохранить цвета';
+            save.style.textDecoration = 'none';
+            save.addEventListener('click', saveColours);
+            //#endregion
+            
+            function colourChange(colourType, colour) {
+                switch (colourType) {
+                    case 'primary':
+                        document.body.style.setProperty('--primary-colour', colour);
+                        localStorage.setItem('--primary-colour', colour);
+                        break;
+                    case 'secondary':
+                        document.body.style.setProperty('--secondary-colour', colour);
+                        localStorage.setItem('--secondary-colour', colour);
+                        break;
+                    case 'accent1':
+                        document.body.style.setProperty('--accent1', colour);
+                        localStorage.setItem('--accent1', colour);
+                        break;
+                    case 'accent2':
+                        document.body.style.setProperty('--accent2', colour);
+                        localStorage.setItem('--accent2', colour);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            /**
+             * @typedef {Object} ColourScheme
+             * @property {string} primary
+             * @property {string} secondary
+             * @property {string} accent1
+             * @property {string} accent2
+             */
+            
+            function saveColours() {
+                /** * @type {ColourScheme}  */
+                let colours = {
+                    primary: document.body.style.getPropertyValue('--primary-colour'),
+                    secondary: document.body.style.getPropertyValue('--secondary-colour'),
+                    accent1: document.body.style.getPropertyValue('--accent1'),
+                    accent2: document.body.style.getPropertyValue('--accent2'),
+                };
+                let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
+                saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
+            async function loadColours() {
+                await loadColoursButton.files[0].text().then((content) => {
+                    try {
+                        /** * @type {ColourScheme} */
+                        let data = JSON.parse(content);
+                        if (data) {
+                            if (data.primary) {
+                                colourChange('primary', data.primary);
+                                primInput.value = data.primary;
+                            }
+                            if (data.secondary) {
+                                colourChange('secondary', data.secondary);
+                                secInput.value = data.secondary;
+                            }
+                            if (data.accent1) {
+                                colourChange('accent1', data.accent1);
+                                acc1Input.value = data.accent1;
+                            }
+                            if (data.accent2) {
+                                colourChange('accent2', data.accent2);
+                                acc2Input.value = data.accent2;
+                            }
+                        }
+                    } catch (error) {
+                        alert(
+                            `Ошибка при чтении файла цветов: ${error}`
+                        );
+                    }
+                });
+            }
+            
+            function loadFont() {
+                let font = localStorage.getItem('pageFont');
+                document.getElementById('fontInput').value = font;
+                document.body.querySelectorAll('*').forEach((e) => {
+                    if (!e.className.includes('preserveFont')) e.style.fontFamily = font;
+                });
+            }
+            
+            loadFont();
+
+		</script>
+        <script>
+            // Elements and variables
+            let mistakesList = document.getElementById('mistakesList');
+            let resultingMark = document.getElementById('resultingMark');
+            let addButton = document.getElementById('addButton');
+            /** * @type {HTMLInputElement} */
+            let mDescription = document.getElementById('description');
+            let mType = document.getElementsByName('mType');
+            let mSubtype = document.getElementsByName('mSubtype');
+            let mAffectsMeaning = document.getElementsByName('mMeaning');
+
+            let mistakes = [];
+            let totalWeight = 0;
+            let mark = 100;
+            let letter = 'A';
+
+            function mAdd() {
+                if (mDescription.value != '') {
+                    if (addButton.disabled) {
+                        addButton.disabled = false;
+                        addButton.title = 'Добавить ошибку';
+                    }
+                } else {
+                    addButton.disabled = true;
+                    addButton.title =
+                        'Для добавления ошибки введите её в поле справа';
+                }
+            }
+
+            function addMistake() {
+                let weight = 0;
+
+                let type = 'Тип ошибки';
+                switch (document.querySelector('[name="mType"]:checked').id) {
+                    case 'grammar':
+                        type = 'грамматическая';
+                        weight = 4.25;
+                        break;
+                    case 'vocabulary':
+                        type = 'лексическая';
+                        weight = 3.5;
+                        break;
+                    case 'orthography':
+                        type = 'орфографическая';
+                        weight = 3.25;
+                        break;
+                    case 'punctuation':
+                        type = 'пунктуационная';
+                        weight = 3;
+                        break;
+                    case 'complex':
+                        type = 'комплексная';
+                        weight = 7;
+                    default:
+                        break;
+                }
+
+                let subtype = 'Подтип ошибки';
+                switch (
+                    document.querySelector('[name="mSubtype"]:checked').id
+                ) {
+                    case 'deletion':
+                        subtype = 'опущение';
+                        break;
+                    case 'modification':
+                        subtype = 'изменение';
+                        break;
+                    case 'addition':
+                        subtype = 'добавление';
+                    default:
+                        break;
+                }
+
+                let affectsMeaning = '';
+                switch (
+                    document.querySelector('[name="mMeaning"]:checked').id
+                ) {
+                    case 'obscured':
+                        affectsMeaning = 'понимание затруднено';
+                        weight *= 1.5;
+                        break;
+                    case 'lost':
+                        affectsMeaning = 'серьёзное искажение';
+                        weight *= 2;
+                    default:
+                        break;
+                }
+
+                mistakes.push({
+                    type: `«${mDescription.value.trim()}»: ${type} [${subtype}${
+                        affectsMeaning ? `; ${affectsMeaning}` : ''
+                    }]`,
+                    weight: weight,
+                });
+
+                mDescription.value = '';
+                addButton.disabled = true;
+                updateList();
+            }
+
+            function deleteMistake(index) {
+                mistakes.splice(index, 1);
+                updateList();
+            }
+
+            function resetValues() {
+                mistakes = [];
+                updateList();
+            }
+
+            function updateList() {
+                let content = '';
+                totalWeight = 0;
+
+                for (var i = 0; i < mistakes.length; i++) {
+                    content += `<li><button class='roundedButton smaller' onclick='deleteMistake(${i})'>✖</button>${
+                        mistakes[i].type
+                    } [<b>${mistakes[i].weight
+                        .toFixed(2)
+                        .replace('.', ',')}</b>]</li>`;
+                    totalWeight += mistakes[i].weight;
+                }
+
+                mistakesList.innerHTML = content;
+
+                mark = Math.round(100 - totalWeight);
+
+                if (mark > 94) letter = 'A';
+                else if (mark > 82) letter = 'B';
+                else if (mark > 67) letter = 'C';
+                else if (mark > 55) letter = 'D';
+                else if (mark > 49) letter = 'E';
+                else if (mark > 19) letter = 'FX';
+                else letter = 'F';
+
+                resultingMark.innerHTML = `число ошибок — <b>${
+                    mistakes.length
+                }</b>; вес ошибок — <b>${totalWeight
+                    .toFixed(2)
+                    .replace('.', ',')}</b>; оценка — <b>${
+                    mark > 0 ? mark : 0
+                }</b> (${letter}).`;
+            }
+
+            function copy(copyAll) {
+                if (copyAll) {
+                    let data = `Число ошибок — ${
+                        mistakes.length
+                    }; вес ошибок — ${totalWeight
+                        .toFixed(2)
+                        .replace('.', ',')}; оценка — ${
+                        mark > 0 ? mark : 0
+                    } (${letter}).`;
+
+                    data += '\n\nНайденные ошибки:';
+                    for (var i = 0; i < mistakes.length; i++) {
+                        data += `\n${i + 1}. ${mistakes[i].type} → –${mistakes[
+                            i
+                        ].weight
+                            .toFixed(2)
+                            .replace('.', ',')}.`;
+                    }
+                    data +=
+                        '\n\nПроверено с помощью программы «Баллабол». Автор — Виталий Павлович Ульянов. Помогали: Максим Чинкин, wmysterio, Seemann.';
+                    navigator.clipboard.writeText(data);
+                } else {
+                    navigator.clipboard.writeText(mark);
+                }
+            }
+
+            mAdd();
+            updateList();
+        </script>
+    </body>
+</html>

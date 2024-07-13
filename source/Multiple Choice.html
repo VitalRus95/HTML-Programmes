@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Multiple Choice</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            li:focus,
+            li:hover {
+                list-style: square;
+            }
+
+            .score {
+                display: flex;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                opacity: 95%;
+                font-size: 1.1em;
+                align-items: baseline;
+                justify-content: center;
+                position: sticky;
+                top: 0%;
+            }
+
+            .score:focus,
+            .score:hover {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+            }
+
+            .right {
+                font-weight: 600;
+                text-decoration-line: underline;
+                text-decoration-thickness: 3px;
+                text-decoration-color: var(--accent2);
+                text-decoration-skip-ink: none;
+            }
+
+            .right:before {
+                content: '✔';
+                margin-right: 2px;
+            }
+
+            .wrong {
+                text-decoration-line: line-through;
+                text-decoration-thickness: 4px;
+                text-decoration-color: var(--accent1);
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Выбирайка</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- Page main body -->
+
+        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
+            <label id="numQuestionsLabel" for='numQuestionsInput'>Число вопросов:</label>
+            <input id='numQuestionsInput' type='number' min='1' max='10' value='10' style='flex-grow: 1;'>
+        </div>
+
+        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
+            <label id="numVariantsLabel" for='numVariantsInput'>Число вариантов:</label>
+            <input id='numVariantsInput' type='number' min='2' max='5' value='4' style='flex-grow: 1;'>
+        </div>
+
+        <div
+            class='box'
+            style='display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;'
+            ><label
+                for='loadTest'
+                style='flex-grow: 1; cursor: pointer;'
+            >
+                &#128193; Загрузить тест
+            </label>
+            <input
+                id='loadTest'
+                type='file'
+                accept='.json'
+                style='cursor: pointer;'>
+        </div>
+
+        <button id='startTest'>Начать тест</button>
+
+        <div id='testBody' style='position: relative;'></div>
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов.
+        </div>
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** * @type {string[][]} */
+            let test = [];
+            /** * @type {number} */
+            let score = 0;
+            /** * @type {HTMLInputElement} */
+            let numQuestionsInput = document.getElementById('numQuestionsInput');
+            /** * @type {HTMLInputElement} */
+            let numVariantsInput = document.getElementById('numVariantsInput');
+            /** * @type {HTMLInputElement} */
+            let loadTest = document.getElementById('loadTest');
+            /** * @type {HTMLButtonElement} */
+            let startTest = document.getElementById('startTest');
+            /** * @type {HTMLDivElement} */
+            let testBody = document.getElementById('testBody');
+
+            startTest.disabled = true;
+            numQuestionsInput.disabled = true;
+            numVariantsInput.disabled = true;
+
+            numQuestionsInput.addEventListener('input', limitInput);
+            numVariantsInput.addEventListener('input', limitInput);
+            loadTest.addEventListener('change', async function () {
+                await this.files[0].text().then((content) => {
+                    try {
+                        /** * @type {string[][]} */
+                        let data = JSON.parse(content);
+                        if (data && data.length > 0) {
+                            test = data;
+                            startTest.disabled = false;
+                            numQuestionsInput.disabled = false;
+                            numVariantsInput.disabled = false;
+                            numQuestionsInput.max = test.length;
+                            numVariantsInput.max = test.length;
+                        }
+                    } catch (error) {
+                        alert(
+                            `Ошибка при чтении файла теста: ${error}`
+                        );
+                    }
+                });
+            });
+            startTest.addEventListener('click', function () {
+                score = 0;
+                while (testBody.hasChildNodes()) testBody.lastChild.remove();
+
+                let resultDiv = testBody.appendChild(document.createElement('div'));
+                resultDiv.className = 'score';
+
+                let resultText = resultDiv.appendChild(document.createElement('p'));
+                resultText.innerText = 'Результат: ';
+                resultText.style.marginRight = '4px';
+                resultText.style.fontSize = 'inherit';
+
+                let scoreText = resultDiv.appendChild(document.createElement('b'));
+                scoreText.id = 'scoreText';
+                scoreText.tabIndex = 0;
+                scoreText.innerText = `0/${numQuestionsInput.value}`;
+                scoreText.style.fontSize = 'inherit';
+
+                let questions = [];
+                let copyQuestions = test.map((e) => e);
+
+                while (questions.length < numQuestionsInput.value) {
+                    let randomIndex = getRandomIndex(copyQuestions);
+                    questions.push(copyQuestions[randomIndex]);
+                    copyQuestions.splice(randomIndex, 1);
+                }
+
+                questions.forEach((q, qi) => {
+                    const question = q[0];
+                    const answer = q[1];
+
+                    let questionDiv = testBody.appendChild(document.createElement('div'));
+                    let questionHeader = questionDiv.appendChild(document.createElement('h2'));
+                    let optionsList = questionDiv.appendChild(document.createElement('ol'));
+                    questionHeader.tabIndex = 0;
+                    questionHeader.innerText = `${qi + 1}. ${question}`;
+                    questionHeader.style.cursor = 'help';
+
+                    let options = [];
+                    let copyOptions = test.map((e) => e[1]);
+
+                    while (options.length < numVariantsInput.value) {
+                        let randomIndex = getRandomIndex(copyOptions);
+                        options.push(copyOptions[randomIndex]);
+                        copyOptions.splice(randomIndex, 1);
+                    }
+
+                    if (!doesContainItem(options, answer)) {
+                        options[getRandomIndex(options)] = answer;
+                    }
+
+                    options.forEach((o, oi) => {
+                        let option = optionsList.appendChild(document.createElement('li'));
+                        option.innerText = o;
+                        option.dataset.right = (o === answer);
+                        option.tabIndex = 0;
+                        option.style.cursor = 'grab';
+                        option.addEventListener('click', processChoice);
+                        option.addEventListener('keydown', processChoice);
+                    });
+                });
+            });
+
+            /**
+             * @param {InputEvent} event
+            */
+            function limitInput(event) {
+                /** @type {HTMLInputElement} */
+                let input = event.target;
+                let min = parseInt(input.min);
+                let max = parseInt(input.max);
+                let val = parseInt(input.value) || min;
+                input.value =
+                    val > max ? max :
+                    val < min ? min : val;
+            }
+
+            /**
+             * @param {any[]} array
+             * @param {any} item
+            */
+            function doesContainItem(array, item) {
+                for (const i of array) {
+                    if (i === item) return true;
+                }
+                return false;
+            }
+
+            function getRandomIndex(array) {
+                return Math.floor(Math.random() * array.length);
+            }
+
+            /**
+             * @param {MouseEvent | KeyboardEvent} event
+            */
+            function processChoice(event) {
+                if (
+                    (event.type !== 'click' && event.type !== 'keydown') ||
+                    (event.type === 'keydown' && event.key !== ' ' && event.key !== 'Enter')
+                ) return;
+
+                event.preventDefault();
+
+                /** @type {HTMLElement} */
+                let option = event.target;
+
+                if (option.dataset.right == 'true') {
+                    option.className = 'right';
+                    score++;
+                } else {
+                    option.className = 'wrong';
+                }
+                option.blur();
+                option.style.cursor = 'not-allowed';
+                option.removeEventListener('click', processChoice);
+                option.removeEventListener('keydown', processChoice);
+                let scoreText = document.getElementById('scoreText');
+                if (scoreText) scoreText.innerText = `${score}/${numQuestionsInput.value}`;
+            }
+        </script>
+    </body>
+</html>

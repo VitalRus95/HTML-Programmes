@@ -1,0 +1,98 @@
+[
+  {
+    "word": "окраска",
+    "description": "Colouration",
+    "column": 5,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "чешуя",
+    "description": "Scale",
+    "column": 12,
+    "row": 0,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "жёлоб",
+    "description": "Trench",
+    "column": 1,
+    "row": 1,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "абориген",
+    "description": "Indigenous [person]",
+    "column": 1,
+    "row": 3,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "ультраабиссаль",
+    "description": "Hadal zone",
+    "column": 7,
+    "row": 4,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "скумбрия",
+    "description": "Mackerel",
+    "column": 4,
+    "row": 5,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "род",
+    "description": "Genus",
+    "column": 4,
+    "row": 10,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "приманка",
+    "description": "Bait",
+    "column": 2,
+    "row": 11,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "студенистый",
+    "description": "Gelatinous",
+    "column": 0,
+    "row": 13,
+    "isVertical": false,
+    "number": 5
+  },
+  {
+    "word": "позвонок",
+    "description": "Vertebra",
+    "column": 9,
+    "row": 14,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "слизень",
+    "description": "Snail[fish]",
+    "column": 5,
+    "row": 17,
+    "isVertical": false,
+    "number": 6
+  },
+  {
+    "word": "плавник",
+    "description": "Fin",
+    "column": 4,
+    "row": 20,
+    "isVertical": false,
+    "number": 7
+  }
+]

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang='ru'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Баллабол</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            @keyframes scaling {
+                from {
+                    transform: scale(1);
+                }
+                to {
+                    transform: scale(1.5);
+                }
+            }
+
+            input:checked {
+                animation: scaling 0.5s ease forwards;
+            }
+
+            input[type='text'] {
+                border-radius: 7px 0px 0px 7px;
+            }
+
+            td {
+                width: 50%;
+            }
+
+            .mistakeClassification td {
+                text-align: left;
+            }
+
+            .mistakeClassification td:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            .roundedButton {
+                border-radius: 7px;
+                cursor: pointer;
+                font-family: monospace;
+                font-size: 14pt;
+                font-weight: 600;
+                width: 28px;
+                height: 28px;
+                margin-right: 3px;
+                padding-inline: 4px;
+            }
+
+            .smaller {
+                font-size: 12pt;
+                width: 24px;
+                height: 24px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1 title='Подсчёт баллов за письменный перевод'>Баллабол</h1>
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Настройки</summary>
+        </details>
+
+        <!-- Clear button -->
+        <button id='reset' onclick='resetValues()'><b>Сброс</b></button>
+
+        <!-- #region Mistakes -->
+        <details open>
+            <summary>Добавить ошибку</summary>
+
+            <div
+                style='
+                    display: flex;
+                    flex-direction: row;
+                    margin: 2px;
+                    align-items: center;
+                '
+            >
+                <button
+                    id='addButton'
+                    class='roundedButton'
+                    onclick='addMistake()'
+                    disabled
+                >
+                    +
+                </button>
+                <input
+                    type='text'
+                    id='description'
+                    oninput='mAdd()'
+                    placeholder='Текст ошибки'
+                    style='width: 100%'
+                    ondragenter='this.value = ""'
+                    onmouseover='select()'
+                    title='Скопируйте сюда часть проверяемого текста, содержащую ошибку'
+                />
+            </div>
+
+            <table class='mistakeClassification'>
+                <!-- Mistake type -->
+                <tr>
+                    <td style='text-align: center'>
+                        <label for='mType'>Вид ошибки</label>
+                    </td>
+
+                    <td>
+                        <div>
+                            <label for='grammar'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='grammar'
+                                    style='vertical-align: middle'
+                                    checked
+                                />
+                                грамматическая</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='vocabulary'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='vocabulary'
+                                    style='vertical-align: middle'
+                                />
+                                лексическая</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='orthography'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='orthography'
+                                    style='vertical-align: middle'
+                                />
+                                орфографическая</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='punctuation'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='punctuation'
+                                    style='vertical-align: middle'
+                                />
+                                пунктуационная</label
+                            >
+                        </div>
+
+                        <div>
+                            <label for='complex'
+                                ><input
+                                    type='radio'
+                                    name='mType'
+                                    id='complex'
+                                    style='vertical-align: middle'
+                                />
+                                комплексная</label
+                            >
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Mistake subtype -->
+                <tr>
+                    <td style='text-align: center'>
+                        <label for='mSubtype'>Подвид ошибки</label>
+                    </td>
+
+                    <td>
+                        <div>
+                            <label for='deletion'
+                                ><input
+                                    type='radio'
+                                    name='mSubtype'
+                                    id='deletion'
+                                    style='vertical-align: middle'
+                                />
+                                опущение</label
+                            >
+                        </div>
+                        <div>
+                            <label for='modification'
+                                ><input
+                                    type='radio'
+                                    name='mSubtype'
+                                    id='modification'
+                                    style='vertical-align: middle'
+                                    checked
+                                />
+                                изменение</label
+                            >
+                        </div>
+                        <div>
+                            <label for='addition'
+                                ><input
+                                    type='radio'
+                                    name='mSubtype'
+                                    id='addition'
+                                    style='vertical-align: middle'
+                                />
+                                добавление</label
+                            >
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Meaning clearness -->
+                <tr>
+                    <td style='text-align: center'>
+                        <label for='mMeaning'>Понимание текста</label>
+                    </td>
+
+                    <td>
+                        <div>
+                            <label for='retained'
+                                ><input
+                                    type='radio'
+                                    name='mMeaning'
+                                    id='retained'
+                                    style='vertical-align: middle'
+                                    checked
+                                />
+                                не затруднено</label
+                            >
+                        </div>
+                        <div>
+                            <label for='obscured'
+                                ><input
+                                    type='radio'
+                                    name='mMeaning'
+                                    id='obscured'
+                                    style='vertical-align: middle'
+                                />
+                                затруднено</label
+                            >
+                        </div>
+                        <div>
+                            <label for='lost'
+                                ><input
+                                    type='radio'
+                                    name='mMeaning'
+                                    id='lost'
+                                    style='vertical-align: middle'
+                                />
+                                невозможно</label
+                            >
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </details>
+        <!-- #endregion -->
+
+        <div style='display: flex; align-items: center'>
+            <label for='resultingMark'><b>Итоги:</b></label>
+            <p id='resultingMark' style='padding-left: 5px'></p>
+        </div>
+
+        <!-- #region Results -->
+        <div style='display: flex'>
+            <button id='copyMark' style='width: 50%' onclick='copy(false)'>
+                <b>Копировать балл</b>
+            </button>
+            <button id='copyAll' style='width: 50%' onclick='copy(true)'>
+                <b>Копировать отчёт</b>
+            </button>
+        </div>
+        <!-- #endregion -->
+
+        <hr />
+
+        <!-- #region Mistakes list -->
+        <label for='mistakesList'><b>Обнаруженные ошибки:</b></label>
+        <ol id='mistakesList'></ol>
+        <!-- #endregion -->
+
+        <div class='box' style='font-style: italic'>
+            Автор — Виталий Павлович Ульянов. Помогали: Максим Чинкин,
+            wmysterio, Seemann.
+        </div>
+
+        <!-- #region Help -->
+        <details>
+            <summary>Справка по программе</summary>
+            <ol>
+                <li><b>Вид ошибки:</b></li>
+                <ul>
+                    <li>
+                        <b>Грамматическая</b> — ошибка в передаче значения
+                        грамматической формы (неверное время,
+                        склонение,спряжение, артикль и т.п.).
+                    </li>
+                    <li>
+                        <b>Лексическая</b> — ошибка в передаче значения слова
+                        (неверное слово, сочетаемость, стиль и т.п.).
+                    </li>
+                    <li><b>Орфографическая</b> — ошибка в написании слова.</li>
+                    <li>
+                        <b>Пунктуационная</b> — ошибка в расстановке знаков
+                        препинания.
+                    </li>
+                    <li>
+                        <b>Комплексная</b> — грубая ошибка или сочетание ошибок
+                        при переводе большей, чем знак или слово, единицы текста
+                        (словосочетания, предложения).
+                    </li>
+                </ul>
+
+                <li><b>Подвид ошибки:</b></li>
+                <ul>
+                    <li><b>Опущение</b> — удаление нужного элемента.</li>
+                    <li>
+                        <b>Изменение</b> — замена правильного элемента
+                        неправильным.
+                    </li>
+                    <li><b>Добавление</b> — привнесение лишнего элемента.</li>
+                </ul>
+
+                <li><b>Понимание текста:</b></li>
+                <ul>
+                    <li>
+                        <b>Не затруднено</b> — ошибка не искажает смысл текста и
+                        не мешает его считывать.
+                    </li>
+                    <li>
+                        <b>Затруднено</b> — ошибка усложняет считывание смысла,
+                        заставляет обращаться к ближайшему контексту.
+                    </li>
+                    <li>
+                        <b>Невозможно</b> — ошибка сильно искажает смысл,
+                        восстановить его по ближайшему контексту нельзя.
+                    </li>
+                </ul>
+            </ol>
+            <hr />
+            <ul>
+                <u>Примечания:</u>
+                <li><b>Повторяющаяся ошибка</b> считается за одну ошибку.</li>
+                <li>
+                    <b>Ближайшим контекстом</b> для удобства можно считать
+                    <i>весь текст до</i> разбираемого фрагмента,
+                    <i>сам этот фрагмент</i> и
+                    <i>одно предложение после</i> него.
+                </li>
+            </ul>
+        </details>
+        <!-- #endregion -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements and variables
+            let mistakesList = document.getElementById('mistakesList');
+            let resultingMark = document.getElementById('resultingMark');
+            let addButton = document.getElementById('addButton');
+            /** * @type {HTMLInputElement} */
+            let mDescription = document.getElementById('description');
+            let mType = document.getElementsByName('mType');
+            let mSubtype = document.getElementsByName('mSubtype');
+            let mAffectsMeaning = document.getElementsByName('mMeaning');
+
+            let mistakes = [];
+            let totalWeight = 0;
+            let mark = 100;
+            let letter = 'A';
+
+            function mAdd() {
+                if (mDescription.value != '') {
+                    if (addButton.disabled) {
+                        addButton.disabled = false;
+                        addButton.title = 'Добавить ошибку';
+                    }
+                } else {
+                    addButton.disabled = true;
+                    addButton.title =
+                        'Для добавления ошибки введите её в поле справа';
+                }
+            }
+
+            function addMistake() {
+                let weight = 0;
+
+                let type = 'Тип ошибки';
+                switch (document.querySelector('[name="mType"]:checked').id) {
+                    case 'grammar':
+                        type = 'грамматическая';
+                        weight = 4.25;
+                        break;
+                    case 'vocabulary':
+                        type = 'лексическая';
+                        weight = 3.5;
+                        break;
+                    case 'orthography':
+                        type = 'орфографическая';
+                        weight = 3.25;
+                        break;
+                    case 'punctuation':
+                        type = 'пунктуационная';
+                        weight = 3;
+                        break;
+                    case 'complex':
+                        type = 'комплексная';
+                        weight = 7;
+                    default:
+                        break;
+                }
+
+                let subtype = 'Подтип ошибки';
+                switch (
+                    document.querySelector('[name="mSubtype"]:checked').id
+                ) {
+                    case 'deletion':
+                        subtype = 'опущение';
+                        break;
+                    case 'modification':
+                        subtype = 'изменение';
+                        break;
+                    case 'addition':
+                        subtype = 'добавление';
+                    default:
+                        break;
+                }
+
+                let affectsMeaning = '';
+                switch (
+                    document.querySelector('[name="mMeaning"]:checked').id
+                ) {
+                    case 'obscured':
+                        affectsMeaning = 'понимание затруднено';
+                        weight *= 1.5;
+                        break;
+                    case 'lost':
+                        affectsMeaning = 'серьёзное искажение';
+                        weight *= 2;
+                    default:
+                        break;
+                }
+
+                mistakes.push({
+                    type: `«${mDescription.value.trim()}»: ${type} [${subtype}${
+                        affectsMeaning ? `; ${affectsMeaning}` : ''
+                    }]`,
+                    weight: weight,
+                });
+
+                mDescription.value = '';
+                addButton.disabled = true;
+                updateList();
+            }
+
+            function deleteMistake(index) {
+                mistakes.splice(index, 1);
+                updateList();
+            }
+
+            function resetValues() {
+                mistakes = [];
+                updateList();
+            }
+
+            function updateList() {
+                let content = '';
+                totalWeight = 0;
+
+                for (var i = 0; i < mistakes.length; i++) {
+                    content += `<li><button class='roundedButton smaller' onclick='deleteMistake(${i})'>✖</button>${
+                        mistakes[i].type
+                    } [<b>${mistakes[i].weight
+                        .toFixed(2)
+                        .replace('.', ',')}</b>]</li>`;
+                    totalWeight += mistakes[i].weight;
+                }
+
+                mistakesList.innerHTML = content;
+
+                mark = Math.round(100 - totalWeight);
+
+                if (mark > 94) letter = 'A';
+                else if (mark > 82) letter = 'B';
+                else if (mark > 67) letter = 'C';
+                else if (mark > 55) letter = 'D';
+                else if (mark > 49) letter = 'E';
+                else if (mark > 19) letter = 'FX';
+                else letter = 'F';
+
+                resultingMark.innerHTML = `число ошибок — <b>${
+                    mistakes.length
+                }</b>; вес ошибок — <b>${totalWeight
+                    .toFixed(2)
+                    .replace('.', ',')}</b>; оценка — <b>${
+                    mark > 0 ? mark : 0
+                }</b> (${letter}).`;
+            }
+
+            function copy(copyAll) {
+                if (copyAll) {
+                    let data = `Число ошибок — ${
+                        mistakes.length
+                    }; вес ошибок — ${totalWeight
+                        .toFixed(2)
+                        .replace('.', ',')}; оценка — ${
+                        mark > 0 ? mark : 0
+                    } (${letter}).`;
+
+                    data += '\n\nНайденные ошибки:';
+                    for (var i = 0; i < mistakes.length; i++) {
+                        data += `\n${i + 1}. ${mistakes[i].type} → –${mistakes[
+                            i
+                        ].weight
+                            .toFixed(2)
+                            .replace('.', ',')}.`;
+                    }
+                    data +=
+                        '\n\nПроверено с помощью программы «Баллабол». Автор — Виталий Павлович Ульянов. Помогали: Максим Чинкин, wmysterio, Seemann.';
+                    navigator.clipboard.writeText(data);
+                } else {
+                    navigator.clipboard.writeText(mark);
+                }
+            }
+
+            mAdd();
+            updateList();
+        </script>
+    </body>
+</html>
