@@ -384,37 +384,37 @@
              * @property {number} number
              */
             // Elements and variables
-            /** * @type {HTMLTableElement} */
+            /** @type {HTMLTableElement} */
             let crosswordGrid = document.getElementById('crosswordGrid');
-            /** * @type {HTMLOListElement} */
+            /** @type {HTMLOListElement} */
             let horizontalQuestions = document.getElementById('horizontalQuestions');
-            /** * @type {HTMLOListElement} */
+            /** @type {HTMLOListElement} */
             let verticalQuestions = document.getElementById('verticalQuestions');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let showAnswers = document.getElementById('showAnswers');
-            /** * @type {HTMLTextAreaElement} */
+            /** @type {HTMLTextAreaElement} */
             let textWords = document.getElementById('textWords');
-            /** * @type {HTMLAnchorElement} */
+            /** @type {HTMLAnchorElement} */
             let saveButton = document.getElementById('saveCrossword');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let loadButton = document.getElementById('loadButton');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let switchWordButton = document.getElementById('removeOrAddWord');
-            /** * @type {HTMLSelectElement} */
+            /** @type {HTMLSelectElement} */
             let menuWords = document.getElementById('menuWords');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let wordDescription = document.getElementById('wordDescription');
-            /** * @type {HTMLSpanElement} */
+            /** @type {HTMLSpanElement} */
             let questionTooltip = document.getElementById('questionTooltip');
-            /** * @type {HTMLParagraphElement} */
+            /** @type {HTMLParagraphElement} */
             let headerWordsMenu = document.getElementById('headerWordsMenu');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let toggleConstructor = document.getElementById('toggleConstructor');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let cellEdgeRadius = document.getElementById('cellEdgeRadius');
-            /** * @type {HTMLLabelElement} */
+            /** @type {HTMLLabelElement} */
             let cellEdgeRadiusValue = document.getElementById('cellEdgeRadiusValue');
-            /** * @type {HTMLDivElement} */
+            /** @type {HTMLDivElement} */
             let constructor = document.getElementById('constructor');
 
             const gridMinX = 0;
@@ -428,12 +428,12 @@
             const cellMinHeight = getComputedStyle(document.body).getPropertyValue('--cell-min-height');
             const cellMaxHeight = getComputedStyle(document.body).getPropertyValue('--cell-max-height');
 
-            /** * @type {Word[]} */
+            /** @type {Word[]} */
             let words = [];
             let crosswordName = '';
 
             // Continuous input when a word number is pressed instead of tabbing or moving the cursor
-            /** * @type {HTMLButtonElement} */
+            /** @type {HTMLButtonElement} */
             let inputFlowLastNumber = undefined;
             let inputFlowRow = undefined;
             let inputFlowColumn = undefined;
@@ -460,7 +460,7 @@
             }
 
             function generateCrossword() {
-                /** * @type {HTMLElement[][]} */
+                /** @type {HTMLElement[][]} */
                 let grid = [];
                 let maxColumn = 0;
                 let maxRow = 0;
@@ -534,7 +534,7 @@
                     question.style.textAlign = 'left';
                     question.style.fontFamily = font;
                     question.addEventListener('click', function (event) {
-                        /** * @type {HTMLButtonElement} */
+                        /** @type {HTMLButtonElement} */
                         if (question !== event.target) return;
                         let button = document.getElementById(`${r};${c}`);
                         button.focus();
@@ -553,7 +553,7 @@
                     });
 
                     // Add the question number
-                    /** * @type {HTMLButtonElement} */
+                    /** @type {HTMLButtonElement} */
                     let number = document.createElement('button');
                     number.id = `${r};${c}`;
                     number.className = `cell number preserveFont ${w.isVertical ? 'vertical' : 'horizontal'}`;
@@ -670,7 +670,7 @@
 
                 // Draw the grid
                 for (var r = 0; r < maxRow; r++) {
-                    /** * @type {HTMLDivElement}  */
+                    /** @type {HTMLDivElement}  */
                     let row = crosswordGrid.appendChild(document.createElement('div'));
                     row.style.display = 'flex';
                     row.style.aspectRatio = `${maxColumn / 1}`;
@@ -678,7 +678,7 @@
 
                     for (var c = 0; c < maxColumn; c++) {
                         if (grid[r][c] === undefined) {
-                            /** * @type {HTMLDivElement} */
+                            /** @type {HTMLDivElement} */
                             let column = row.appendChild(document.createElement('div'));
                             column.id = `e${r};${c}`;
                             column.className = 'cell empty';
@@ -779,7 +779,7 @@
 
                 while (menuWords.hasChildNodes()) menuWords.lastChild.remove();
                 words.forEach((w, wi) => {
-                    /** * @type {HTMLOptionElement} */
+                    /** @type {HTMLOptionElement} */
                     let option = menuWords.appendChild(document.createElement('option'));
                     option.value = w.word;
                     option.innerText = w.word;
@@ -897,7 +897,7 @@
                     inputFlowRow += inputFlowVertical ? 1 : 0;
                     inputFlowColumn += inputFlowVertical ? 0 : 1;
 
-                    /** * @type {HTMLInputElement} */
+                    /** @type {HTMLInputElement} */
                     let nextCell = document.getElementById(`i${inputFlowRow};${inputFlowColumn}`);
                     if (nextCell) nextCell.focus();
                     else if (inputFlowLastNumber) {
@@ -916,7 +916,7 @@
             function inputFlow(row, column, vertical, button) {
                 if (toggleConstructor.checked || showAnswers.checked) return;
 
-                /** * @type {HTMLInputElement} */
+                /** @type {HTMLInputElement} */
                 let cell = document.getElementById(`i${row};${column}`) ?? document.getElementById(`${row};${column}`);
                 if (cell) cell.focus();
                 else return;
@@ -950,7 +950,7 @@
             }
 
             function setCellRoundness() {
-                /** * @type {Number} */
+                /** @type {Number} */
                 let roundness = clamp(cellEdgeRadius.value, 0, 50);
                 let percent = `${roundness}%`;
                 let inverted = `${clamp(50 - roundness, 15, 45)}%`;

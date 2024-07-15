@@ -102,19 +102,19 @@
         <script src='../resources/VitalLogic.js'></script>
         <script>
             // Elements
-            /** * @type {string[][]} */
+            /** @type {string[][]} */
             let test = [];
-            /** * @type {number} */
+            /** @type {number} */
             let score = 0;
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let numQuestionsInput = document.getElementById('numQuestionsInput');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let numVariantsInput = document.getElementById('numVariantsInput');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let loadTest = document.getElementById('loadTest');
-            /** * @type {HTMLButtonElement} */
+            /** @type {HTMLButtonElement} */
             let startTest = document.getElementById('startTest');
-            /** * @type {HTMLDivElement} */
+            /** @type {HTMLDivElement} */
             let testBody = document.getElementById('testBody');
 
             startTest.disabled = true;
@@ -126,7 +126,7 @@
             loadTest.addEventListener('change', async function () {
                 await this.files[0].text().then((content) => {
                     try {
-                        /** * @type {string[][]} */
+                        /** @type {string[][]} */
                         let data = JSON.parse(content);
                         if (data && data.length > 0) {
                             test = data;

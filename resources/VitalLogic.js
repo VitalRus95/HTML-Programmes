@@ -21,7 +21,7 @@ document.body.style.setProperty('--secondary-colour', storedSecondaryColour);
 document.body.style.setProperty('--accent1', storedAccentColour1);
 document.body.style.setProperty('--accent2', storedAccentColour2);
 
-/** * @type {HTMLDetailsElement} */
+/** @type {HTMLDetailsElement} */
 let settings = document.getElementById('settings');
 
 // Append settings with unified ones
@@ -232,7 +232,7 @@ function colourChange(colourType, colour) {
  */
 
 function saveColours() {
-    /** * @type {ColourScheme}  */
+    /** @type {ColourScheme}  */
     let colours = {
         primary: document.body.style.getPropertyValue('--primary-colour'),
         secondary: document.body.style.getPropertyValue('--secondary-colour'),
@@ -246,7 +246,7 @@ function saveColours() {
 async function loadColours() {
     await loadColoursButton.files[0].text().then((content) => {
         try {
-            /** * @type {ColourScheme} */
+            /** @type {ColourScheme} */
             let data = JSON.parse(content);
             if (data) {
                 if (data.primary) {

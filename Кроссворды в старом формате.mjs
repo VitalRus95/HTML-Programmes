@@ -1,4 +1,4 @@
-/** * @type {Crossword[]} */
+/** @type {Crossword[]} */
 let crosswords = [
     {
         name: "Тестовый кроссворд «Университет» [рус.]",

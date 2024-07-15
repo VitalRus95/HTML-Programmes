@@ -619,7 +619,7 @@
             document.body.style.setProperty('--accent1', storedAccentColour1);
             document.body.style.setProperty('--accent2', storedAccentColour2);
             
-            /** * @type {HTMLDetailsElement} */
+            /** @type {HTMLDetailsElement} */
             let settings = document.getElementById('settings');
             
             // Append settings with unified ones
@@ -830,7 +830,7 @@
              */
             
             function saveColours() {
-                /** * @type {ColourScheme}  */
+                /** @type {ColourScheme}  */
                 let colours = {
                     primary: document.body.style.getPropertyValue('--primary-colour'),
                     secondary: document.body.style.getPropertyValue('--secondary-colour'),
@@ -844,7 +844,7 @@
             async function loadColours() {
                 await loadColoursButton.files[0].text().then((content) => {
                     try {
-                        /** * @type {ColourScheme} */
+                        /** @type {ColourScheme} */
                         let data = JSON.parse(content);
                         if (data) {
                             if (data.primary) {
@@ -888,7 +888,7 @@
             let mistakesList = document.getElementById('mistakesList');
             let resultingMark = document.getElementById('resultingMark');
             let addButton = document.getElementById('addButton');
-            /** * @type {HTMLInputElement} */
+            /** @type {HTMLInputElement} */
             let mDescription = document.getElementById('description');
             let mType = document.getElementsByName('mType');
             let mSubtype = document.getElementsByName('mSubtype');
