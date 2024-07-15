@@ -290,9 +290,6 @@
             }
 
             .correct {
-                /* background-color: var(--accent1);
-                color: var(--primary-colour);
-                transition: background-color 1.7s ease-in; */
                 animation: letterOpen 1.25s ease-out forwards;
             }
 
@@ -358,16 +355,20 @@
         </details>
 
         <!-- Page main body -->
-        <div>
+        <div style='display: flex; align-items: baseline;'>
             <label for='wordInput'>Загадайте слово:</label>
-            <input id='wordInput' type='password' oninput='fillWord()' />
+            <input id='wordInput' type='password' oninput='fillWord()' style='flex-grow: 0.5;'/>
+            <button
+                id='revealWordButton'
+                onclick='revealWord()'
+                style='flex-grow: 1;'
+                disabled
+            >Раскрыть слово</button>
         </div>
 
         <hr />
 
         <div id='wordCells'></div>
-
-        <button id='revealWordButton' onclick='revealWord()' disabled>Раскрыть слово</button>
 
         <hr />
 
