@@ -355,13 +355,13 @@
         </details>
 
         <!-- Page main body -->
-        <div style='display: flex; align-items: baseline;'>
-            <label for='wordInput'>Загадайте слово:</label>
-            <input id='wordInput' type='password' oninput='fillWord()' style='flex-grow: 0.5;'/>
+        <div style='display: flex; flex-wrap: wrap; align-items: baseline;'>
+            <label for='wordInput' style="margin-right: 4px;">Загадайте слово:</label>
+            <input id='wordInput' type='password' oninput='fillWord()' style='flex-grow: 1;'/>
             <button
                 id='revealWordButton'
                 onclick='revealWord()'
-                style='flex-grow: 1;'
+                style='flex-grow: 1; min-width: 45%;'
                 disabled
             >Раскрыть слово</button>
         </div>
