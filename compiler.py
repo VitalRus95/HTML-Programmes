@@ -13,7 +13,7 @@ target_dir: str = os.path.join(current_dir, 'target')
 style_path: str = os.path.join(current_dir, 'resources/VitalStyle.css')
 logic_path: str = os.path.join(current_dir, 'resources/VitalLogic.js')
 
-delete_style: str = '<link rel=\'stylesheet\' href=\'../resources/VitalStyle.css\'>'
+delete_style: str = "<link rel='stylesheet' href='../resources/VitalStyle.css' />"
 replace_style: str = '<style>'
 replace_logic: str = '<script src=\'../resources/VitalLogic.js\'></script>'
 
@@ -55,7 +55,7 @@ for file in os.listdir(source_dir):
                 ).replace(
                     replace_style, f'{replace_style}\n{style}\n'
                 ).replace(
-                    replace_logic, f'<script>\n{logic}\n\t\t</script>'
+                    replace_logic, f'<script>\n{logic}\n        </script>'
                 )
                 target_file.write(target)
 

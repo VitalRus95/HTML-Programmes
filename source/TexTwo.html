@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>> TexTwo <</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            body {
+                min-width: 90%;
+                max-width: 90%;
+            }
+
+            .projectName {
+                border-radius: 0px 0px 7px 7px;
+                margin-bottom: 0;
+                margin-top: 0;
+                font-size: 1.05em;
+                font-weight: 600;
+                text-align: center;
+                width: 100%;
+            }
+
+            .header {
+                display: flex;
+                width: 100%;
+            }
+
+            .textName {
+                flex-grow: 1;
+                margin-bottom: 0;
+                font-weight: 600;
+                text-align: center;
+                width: 100%;
+            }
+
+            .shrinkButton {
+                margin-bottom: 0;
+                font-weight: 900;
+                width: 2em;
+            }
+
+            .editor {
+                display: flex;
+                flex-grow: 1;
+                border-color: var(--secondary-colour);
+                border-style: outset;
+                border-width: 2px;
+                margin-top: 0;
+                resize: none;
+                width: 100%;
+            }
+
+            .menuButton {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                text-wrap: nowrap;
+                overflow: auto;
+                padding: 2px;
+                width: 100%;
+            }
+
+            .menuButton:hover,
+            .menuButton:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            .counter {
+                display: flex;
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                margin-top: 0;
+                width: 100%;
+            }
+
+            .counter::before {
+                content: 'Aa:';
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-radius: 0px 7px 7px 0px;
+                margin-right: 4px;
+                padding-inline: 4px;
+                font-weight: 600;
+            }
+
+            .notes {
+                display: flex;
+                flex-grow: 1;
+                border-color: var(--secondary-colour);
+                border-radius: 0px 0px 0px 7px;
+                border-style: outset;
+                border-width: 2px;
+                resize: vertical;
+                min-height: 2em;
+                width: 100%;
+            }
+
+            @keyframes shrinkAnim {
+                from {
+                    opacity: 1;
+                    width: 100%;
+                }
+                to {
+                    opacity: 0;
+                    width: 0%;
+                }
+            }
+
+            @keyframes expandAnim {
+                from {
+                    opacity: 0;
+                    overflow: hidden;
+                    width: 0%;
+                }
+                to {
+                    opacity: 1;
+                    overflow: auto;
+                    width: 100%;
+                }
+            }
+
+            .shrink {
+                animation: shrinkAnim 1s ease-in;
+                overflow: hidden;
+            }
+
+            .expand {
+                animation: expandAnim 1s ease-out;
+                display: flex;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class='tooltipParent' tabindex='0'>
+            &#62; TexTwo &#60;
+            <span class='tooltip'>&#62;(^o.o^)&#60;</span>
+        </h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary id='settingsSummary'>Settings</summary>
+
+            <div style='display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                column-gap: 2px;
+                overflow: auto;'
+            >
+                <label id='langLabel' for='lang'>Language</label>
+
+                <select
+                    name='language'
+                    id='lang'
+                    onchange='setLanguage()'
+                    style='flex-grow: 1;'
+                >
+                    <option value='eng'>English [Vitaly Ulyanov]</option>
+                    <option value='rus'>Русский [Виталий Ульянов]</option>
+                    <option value='ukr'>Українська [wmysterio]</option>
+                </select>
+            </div>
+        </details>
+
+        <!-- Page main body -->
+
+        <!-- Project save & load -->
+        <div style='display: flex; column-gap: 4px;'>
+            <a
+                id='saveProjectButton'
+                href=''
+                class='menuButton tooltipParent'
+                onclick='saveProjectFile()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save project to .json file</span>
+            </a>
+
+            <button
+                id='loadProjectButton'
+                class='menuButton tooltipParent'
+                onclick='document.getElementById("loadProject").click()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load project from .json file</span>
+            </button>
+            <input
+                id='loadProject'
+                type='file'
+                accept='.json'
+                onchange='loadProjectFile()'
+                style='display: none;'
+            >
+            </input>
+        </div>
+
+        <!-- Project name -->
+        <input
+            id='projectName'
+            type='text'
+            autocomplete='off'
+            placeholder='Project name'
+            class='projectName'
+        >
+
+        <!-- Editing -->
+        <div style='margin-bottom: 0;'>
+            <!-- Headers -->
+            <div style='display: flex; column-gap: 4px;'>
+                <!-- Left header -->
+                <div id='headerLeft' style='display: flex; width: 100%;'>
+                    <input
+                        id='nameLeft'
+                        type='text'
+                        class='textName'
+                        autocomplete='off'
+                        placeholder='Text 1 name'
+                        style='border-radius: 7px 0px 0px 0px;'>
+                    <button
+                        id='shrinkLeft'
+                        class='shrinkButton tooltipParent'
+                        style='border-radius: 0px 7px 0px 0px;'
+                    >
+                        &#60;
+                        <span class='tooltip'>
+                            Shrink left panel
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Right header -->
+                <div id='headerRight' style='display: flex; width: 100%;'>
+                    <button
+                        id='shrinkRight'
+                        class='shrinkButton tooltipParent'
+                        style='border-radius: 7px 0px 0px 0px;'
+                    >
+                        &#62;
+                        <span class='tooltip'>
+                            Shrink right panel
+                        </span>
+                    </button>
+                    <input
+                        id='nameRight'
+                        type='text'
+                        class='textName'
+                        autocomplete='off'
+                        placeholder='Text 2 name'
+                        style='border-radius: 0px 7px 0px 0px   ;'>
+                </div>
+            </div>
+
+            <!-- Save buttons -->
+            <div style='display: flex; column-gap: 4px;'>
+                <a
+                    id='saveFile1'
+                    href=''
+                    class='menuButton tooltipParent'
+                    onclick='saveFile(true)'
+                    style='margin-top: 0;'
+                >
+                    &#128190; Save
+                    <span class='tooltip'>Save text 1 to .txt file</span>
+                </a>
+
+                <a
+                    id='saveFile2'
+                    href=''
+                    class='menuButton tooltipParent'
+                    onclick='saveFile(false)'
+                    style='margin-top: 0;'
+                >
+                    &#128190; Save
+                    <span class='tooltip'>Save text 2 to .txt file</span>
+                </a>
+            </div>
+
+            <!-- Load buttons -->
+            <div style='display: flex; column-gap: 4px;'>
+                <!-- Load left -->
+                <button
+                    id='loadText1Button'
+                    class='menuButton tooltipParent'
+                    ondrop='dropText(event, true)'
+                    ondragover='cancelDragOver(event)'
+                    onclick='document.getElementById("loadText1").click()'
+                    style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
+                >
+                    &#128193; Open
+                    <span class='tooltip'>Open text 1. To open files, click the button or drag and drop them on it.</span>
+                </button>
+                <input
+                    id='loadText1'
+                    type='file'
+                    multiple
+                    onchange='loadFile(true)'
+                    style='display: none;'
+                >
+                </input>
+
+                <!-- Load right -->
+                <button
+                    id='loadText2Button'
+                    class='menuButton tooltipParent'
+                    ondrop='dropText(event, false)'
+                    ondragover='cancelDragOver(event)'
+                    onclick='document.getElementById("loadText2").click()'
+                    style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
+                >
+                    &#128193; Open
+                    <span class='tooltip'>Open text 2. To open files, click the button or drag and drop them on it.</span>
+                </button>
+                <input
+                    id='loadText2'
+                    type='file'
+                    multiple
+                    onchange='loadFile(false)'
+                    style='display: none;'
+                >
+                </input>
+            </div>
+
+            <!-- Editors -->
+            <div style='display: flex;
+                column-gap: 4px;
+                min-height: 35vh;
+                overflow: auto;
+                resize: vertical;'
+            >
+                <!-- Left editor -->
+                <textarea
+                    id='textLeft'
+                    class='editor'
+                    autocomplete='off'
+                    placeholder='Text 1 content'
+                    rows='10'
+                    oninput='updateCounter(true)'
+                    onselect='updateCounter(true)'
+                ></textarea>
+
+                <!-- Right editor -->
+                <textarea
+                    id='textRight'
+                    class='editor'
+                    autocomplete='off'
+                    placeholder='Text 2 content'
+                    rows='10'
+                    oninput='updateCounter(false)'
+                    onselect='updateCounter(false)'
+                ></textarea>
+            </div>
+        </div>
+
+        <!-- Texts' symbols counter -->
+        <div style='display: flex; column-gap: 4px;margin-top: 0;'>
+            <div
+                id='leftCounterDiv'
+                class='counter tooltipParent'
+                tabindex='0'
+            >
+                <p id='leftCounter'></p>
+                <span id='tsc_l_tip' class='tooltip'>Text 1 symbol count</span>
+            </div>
+
+            <div
+                id='rightCounterDiv'
+                class='counter tooltipParent'
+                tabindex='0'
+            >
+                <p id='rightCounter'></p>
+                <span id='tsc_r_tip' class='tooltip'>Text 2 symbol count</span>
+            </div>
+        </div>
+
+        <!-- Save comparison button -->
+        <a
+            id='saveComparisonButton'
+            href=''
+            class='menuButton tooltipParent'
+            onclick='saveComparison()'
+            style='margin-top: 0;'
+        >
+            &#128190; Save comparison
+            <span class='tooltip'>Save paragraph by paragraph comparison of both texts to .txt file</span>
+        </a>
+
+        <!-- Notes -->
+        <textarea
+            id='userNotes'
+            class='notes'
+            autocomplete='off'
+            placeholder='Your notes'
+            rows='3'
+        ></textarea>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLSelectElement} */
+            let lang = document.getElementById('lang');
+
+            /** @type {HTMLDivElement} */
+            let headerLeft = document.getElementById('headerLeft');
+            /** @type {HTMLDivElement} */
+            let headerRight = document.getElementById('headerRight');
+
+            /** @type {HTMLInputElement} */
+            let projectName = document.getElementById('projectName');
+            /** @type {HTMLInputElement} */
+            let nameLeft = document.getElementById('nameLeft');
+            /** @type {HTMLInputElement} */
+            let nameRight = document.getElementById('nameRight');
+
+            /** @type {HTMLButtonElement} */
+            let shrinkLeft = document.getElementById('shrinkLeft');
+            /** @type {HTMLButtonElement} */
+            let shrinkRight = document.getElementById('shrinkRight');
+            /** @type {HTMLButtonElement} */
+            let loadText1Button = document.getElementById('loadText1Button');
+            /** @type {HTMLButtonElement} */
+            let loadText2Button = document.getElementById('loadText2Button');
+
+            /** @type {HTMLTextAreaElement} */
+            let textLeft = document.getElementById('textLeft');
+            /** @type {HTMLTextAreaElement} */
+            let textRight = document.getElementById('textRight');
+            /** @type {HTMLTextAreaElement}*/
+            let userNotes = document.getElementById('userNotes');
+
+            /** @type {HTMLAnchorElement} */
+            let saveFile1 = document.getElementById('saveFile1');
+            /** @type {HTMLAnchorElement} */
+            let saveFile2 = document.getElementById('saveFile2');
+            /** @type {HTMLAnchorElement} */
+            let saveProjectButton = document.getElementById('saveProjectButton');
+
+            /** @type {HTMLInputElement} */
+            let loadProject = document.getElementById('loadProject');
+            /** @type {HTMLInputElement} */
+            let loadText1 = document.getElementById('loadText1');
+            /** @type {HTMLInputElement} */
+            let loadText2 = document.getElementById('loadText2');
+
+            /** @type {HTMLParagraphElement} */
+            let leftCounter = document.getElementById('leftCounterDiv');
+            /** @type {HTMLParagraphElement} */
+            let rightCounter = document.getElementById('rightCounterDiv');
+
+            let leftPanel = [headerLeft, saveFile1, loadText1Button, textLeft, leftCounter];
+            let rightPanel = [headerRight, saveFile2, loadText2Button, textRight, rightCounter];
+            let bothPanels = leftPanel.concat(rightPanel);
+
+            shrinkLeft.addEventListener('click', function () {
+                if (!headerRight.classList.contains('shrink')) {
+                    leftPanel.forEach((e) => {
+                        e.classList.remove('expand');
+                        e.classList.add('shrink');
+                    });
+                    shrinkRight.focus();
+                } else {
+                    rightPanel.forEach((e) => {
+                        e.style.display = 'flex';
+                        e.classList.remove('shrink');
+                        e.classList.add('expand');
+                    });
+                }
+            });
+
+            shrinkRight.addEventListener('click', function () {
+                if (!headerLeft.classList.contains('shrink')) {
+                    rightPanel.forEach((e) => {
+                        e.classList.remove('expand');
+                        e.classList.add('shrink');
+                    });
+                    shrinkLeft.focus();
+                } else {
+                    leftPanel.forEach((e) => {
+                        e.style.display = 'flex';
+                        e.classList.remove('shrink');
+                        e.classList.add('expand');
+                    });
+                }
+            });
+
+            bothPanels.forEach((e) => {
+                e.addEventListener('animationend', function (event) {
+                    if (event.animationName === 'shrinkAnim')
+                        e.style.display = 'none';
+                });
+            });
+
+            lang.value = localStorage.getItem('lang') ?? 'eng';
+            if (lang.value !== 'eng') setLanguage();
+            updateCounter(true);
+            updateCounter(false);
+
+            document.body.addEventListener('keydown', function (event) {
+                if (!event.ctrlKey) return;
+
+                switch (event.code) {
+                    case 'KeyS':
+                        event.preventDefault();
+                        saveProjectButton.click();
+                        break;
+                    case 'KeyO':
+                        event.preventDefault();
+                        loadProject.click();
+                    default:
+                        break;
+                }
+            });
+
+            function saveProjectFile() {
+                /** @type {HTMLAnchorElement} */
+                let saveProjectButton = document.getElementById('saveProjectButton');
+                let project = {
+                    name1: nameLeft.value,
+                    content1: textLeft.value,
+                    cursorPos1: textLeft.selectionEnd,
+
+                    name2: nameRight.value,
+                    content2: textRight.value,
+                    cursorPos2: textRight.selectionEnd,
+
+                    notes: userNotes.value
+                };
+
+                let data = encodeURIComponent(JSON.stringify(project, undefined, 2));
+                saveProjectButton.download = `${projectName.value || 'Project'}.json`;
+                saveProjectButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            async function loadProjectFile() {
+                await loadProject.files[0].text().then((content) => {
+                    try {
+                        /** @type {
+                                {
+                                    name1: string,
+                                    content1: string,
+                                    cursorPos1: number,
+
+                                    name2: string,
+                                    content2: string,
+                                    cursorPos2: number,
+
+                                    notes: string
+                                }
+                            }
+                        */
+                        let project = JSON.parse(content);
+
+                        projectName.value = loadProject.files[0].name.replace('.json', '') ?? '';
+
+                        nameLeft.value = project.name1 ?? '';
+                        nameRight.value = project.name2 ?? '';
+
+                        textLeft.value = project.content1 ?? '';
+                        textRight.value = project.content2 ?? '';
+
+                        textLeft.selectionStart = project.cursorPos1 ?? 0;
+                        textRight.selectionStart = project.cursorPos2 ?? 0;
+                        textLeft.selectionEnd = project.cursorPos1 ?? 0;
+                        textRight.selectionEnd = project.cursorPos2 ?? 0;
+
+                        userNotes.value = project.notes ?? '';
+
+                        updateCounter(true);
+                        updateCounter(false);
+                    } catch (error) {
+                        alert(`Error while reading project file: ${error}`);
+                    }
+                });
+
+                loadProject.value = '';
+            }
+
+            /**
+             * @param {boolean} left
+            */
+            function saveFile(left) {
+                /** @type {HTMLAnchorElement} */
+                let saveButton = document.getElementById(
+                    left ? 'saveFile1' : 'saveFile2'
+                );
+
+                let projectString = projectName.value
+                    ? `${projectName.value} - `
+                    : '';
+
+                let name = left
+                    ? `${projectString}${nameLeft.value}`
+                    : `${projectString}${nameRight.value}`;
+
+                let text = left
+                    ? `${textLeft.value}`
+                    : `${textRight.value}`;
+
+                let data = encodeURIComponent(text);
+                saveButton.download = `${name}.txt`;
+                saveButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            /**
+             * @param {boolean} left
+            */
+            async function loadFile(left) {
+                /** @type {HTMLInputElement} */
+                let load = left
+                    ? loadText1
+                    : loadText2;
+
+                let name = left
+                    ? nameLeft
+                    : nameRight;
+
+                let text = left
+                    ? textLeft
+                    : textRight;
+
+                name.value = load.files.length === 1
+                    ? load.files[0].name
+                    : '';
+
+                text.value = '';
+
+                for (const f of load.files) {
+                    await f.text().then((content) => {
+                        try {
+                            text.value += `${content}\n\n`;
+                        } catch (error) {
+                            alert(`Error while reading file: ${error}`);
+                        }
+                    });
+                }
+
+                text.value = text.value.trim();
+                updateCounter(left);
+            }
+
+            /**
+             * @param {DragEvent} event
+             * @param {boolean} left
+            */
+            async function dropText(event, left) {
+                if (event.dataTransfer.files.length === 0) return;
+                event.preventDefault();
+
+                let name = left
+                    ? nameLeft
+                    : nameRight;
+
+                let text = left
+                    ? textLeft
+                    : textRight;
+
+                name.value = event.dataTransfer.files.length === 1
+                    ? event.dataTransfer.files[0].name
+                    : '';
+
+                text.value = '';
+
+                for (const f of event.dataTransfer.files) {
+                    await f.text().then((content) => {
+                        try {
+                            text.value += `${content}\n\n`;
+                        } catch (error) {
+                            alert(`Error while reading file: ${error}`);
+                        }
+                    });
+                }
+
+                text.value = text.value.trim();
+                updateCounter(left);
+            }
+
+            /**
+             * @param {DragEvent} event
+            */
+            function cancelDragOver(event) {
+                event.preventDefault();
+            }
+
+            function saveComparison() {
+                /** @type {HTMLAnchorElement} */
+                let saveComparisonButton = document.getElementById('saveComparisonButton');
+
+                // Get paragraphs
+                let parsLeft = textLeft.value.split('\n').filter((l) => l !== '');
+                let parsRight = textRight.value.split('\n').filter((l) => l !== '');
+
+                // Determine the maximum array index
+                let maxLine = parsLeft.length > parsRight.length
+                    ? parsLeft.length
+                    : parsRight.length;
+
+                let text = `${projectName.value}\n\n`;
+
+                for (var i = 0; i < maxLine; i++) {
+                    text += `${i + 1}. ${nameLeft.value} >> ${parsLeft[i] ?? ''}\n`;
+                    text += `${i + 1}. ${nameRight.value} >> ${parsRight[i] ?? ''}`;
+                    if (i < maxLine - 1) text += `\n\n`;
+                }
+
+                let data = encodeURIComponent(text);
+                saveComparisonButton.download = `${projectName.value}.txt`;
+                saveComparisonButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            /**
+             * @param {boolean} left
+            */
+            function updateCounter(left) {
+                /** @type {HTMLParagraphElement} */
+                let counter = document.getElementById(
+                    left ? 'leftCounter' : 'rightCounter'
+                );
+
+                let text = left ? textLeft : textRight;
+                let selection = text.selectionEnd - text.selectionStart;
+
+                let textLength = left
+                    ? textLeft.value.length
+                    : textRight.value.length;
+
+                counter.innerText = selection > 0
+                    ? `${selection}/${textLength}`
+                    : `${textLength}`;
+            }
+
+            function setLanguage() {
+                /** @type {{
+                    id: string,
+                    props: {}[]
+                }[]} */
+                let elements = [];
+
+                localStorage.setItem('lang', lang.value);
+
+                switch (lang.value) {
+                    case 'eng':
+                        elements = [
+                            {
+                                id: 'settingsSummary',
+                                props: {
+                                    innerHTML: 'Settings'
+                                }
+                            },
+                            {
+                                id: 'langLabel',
+                                props: {
+                                    innerHTML: 'Language'
+                                }
+                            },
+                            {
+                                id: 'fontLabel',
+                                props: {
+                                    innerHTML: 'Font'
+                                }
+                            },
+                            {
+                                id: 'fontInput',
+                                props: {
+                                    placeholder: 'Type a font\'s name and press Enter'
+                                }
+                            },
+                            {
+                                id: 'primLabel',
+                                props: {
+                                    innerHTML: 'Background colour'
+                                }
+                            },
+                            {
+                                id: 'secLabel',
+                                props: {
+                                    innerHTML: 'Text colour'
+                                }
+                            },
+                            {
+                                id: 'acc1Label',
+                                props: {
+                                    innerHTML: 'Accent colour 1'
+                                }
+                            },
+                            {
+                                id: 'acc2Label',
+                                props: {
+                                    innerHTML: 'Accent colour 2'
+                                }
+                            },
+                            {
+                                id: 'loadLabel',
+                                props: {
+                                    innerHTML: '📁 Load colours'
+                                }
+                            },
+                            {
+                                id: 'saveColoursButton',
+                                props: {
+                                    innerHTML: '💾 Save colours'
+                                }
+                            },
+                            {
+                                id: 'exportLang',
+                                props: {
+                                    innerHTML: '🌐 Export texts for translation'
+                                }
+                            },
+                            {
+                                id: 'saveProjectButton',
+                                props: {
+                                    innerHTML: '💾 Save\n<span class=\'tooltip\'>Save project to .json file</span>'
+                                }
+                            },
+                            {
+                                id: 'loadProjectButton',
+                                props: {
+                                    innerHTML: '📁 Load\n<span class=\'tooltip\'>Load project from .json file</span>'
+                                }
+                            },
+                            {
+                                id: 'projectName',
+                                props: {
+                                    placeholder: 'Project name'
+                                }
+                            },
+                            {
+                                id: 'nameLeft',
+                                props: {
+                                    placeholder: 'Text 1 name'
+                                }
+                            },
+                            {
+                                id: 'shrinkLeft',
+                                props: {
+                                    innerHTML: '&lt;\n<span class=\'tooltip\'>\nShrink left panel\n</span>'
+                                }
+                            },
+                            {
+                                id: 'shrinkRight',
+                                props: {
+                                    innerHTML: '&gt;\n<span class=\'tooltip\'>\nShrink right panel\n</span>'
+                                }
+                            },
+                            {
+                                id: 'nameRight',
+                                props: {
+                                    placeholder: 'Text 2 name'
+                                }
+                            },
+                            {
+                                id: 'saveFile1',
+                                props: {
+                                    innerHTML: '💾 Save\n<span class=\'tooltip\'>Save text 1 to .txt file</span>'
+                                }
+                            },
+                            {
+                                id: 'saveFile2',
+                                props: {
+                                    innerHTML: '💾 Save\n<span class=\'tooltip\'>Save text 2 to .txt file</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText1Button',
+                                props: {
+                                    innerHTML: '📁 Open\n<span class=\'tooltip\'>Open text 1. To open files, click the button or drag and drop them on it.</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText2Button',
+                                props: {
+                                    innerHTML: '📁 Open\n<span class=\'tooltip\'>Open text 2. To open files, click the button or drag and drop them on it.</span>'
+                                }
+                            },
+                            {
+                                id: 'textLeft',
+                                props: {
+                                    placeholder: 'Text 1 content'
+                                }
+                            },
+                            {
+                                id: 'textRight',
+                                props: {
+                                    placeholder: 'Text 2 content'
+                                }
+                            },
+                            {
+                                id: 'tsc_l_tip',
+                                props: {
+                                    innerHTML: 'Text 1 symbol count'
+                                }
+                            },
+                            {
+                                id: 'tsc_r_tip',
+                                props: {
+                                    innerHTML: 'Text 2 symbol count'
+                                }
+                            },
+                            {
+                                id: 'saveComparisonButton',
+                                props: {
+                                    innerHTML: '💾 Save comparison\n<span class=\'tooltip\'>Save paragraph by paragraph comparison of both texts to .txt file</span>'
+                                }
+                            },
+                            {
+                                id: 'userNotes',
+                                props: {
+                                    placeholder: 'Your notes'
+                                }
+                            },
+                            {
+                                id: 'author',
+                                props: {
+                                    innerHTML: 'Made by Vitaly Pavlovich Ulyanov.'
+                                }
+                            },
+                            {
+                                id: 'fscrn_tip',
+                                props: {
+                                    innerHTML: 'Fullscreen'
+                                }
+                            }
+                        ];
+                        break;
+                    case 'rus':
+                        elements = [
+                            {
+                                id: 'settingsSummary',
+                                props: {
+                                    innerHTML: 'Настройки'
+                                }
+                            },
+                            {
+                                id: 'langLabel',
+                                props: {
+                                    innerHTML: 'Язык'
+                                }
+                            },
+                            {
+                                id: 'fontLabel',
+                                props: {
+                                    innerHTML: 'Шрифт'
+                                }
+                            },
+                            {
+                                id: 'fontInput',
+                                props: {
+                                    placeholder: 'Введите имя шрифта и нажмите Enter'
+                                }
+                            },
+                            {
+                                id: 'primLabel',
+                                props: {
+                                    innerHTML: 'Цвет фона'
+                                }
+                            },
+                            {
+                                id: 'secLabel',
+                                props: {
+                                    innerHTML: 'Цвет текста'
+                                }
+                            },
+                            {
+                                id: 'acc1Label',
+                                props: {
+                                    innerHTML: 'Контрастный цвет 1'
+                                }
+                            },
+                            {
+                                id: 'acc2Label',
+                                props: {
+                                    innerHTML: 'Контрастный цвет 2'
+                                }
+                            },
+                            {
+                                id: 'loadLabel',
+                                props: {
+                                    innerHTML: '📁 Загрузить цвета'
+                                }
+                            },
+                            {
+                                id: 'saveColoursButton',
+                                props: {
+                                    innerHTML: '💾 Сохранить цвета'
+                                }
+                            },
+                            {
+                                id: 'exportLang',
+                                props: {
+                                    innerHTML: '🌐 Экспортировать тексты для перевода'
+                                }
+                            },
+                            {
+                                id: 'saveProjectButton',
+                                props: {
+                                    innerHTML: '💾 Сохранить\n<span class=\'tooltip\'>Сохранить проект в файл .json</span>'
+                                }
+                            },
+                            {
+                                id: 'loadProjectButton',
+                                props: {
+                                    innerHTML: '📁 Загрузить\n<span class=\'tooltip\'>Загрузить проект из файла .json</span>'
+                                }
+                            },
+                            {
+                                id: 'projectName',
+                                props: {
+                                    placeholder: 'Имя проекта'
+                                }
+                            },
+                            {
+                                id: 'nameLeft',
+                                props: {
+                                    placeholder: 'Имя текста 1'
+                                }
+                            },
+                            {
+                                id: 'shrinkLeft',
+                                props: {
+                                    innerHTML: '&lt;\n<span class=\'tooltip\'>\nУменьшить левую панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'shrinkRight',
+                                props: {
+                                    innerHTML: '&gt;\n<span class=\'tooltip\'>\nУменьшить правую панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'nameRight',
+                                props: {
+                                    placeholder: 'Имя текста 2'
+                                }
+                            },
+                            {
+                                id: 'saveFile1',
+                                props: {
+                                    innerHTML: '💾 Сохранить\n<span class=\'tooltip\'>Сохранить текст 1 в файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'saveFile2',
+                                props: {
+                                    innerHTML: '💾 Сохранить\n<span class=\'tooltip\'>Сохранить текст 2 в файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText1Button',
+                                props: {
+                                    innerHTML: '📁 Открыть\n<span class=\'tooltip\'>Открыть текст 1. Для открытия файлов нажмите на кнопку или перетащите их на неё.</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText2Button',
+                                props: {
+                                    innerHTML: '📁 Открыть\n<span class=\'tooltip\'>Открыть текст 2. Для открытия файлов нажмите на кнопку или перетащите их на неё.</span>'
+                                }
+                            },
+                            {
+                                id: 'textLeft',
+                                props: {
+                                    placeholder: 'Содержимое текста 1'
+                                }
+                            },
+                            {
+                                id: 'textRight',
+                                props: {
+                                    placeholder: 'Содержимое текста 2'
+                                }
+                            },
+                            {
+                                id: 'tsc_l_tip',
+                                props: {
+                                    innerHTML: 'Число символов в тексте 1'
+                                }
+                            },
+                            {
+                                id: 'tsc_r_tip',
+                                props: {
+                                    innerHTML: 'Число символов в тексте 2'
+                                }
+                            },
+                            {
+                                id: 'saveComparisonButton',
+                                props: {
+                                    innerHTML: '💾 Сохранить сравнение\n<span class=\'tooltip\'>Сохранить поабзацное сравнение обоих текстов в файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'userNotes',
+                                props: {
+                                    placeholder: 'Заметки'
+                                }
+                            },
+                            {
+                                id: 'author',
+                                props: {
+                                    innerHTML: 'Автор — Виталий Павлович Ульянов.'
+                                }
+                            },
+                            {
+                                id: 'fscrn_tip',
+                                props: {
+                                    innerHTML: 'Полный экран'
+                                }
+                            }
+                        ];
+                        break;
+                    case 'ukr':
+                        elements = [
+                            {
+                                id: 'settingsSummary',
+                                props: {
+                                    innerHTML: 'Налаштування'
+                                }
+                            },
+                            {
+                                id: 'langLabel',
+                                props: {
+                                    innerHTML: 'Мова'
+                                }
+                            },
+                            {
+                                id: 'fontLabel',
+                                props: {
+                                    innerHTML: 'Шрифт'
+                                }
+                            },
+                            {
+                                id: 'fontInput',
+                                props: {
+                                    placeholder: 'Введіть ім\'я шрифту та натисніть Enter'
+                                }
+                            },
+                            {
+                                id: 'primLabel',
+                                props: {
+                                    innerHTML: 'Колір тла'
+                                }
+                            },
+                            {
+                                id: 'secLabel',
+                                props: {
+                                    innerHTML: 'Колір тексту'
+                                }
+                            },
+                            {
+                                id: 'acc1Label',
+                                props: {
+                                    innerHTML: 'Контрастний колір 1'
+                                }
+                            },
+                            {
+                                id: 'acc2Label',
+                                props: {
+                                    innerHTML: 'Контрастний колір 2'
+                                }
+                            },
+                            {
+                                id: 'loadLabel',
+                                props: {
+                                    innerHTML: '📁 Завантажити кольори'
+                                }
+                            },
+                            {
+                                id: 'saveColoursButton',
+                                props: {
+                                    innerHTML: '💾 Зберегти кольори'
+                                }
+                            },
+                            {
+                                id: 'exportLang',
+                                props: {
+                                    innerHTML: '🌐 Експортувати тексти для перекладу'
+                                }
+                            },
+                            {
+                                id: 'saveProjectButton',
+                                props: {
+                                    innerHTML: '💾 Зберегти\n<span class=\'tooltip\'>Зберегти проект у файл .json</span>'
+                                }
+                            },
+                            {
+                                id: 'loadProjectButton',
+                                props: {
+                                    innerHTML: '📁 Завантажити\n<span class=\'tooltip\'>Завантажити проект із файлу .json</span>'
+                                }
+                            },
+                            {
+                                id: 'projectName',
+                                props: {
+                                    placeholder: 'Ім\'я проекту'
+                                }
+                            },
+                            {
+                                id: 'nameLeft',
+                                props: {
+                                    placeholder: 'Ім\'я тексту 1'
+                                }
+                            },
+                            {
+                                id: 'shrinkLeft',
+                                props: {
+                                    innerHTML: '&lt;\n<span class=\'tooltip\'>\nЗменшити ліву панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'shrinkRight',
+                                props: {
+                                    innerHTML: '&gt;\n<span class=\'tooltip\'>\nЗменшити праву панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'nameRight',
+                                props: {
+                                    placeholder: 'Ім\'я тексту 2'
+                                }
+                            },
+                            {
+                                id: 'saveFile1',
+                                props: {
+                                    innerHTML: '💾 Зберегти\n<span class=\'tooltip\'>Зберегти текст 1 у файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'saveFile2',
+                                props: {
+                                    innerHTML: '💾 Зберегти\n<span class=\'tooltip\'>Зберегти текст 2 у файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText1Button',
+                                props: {
+                                    innerHTML: '📁 Відкрити\n<span class=\'tooltip\'>Відкрити текст 1. Щоб відкрити файли, натисніть на кнопку або перетягніть їх.</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText2Button',
+                                props: {
+                                    innerHTML: '📁 Відкрити\n<span class=\'tooltip\'>Відкрити текст 2. Щоб відкрити файли, натисніть на кнопку або перетягніть їх.</span>'
+                                }
+                            },
+                            {
+                                id: 'textLeft',
+                                props: {
+                                    placeholder: 'Вміст тексту 1'
+                                }
+                            },
+                            {
+                                id: 'textRight',
+                                props: {
+                                    placeholder: 'Вміст тексту 2'
+                                }
+                            },
+                            {
+                                id: 'tsc_l_tip',
+                                props: {
+                                    innerHTML: 'Кількість символів у тексті 1'
+                                }
+                            },
+                            {
+                                id: 'tsc_r_tip',
+                                props: {
+                                    innerHTML: 'Кількість символів у тексті 2'
+                                }
+                            },
+                            {
+                                id: 'saveComparisonButton',
+                                props: {
+                                    innerHTML: '💾 Зберегти порівняння\n<span class=\'tooltip\'>Зберегти поабзацне порівняння обох текстів у файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'userNotes',
+                                props: {
+                                    placeholder: 'Нотатки'
+                                }
+                            },
+                            {
+                                id: 'author',
+                                props: {
+                                    innerHTML: 'Автор — Віталій Павловіч Ульянов.'
+                                }
+                            },
+                            {
+                                id: 'fscrn_tip',
+                                props: {
+                                    innerHTML: 'Повний екран'
+                                }
+                            }
+                        ];
+                        break;
+                    default:
+                        break;
+                }
+
+                elements.forEach((e) => {
+                    const el = document.getElementById(e.id);
+
+                    if (!el) {
+                        console.log(`Translation error: element with ID '${e.id}' not found!`);
+                        return;
+                    }
+
+                    for (const prop in e.props) {
+                        el[prop] = e.props[prop];
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

@@ -45,10 +45,11 @@ const up = '&#9650;';
 const down = '&#9660;';
 
 fullscreen.id = 'fullscreenButton';
+fullscreen.classList = 'tooltipParent';
 fullscreen.innerHTML = up;
 fullscreen.style.fontWeight = 600;
 fullscreen.style.borderWidth = 0;
-fullscreen.style.opacity = '50%';
+fullscreen.style.opacity = '0.9';
 fullscreen.style.position = 'fixed';
 fullscreen.style.top = '5px';
 fullscreen.style.right = '5px';
@@ -61,9 +62,17 @@ fullscreen.addEventListener('click', function () {
     }
 });
 
+let fullscreenTooltip = document.createElement('span');
+fullscreenTooltip.id = 'fscrn_tip';
+fullscreenTooltip.className = 'tooltip';
+fullscreenTooltip.innerText = 'Fullscreen';
+
+fullscreen.appendChild(fullscreenTooltip);
+
 document.addEventListener('fullscreenchange', function () {
     if (document.fullscreenElement) fullscreen.innerHTML = down;
     else fullscreen.innerHTML = up;
+    fullscreen.appendChild(fullscreenTooltip);
 });
 //#endregion
 
@@ -78,12 +87,12 @@ let fontInput = fontDiv.appendChild(document.createElement('input'));
 fontLabel.id = 'fontLabel';
 fontLabel.htmlFor = 'fontInput';
 fontLabel.className = 'preserveFont';
-fontLabel.innerText = 'Шрифт';
+fontLabel.innerText = 'Font';
 fontLabel.style.marginRight = '2px';
 
 fontInput.id = 'fontInput';
 fontInput.type = 'text';
-fontInput.placeholder = 'Введите название шрифта и нажмите Enter';
+fontInput.placeholder = 'Type a font\'s name and press Enter';
 fontInput.style.width = '100%';
 fontInput.addEventListener('change', function () {
     localStorage.setItem('pageFont', this.value);
@@ -105,8 +114,9 @@ primInput.addEventListener('input', function () {
 });
 
 let primLabel = primDiv.appendChild(document.createElement('label'));
+primLabel.id = 'primLabel';
 primLabel.htmlFor = primInput.id;
-primLabel.innerText = 'Фоновый цвет';
+primLabel.innerText = 'Background colour';
 primLabel.style.marginLeft = '2px';
 primLabel.style.verticalAlign = 'center';
 //#endregion
@@ -124,8 +134,9 @@ secInput.addEventListener('input', function () {
 });
 
 let secLabel = secDiv.appendChild(document.createElement('label'));
+secLabel.id = 'secLabel';
 secLabel.htmlFor = secInput.id;
-secLabel.innerText = 'Цвет текста';
+secLabel.innerText = 'Text colour';
 secLabel.style.marginLeft = '2px';
 secLabel.style.verticalAlign = 'center';
 //#endregion
@@ -144,8 +155,9 @@ acc1Input.addEventListener('input', function () {
 });
 
 let acc1Label = acc1Div.appendChild(document.createElement('label'));
+acc1Label.id = 'acc1Label';
 acc1Label.htmlFor = acc1Input.id;
-acc1Label.innerText = 'Контрастный цвет 1';
+acc1Label.innerText = 'Accent colour 1';
 acc1Label.style.marginLeft = '2px';
 acc1Label.style.verticalAlign = 'center';
 //#endregion
@@ -163,8 +175,9 @@ acc2Input.addEventListener('input', function () {
 });
 
 let acc2Label = acc2Div.appendChild(document.createElement('label'));
+acc2Label.id = 'acc2Label';
 acc2Label.htmlFor = acc2Input.id;
-acc2Label.innerText = 'Контрастный цвет 2';
+acc2Label.innerText = 'Accent colour 2';
 acc2Label.style.marginLeft = '2px';
 acc2Label.style.verticalAlign = 'center';
 //#endregion
@@ -177,8 +190,9 @@ load.style.alignItems = 'center';
 load.style.justifyContent = 'space-between';
 
 let loadLabel = load.appendChild(document.createElement('label'));
+loadLabel.id = 'loadLabel';
 loadLabel.htmlFor = 'loadColoursButton';
-loadLabel.innerHTML = '&#128193; Загрузить цвета';
+loadLabel.innerHTML = '&#128193; Load colours';
 loadLabel.style.flexGrow = 1;
 loadLabel.style.cursor = 'pointer';
 
@@ -186,7 +200,7 @@ let loadInput = load.appendChild(document.createElement('input'));
 loadInput.id = 'loadColoursButton';
 loadInput.type = 'file';
 loadInput.accept = '.json';
-loadInput.style.cursor = 'pointer';
+loadInput.style.display = 'none';
 loadInput.addEventListener('change', loadColours);
 //#endregion
 
@@ -195,9 +209,21 @@ save.id = 'saveColoursButton';
 save.href = '';
 save.download = 'ColourScheme.json';
 save.className = 'box';
-save.innerHTML = '&#128190; Сохранить цвета';
+save.innerHTML = '&#128190; Save colours';
 save.style.textDecoration = 'none';
 save.addEventListener('click', saveColours);
+//#endregion
+
+//#region Export texts for translation
+let exportLang = settings.appendChild(document.createElement('a'));
+
+exportLang.id = 'exportLang';
+exportLang.href = '';
+exportLang.download = 'TranslationTemplate.json';
+exportLang.className = 'box';
+exportLang.innerHTML = '&#127760; Export texts for translation';
+exportLang.style.textDecoration = 'none';
+exportLang.addEventListener('click', exportTranslationTemplate);
 //#endregion
 
 function colourChange(colourType, colour) {
@@ -241,6 +267,41 @@ function saveColours() {
     };
     let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
     saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
+}
+
+/**
+ * @typedef {Object} LangElement
+ * @property {string} id
+ * @property {Object} props
+ */
+function exportTranslationTemplate() {
+    /** @type {LangElement[]} */
+    let elements = [];
+
+    document.querySelectorAll('body *').forEach((e) => {
+        if (e.tagName !== 'DIV'
+            && e.tagName !== 'DETAILS'
+            && e.id
+            && e.id !== 'lang'
+        ) {
+            /** @type {LangElement} */
+            let newEl = {};
+
+            newEl.id = e.id;
+
+            ['innerHTML', 'placeholder'].forEach((p) => {
+                if (e[p]) {
+                    if (!newEl.props) newEl.props = {};
+                    newEl.props[p] = e[p].trim();
+                }
+            });
+
+            if (newEl.props) elements.push(newEl);
+        }
+    });
+
+    let data = encodeURIComponent(JSON.stringify(elements, undefined, 4));
+    exportLang.href = `data:text/plain;charset=utf-8,${data}`;
 }
 
 async function loadColours() {

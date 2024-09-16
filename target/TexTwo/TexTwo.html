@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>> TexTwo <</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        
+
+        <style>
+            :root {
+                --accent1: #774936;
+                --accent2: #D69F7E;
+                --primary-colour: #eeebbd;
+                --secondary-colour: #050609;
+            }
+            
+            * {
+                background-color: inherit;
+                box-sizing: border-box;
+                color: inherit;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 14pt;
+                margin-top: 1.5px;
+                margin-bottom: 1.5px;
+            }
+            
+            *::selection {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                accent-color: var(--accent1);
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                margin: auto;
+                min-width: 85%;
+                max-width: 85%;
+            }
+            
+            a.button,
+            button {
+                display: inline-flex;
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                cursor: pointer;
+                padding: 1px;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            button:disabled {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                cursor: not-allowed;
+            }
+            
+            button:focus,
+            button:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            details {
+                cursor: default;
+                width: 100%;
+            }
+            
+            details > summary {
+                background-color: var(--accent2);
+                border-radius: 7px 0px 7px 0px;
+                box-shadow: 1px 1px 2px var(--secondary-colour);
+                cursor: pointer;
+                padding: 2px;
+            }
+            
+            details > summary:focus,
+            details > summary:hover {
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+            }
+            
+            @keyframes detailsOpening {
+                0% {
+                    transform: translateX(0%);
+                }
+                50% {
+                    transform: translateX(1%);
+                }
+                100% {
+                    transform: translateX(0%)
+                }
+            }
+            
+            details[open] {
+                animation: detailsOpening 0.7s ease-out;
+            }
+            
+            details[open] > summary {
+                border-bottom-color: var(--secondary-colour);
+                border-bottom-style: inset;
+                border-bottom-width: 2px;
+                font-size: 1.05em;
+                font-weight: 600;
+                padding-bottom: 2px;
+            }
+            
+            details[open] > summary:focus,
+            details[open] > summary:hover {
+                border-bottom-color: var(--accent2);
+            }
+            
+            h1 {
+                align-self: center;
+                border-bottom-style: dotted;
+                border-bottom-width: 4px;
+                border-color: var(--accent1);
+                font-size: 1.5em;
+                padding: 0px 4px;
+                margin-bottom: 3px;
+            }
+            
+            h1:focus,
+            h1:hover {
+                border-bottom-style: solid;
+                border-bottom-left-radius: 10%;
+                border-bottom-right-radius: 10%;
+            }
+            
+            h2 {
+                border-bottom-style: ridge;
+                border-bottom-width: 3px;
+                border-bottom-color: var(--secondary-colour);
+                border-radius: 0px 0px 7px 0px;
+                padding-left: 4px;
+                font-size: 1.4em;
+            }
+            
+            hr {
+                border-color: var(--accent1);
+                width: 100%;
+            }
+            
+            input {
+                border-color: var(--secondary-colour);
+                border-style: outset;
+                accent-color: var(--accent2);
+            }
+            
+            input[type='file'] {
+                border-style: none;
+            }
+            
+            input[type='number'] {
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                text-align: center;
+                font-weight: 600;
+            }
+            
+            input[type='number']:focus {
+                color: var(--secondary-colour);
+                background-color: var(--accent2);
+            }
+            
+            kbd {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border: 1px solid var(--secondary-colour);
+                border-radius: 3px;
+                box-shadow: 1px 1px 1px var(--secondary-colour);
+                font-weight: 600;
+                margin-right: 2px;
+                padding: 0px 2px;
+            }
+            
+            option:checked {
+                background-color: var(--accent2);
+            }
+            
+            select {
+                background-color: var(--primary-colour);
+                border-color: var(--accent1);
+                border-style: inset;
+                border-width: 2px;
+                color: var(--secondary-colour);
+                overflow: auto;
+            }
+            
+            table {
+                width: 100%;
+            }
+            
+            td,
+            th {
+                border-color: var(--secondary-colour);
+                border-style: inset;
+                border-width: 2px;
+                padding: 2px;
+                text-align: center;
+            }
+            
+            td {
+                border-radius: 0px 0px 5px 0px;
+                font-weight: 600;
+            }
+            
+            td:focus,
+            td:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            th {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-radius: 5px 5px 0px 0px;
+                font-size: 13pt;
+                font-weight: bold;
+            }
+            
+            th:focus,
+            th:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            textarea {
+                border-color: var(--secondary-colour);
+                border-style: outset;
+                border-width: 2px;
+            }
+            
+            textarea::placeholder {
+                color: var(--accent1);
+            }
+            
+            .box {
+                display: flex;
+                flex-direction: row;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 2px;
+            }
+            
+            .box:focus,
+            .box:hover {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+            }
+            
+            @keyframes tooltipFadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 0.95;
+                }
+            }
+            
+            .tooltipParent {
+                position: relative;
+            }
+            
+            .tooltipParent:hover > .tooltip,
+            .tooltipParent:focus > .tooltip {
+                display: flex;
+                animation: tooltipFadeIn 0.7s ease;
+            }
+            
+            .tooltip {
+                display: none;
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                opacity: 0.95;
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 3px;
+                position: fixed;
+                top: 5px;
+                left: 5px;
+                z-index: 1;
+                min-width: min-content;
+                width: max-content;
+                max-width: 75vw;
+                font-weight: 600;
+                text-align: left;
+                text-wrap: wrap;
+            }
+            
+            .tooltip::before {
+                content: 'i';
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-radius: 7px 0px 7px 0px;
+                margin-right: 4px;
+                height: 100%;
+                padding-inline: 0.5em;
+                font-style: italic;
+                font-weight: 600;
+            }
+
+            body {
+                min-width: 90%;
+                max-width: 90%;
+            }
+
+            .projectName {
+                border-radius: 0px 0px 7px 7px;
+                margin-bottom: 0;
+                margin-top: 0;
+                font-size: 1.05em;
+                font-weight: 600;
+                text-align: center;
+                width: 100%;
+            }
+
+            .header {
+                display: flex;
+                width: 100%;
+            }
+
+            .textName {
+                flex-grow: 1;
+                margin-bottom: 0;
+                font-weight: 600;
+                text-align: center;
+                width: 100%;
+            }
+
+            .shrinkButton {
+                margin-bottom: 0;
+                font-weight: 900;
+                width: 2em;
+            }
+
+            .editor {
+                display: flex;
+                flex-grow: 1;
+                border-color: var(--secondary-colour);
+                border-style: outset;
+                border-width: 2px;
+                margin-top: 0;
+                resize: none;
+                width: 100%;
+            }
+
+            .menuButton {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                text-wrap: nowrap;
+                overflow: auto;
+                padding: 2px;
+                width: 100%;
+            }
+
+            .menuButton:hover,
+            .menuButton:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            .counter {
+                display: flex;
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                margin-top: 0;
+                width: 100%;
+            }
+
+            .counter::before {
+                content: 'Aa:';
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-radius: 0px 7px 7px 0px;
+                margin-right: 4px;
+                padding-inline: 4px;
+                font-weight: 600;
+            }
+
+            .notes {
+                display: flex;
+                flex-grow: 1;
+                border-color: var(--secondary-colour);
+                border-radius: 0px 0px 0px 7px;
+                border-style: outset;
+                border-width: 2px;
+                resize: vertical;
+                min-height: 2em;
+                width: 100%;
+            }
+
+            @keyframes shrinkAnim {
+                from {
+                    opacity: 1;
+                    width: 100%;
+                }
+                to {
+                    opacity: 0;
+                    width: 0%;
+                }
+            }
+
+            @keyframes expandAnim {
+                from {
+                    opacity: 0;
+                    overflow: hidden;
+                    width: 0%;
+                }
+                to {
+                    opacity: 1;
+                    overflow: auto;
+                    width: 100%;
+                }
+            }
+
+            .shrink {
+                animation: shrinkAnim 1s ease-in;
+                overflow: hidden;
+            }
+
+            .expand {
+                animation: expandAnim 1s ease-out;
+                display: flex;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class='tooltipParent' tabindex='0'>
+            &#62; TexTwo &#60;
+            <span class='tooltip'>&#62;(^o.o^)&#60;</span>
+        </h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary id='settingsSummary'>Settings</summary>
+
+            <div style='display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                column-gap: 2px;
+                overflow: auto;'
+            >
+                <label id='langLabel' for='lang'>Language</label>
+
+                <select
+                    name='language'
+                    id='lang'
+                    onchange='setLanguage()'
+                    style='flex-grow: 1;'
+                >
+                    <option value='eng'>English [Vitaly Ulyanov]</option>
+                    <option value='rus'>Русский [Виталий Ульянов]</option>
+                    <option value='ukr'>Українська [wmysterio]</option>
+                </select>
+            </div>
+        </details>
+
+        <!-- Page main body -->
+
+        <!-- Project save & load -->
+        <div style='display: flex; column-gap: 4px;'>
+            <a
+                id='saveProjectButton'
+                href=''
+                class='menuButton tooltipParent'
+                onclick='saveProjectFile()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save project to .json file</span>
+            </a>
+
+            <button
+                id='loadProjectButton'
+                class='menuButton tooltipParent'
+                onclick='document.getElementById("loadProject").click()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load project from .json file</span>
+            </button>
+            <input
+                id='loadProject'
+                type='file'
+                accept='.json'
+                onchange='loadProjectFile()'
+                style='display: none;'
+            >
+            </input>
+        </div>
+
+        <!-- Project name -->
+        <input
+            id='projectName'
+            type='text'
+            autocomplete='off'
+            placeholder='Project name'
+            class='projectName'
+        >
+
+        <!-- Editing -->
+        <div style='margin-bottom: 0;'>
+            <!-- Headers -->
+            <div style='display: flex; column-gap: 4px;'>
+                <!-- Left header -->
+                <div id='headerLeft' style='display: flex; width: 100%;'>
+                    <input
+                        id='nameLeft'
+                        type='text'
+                        class='textName'
+                        autocomplete='off'
+                        placeholder='Text 1 name'
+                        style='border-radius: 7px 0px 0px 0px;'>
+                    <button
+                        id='shrinkLeft'
+                        class='shrinkButton tooltipParent'
+                        style='border-radius: 0px 7px 0px 0px;'
+                    >
+                        &#60;
+                        <span class='tooltip'>
+                            Shrink left panel
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Right header -->
+                <div id='headerRight' style='display: flex; width: 100%;'>
+                    <button
+                        id='shrinkRight'
+                        class='shrinkButton tooltipParent'
+                        style='border-radius: 7px 0px 0px 0px;'
+                    >
+                        &#62;
+                        <span class='tooltip'>
+                            Shrink right panel
+                        </span>
+                    </button>
+                    <input
+                        id='nameRight'
+                        type='text'
+                        class='textName'
+                        autocomplete='off'
+                        placeholder='Text 2 name'
+                        style='border-radius: 0px 7px 0px 0px   ;'>
+                </div>
+            </div>
+
+            <!-- Save buttons -->
+            <div style='display: flex; column-gap: 4px;'>
+                <a
+                    id='saveFile1'
+                    href=''
+                    class='menuButton tooltipParent'
+                    onclick='saveFile(true)'
+                    style='margin-top: 0;'
+                >
+                    &#128190; Save
+                    <span class='tooltip'>Save text 1 to .txt file</span>
+                </a>
+
+                <a
+                    id='saveFile2'
+                    href=''
+                    class='menuButton tooltipParent'
+                    onclick='saveFile(false)'
+                    style='margin-top: 0;'
+                >
+                    &#128190; Save
+                    <span class='tooltip'>Save text 2 to .txt file</span>
+                </a>
+            </div>
+
+            <!-- Load buttons -->
+            <div style='display: flex; column-gap: 4px;'>
+                <!-- Load left -->
+                <button
+                    id='loadText1Button'
+                    class='menuButton tooltipParent'
+                    ondrop='dropText(event, true)'
+                    ondragover='cancelDragOver(event)'
+                    onclick='document.getElementById("loadText1").click()'
+                    style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
+                >
+                    &#128193; Open
+                    <span class='tooltip'>Open text 1. To open files, click the button or drag and drop them on it.</span>
+                </button>
+                <input
+                    id='loadText1'
+                    type='file'
+                    multiple
+                    onchange='loadFile(true)'
+                    style='display: none;'
+                >
+                </input>
+
+                <!-- Load right -->
+                <button
+                    id='loadText2Button'
+                    class='menuButton tooltipParent'
+                    ondrop='dropText(event, false)'
+                    ondragover='cancelDragOver(event)'
+                    onclick='document.getElementById("loadText2").click()'
+                    style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
+                >
+                    &#128193; Open
+                    <span class='tooltip'>Open text 2. To open files, click the button or drag and drop them on it.</span>
+                </button>
+                <input
+                    id='loadText2'
+                    type='file'
+                    multiple
+                    onchange='loadFile(false)'
+                    style='display: none;'
+                >
+                </input>
+            </div>
+
+            <!-- Editors -->
+            <div style='display: flex;
+                column-gap: 4px;
+                min-height: 35vh;
+                overflow: auto;
+                resize: vertical;'
+            >
+                <!-- Left editor -->
+                <textarea
+                    id='textLeft'
+                    class='editor'
+                    autocomplete='off'
+                    placeholder='Text 1 content'
+                    rows='10'
+                    oninput='updateCounter(true)'
+                    onselect='updateCounter(true)'
+                ></textarea>
+
+                <!-- Right editor -->
+                <textarea
+                    id='textRight'
+                    class='editor'
+                    autocomplete='off'
+                    placeholder='Text 2 content'
+                    rows='10'
+                    oninput='updateCounter(false)'
+                    onselect='updateCounter(false)'
+                ></textarea>
+            </div>
+        </div>
+
+        <!-- Texts' symbols counter -->
+        <div style='display: flex; column-gap: 4px;margin-top: 0;'>
+            <div
+                id='leftCounterDiv'
+                class='counter tooltipParent'
+                tabindex='0'
+            >
+                <p id='leftCounter'></p>
+                <span id='tsc_l_tip' class='tooltip'>Text 1 symbol count</span>
+            </div>
+
+            <div
+                id='rightCounterDiv'
+                class='counter tooltipParent'
+                tabindex='0'
+            >
+                <p id='rightCounter'></p>
+                <span id='tsc_r_tip' class='tooltip'>Text 2 symbol count</span>
+            </div>
+        </div>
+
+        <!-- Save comparison button -->
+        <a
+            id='saveComparisonButton'
+            href=''
+            class='menuButton tooltipParent'
+            onclick='saveComparison()'
+            style='margin-top: 0;'
+        >
+            &#128190; Save comparison
+            <span class='tooltip'>Save paragraph by paragraph comparison of both texts to .txt file</span>
+        </a>
+
+        <!-- Notes -->
+        <textarea
+            id='userNotes'
+            class='notes'
+            autocomplete='off'
+            placeholder='Your notes'
+            rows='3'
+        ></textarea>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+
+        <script>
+            /**
+             * JavaScript logic for HTML programmes by Vital (Vitaly Pavlovich Ulyanov)
+             */
+            
+            // Stored values and style variables
+            let storedPrimaryColour =
+                localStorage.getItem('--primary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--primary-colour');
+            let storedSecondaryColour =
+                localStorage.getItem('--secondary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--secondary-colour');
+            let storedAccentColour1 =
+                localStorage.getItem('--accent1') ??
+                getComputedStyle(document.body).getPropertyValue('--accent1');
+            let storedAccentColour2 =
+                localStorage.getItem('--accent2') ??
+                getComputedStyle(document.body).getPropertyValue('--accent2');
+            
+            document.body.style.setProperty('--primary-colour', storedPrimaryColour);
+            document.body.style.setProperty('--secondary-colour', storedSecondaryColour);
+            document.body.style.setProperty('--accent1', storedAccentColour1);
+            document.body.style.setProperty('--accent2', storedAccentColour2);
+            
+            /** @type {HTMLDetailsElement} */
+            let settings = document.getElementById('settings');
+            
+            // Append settings with unified ones
+            let fullscreen = settings.parentElement.appendChild(
+                document.createElement('button')
+            );
+            let font = settings.appendChild(document.createElement('div'));
+            let setDiv = settings.appendChild(document.createElement('div'));
+            let primDiv = setDiv.appendChild(document.createElement('div'));
+            let secDiv = setDiv.appendChild(document.createElement('div'));
+            let acc1Div = setDiv.appendChild(document.createElement('div'));
+            let acc2Div = setDiv.appendChild(document.createElement('div'));
+            let load = settings.appendChild(document.createElement('div'));
+            let save = settings.appendChild(document.createElement('a'));
+            
+            setDiv.style.display = 'flex';
+            setDiv.style.flexWrap = 'wrap';
+            
+            //#region Fullscreen button
+            const up = '&#9650;';
+            const down = '&#9660;';
+            
+            fullscreen.id = 'fullscreenButton';
+            fullscreen.classList = 'tooltipParent';
+            fullscreen.innerHTML = up;
+            fullscreen.style.fontWeight = 600;
+            fullscreen.style.borderWidth = 0;
+            fullscreen.style.opacity = '0.9';
+            fullscreen.style.position = 'fixed';
+            fullscreen.style.top = '5px';
+            fullscreen.style.right = '5px';
+            fullscreen.addEventListener('click', function () {
+                let page = document.documentElement;
+                if (document.fullscreenElement) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                } else {
+                    if (page.requestFullscreen) page.requestFullscreen();
+                }
+            });
+            
+            let fullscreenTooltip = document.createElement('span');
+            fullscreenTooltip.id = 'fscrn_tip';
+            fullscreenTooltip.className = 'tooltip';
+            fullscreenTooltip.innerText = 'Fullscreen';
+            
+            fullscreen.appendChild(fullscreenTooltip);
+            
+            document.addEventListener('fullscreenchange', function () {
+                if (document.fullscreenElement) fullscreen.innerHTML = down;
+                else fullscreen.innerHTML = up;
+                fullscreen.appendChild(fullscreenTooltip);
+            });
+            //#endregion
+            
+            //#region Font
+            let fontDiv = font.appendChild(document.createElement('div'));
+            fontDiv.style.display = 'flex';
+            fontDiv.style.alignItems = 'baseline';
+            
+            let fontLabel = fontDiv.appendChild(document.createElement('label'));
+            let fontInput = fontDiv.appendChild(document.createElement('input'));
+            
+            fontLabel.id = 'fontLabel';
+            fontLabel.htmlFor = 'fontInput';
+            fontLabel.className = 'preserveFont';
+            fontLabel.innerText = 'Font';
+            fontLabel.style.marginRight = '2px';
+            
+            fontInput.id = 'fontInput';
+            fontInput.type = 'text';
+            fontInput.placeholder = 'Type a font\'s name and press Enter';
+            fontInput.style.width = '100%';
+            fontInput.addEventListener('change', function () {
+                localStorage.setItem('pageFont', this.value);
+                loadFont();
+            });
+            //#endregion
+            
+            //#region Primary colour
+            primDiv.style.display = 'flex';
+            primDiv.style.minWidth = '50%';
+            primDiv.style.alignItems = 'center';
+            
+            let primInput = primDiv.appendChild(document.createElement('input'));
+            primInput.id = 'primCol';
+            primInput.type = 'color';
+            primInput.value = storedPrimaryColour;
+            primInput.addEventListener('input', function () {
+                colourChange('primary', this.value);
+            });
+            
+            let primLabel = primDiv.appendChild(document.createElement('label'));
+            primLabel.id = 'primLabel';
+            primLabel.htmlFor = primInput.id;
+            primLabel.innerText = 'Background colour';
+            primLabel.style.marginLeft = '2px';
+            primLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Secondary colour
+            secDiv.style.display = 'flex';
+            secDiv.style.alignItems = 'center';
+            
+            let secInput = secDiv.appendChild(document.createElement('input'));
+            secInput.id = 'secCol';
+            secInput.type = 'color';
+            secInput.value = storedSecondaryColour;
+            secInput.addEventListener('input', function () {
+                colourChange('secondary', this.value);
+            });
+            
+            let secLabel = secDiv.appendChild(document.createElement('label'));
+            secLabel.id = 'secLabel';
+            secLabel.htmlFor = secInput.id;
+            secLabel.innerText = 'Text colour';
+            secLabel.style.marginLeft = '2px';
+            secLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 1
+            acc1Div.style.display = 'flex';
+            acc1Div.style.minWidth = '50%';
+            acc1Div.style.alignItems = 'center';
+            
+            let acc1Input = acc1Div.appendChild(document.createElement('input'));
+            acc1Input.id = 'acc1Col';
+            acc1Input.type = 'color';
+            acc1Input.value = storedAccentColour1;
+            acc1Input.addEventListener('input', function () {
+                colourChange('accent1', this.value);
+            });
+            
+            let acc1Label = acc1Div.appendChild(document.createElement('label'));
+            acc1Label.id = 'acc1Label';
+            acc1Label.htmlFor = acc1Input.id;
+            acc1Label.innerText = 'Accent colour 1';
+            acc1Label.style.marginLeft = '2px';
+            acc1Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 2
+            acc2Div.style.display = 'flex';
+            acc2Div.style.alignItems = 'center';
+            
+            let acc2Input = acc2Div.appendChild(document.createElement('input'));
+            acc2Input.id = 'acc2Col';
+            acc2Input.type = 'color';
+            acc2Input.value = storedAccentColour2;
+            acc2Input.addEventListener('input', function () {
+                colourChange('accent2', this.value);
+            });
+            
+            let acc2Label = acc2Div.appendChild(document.createElement('label'));
+            acc2Label.id = 'acc2Label';
+            acc2Label.htmlFor = acc2Input.id;
+            acc2Label.innerText = 'Accent colour 2';
+            acc2Label.style.marginLeft = '2px';
+            acc2Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Load button
+            load.className = 'box';
+            load.style.display = 'flex';
+            load.style.flexWrap = 'wrap';
+            load.style.alignItems = 'center';
+            load.style.justifyContent = 'space-between';
+            
+            let loadLabel = load.appendChild(document.createElement('label'));
+            loadLabel.id = 'loadLabel';
+            loadLabel.htmlFor = 'loadColoursButton';
+            loadLabel.innerHTML = '&#128193; Load colours';
+            loadLabel.style.flexGrow = 1;
+            loadLabel.style.cursor = 'pointer';
+            
+            let loadInput = load.appendChild(document.createElement('input'));
+            loadInput.id = 'loadColoursButton';
+            loadInput.type = 'file';
+            loadInput.accept = '.json';
+            loadInput.style.display = 'none';
+            loadInput.addEventListener('change', loadColours);
+            //#endregion
+            
+            //#region Save button
+            save.id = 'saveColoursButton';
+            save.href = '';
+            save.download = 'ColourScheme.json';
+            save.className = 'box';
+            save.innerHTML = '&#128190; Save colours';
+            save.style.textDecoration = 'none';
+            save.addEventListener('click', saveColours);
+            //#endregion
+            
+            //#region Export texts for translation
+            let exportLang = settings.appendChild(document.createElement('a'));
+            
+            exportLang.id = 'exportLang';
+            exportLang.href = '';
+            exportLang.download = 'TranslationTemplate.json';
+            exportLang.className = 'box';
+            exportLang.innerHTML = '&#127760; Export texts for translation';
+            exportLang.style.textDecoration = 'none';
+            exportLang.addEventListener('click', exportTranslationTemplate);
+            //#endregion
+            
+            function colourChange(colourType, colour) {
+                switch (colourType) {
+                    case 'primary':
+                        document.body.style.setProperty('--primary-colour', colour);
+                        localStorage.setItem('--primary-colour', colour);
+                        break;
+                    case 'secondary':
+                        document.body.style.setProperty('--secondary-colour', colour);
+                        localStorage.setItem('--secondary-colour', colour);
+                        break;
+                    case 'accent1':
+                        document.body.style.setProperty('--accent1', colour);
+                        localStorage.setItem('--accent1', colour);
+                        break;
+                    case 'accent2':
+                        document.body.style.setProperty('--accent2', colour);
+                        localStorage.setItem('--accent2', colour);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            /**
+             * @typedef {Object} ColourScheme
+             * @property {string} primary
+             * @property {string} secondary
+             * @property {string} accent1
+             * @property {string} accent2
+             */
+            
+            function saveColours() {
+                /** @type {ColourScheme}  */
+                let colours = {
+                    primary: document.body.style.getPropertyValue('--primary-colour'),
+                    secondary: document.body.style.getPropertyValue('--secondary-colour'),
+                    accent1: document.body.style.getPropertyValue('--accent1'),
+                    accent2: document.body.style.getPropertyValue('--accent2'),
+                };
+                let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
+                saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
+            /**
+             * @typedef {Object} LangElement
+             * @property {string} id
+             * @property {Object} props
+             */
+            function exportTranslationTemplate() {
+                /** @type {LangElement[]} */
+                let elements = [];
+            
+                document.querySelectorAll('body *').forEach((e) => {
+                    if (e.tagName !== 'DIV'
+                        && e.tagName !== 'DETAILS'
+                        && e.id
+                        && e.id !== 'lang'
+                    ) {
+                        /** @type {LangElement} */
+                        let newEl = {};
+            
+                        newEl.id = e.id;
+            
+                        ['innerHTML', 'placeholder'].forEach((p) => {
+                            if (e[p]) {
+                                if (!newEl.props) newEl.props = {};
+                                newEl.props[p] = e[p].trim();
+                            }
+                        });
+            
+                        if (newEl.props) elements.push(newEl);
+                    }
+                });
+            
+                let data = encodeURIComponent(JSON.stringify(elements, undefined, 4));
+                exportLang.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
+            async function loadColours() {
+                await loadColoursButton.files[0].text().then((content) => {
+                    try {
+                        /** @type {ColourScheme} */
+                        let data = JSON.parse(content);
+                        if (data) {
+                            if (data.primary) {
+                                colourChange('primary', data.primary);
+                                primInput.value = data.primary;
+                            }
+                            if (data.secondary) {
+                                colourChange('secondary', data.secondary);
+                                secInput.value = data.secondary;
+                            }
+                            if (data.accent1) {
+                                colourChange('accent1', data.accent1);
+                                acc1Input.value = data.accent1;
+                            }
+                            if (data.accent2) {
+                                colourChange('accent2', data.accent2);
+                                acc2Input.value = data.accent2;
+                            }
+                        }
+                    } catch (error) {
+                        alert(
+                            `Ошибка при чтении файла цветов: ${error}`
+                        );
+                    }
+                });
+            }
+            
+            function loadFont() {
+                let font = localStorage.getItem('pageFont');
+                document.getElementById('fontInput').value = font;
+                document.body.querySelectorAll('*').forEach((e) => {
+                    if (!e.className.includes('preserveFont')) e.style.fontFamily = font;
+                });
+            }
+            
+            loadFont();
+
+        </script>
+        <script>
+            // Elements
+            /** @type {HTMLSelectElement} */
+            let lang = document.getElementById('lang');
+
+            /** @type {HTMLDivElement} */
+            let headerLeft = document.getElementById('headerLeft');
+            /** @type {HTMLDivElement} */
+            let headerRight = document.getElementById('headerRight');
+
+            /** @type {HTMLInputElement} */
+            let projectName = document.getElementById('projectName');
+            /** @type {HTMLInputElement} */
+            let nameLeft = document.getElementById('nameLeft');
+            /** @type {HTMLInputElement} */
+            let nameRight = document.getElementById('nameRight');
+
+            /** @type {HTMLButtonElement} */
+            let shrinkLeft = document.getElementById('shrinkLeft');
+            /** @type {HTMLButtonElement} */
+            let shrinkRight = document.getElementById('shrinkRight');
+            /** @type {HTMLButtonElement} */
+            let loadText1Button = document.getElementById('loadText1Button');
+            /** @type {HTMLButtonElement} */
+            let loadText2Button = document.getElementById('loadText2Button');
+
+            /** @type {HTMLTextAreaElement} */
+            let textLeft = document.getElementById('textLeft');
+            /** @type {HTMLTextAreaElement} */
+            let textRight = document.getElementById('textRight');
+            /** @type {HTMLTextAreaElement}*/
+            let userNotes = document.getElementById('userNotes');
+
+            /** @type {HTMLAnchorElement} */
+            let saveFile1 = document.getElementById('saveFile1');
+            /** @type {HTMLAnchorElement} */
+            let saveFile2 = document.getElementById('saveFile2');
+            /** @type {HTMLAnchorElement} */
+            let saveProjectButton = document.getElementById('saveProjectButton');
+
+            /** @type {HTMLInputElement} */
+            let loadProject = document.getElementById('loadProject');
+            /** @type {HTMLInputElement} */
+            let loadText1 = document.getElementById('loadText1');
+            /** @type {HTMLInputElement} */
+            let loadText2 = document.getElementById('loadText2');
+
+            /** @type {HTMLParagraphElement} */
+            let leftCounter = document.getElementById('leftCounterDiv');
+            /** @type {HTMLParagraphElement} */
+            let rightCounter = document.getElementById('rightCounterDiv');
+
+            let leftPanel = [headerLeft, saveFile1, loadText1Button, textLeft, leftCounter];
+            let rightPanel = [headerRight, saveFile2, loadText2Button, textRight, rightCounter];
+            let bothPanels = leftPanel.concat(rightPanel);
+
+            shrinkLeft.addEventListener('click', function () {
+                if (!headerRight.classList.contains('shrink')) {
+                    leftPanel.forEach((e) => {
+                        e.classList.remove('expand');
+                        e.classList.add('shrink');
+                    });
+                    shrinkRight.focus();
+                } else {
+                    rightPanel.forEach((e) => {
+                        e.style.display = 'flex';
+                        e.classList.remove('shrink');
+                        e.classList.add('expand');
+                    });
+                }
+            });
+
+            shrinkRight.addEventListener('click', function () {
+                if (!headerLeft.classList.contains('shrink')) {
+                    rightPanel.forEach((e) => {
+                        e.classList.remove('expand');
+                        e.classList.add('shrink');
+                    });
+                    shrinkLeft.focus();
+                } else {
+                    leftPanel.forEach((e) => {
+                        e.style.display = 'flex';
+                        e.classList.remove('shrink');
+                        e.classList.add('expand');
+                    });
+                }
+            });
+
+            bothPanels.forEach((e) => {
+                e.addEventListener('animationend', function (event) {
+                    if (event.animationName === 'shrinkAnim')
+                        e.style.display = 'none';
+                });
+            });
+
+            lang.value = localStorage.getItem('lang') ?? 'eng';
+            if (lang.value !== 'eng') setLanguage();
+            updateCounter(true);
+            updateCounter(false);
+
+            document.body.addEventListener('keydown', function (event) {
+                if (!event.ctrlKey) return;
+
+                switch (event.code) {
+                    case 'KeyS':
+                        event.preventDefault();
+                        saveProjectButton.click();
+                        break;
+                    case 'KeyO':
+                        event.preventDefault();
+                        loadProject.click();
+                    default:
+                        break;
+                }
+            });
+
+            function saveProjectFile() {
+                /** @type {HTMLAnchorElement} */
+                let saveProjectButton = document.getElementById('saveProjectButton');
+                let project = {
+                    name1: nameLeft.value,
+                    content1: textLeft.value,
+                    cursorPos1: textLeft.selectionEnd,
+
+                    name2: nameRight.value,
+                    content2: textRight.value,
+                    cursorPos2: textRight.selectionEnd,
+
+                    notes: userNotes.value
+                };
+
+                let data = encodeURIComponent(JSON.stringify(project, undefined, 2));
+                saveProjectButton.download = `${projectName.value || 'Project'}.json`;
+                saveProjectButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            async function loadProjectFile() {
+                await loadProject.files[0].text().then((content) => {
+                    try {
+                        /** @type {
+                                {
+                                    name1: string,
+                                    content1: string,
+                                    cursorPos1: number,
+
+                                    name2: string,
+                                    content2: string,
+                                    cursorPos2: number,
+
+                                    notes: string
+                                }
+                            }
+                        */
+                        let project = JSON.parse(content);
+
+                        projectName.value = loadProject.files[0].name.replace('.json', '') ?? '';
+
+                        nameLeft.value = project.name1 ?? '';
+                        nameRight.value = project.name2 ?? '';
+
+                        textLeft.value = project.content1 ?? '';
+                        textRight.value = project.content2 ?? '';
+
+                        textLeft.selectionStart = project.cursorPos1 ?? 0;
+                        textRight.selectionStart = project.cursorPos2 ?? 0;
+                        textLeft.selectionEnd = project.cursorPos1 ?? 0;
+                        textRight.selectionEnd = project.cursorPos2 ?? 0;
+
+                        userNotes.value = project.notes ?? '';
+
+                        updateCounter(true);
+                        updateCounter(false);
+                    } catch (error) {
+                        alert(`Error while reading project file: ${error}`);
+                    }
+                });
+
+                loadProject.value = '';
+            }
+
+            /**
+             * @param {boolean} left
+            */
+            function saveFile(left) {
+                /** @type {HTMLAnchorElement} */
+                let saveButton = document.getElementById(
+                    left ? 'saveFile1' : 'saveFile2'
+                );
+
+                let projectString = projectName.value
+                    ? `${projectName.value} - `
+                    : '';
+
+                let name = left
+                    ? `${projectString}${nameLeft.value}`
+                    : `${projectString}${nameRight.value}`;
+
+                let text = left
+                    ? `${textLeft.value}`
+                    : `${textRight.value}`;
+
+                let data = encodeURIComponent(text);
+                saveButton.download = `${name}.txt`;
+                saveButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            /**
+             * @param {boolean} left
+            */
+            async function loadFile(left) {
+                /** @type {HTMLInputElement} */
+                let load = left
+                    ? loadText1
+                    : loadText2;
+
+                let name = left
+                    ? nameLeft
+                    : nameRight;
+
+                let text = left
+                    ? textLeft
+                    : textRight;
+
+                name.value = load.files.length === 1
+                    ? load.files[0].name
+                    : '';
+
+                text.value = '';
+
+                for (const f of load.files) {
+                    await f.text().then((content) => {
+                        try {
+                            text.value += `${content}\n\n`;
+                        } catch (error) {
+                            alert(`Error while reading file: ${error}`);
+                        }
+                    });
+                }
+
+                text.value = text.value.trim();
+                updateCounter(left);
+            }
+
+            /**
+             * @param {DragEvent} event
+             * @param {boolean} left
+            */
+            async function dropText(event, left) {
+                if (event.dataTransfer.files.length === 0) return;
+                event.preventDefault();
+
+                let name = left
+                    ? nameLeft
+                    : nameRight;
+
+                let text = left
+                    ? textLeft
+                    : textRight;
+
+                name.value = event.dataTransfer.files.length === 1
+                    ? event.dataTransfer.files[0].name
+                    : '';
+
+                text.value = '';
+
+                for (const f of event.dataTransfer.files) {
+                    await f.text().then((content) => {
+                        try {
+                            text.value += `${content}\n\n`;
+                        } catch (error) {
+                            alert(`Error while reading file: ${error}`);
+                        }
+                    });
+                }
+
+                text.value = text.value.trim();
+                updateCounter(left);
+            }
+
+            /**
+             * @param {DragEvent} event
+            */
+            function cancelDragOver(event) {
+                event.preventDefault();
+            }
+
+            function saveComparison() {
+                /** @type {HTMLAnchorElement} */
+                let saveComparisonButton = document.getElementById('saveComparisonButton');
+
+                // Get paragraphs
+                let parsLeft = textLeft.value.split('\n').filter((l) => l !== '');
+                let parsRight = textRight.value.split('\n').filter((l) => l !== '');
+
+                // Determine the maximum array index
+                let maxLine = parsLeft.length > parsRight.length
+                    ? parsLeft.length
+                    : parsRight.length;
+
+                let text = `${projectName.value}\n\n`;
+
+                for (var i = 0; i < maxLine; i++) {
+                    text += `${i + 1}. ${nameLeft.value} >> ${parsLeft[i] ?? ''}\n`;
+                    text += `${i + 1}. ${nameRight.value} >> ${parsRight[i] ?? ''}`;
+                    if (i < maxLine - 1) text += `\n\n`;
+                }
+
+                let data = encodeURIComponent(text);
+                saveComparisonButton.download = `${projectName.value}.txt`;
+                saveComparisonButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            /**
+             * @param {boolean} left
+            */
+            function updateCounter(left) {
+                /** @type {HTMLParagraphElement} */
+                let counter = document.getElementById(
+                    left ? 'leftCounter' : 'rightCounter'
+                );
+
+                let text = left ? textLeft : textRight;
+                let selection = text.selectionEnd - text.selectionStart;
+
+                let textLength = left
+                    ? textLeft.value.length
+                    : textRight.value.length;
+
+                counter.innerText = selection > 0
+                    ? `${selection}/${textLength}`
+                    : `${textLength}`;
+            }
+
+            function setLanguage() {
+                /** @type {{
+                    id: string,
+                    props: {}[]
+                }[]} */
+                let elements = [];
+
+                localStorage.setItem('lang', lang.value);
+
+                switch (lang.value) {
+                    case 'eng':
+                        elements = [
+                            {
+                                id: 'settingsSummary',
+                                props: {
+                                    innerHTML: 'Settings'
+                                }
+                            },
+                            {
+                                id: 'langLabel',
+                                props: {
+                                    innerHTML: 'Language'
+                                }
+                            },
+                            {
+                                id: 'fontLabel',
+                                props: {
+                                    innerHTML: 'Font'
+                                }
+                            },
+                            {
+                                id: 'fontInput',
+                                props: {
+                                    placeholder: 'Type a font\'s name and press Enter'
+                                }
+                            },
+                            {
+                                id: 'primLabel',
+                                props: {
+                                    innerHTML: 'Background colour'
+                                }
+                            },
+                            {
+                                id: 'secLabel',
+                                props: {
+                                    innerHTML: 'Text colour'
+                                }
+                            },
+                            {
+                                id: 'acc1Label',
+                                props: {
+                                    innerHTML: 'Accent colour 1'
+                                }
+                            },
+                            {
+                                id: 'acc2Label',
+                                props: {
+                                    innerHTML: 'Accent colour 2'
+                                }
+                            },
+                            {
+                                id: 'loadLabel',
+                                props: {
+                                    innerHTML: '📁 Load colours'
+                                }
+                            },
+                            {
+                                id: 'saveColoursButton',
+                                props: {
+                                    innerHTML: '💾 Save colours'
+                                }
+                            },
+                            {
+                                id: 'exportLang',
+                                props: {
+                                    innerHTML: '🌐 Export texts for translation'
+                                }
+                            },
+                            {
+                                id: 'saveProjectButton',
+                                props: {
+                                    innerHTML: '💾 Save\n<span class=\'tooltip\'>Save project to .json file</span>'
+                                }
+                            },
+                            {
+                                id: 'loadProjectButton',
+                                props: {
+                                    innerHTML: '📁 Load\n<span class=\'tooltip\'>Load project from .json file</span>'
+                                }
+                            },
+                            {
+                                id: 'projectName',
+                                props: {
+                                    placeholder: 'Project name'
+                                }
+                            },
+                            {
+                                id: 'nameLeft',
+                                props: {
+                                    placeholder: 'Text 1 name'
+                                }
+                            },
+                            {
+                                id: 'shrinkLeft',
+                                props: {
+                                    innerHTML: '&lt;\n<span class=\'tooltip\'>\nShrink left panel\n</span>'
+                                }
+                            },
+                            {
+                                id: 'shrinkRight',
+                                props: {
+                                    innerHTML: '&gt;\n<span class=\'tooltip\'>\nShrink right panel\n</span>'
+                                }
+                            },
+                            {
+                                id: 'nameRight',
+                                props: {
+                                    placeholder: 'Text 2 name'
+                                }
+                            },
+                            {
+                                id: 'saveFile1',
+                                props: {
+                                    innerHTML: '💾 Save\n<span class=\'tooltip\'>Save text 1 to .txt file</span>'
+                                }
+                            },
+                            {
+                                id: 'saveFile2',
+                                props: {
+                                    innerHTML: '💾 Save\n<span class=\'tooltip\'>Save text 2 to .txt file</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText1Button',
+                                props: {
+                                    innerHTML: '📁 Open\n<span class=\'tooltip\'>Open text 1. To open files, click the button or drag and drop them on it.</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText2Button',
+                                props: {
+                                    innerHTML: '📁 Open\n<span class=\'tooltip\'>Open text 2. To open files, click the button or drag and drop them on it.</span>'
+                                }
+                            },
+                            {
+                                id: 'textLeft',
+                                props: {
+                                    placeholder: 'Text 1 content'
+                                }
+                            },
+                            {
+                                id: 'textRight',
+                                props: {
+                                    placeholder: 'Text 2 content'
+                                }
+                            },
+                            {
+                                id: 'tsc_l_tip',
+                                props: {
+                                    innerHTML: 'Text 1 symbol count'
+                                }
+                            },
+                            {
+                                id: 'tsc_r_tip',
+                                props: {
+                                    innerHTML: 'Text 2 symbol count'
+                                }
+                            },
+                            {
+                                id: 'saveComparisonButton',
+                                props: {
+                                    innerHTML: '💾 Save comparison\n<span class=\'tooltip\'>Save paragraph by paragraph comparison of both texts to .txt file</span>'
+                                }
+                            },
+                            {
+                                id: 'userNotes',
+                                props: {
+                                    placeholder: 'Your notes'
+                                }
+                            },
+                            {
+                                id: 'author',
+                                props: {
+                                    innerHTML: 'Made by Vitaly Pavlovich Ulyanov.'
+                                }
+                            },
+                            {
+                                id: 'fscrn_tip',
+                                props: {
+                                    innerHTML: 'Fullscreen'
+                                }
+                            }
+                        ];
+                        break;
+                    case 'rus':
+                        elements = [
+                            {
+                                id: 'settingsSummary',
+                                props: {
+                                    innerHTML: 'Настройки'
+                                }
+                            },
+                            {
+                                id: 'langLabel',
+                                props: {
+                                    innerHTML: 'Язык'
+                                }
+                            },
+                            {
+                                id: 'fontLabel',
+                                props: {
+                                    innerHTML: 'Шрифт'
+                                }
+                            },
+                            {
+                                id: 'fontInput',
+                                props: {
+                                    placeholder: 'Введите имя шрифта и нажмите Enter'
+                                }
+                            },
+                            {
+                                id: 'primLabel',
+                                props: {
+                                    innerHTML: 'Цвет фона'
+                                }
+                            },
+                            {
+                                id: 'secLabel',
+                                props: {
+                                    innerHTML: 'Цвет текста'
+                                }
+                            },
+                            {
+                                id: 'acc1Label',
+                                props: {
+                                    innerHTML: 'Контрастный цвет 1'
+                                }
+                            },
+                            {
+                                id: 'acc2Label',
+                                props: {
+                                    innerHTML: 'Контрастный цвет 2'
+                                }
+                            },
+                            {
+                                id: 'loadLabel',
+                                props: {
+                                    innerHTML: '📁 Загрузить цвета'
+                                }
+                            },
+                            {
+                                id: 'saveColoursButton',
+                                props: {
+                                    innerHTML: '💾 Сохранить цвета'
+                                }
+                            },
+                            {
+                                id: 'exportLang',
+                                props: {
+                                    innerHTML: '🌐 Экспортировать тексты для перевода'
+                                }
+                            },
+                            {
+                                id: 'saveProjectButton',
+                                props: {
+                                    innerHTML: '💾 Сохранить\n<span class=\'tooltip\'>Сохранить проект в файл .json</span>'
+                                }
+                            },
+                            {
+                                id: 'loadProjectButton',
+                                props: {
+                                    innerHTML: '📁 Загрузить\n<span class=\'tooltip\'>Загрузить проект из файла .json</span>'
+                                }
+                            },
+                            {
+                                id: 'projectName',
+                                props: {
+                                    placeholder: 'Имя проекта'
+                                }
+                            },
+                            {
+                                id: 'nameLeft',
+                                props: {
+                                    placeholder: 'Имя текста 1'
+                                }
+                            },
+                            {
+                                id: 'shrinkLeft',
+                                props: {
+                                    innerHTML: '&lt;\n<span class=\'tooltip\'>\nУменьшить левую панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'shrinkRight',
+                                props: {
+                                    innerHTML: '&gt;\n<span class=\'tooltip\'>\nУменьшить правую панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'nameRight',
+                                props: {
+                                    placeholder: 'Имя текста 2'
+                                }
+                            },
+                            {
+                                id: 'saveFile1',
+                                props: {
+                                    innerHTML: '💾 Сохранить\n<span class=\'tooltip\'>Сохранить текст 1 в файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'saveFile2',
+                                props: {
+                                    innerHTML: '💾 Сохранить\n<span class=\'tooltip\'>Сохранить текст 2 в файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText1Button',
+                                props: {
+                                    innerHTML: '📁 Открыть\n<span class=\'tooltip\'>Открыть текст 1. Для открытия файлов нажмите на кнопку или перетащите их на неё.</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText2Button',
+                                props: {
+                                    innerHTML: '📁 Открыть\n<span class=\'tooltip\'>Открыть текст 2. Для открытия файлов нажмите на кнопку или перетащите их на неё.</span>'
+                                }
+                            },
+                            {
+                                id: 'textLeft',
+                                props: {
+                                    placeholder: 'Содержимое текста 1'
+                                }
+                            },
+                            {
+                                id: 'textRight',
+                                props: {
+                                    placeholder: 'Содержимое текста 2'
+                                }
+                            },
+                            {
+                                id: 'tsc_l_tip',
+                                props: {
+                                    innerHTML: 'Число символов в тексте 1'
+                                }
+                            },
+                            {
+                                id: 'tsc_r_tip',
+                                props: {
+                                    innerHTML: 'Число символов в тексте 2'
+                                }
+                            },
+                            {
+                                id: 'saveComparisonButton',
+                                props: {
+                                    innerHTML: '💾 Сохранить сравнение\n<span class=\'tooltip\'>Сохранить поабзацное сравнение обоих текстов в файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'userNotes',
+                                props: {
+                                    placeholder: 'Заметки'
+                                }
+                            },
+                            {
+                                id: 'author',
+                                props: {
+                                    innerHTML: 'Автор — Виталий Павлович Ульянов.'
+                                }
+                            },
+                            {
+                                id: 'fscrn_tip',
+                                props: {
+                                    innerHTML: 'Полный экран'
+                                }
+                            }
+                        ];
+                        break;
+                    case 'ukr':
+                        elements = [
+                            {
+                                id: 'settingsSummary',
+                                props: {
+                                    innerHTML: 'Налаштування'
+                                }
+                            },
+                            {
+                                id: 'langLabel',
+                                props: {
+                                    innerHTML: 'Мова'
+                                }
+                            },
+                            {
+                                id: 'fontLabel',
+                                props: {
+                                    innerHTML: 'Шрифт'
+                                }
+                            },
+                            {
+                                id: 'fontInput',
+                                props: {
+                                    placeholder: 'Введіть ім\'я шрифту та натисніть Enter'
+                                }
+                            },
+                            {
+                                id: 'primLabel',
+                                props: {
+                                    innerHTML: 'Колір тла'
+                                }
+                            },
+                            {
+                                id: 'secLabel',
+                                props: {
+                                    innerHTML: 'Колір тексту'
+                                }
+                            },
+                            {
+                                id: 'acc1Label',
+                                props: {
+                                    innerHTML: 'Контрастний колір 1'
+                                }
+                            },
+                            {
+                                id: 'acc2Label',
+                                props: {
+                                    innerHTML: 'Контрастний колір 2'
+                                }
+                            },
+                            {
+                                id: 'loadLabel',
+                                props: {
+                                    innerHTML: '📁 Завантажити кольори'
+                                }
+                            },
+                            {
+                                id: 'saveColoursButton',
+                                props: {
+                                    innerHTML: '💾 Зберегти кольори'
+                                }
+                            },
+                            {
+                                id: 'exportLang',
+                                props: {
+                                    innerHTML: '🌐 Експортувати тексти для перекладу'
+                                }
+                            },
+                            {
+                                id: 'saveProjectButton',
+                                props: {
+                                    innerHTML: '💾 Зберегти\n<span class=\'tooltip\'>Зберегти проект у файл .json</span>'
+                                }
+                            },
+                            {
+                                id: 'loadProjectButton',
+                                props: {
+                                    innerHTML: '📁 Завантажити\n<span class=\'tooltip\'>Завантажити проект із файлу .json</span>'
+                                }
+                            },
+                            {
+                                id: 'projectName',
+                                props: {
+                                    placeholder: 'Ім\'я проекту'
+                                }
+                            },
+                            {
+                                id: 'nameLeft',
+                                props: {
+                                    placeholder: 'Ім\'я тексту 1'
+                                }
+                            },
+                            {
+                                id: 'shrinkLeft',
+                                props: {
+                                    innerHTML: '&lt;\n<span class=\'tooltip\'>\nЗменшити ліву панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'shrinkRight',
+                                props: {
+                                    innerHTML: '&gt;\n<span class=\'tooltip\'>\nЗменшити праву панель\n</span>'
+                                }
+                            },
+                            {
+                                id: 'nameRight',
+                                props: {
+                                    placeholder: 'Ім\'я тексту 2'
+                                }
+                            },
+                            {
+                                id: 'saveFile1',
+                                props: {
+                                    innerHTML: '💾 Зберегти\n<span class=\'tooltip\'>Зберегти текст 1 у файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'saveFile2',
+                                props: {
+                                    innerHTML: '💾 Зберегти\n<span class=\'tooltip\'>Зберегти текст 2 у файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText1Button',
+                                props: {
+                                    innerHTML: '📁 Відкрити\n<span class=\'tooltip\'>Відкрити текст 1. Щоб відкрити файли, натисніть на кнопку або перетягніть їх.</span>'
+                                }
+                            },
+                            {
+                                id: 'loadText2Button',
+                                props: {
+                                    innerHTML: '📁 Відкрити\n<span class=\'tooltip\'>Відкрити текст 2. Щоб відкрити файли, натисніть на кнопку або перетягніть їх.</span>'
+                                }
+                            },
+                            {
+                                id: 'textLeft',
+                                props: {
+                                    placeholder: 'Вміст тексту 1'
+                                }
+                            },
+                            {
+                                id: 'textRight',
+                                props: {
+                                    placeholder: 'Вміст тексту 2'
+                                }
+                            },
+                            {
+                                id: 'tsc_l_tip',
+                                props: {
+                                    innerHTML: 'Кількість символів у тексті 1'
+                                }
+                            },
+                            {
+                                id: 'tsc_r_tip',
+                                props: {
+                                    innerHTML: 'Кількість символів у тексті 2'
+                                }
+                            },
+                            {
+                                id: 'saveComparisonButton',
+                                props: {
+                                    innerHTML: '💾 Зберегти порівняння\n<span class=\'tooltip\'>Зберегти поабзацне порівняння обох текстів у файл .txt</span>'
+                                }
+                            },
+                            {
+                                id: 'userNotes',
+                                props: {
+                                    placeholder: 'Нотатки'
+                                }
+                            },
+                            {
+                                id: 'author',
+                                props: {
+                                    innerHTML: 'Автор — Віталій Павловіч Ульянов.'
+                                }
+                            },
+                            {
+                                id: 'fscrn_tip',
+                                props: {
+                                    innerHTML: 'Повний екран'
+                                }
+                            }
+                        ];
+                        break;
+                    default:
+                        break;
+                }
+
+                elements.forEach((e) => {
+                    const el = document.getElementById(e.id);
+
+                    if (!el) {
+                        console.log(`Translation error: element with ID '${e.id}' not found!`);
+                        return;
+                    }
+
+                    for (const prop in e.props) {
+                        el[prop] = e.props[prop];
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

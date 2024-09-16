@@ -5,7 +5,7 @@
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <title>Полезное</title>
-        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+        
 
         <style>
             :root {
@@ -23,6 +23,11 @@
                 font-size: 14pt;
                 margin-top: 1.5px;
                 margin-bottom: 1.5px;
+            }
+            
+            *::selection {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
             }
             
             body {
@@ -46,7 +51,6 @@
                 border-style: outset;
                 cursor: pointer;
                 padding: 1px;
-                margin: 1px;
                 align-items: center;
                 justify-content: center;
             }
@@ -68,15 +72,16 @@
                 width: 100%;
             }
             
-            details>summary {
+            details > summary {
                 background-color: var(--accent2);
                 border-radius: 7px 0px 7px 0px;
+                box-shadow: 1px 1px 2px var(--secondary-colour);
                 cursor: pointer;
                 padding: 2px;
             }
             
-            details>summary:focus,
-            details>summary:hover {
+            details > summary:focus,
+            details > summary:hover {
                 background-color: var(--secondary-colour);
                 color: var(--accent2);
             }
@@ -97,7 +102,7 @@
                 animation: detailsOpening 0.7s ease-out;
             }
             
-            details[open]>summary {
+            details[open] > summary {
                 border-bottom-color: var(--secondary-colour);
                 border-bottom-style: inset;
                 border-bottom-width: 2px;
@@ -106,8 +111,8 @@
                 padding-bottom: 2px;
             }
             
-            details[open]>summary:focus,
-            details[open]>summary:hover {
+            details[open] > summary:focus,
+            details[open] > summary:hover {
                 border-bottom-color: var(--accent2);
             }
             
@@ -144,7 +149,12 @@
             
             input {
                 border-color: var(--secondary-colour);
+                border-style: outset;
                 accent-color: var(--accent2);
+            }
+            
+            input[type='file'] {
+                border-style: none;
             }
             
             input[type='number'] {
@@ -174,35 +184,37 @@
                 background-color: var(--accent2);
             }
             
-            p {
-                margin: 1px;
-            }
-            
             select {
                 background-color: var(--primary-colour);
                 border-color: var(--accent1);
-                border-radius: 7px 0px 0px 0px;
                 border-style: inset;
                 border-width: 2px;
                 color: var(--secondary-colour);
-            }
-            
-            select:focus {
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
+                overflow: auto;
             }
             
             table {
                 width: 100%;
             }
             
-            th,
-            td {
+            td,
+            th {
                 border-color: var(--secondary-colour);
                 border-style: inset;
                 border-width: 2px;
                 padding: 2px;
                 text-align: center;
+            }
+            
+            td {
+                border-radius: 0px 0px 5px 0px;
+                font-weight: 600;
+            }
+            
+            td:focus,
+            td:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
             }
             
             th {
@@ -213,21 +225,20 @@
                 font-weight: bold;
             }
             
-            td {
-                border-radius: 0px 0px 5px 0px;
-                font-weight: 600;
-            }
-            
             th:focus,
             th:hover {
                 background-color: var(--accent2);
                 color: var(--secondary-colour);
             }
             
-            td:focus,
-            td:hover {
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
+            textarea {
+                border-color: var(--secondary-colour);
+                border-style: outset;
+                border-width: 2px;
+            }
+            
+            textarea::placeholder {
+                color: var(--accent1);
             }
             
             .box {
@@ -242,8 +253,61 @@
             
             .box:focus,
             .box:hover {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+            }
+            
+            @keyframes tooltipFadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 0.95;
+                }
+            }
+            
+            .tooltipParent {
+                position: relative;
+            }
+            
+            .tooltipParent:hover > .tooltip,
+            .tooltipParent:focus > .tooltip {
+                display: flex;
+                animation: tooltipFadeIn 0.7s ease;
+            }
+            
+            .tooltip {
+                display: none;
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
+                opacity: 0.95;
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 3px;
+                position: fixed;
+                top: 5px;
+                left: 5px;
+                z-index: 1;
+                min-width: min-content;
+                width: max-content;
+                max-width: 75vw;
+                font-weight: 600;
+                text-align: left;
+                text-wrap: wrap;
+            }
+            
+            .tooltip::before {
+                content: 'i';
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-radius: 7px 0px 7px 0px;
+                margin-right: 4px;
+                height: 100%;
+                padding-inline: 0.5em;
+                font-style: italic;
+                font-weight: 600;
             }
 
             li {
@@ -543,10 +607,11 @@
             const down = '&#9660;';
             
             fullscreen.id = 'fullscreenButton';
+            fullscreen.classList = 'tooltipParent';
             fullscreen.innerHTML = up;
             fullscreen.style.fontWeight = 600;
             fullscreen.style.borderWidth = 0;
-            fullscreen.style.opacity = '50%';
+            fullscreen.style.opacity = '0.9';
             fullscreen.style.position = 'fixed';
             fullscreen.style.top = '5px';
             fullscreen.style.right = '5px';
@@ -559,9 +624,17 @@
                 }
             });
             
+            let fullscreenTooltip = document.createElement('span');
+            fullscreenTooltip.id = 'fscrn_tip';
+            fullscreenTooltip.className = 'tooltip';
+            fullscreenTooltip.innerText = 'Fullscreen';
+            
+            fullscreen.appendChild(fullscreenTooltip);
+            
             document.addEventListener('fullscreenchange', function () {
                 if (document.fullscreenElement) fullscreen.innerHTML = down;
                 else fullscreen.innerHTML = up;
+                fullscreen.appendChild(fullscreenTooltip);
             });
             //#endregion
             
@@ -576,12 +649,12 @@
             fontLabel.id = 'fontLabel';
             fontLabel.htmlFor = 'fontInput';
             fontLabel.className = 'preserveFont';
-            fontLabel.innerText = 'Шрифт';
+            fontLabel.innerText = 'Font';
             fontLabel.style.marginRight = '2px';
             
             fontInput.id = 'fontInput';
             fontInput.type = 'text';
-            fontInput.placeholder = 'Введите название шрифта и нажмите Enter';
+            fontInput.placeholder = 'Type a font\'s name and press Enter';
             fontInput.style.width = '100%';
             fontInput.addEventListener('change', function () {
                 localStorage.setItem('pageFont', this.value);
@@ -603,8 +676,9 @@
             });
             
             let primLabel = primDiv.appendChild(document.createElement('label'));
+            primLabel.id = 'primLabel';
             primLabel.htmlFor = primInput.id;
-            primLabel.innerText = 'Фоновый цвет';
+            primLabel.innerText = 'Background colour';
             primLabel.style.marginLeft = '2px';
             primLabel.style.verticalAlign = 'center';
             //#endregion
@@ -622,8 +696,9 @@
             });
             
             let secLabel = secDiv.appendChild(document.createElement('label'));
+            secLabel.id = 'secLabel';
             secLabel.htmlFor = secInput.id;
-            secLabel.innerText = 'Цвет текста';
+            secLabel.innerText = 'Text colour';
             secLabel.style.marginLeft = '2px';
             secLabel.style.verticalAlign = 'center';
             //#endregion
@@ -642,8 +717,9 @@
             });
             
             let acc1Label = acc1Div.appendChild(document.createElement('label'));
+            acc1Label.id = 'acc1Label';
             acc1Label.htmlFor = acc1Input.id;
-            acc1Label.innerText = 'Контрастный цвет 1';
+            acc1Label.innerText = 'Accent colour 1';
             acc1Label.style.marginLeft = '2px';
             acc1Label.style.verticalAlign = 'center';
             //#endregion
@@ -661,8 +737,9 @@
             });
             
             let acc2Label = acc2Div.appendChild(document.createElement('label'));
+            acc2Label.id = 'acc2Label';
             acc2Label.htmlFor = acc2Input.id;
-            acc2Label.innerText = 'Контрастный цвет 2';
+            acc2Label.innerText = 'Accent colour 2';
             acc2Label.style.marginLeft = '2px';
             acc2Label.style.verticalAlign = 'center';
             //#endregion
@@ -675,8 +752,9 @@
             load.style.justifyContent = 'space-between';
             
             let loadLabel = load.appendChild(document.createElement('label'));
+            loadLabel.id = 'loadLabel';
             loadLabel.htmlFor = 'loadColoursButton';
-            loadLabel.innerHTML = '&#128193; Загрузить цвета';
+            loadLabel.innerHTML = '&#128193; Load colours';
             loadLabel.style.flexGrow = 1;
             loadLabel.style.cursor = 'pointer';
             
@@ -684,7 +762,7 @@
             loadInput.id = 'loadColoursButton';
             loadInput.type = 'file';
             loadInput.accept = '.json';
-            loadInput.style.cursor = 'pointer';
+            loadInput.style.display = 'none';
             loadInput.addEventListener('change', loadColours);
             //#endregion
             
@@ -693,9 +771,21 @@
             save.href = '';
             save.download = 'ColourScheme.json';
             save.className = 'box';
-            save.innerHTML = '&#128190; Сохранить цвета';
+            save.innerHTML = '&#128190; Save colours';
             save.style.textDecoration = 'none';
             save.addEventListener('click', saveColours);
+            //#endregion
+            
+            //#region Export texts for translation
+            let exportLang = settings.appendChild(document.createElement('a'));
+            
+            exportLang.id = 'exportLang';
+            exportLang.href = '';
+            exportLang.download = 'TranslationTemplate.json';
+            exportLang.className = 'box';
+            exportLang.innerHTML = '&#127760; Export texts for translation';
+            exportLang.style.textDecoration = 'none';
+            exportLang.addEventListener('click', exportTranslationTemplate);
             //#endregion
             
             function colourChange(colourType, colour) {
@@ -741,6 +831,41 @@
                 saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
             }
             
+            /**
+             * @typedef {Object} LangElement
+             * @property {string} id
+             * @property {Object} props
+             */
+            function exportTranslationTemplate() {
+                /** @type {LangElement[]} */
+                let elements = [];
+            
+                document.querySelectorAll('body *').forEach((e) => {
+                    if (e.tagName !== 'DIV'
+                        && e.tagName !== 'DETAILS'
+                        && e.id
+                        && e.id !== 'lang'
+                    ) {
+                        /** @type {LangElement} */
+                        let newEl = {};
+            
+                        newEl.id = e.id;
+            
+                        ['innerHTML', 'placeholder'].forEach((p) => {
+                            if (e[p]) {
+                                if (!newEl.props) newEl.props = {};
+                                newEl.props[p] = e[p].trim();
+                            }
+                        });
+            
+                        if (newEl.props) elements.push(newEl);
+                    }
+                });
+            
+                let data = encodeURIComponent(JSON.stringify(elements, undefined, 4));
+                exportLang.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
             async function loadColours() {
                 await loadColoursButton.files[0].text().then((content) => {
                     try {
@@ -782,6 +907,6 @@
             
             loadFont();
 
-		</script>
+        </script>
     </body>
 </html>
