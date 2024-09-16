@@ -1,146 +1,146 @@
 [
   {
-    "word": "сокрытие",
-    "description": "Cover-up",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 1
-  },
-  {
-    "word": "фабриковать",
-    "description": "Fake [глаг.]",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 2
-  },
-  {
     "word": "присущий",
     "description": "Inherent",
-    "column": -1,
+    "column": 16,
     "row": 0,
-    "isVertical": false,
-    "number": 3
+    "isVertical": true,
+    "number": 1
   },
   {
     "word": "выхлоп",
     "description": "Exhaust [сущ.]",
-    "column": -1,
+    "column": 19,
     "row": 0,
-    "isVertical": false,
-    "number": 5
+    "isVertical": true,
+    "number": 2
   },
   {
     "word": "прожектор",
     "description": "Spotlight",
-    "column": -1,
-    "row": 0,
+    "column": 9,
+    "row": 2,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "противник",
+    "description": "Naysayer",
+    "column": 8,
+    "row": 3,
     "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "пустой",
+    "description": "Vacuous",
+    "column": 14,
+    "row": 5,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "выдержка",
+    "description": "Exposure [фото]",
+    "column": 11,
+    "row": 7,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "фабриковать",
+    "description": "Fake [глаг.]",
+    "column": 3,
+    "row": 8,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "смехотворный",
+    "description": "Risible",
+    "column": 13,
+    "row": 12,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "мистификация",
+    "description": "Hoax",
+    "column": 15,
+    "row": 13,
+    "isVertical": true,
     "number": 6
   },
   {
-    "word": "заговор",
-    "description": "Conspiracy",
-    "column": -1,
-    "row": 0,
+    "word": "разоблачение",
+    "description": "Debunking [сущ.]",
+    "column": 4,
+    "row": 15,
     "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "бездумный",
+    "description": "Incogitant",
+    "column": 5,
+    "row": 16,
+    "isVertical": true,
     "number": 7
   },
   {
     "word": "бдительность",
     "description": "Vigilance",
-    "column": -1,
-    "row": 0,
+    "column": 4,
+    "row": 17,
+    "isVertical": false,
+    "number": 5
+  },
+  {
+    "word": "невыносимый",
+    "description": "Exasperating",
+    "column": 2,
+    "row": 18,
+    "isVertical": true,
+    "number": 8
+  },
+  {
+    "word": "опровергать",
+    "description": "Refute",
+    "column": 8,
+    "row": 18,
+    "isVertical": true,
+    "number": 9
+  },
+  {
+    "word": "заговор",
+    "description": "Conspiracy",
+    "column": 4,
+    "row": 19,
+    "isVertical": false,
+    "number": 6
+  },
+  {
+    "word": "сокрытие",
+    "description": "Cover-up",
+    "column": 0,
+    "row": 24,
+    "isVertical": false,
+    "number": 7
+  },
+  {
+    "word": "материал",
+    "description": "Footage [кино]",
+    "column": 1,
+    "row": 27,
     "isVertical": false,
     "number": 8
   },
   {
     "word": "чушь",
     "description": "Flapdoodle",
-    "column": -1,
-    "row": 0,
+    "column": 4,
+    "row": 29,
     "isVertical": false,
     "number": 9
-  },
-  {
-    "word": "невыносимый",
-    "description": "Exasperating",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 10
-  },
-  {
-    "word": "бездумный",
-    "description": "Incogitant",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 12
-  },
-  {
-    "word": "противник",
-    "description": "Naysayer",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 13
-  },
-  {
-    "word": "пустой",
-    "description": "Vacuous",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 14
-  },
-  {
-    "word": "разоблачение",
-    "description": "Debunking [сущ.]",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 15
-  },
-  {
-    "word": "опровергать",
-    "description": "Refute",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 16
-  },
-  {
-    "word": "выдержка",
-    "description": "Exposure [фото]",
-    "column": -1,
-    "row": 0,
-    "isVertical": false,
-    "number": 17
-  },
-  {
-    "word": "материал",
-    "description": "Footage [кино]",
-    "column": 1,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
-  },
-  {
-    "word": "смехотворный",
-    "description": "Risible",
-    "column": 3,
-    "row": 0,
-    "isVertical": true,
-    "number": 2
-  },
-  {
-    "word": "мистификация",
-    "description": "Hoax",
-    "column": 0,
-    "row": 1,
-    "isVertical": false,
-    "number": 1
   }
 ]
