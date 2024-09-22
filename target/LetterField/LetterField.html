@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Letter Field</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        
+
+        <style>
+            :root {
+                --accent1: #774936;
+                --accent2: #D69F7E;
+                --primary-colour: #eeebbd;
+                --secondary-colour: #050609;
+            }
+            
+            * {
+                background-color: inherit;
+                box-sizing: border-box;
+                color: inherit;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 14pt;
+                margin-top: 1.5px;
+                margin-bottom: 1.5px;
+            }
+            
+            *::selection {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            body {
+                display: flex;
+                flex-direction: column;
+                accent-color: var(--accent1);
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                margin: auto;
+                min-width: 85%;
+                max-width: 85%;
+            }
+            
+            a.button,
+            button {
+                display: inline-flex;
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                cursor: pointer;
+                padding: 1px;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            button:disabled {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                cursor: not-allowed;
+            }
+            
+            button:focus,
+            button:hover {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            details {
+                cursor: default;
+                width: 100%;
+            }
+            
+            details > summary {
+                background-color: var(--accent2);
+                border-radius: 7px 0px 7px 0px;
+                box-shadow: 1px 1px 2px var(--secondary-colour);
+                cursor: pointer;
+                padding: 2px;
+            }
+            
+            details > summary:focus,
+            details > summary:hover {
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+            }
+            
+            @keyframes detailsOpening {
+                0% {
+                    transform: translateX(0%);
+                }
+                50% {
+                    transform: translateX(1%);
+                }
+                100% {
+                    transform: translateX(0%)
+                }
+            }
+            
+            details[open] {
+                animation: detailsOpening 0.7s ease-out;
+            }
+            
+            details[open] > summary {
+                border-bottom-color: var(--secondary-colour);
+                border-bottom-style: inset;
+                border-bottom-width: 2px;
+                font-size: 1.05em;
+                font-weight: 600;
+                padding-bottom: 2px;
+            }
+            
+            details[open] > summary:focus,
+            details[open] > summary:hover {
+                border-bottom-color: var(--accent2);
+            }
+            
+            h1 {
+                align-self: center;
+                border-bottom-style: dotted;
+                border-bottom-width: 4px;
+                border-color: var(--accent1);
+                font-size: 1.5em;
+                padding: 0px 4px;
+                margin-bottom: 3px;
+            }
+            
+            h1:focus,
+            h1:hover {
+                border-bottom-style: solid;
+                border-bottom-left-radius: 10%;
+                border-bottom-right-radius: 10%;
+            }
+            
+            h2 {
+                border-bottom-style: ridge;
+                border-bottom-width: 3px;
+                border-bottom-color: var(--secondary-colour);
+                border-radius: 0px 0px 7px 0px;
+                padding-left: 4px;
+                font-size: 1.4em;
+            }
+            
+            hr {
+                border-color: var(--accent1);
+                width: 100%;
+            }
+            
+            input {
+                border-color: var(--secondary-colour);
+                border-style: outset;
+                accent-color: var(--accent2);
+            }
+            
+            input[type='file'] {
+                border-style: none;
+            }
+            
+            input[type='number'] {
+                border-color: var(--accent1);
+                border-radius: 7px 0px 0px 0px;
+                text-align: center;
+                font-weight: 600;
+            }
+            
+            input[type='number']:focus {
+                color: var(--secondary-colour);
+                background-color: var(--accent2);
+            }
+            
+            kbd {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border: 1px solid var(--secondary-colour);
+                border-radius: 3px;
+                box-shadow: 1px 1px 1px var(--secondary-colour);
+                font-weight: 600;
+                margin-right: 2px;
+                padding: 0px 2px;
+            }
+            
+            option:checked {
+                background-color: var(--accent2);
+            }
+            
+            select {
+                background-color: var(--primary-colour);
+                border-color: var(--accent1);
+                border-style: inset;
+                border-width: 2px;
+                color: var(--secondary-colour);
+                overflow: auto;
+            }
+            
+            table {
+                width: 100%;
+            }
+            
+            td,
+            th {
+                border-color: var(--secondary-colour);
+                border-style: inset;
+                border-width: 2px;
+                padding: 2px;
+                text-align: center;
+            }
+            
+            td {
+                border-radius: 0px 0px 5px 0px;
+                font-weight: 600;
+            }
+            
+            td:focus,
+            td:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            th {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-radius: 5px 5px 0px 0px;
+                font-size: 13pt;
+                font-weight: bold;
+            }
+            
+            th:focus,
+            th:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+            
+            textarea {
+                border-color: var(--secondary-colour);
+                border-style: outset;
+                border-width: 2px;
+            }
+            
+            textarea::placeholder {
+                color: var(--accent1);
+            }
+            
+            .box {
+                display: flex;
+                flex-direction: row;
+                border-color: var(--accent1);
+                border-radius: 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 2px;
+            }
+            
+            .box:focus,
+            .box:hover {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+            }
+            
+            @keyframes tooltipFadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 0.95;
+                }
+            }
+            
+            .tooltipParent {
+                position: relative;
+            }
+            
+            .tooltipParent:hover > .tooltip,
+            .tooltipParent:focus > .tooltip {
+                display: flex;
+                animation: tooltipFadeIn 0.7s ease;
+            }
+            
+            .tooltip {
+                display: none;
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                opacity: 0.95;
+                border-color: var(--accent1);
+                border-radius: 7px 0px 7px 0px;
+                border-style: outset;
+                border-width: 2px;
+                padding: 3px;
+                position: fixed;
+                top: 5px;
+                left: 5px;
+                z-index: 1;
+                min-width: min-content;
+                width: max-content;
+                max-width: 75vw;
+                font-weight: 600;
+                text-align: left;
+                text-wrap: wrap;
+            }
+            
+            .tooltip::before {
+                content: 'i';
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-radius: 7px 0px 7px 0px;
+                margin-right: 4px;
+                height: 100%;
+                padding-inline: 0.5em;
+                font-style: italic;
+                font-weight: 600;
+            }
+
+            :root {
+                --cell-size: 2.1rem;
+            }
+
+            .cell {
+                display: flex;
+                align-items: end;
+                justify-content: center;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.6em;
+                font-weight: 600;
+                border: 2px outset var(--accent1);
+                border-radius: 2px;
+                height: var(--cell-size);
+                width: var(--cell-size);
+                cursor: crosshair;
+                transition: background-color 1.75s ease-in;
+            }
+
+            .cell:focus,
+            .cell:hover {
+                background-color: var(--accent2);
+                transition: background-color 0s ease-out;
+            }
+
+            .menuButton {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                text-wrap: nowrap;
+                overflow: auto;
+                padding: 2px;
+                width: 100%;
+            }
+
+            .menuButton:hover,
+            .menuButton:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            #words {
+                border-radius: 0px 7px;
+                width: 100%;
+                resize: vertical;
+                min-height: 2em;
+            }
+
+            #grid-container {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                border: 2px outset var(--accent1);
+                border-radius: 7px 7px 0px 7px;
+            }
+
+            #grid-letters {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 2px;
+                padding: 2px;
+            }
+
+            #grid-win {
+                display: none;
+                align-self: center;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.5em;
+                font-weight: 600;
+            }
+
+            #grid-input {
+                display: flex;
+                align-items: center;
+                column-gap: 4px;
+                position: sticky;
+                bottom: 2px;
+                padding: 2px;
+                border-top: 2px ridge var(--accent2);
+                opacity: 0.9;
+            }
+
+            #wordInput {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Letter Field</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+        <details>
+            <summary>Words</summary>
+            <textarea id='words' autocomplete='off'></textarea>
+        </details>
+
+        <!-- Buttons -->
+        <div style='display: flex; column-gap: 4px;'>
+            <!-- Load button -->
+            <button
+                id='loadWordsButton'
+                class='menuButton tooltipParent'
+                tabindex='1'
+                onclick='document.getElementById("loadWordsInput").click()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load words list from .txt file</span>
+            </button>
+            <input
+                id='loadWordsInput'
+                type='file'
+                accept='.txt'
+                onchange='loadWords()'
+                style='display: none;'
+            >
+            </input>
+
+            <!-- Save button -->
+            <a
+                id='saveWordsButton'
+                href=''
+                class='menuButton tooltipParent'
+                tabindex='1'
+                onclick='saveWords()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save words list to .txt file</span>
+            </a>
+        </div>
+
+        <button
+            tabindex='1'
+            onclick='fillGrid()'
+            style='border-radius: 0px 0px 7px 7px;'
+        >
+            Start
+        </button>
+
+        <div id='grid-container'>
+            <div id='grid-letters'></div>
+
+            <span id='grid-win' class='preserveFont'>You win!</span>
+
+            <div id='grid-input'>
+                <label for='wordInput' class='preserveFont'>
+                    Word:
+                </label>
+                <input
+                    type='text'
+                    id='wordInput'
+                    class='preserveFont'
+                    tabindex='1'
+                    autocomplete='off'
+                    oninput='checkInput()'
+                >
+            </div>
+        </div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script>
+            /**
+             * JavaScript logic for HTML programmes by Vital (Vitaly Pavlovich Ulyanov)
+             */
+            
+            // Stored values and style variables
+            let storedPrimaryColour =
+                localStorage.getItem('--primary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--primary-colour');
+            let storedSecondaryColour =
+                localStorage.getItem('--secondary-colour') ??
+                getComputedStyle(document.body).getPropertyValue('--secondary-colour');
+            let storedAccentColour1 =
+                localStorage.getItem('--accent1') ??
+                getComputedStyle(document.body).getPropertyValue('--accent1');
+            let storedAccentColour2 =
+                localStorage.getItem('--accent2') ??
+                getComputedStyle(document.body).getPropertyValue('--accent2');
+            
+            document.body.style.setProperty('--primary-colour', storedPrimaryColour);
+            document.body.style.setProperty('--secondary-colour', storedSecondaryColour);
+            document.body.style.setProperty('--accent1', storedAccentColour1);
+            document.body.style.setProperty('--accent2', storedAccentColour2);
+            
+            /** @type {HTMLDetailsElement} */
+            let settings = document.getElementById('settings');
+            
+            // Append settings with unified ones
+            let fullscreen = settings.parentElement.appendChild(
+                document.createElement('button')
+            );
+            let font = settings.appendChild(document.createElement('div'));
+            let setDiv = settings.appendChild(document.createElement('div'));
+            let primDiv = setDiv.appendChild(document.createElement('div'));
+            let secDiv = setDiv.appendChild(document.createElement('div'));
+            let acc1Div = setDiv.appendChild(document.createElement('div'));
+            let acc2Div = setDiv.appendChild(document.createElement('div'));
+            let load = settings.appendChild(document.createElement('div'));
+            let save = settings.appendChild(document.createElement('a'));
+            
+            setDiv.style.display = 'flex';
+            setDiv.style.flexWrap = 'wrap';
+            
+            //#region Fullscreen button
+            const up = '&#9650;';
+            const down = '&#9660;';
+            
+            fullscreen.id = 'fullscreenButton';
+            fullscreen.classList = 'tooltipParent';
+            fullscreen.innerHTML = up;
+            fullscreen.style.fontWeight = 600;
+            fullscreen.style.borderWidth = 0;
+            fullscreen.style.opacity = '0.9';
+            fullscreen.style.position = 'fixed';
+            fullscreen.style.top = '5px';
+            fullscreen.style.right = '5px';
+            fullscreen.addEventListener('click', function () {
+                let page = document.documentElement;
+                if (document.fullscreenElement) {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                } else {
+                    if (page.requestFullscreen) page.requestFullscreen();
+                }
+            });
+            
+            let fullscreenTooltip = document.createElement('span');
+            fullscreenTooltip.id = 'fscrn_tip';
+            fullscreenTooltip.className = 'tooltip';
+            fullscreenTooltip.innerText = 'Fullscreen';
+            
+            fullscreen.appendChild(fullscreenTooltip);
+            
+            document.addEventListener('fullscreenchange', function () {
+                if (document.fullscreenElement) fullscreen.innerHTML = down;
+                else fullscreen.innerHTML = up;
+                fullscreen.appendChild(fullscreenTooltip);
+            });
+            //#endregion
+            
+            //#region Font
+            let fontDiv = font.appendChild(document.createElement('div'));
+            fontDiv.style.display = 'flex';
+            fontDiv.style.alignItems = 'baseline';
+            
+            let fontLabel = fontDiv.appendChild(document.createElement('label'));
+            let fontInput = fontDiv.appendChild(document.createElement('input'));
+            
+            fontLabel.id = 'fontLabel';
+            fontLabel.htmlFor = 'fontInput';
+            fontLabel.className = 'preserveFont';
+            fontLabel.innerText = 'Font';
+            fontLabel.style.marginRight = '2px';
+            
+            fontInput.id = 'fontInput';
+            fontInput.type = 'text';
+            fontInput.placeholder = 'Type a font\'s name and press Enter';
+            fontInput.style.width = '100%';
+            fontInput.addEventListener('change', function () {
+                localStorage.setItem('pageFont', this.value);
+                loadFont();
+            });
+            //#endregion
+            
+            //#region Primary colour
+            primDiv.style.display = 'flex';
+            primDiv.style.minWidth = '50%';
+            primDiv.style.alignItems = 'center';
+            
+            let primInput = primDiv.appendChild(document.createElement('input'));
+            primInput.id = 'primCol';
+            primInput.type = 'color';
+            primInput.value = storedPrimaryColour;
+            primInput.addEventListener('input', function () {
+                colourChange('primary', this.value);
+            });
+            
+            let primLabel = primDiv.appendChild(document.createElement('label'));
+            primLabel.id = 'primLabel';
+            primLabel.htmlFor = primInput.id;
+            primLabel.innerText = 'Background colour';
+            primLabel.style.marginLeft = '2px';
+            primLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Secondary colour
+            secDiv.style.display = 'flex';
+            secDiv.style.alignItems = 'center';
+            
+            let secInput = secDiv.appendChild(document.createElement('input'));
+            secInput.id = 'secCol';
+            secInput.type = 'color';
+            secInput.value = storedSecondaryColour;
+            secInput.addEventListener('input', function () {
+                colourChange('secondary', this.value);
+            });
+            
+            let secLabel = secDiv.appendChild(document.createElement('label'));
+            secLabel.id = 'secLabel';
+            secLabel.htmlFor = secInput.id;
+            secLabel.innerText = 'Text colour';
+            secLabel.style.marginLeft = '2px';
+            secLabel.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 1
+            acc1Div.style.display = 'flex';
+            acc1Div.style.minWidth = '50%';
+            acc1Div.style.alignItems = 'center';
+            
+            let acc1Input = acc1Div.appendChild(document.createElement('input'));
+            acc1Input.id = 'acc1Col';
+            acc1Input.type = 'color';
+            acc1Input.value = storedAccentColour1;
+            acc1Input.addEventListener('input', function () {
+                colourChange('accent1', this.value);
+            });
+            
+            let acc1Label = acc1Div.appendChild(document.createElement('label'));
+            acc1Label.id = 'acc1Label';
+            acc1Label.htmlFor = acc1Input.id;
+            acc1Label.innerText = 'Accent colour 1';
+            acc1Label.style.marginLeft = '2px';
+            acc1Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Accent colour 2
+            acc2Div.style.display = 'flex';
+            acc2Div.style.alignItems = 'center';
+            
+            let acc2Input = acc2Div.appendChild(document.createElement('input'));
+            acc2Input.id = 'acc2Col';
+            acc2Input.type = 'color';
+            acc2Input.value = storedAccentColour2;
+            acc2Input.addEventListener('input', function () {
+                colourChange('accent2', this.value);
+            });
+            
+            let acc2Label = acc2Div.appendChild(document.createElement('label'));
+            acc2Label.id = 'acc2Label';
+            acc2Label.htmlFor = acc2Input.id;
+            acc2Label.innerText = 'Accent colour 2';
+            acc2Label.style.marginLeft = '2px';
+            acc2Label.style.verticalAlign = 'center';
+            //#endregion
+            
+            //#region Load button
+            load.className = 'box';
+            load.style.display = 'flex';
+            load.style.flexWrap = 'wrap';
+            load.style.alignItems = 'center';
+            load.style.justifyContent = 'space-between';
+            
+            let loadLabel = load.appendChild(document.createElement('label'));
+            loadLabel.id = 'loadLabel';
+            loadLabel.htmlFor = 'loadColoursButton';
+            loadLabel.innerHTML = '&#128193; Load colours';
+            loadLabel.style.flexGrow = 1;
+            loadLabel.style.cursor = 'pointer';
+            
+            let loadInput = load.appendChild(document.createElement('input'));
+            loadInput.id = 'loadColoursButton';
+            loadInput.type = 'file';
+            loadInput.accept = '.json';
+            loadInput.style.display = 'none';
+            loadInput.addEventListener('change', loadColours);
+            //#endregion
+            
+            //#region Save button
+            save.id = 'saveColoursButton';
+            save.href = '';
+            save.download = 'ColourScheme.json';
+            save.className = 'box';
+            save.innerHTML = '&#128190; Save colours';
+            save.style.textDecoration = 'none';
+            save.addEventListener('click', saveColours);
+            //#endregion
+            
+            //#region Export texts for translation
+            let exportLang = settings.appendChild(document.createElement('a'));
+            
+            exportLang.id = 'exportLang';
+            exportLang.href = '';
+            exportLang.download = 'TranslationTemplate.json';
+            exportLang.className = 'box';
+            exportLang.innerHTML = '&#127760; Export texts for translation';
+            exportLang.style.textDecoration = 'none';
+            exportLang.addEventListener('click', exportTranslationTemplate);
+            //#endregion
+            
+            function colourChange(colourType, colour) {
+                switch (colourType) {
+                    case 'primary':
+                        document.body.style.setProperty('--primary-colour', colour);
+                        localStorage.setItem('--primary-colour', colour);
+                        break;
+                    case 'secondary':
+                        document.body.style.setProperty('--secondary-colour', colour);
+                        localStorage.setItem('--secondary-colour', colour);
+                        break;
+                    case 'accent1':
+                        document.body.style.setProperty('--accent1', colour);
+                        localStorage.setItem('--accent1', colour);
+                        break;
+                    case 'accent2':
+                        document.body.style.setProperty('--accent2', colour);
+                        localStorage.setItem('--accent2', colour);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            /**
+             * @typedef {Object} ColourScheme
+             * @property {string} primary
+             * @property {string} secondary
+             * @property {string} accent1
+             * @property {string} accent2
+             */
+            
+            function saveColours() {
+                /** @type {ColourScheme}  */
+                let colours = {
+                    primary: document.body.style.getPropertyValue('--primary-colour'),
+                    secondary: document.body.style.getPropertyValue('--secondary-colour'),
+                    accent1: document.body.style.getPropertyValue('--accent1'),
+                    accent2: document.body.style.getPropertyValue('--accent2'),
+                };
+                let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
+                saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
+            /**
+             * @typedef {Object} LangElement
+             * @property {string} id
+             * @property {Object} props
+             */
+            function exportTranslationTemplate() {
+                /** @type {LangElement[]} */
+                let elements = [];
+            
+                document.querySelectorAll('body *').forEach((e) => {
+                    if (e.tagName !== 'DIV'
+                        && e.tagName !== 'DETAILS'
+                        && e.id
+                        && e.id !== 'lang'
+                    ) {
+                        /** @type {LangElement} */
+                        let newEl = {};
+            
+                        newEl.id = e.id;
+            
+                        ['innerHTML', 'placeholder'].forEach((p) => {
+                            if (e[p]) {
+                                if (!newEl.props) newEl.props = {};
+                                newEl.props[p] = e[p].trim();
+                            }
+                        });
+            
+                        if (newEl.props) elements.push(newEl);
+                    }
+                });
+            
+                let data = encodeURIComponent(JSON.stringify(elements, undefined, 4));
+                exportLang.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+            
+            async function loadColours() {
+                await loadColoursButton.files[0].text().then((content) => {
+                    try {
+                        /** @type {ColourScheme} */
+                        let data = JSON.parse(content);
+                        if (data) {
+                            if (data.primary) {
+                                colourChange('primary', data.primary);
+                                primInput.value = data.primary;
+                            }
+                            if (data.secondary) {
+                                colourChange('secondary', data.secondary);
+                                secInput.value = data.secondary;
+                            }
+                            if (data.accent1) {
+                                colourChange('accent1', data.accent1);
+                                acc1Input.value = data.accent1;
+                            }
+                            if (data.accent2) {
+                                colourChange('accent2', data.accent2);
+                                acc2Input.value = data.accent2;
+                            }
+                        }
+                    } catch (error) {
+                        alert(
+                            `Ошибка при чтении файла цветов: ${error}`
+                        );
+                    }
+                });
+            }
+            
+            function loadFont() {
+                let font = localStorage.getItem('pageFont');
+                document.getElementById('fontInput').value = font;
+                document.body.querySelectorAll('*').forEach((e) => {
+                    if (!e.className.includes('preserveFont')) e.style.fontFamily = font;
+                });
+            }
+            
+            loadFont();
+
+        </script>
+        <script>
+            // Elements
+            /** @type {HTMLInputElement} */
+            let loadWordsInput = document.getElementById('loadWordsInput');
+            /** @type {HTMLAnchorElement} */
+            let saveWordsButton = document.getElementById('saveWordsButton');
+            /** @type {HTMLTextAreaElement} */
+            let words = document.getElementById('words');
+            /** @type {HTMLDivElement} */
+            let grid = document.getElementById('grid-letters');
+            /** @type {HTMLSpanElement} */
+            let win = document.getElementById('grid-win');
+            /** @type {HTMLInputElement} */
+            let wordInput = document.getElementById('wordInput');
+
+            // Variables
+            /** @type {string[]} */
+            let wordsList = [];
+            /** @type {string[]} */
+            let letters = [];
+
+            async function loadWords() {
+                await loadWordsInput.files[0].text().then((content) => {
+                    try {
+                        words.value = content;
+                        fillGrid();
+                    } catch (error) {
+                        alert(`Error while reading words file: ${error}`);
+                    }
+                });
+            }
+
+            function saveWords() {
+                let data = encodeURIComponent(words.value);
+                saveWordsButton.download = `Words.txt`;
+                saveWordsButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            function fillGrid() {
+                if (!words) return;
+
+                // Hide victory text
+                win.style.display = 'none';
+
+                // Empty the letters array
+                letters = [];
+
+                // Fill the list of words
+                wordsList = words.value
+                    .toUpperCase()
+                    .trim()
+                    .split(/\s/);
+
+                // Create a string with all words from the list
+                let wordsString = words.value
+                    .toUpperCase()
+                    .trim()
+                    .replace(/\s/g, '');
+
+                // Push random letters from the string to the letters array
+                let tempArray = Array.from(wordsString);
+                while (tempArray.length > 0) {
+                    let i = Math.floor(Math.random() * tempArray.length);
+                    letters.push(tempArray[i]);
+                    tempArray.splice(i, 1);
+                }
+
+                // Empty the grid
+                while (grid.hasChildNodes()) grid.lastChild.remove();
+
+                // Fill the grid with cells
+                letters.forEach((l) => {
+                    let cell = grid.appendChild(
+                        document.createElement('div')
+                    );
+
+                    cell.className = 'cell';
+                    cell.innerText = l;
+                    cell.tabIndex = 0;
+                });
+            }
+
+            /**
+             * @param {HTMLElement} id
+             * @param {boolean} state
+            */
+            function setCellVisibility(id, state) {
+                if (id) {
+                    id.style.opacity = state ? 1 : 0.1;
+                    id.tabIndex = state ? 0 : -1;
+                }
+            }
+
+            function resetCellsVisibility() {
+                for (const c of grid.children) {
+                    setCellVisibility(c, true);
+                }
+            }
+
+            function checkInput() {
+                // Reset cells' visibility if there's no input
+                if (wordInput.value === '') {
+                    resetCellsVisibility();
+                    return;
+                }
+
+                // Get the input converted to the upper case
+                let input = wordInput.value.toUpperCase();
+
+                // Remove letters when full word is typed
+                for (let i = 0; i < wordsList.length; i++) {
+                    if (wordsList[i] === input) {
+                        for (const l of wordsList[i]) {
+                            for (const c of grid.children) {
+                                if (c.innerText === l) {
+                                    c.remove();
+                                    break;
+                                }
+                            }
+                        }
+
+                        wordsList.splice(i, 1);
+                        wordInput.value = '';
+                        resetCellsVisibility();
+
+                        // Show victory text if all words are removed
+                        if (!grid.hasChildNodes()) {
+                            win.style.display = 'flex';
+                        }
+
+                        return;
+                    }
+                }
+
+                // If only a part of a word in typed, continue
+                /** @type {string[]} */
+                let neighbouringLetters = [Array.from(input)];
+
+                // Take the input, find matches with words, determine nearby letters
+                for (const w of wordsList) {
+                    if (w.startsWith(input)) {
+                        for (const l of w) {
+                            if (!neighbouringLetters.includes(l)) {
+                                neighbouringLetters.push(l);
+                            }
+                        }
+                    }
+                }
+
+                // Manage cells' visibility
+                for (const c of grid.children) {
+                    if (!neighbouringLetters.includes(c.innerText)) {
+                        setCellVisibility(c, false);
+                    } else {
+                        setCellVisibility(c, true);
+                    }
+                }
+            }
+
+            fillGrid();
+        </script>
+    </body>
+</html>

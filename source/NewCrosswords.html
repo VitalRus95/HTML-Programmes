@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Crosswords</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --cell-size: 48px;
+                --cell-border: calc(var(--cell-size) * 0.01 + 2px);
+                --cell-font: calc(var(--cell-size) * 0.9);
+                --cell-radius: 5%;
+                --gap-size: calc(var(--cell-size) * 0.04);
+            }
+
+            .grid {
+                display: flex;
+                flex-direction: column;
+                row-gap: var(--gap-size);
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 4px;
+            }
+
+            .row {
+                display: flex;
+                margin: 0;
+                column-gap: var(--gap-size);
+                width: fit-content;
+            }
+
+            .cell {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: var(--cell-border) solid var(--accent1);
+                border-radius: var(--cell-radius);
+                border-style: solid;
+                margin: 0;
+                height: var(--cell-size);
+                width: var(--cell-size);
+                font-size: var(--cell-font);
+                font-weight: 600;
+                transition: border-color 1.5s ease-in;
+            }
+
+            .cell:focus,
+            .cell:hover {
+                border-color: var(--secondary-colour);
+                transition: border-color 0.1s ease-in;
+            }
+
+            .empty {
+                opacity: 0.2;
+                border-color: var(--accent1);
+                transition: opacity 1.5s ease-in;
+            }
+
+            .empty:focus,
+            .empty:hover {
+                opacity: 0.7;
+                border-color: var(--accent1);
+                transition: opacity 0.1s ease-in;
+            }
+
+            .cell-input {
+                background-color: transparent;
+                border-style: none;
+                font-size: var(--cell-font);
+                font-weight: 600;
+                text-align: center;
+                height: 100%;
+                width: 100%;
+                transition: background-color 1.5s ease-in;
+            }
+
+            .cell-input:valid {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            .cell-input:focus,
+            .cell-input:hover {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                transition: background-color 0.1s ease;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Crosswords</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+
+        <div id='crossword' class='grid'>
+            <div class='row'>
+                <div class='cell'>A</div>
+                <div class='cell'>B</div>
+                <div class='cell'>C</div>
+                <div class='cell empty'></div>
+                <div class='cell empty'></div>
+                <div class='cell empty'></div>
+            </div>
+
+            <div class='row'>
+                <div class='cell'>
+                    <input type='text' class='cell-input' maxlength='1' value='' pattern='A' required>
+                </div>
+                <div class='cell'>
+                    <input type='text' class='cell-input' maxlength='1' value='E' pattern='B'>
+                </div>
+                <div class='cell'>
+                    <input type='text' class='cell-input' maxlength='1' value='F' pattern='F'>
+                </div>
+                <div class='cell'>4</div>
+                <div class='cell empty'></div>
+                <div class='cell'>6</div>
+            </div>
+
+            <div class='row'>
+                <div class='cell'>G</div>
+                <div class='cell'>H</div>
+                <div class='cell'>I</div>
+                <div class='cell'>7</div>
+                <div class='cell empty'></div>
+                <div class='cell'>9</div>
+            </div>
+
+            <div class='row'>
+                <div class='cell'>J</div>
+                <div class='cell'>K</div>
+                <div class='cell'>L</div>
+                <div class='cell'>0</div>
+                <div class='cell'>1</div>
+                <div class='cell'>2</div>
+            </div>
+        </div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLDivElement} */
+            let grid = document.getElementById('crossword');
+
+            // Variables
+            /**
+             * @typedef {Object} Word
+             * @property {string} word
+             * @property {string} description
+             * @property {boolean} vertical
+             * @property {number} x
+             * @propety {number} y
+            */
+            /** @type {Word[]} */
+            let words = [
+                {
+                    "word": "pebble",
+                    "description": "Камушек",
+                    "x": 1,
+                    "y": 0,
+                    "vertical": true
+                },
+                {
+                    "word": "dictum",
+                    "description": "Изречение",
+                    "x": 7,
+                    "y": 0,
+                    "vertical": true
+                },
+                {
+                    "word": "extremist",
+                    "description": "Крайний",
+                    "x": 0,
+                    "y": 2,
+                    "vertical": false
+                },
+                {
+                    "word": "manual",
+                    "description": "Руководство",
+                    "x": 12,
+                    "y": 2,
+                    "vertical": true
+                },
+                {
+                    "word": "bias",
+                    "description": "Предвзятость",
+                    "x": 0,
+                    "y": 4,
+                    "vertical": false
+                },
+                {
+                    "word": "exquisite",
+                    "description": "Изысканный",
+                    "x": 5,
+                    "y": 4,
+                    "vertical": true
+                },
+                {
+                    "word": "equation",
+                    "description": "Уравнение",
+                    "x": 4,
+                    "y": 5,
+                    "vertical": false
+                },
+                {
+                    "word": "decimal",
+                    "description": "Десятичный",
+                    "x": 1,
+                    "y": 7,
+                    "vertical": true
+                },
+                {
+                    "word": "denouement",
+                    "description": "Завершение",
+                    "x": 0,
+                    "y": 8,
+                    "vertical": false
+                },
+                {
+                    "word": "curve",
+                    "description": "Кривая [сущ.]",
+                    "x": 11,
+                    "y": 8,
+                    "vertical": true
+                },
+                {
+                    "word": "descent",
+                    "description": "Происхождение",
+                    "x": 2,
+                    "y": 10,
+                    "vertical": false
+                },
+                {
+                    "word": "suppress",
+                    "description": "Подавлять",
+                    "x": 8,
+                    "y": 11,
+                    "vertical": true
+                },
+                {
+                    "word": "expunge",
+                    "description": "Вычёркивать, исключать",
+                    "x": 4,
+                    "y": 13,
+                    "vertical": false
+                },
+                {
+                    "word": "proffer",
+                    "description": "Предлагать",
+                    "x": 3,
+                    "y": 14,
+                    "vertical": true
+                },
+                {
+                    "word": "percept",
+                    "description": "Объект восприятия",
+                    "x": 2,
+                    "y": 15,
+                    "vertical": false
+                },
+                {
+                    "word": "frenzy",
+                    "description": "Безумие, бешенство",
+                    "x": 6,
+                    "y": 18,
+                    "vertical": true
+                },
+                {
+                    "word": "fossil",
+                    "description": "Ископаемый",
+                    "x": 5,
+                    "y": 19,
+                    "vertical": false
+                },
+                {
+                    "word": "forebear",
+                    "description": "Предок",
+                    "x": 0,
+                    "y": 21,
+                    "vertical": false
+                }
+            ];
+            /** @type {number} */
+            let xMax;
+            /** @type {number} */
+            let yMax;
+
+            function fillGrid() {
+                // Return if there are no words
+                if (!words) return;
+
+                // Variables
+                /** @type {HTMLElement[]} */
+                let newGrid = [];
+
+                // Empty the grid
+                while (grid.hasChildNodes()) {
+                    grid.lastChild.remove();
+                }
+
+                // Determine the maximum for X and Y
+                words.forEach((w) => {
+                    const x = w.x;
+                    const y = w.y;
+                    const l = w.word.length;
+
+                    if (w.vertical) {
+                        if (x > xMax) xMax = x;
+                        if (y + l > yMax) yMax = y + l;
+                    } else {
+                        if (x + l > xMax) xMax = x + l;
+                        if (y > yMax) yMax = x;
+                    }
+                });
+
+                // Sort by column (X) and row (Y)
+                words.sort((a, b) => a.x - b.x).sort((a, b) => a.y - b.y);
+
+                // Prepare an empty grid
+                for (var y = 0; y < yMax; y++) {
+                    grid.push([]);
+                    for (var x = 0; x < xMax; x++) {
+                        grid[y].push(undefined);
+                    }
+                }
+            }
+
+            fillGrid();
+        </script>
+    </body>
+</html>

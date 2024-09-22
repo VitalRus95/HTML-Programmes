@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Letter Field</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --cell-size: 2.1rem;
+            }
+
+            .cell {
+                display: flex;
+                align-items: end;
+                justify-content: center;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.6em;
+                font-weight: 600;
+                border: 2px outset var(--accent1);
+                border-radius: 2px;
+                height: var(--cell-size);
+                width: var(--cell-size);
+                cursor: crosshair;
+                transition: background-color 1.75s ease-in;
+            }
+
+            .cell:focus,
+            .cell:hover {
+                background-color: var(--accent2);
+                transition: background-color 0s ease-out;
+            }
+
+            .menuButton {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                text-wrap: nowrap;
+                overflow: auto;
+                padding: 2px;
+                width: 100%;
+            }
+
+            .menuButton:hover,
+            .menuButton:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            #words {
+                border-radius: 0px 7px;
+                width: 100%;
+                resize: vertical;
+                min-height: 2em;
+            }
+
+            #grid-container {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                border: 2px outset var(--accent1);
+                border-radius: 7px 7px 0px 7px;
+            }
+
+            #grid-letters {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 2px;
+                padding: 2px;
+            }
+
+            #grid-win {
+                display: none;
+                align-self: center;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.5em;
+                font-weight: 600;
+            }
+
+            #grid-input {
+                display: flex;
+                align-items: center;
+                column-gap: 4px;
+                position: sticky;
+                bottom: 2px;
+                padding: 2px;
+                border-top: 2px ridge var(--accent2);
+                opacity: 0.9;
+            }
+
+            #wordInput {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Letter Field</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+        <details>
+            <summary>Words</summary>
+            <textarea id='words' autocomplete='off'></textarea>
+        </details>
+
+        <!-- Buttons -->
+        <div style='display: flex; column-gap: 4px;'>
+            <!-- Load button -->
+            <button
+                id='loadWordsButton'
+                class='menuButton tooltipParent'
+                tabindex='1'
+                onclick='document.getElementById("loadWordsInput").click()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load words list from .txt file</span>
+            </button>
+            <input
+                id='loadWordsInput'
+                type='file'
+                accept='.txt'
+                onchange='loadWords()'
+                style='display: none;'
+            >
+            </input>
+
+            <!-- Save button -->
+            <a
+                id='saveWordsButton'
+                href=''
+                class='menuButton tooltipParent'
+                tabindex='1'
+                onclick='saveWords()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save words list to .txt file</span>
+            </a>
+        </div>
+
+        <button
+            tabindex='1'
+            onclick='fillGrid()'
+            style='border-radius: 0px 0px 7px 7px;'
+        >
+            Start
+        </button>
+
+        <div id='grid-container'>
+            <div id='grid-letters'></div>
+
+            <span id='grid-win' class='preserveFont'>You win!</span>
+
+            <div id='grid-input'>
+                <label for='wordInput' class='preserveFont'>
+                    Word:
+                </label>
+                <input
+                    type='text'
+                    id='wordInput'
+                    class='preserveFont'
+                    tabindex='1'
+                    autocomplete='off'
+                    oninput='checkInput()'
+                >
+            </div>
+        </div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLInputElement} */
+            let loadWordsInput = document.getElementById('loadWordsInput');
+            /** @type {HTMLAnchorElement} */
+            let saveWordsButton = document.getElementById('saveWordsButton');
+            /** @type {HTMLTextAreaElement} */
+            let words = document.getElementById('words');
+            /** @type {HTMLDivElement} */
+            let grid = document.getElementById('grid-letters');
+            /** @type {HTMLSpanElement} */
+            let win = document.getElementById('grid-win');
+            /** @type {HTMLInputElement} */
+            let wordInput = document.getElementById('wordInput');
+
+            // Variables
+            /** @type {string[]} */
+            let wordsList = [];
+            /** @type {string[]} */
+            let letters = [];
+
+            async function loadWords() {
+                await loadWordsInput.files[0].text().then((content) => {
+                    try {
+                        words.value = content;
+                        fillGrid();
+                    } catch (error) {
+                        alert(`Error while reading words file: ${error}`);
+                    }
+                });
+            }
+
+            function saveWords() {
+                let data = encodeURIComponent(words.value);
+                saveWordsButton.download = `Words.txt`;
+                saveWordsButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            function fillGrid() {
+                if (!words) return;
+
+                // Hide victory text
+                win.style.display = 'none';
+
+                // Empty the letters array
+                letters = [];
+
+                // Fill the list of words
+                wordsList = words.value
+                    .toUpperCase()
+                    .trim()
+                    .split(/\s/);
+
+                // Create a string with all words from the list
+                let wordsString = words.value
+                    .toUpperCase()
+                    .trim()
+                    .replace(/\s/g, '');
+
+                // Push random letters from the string to the letters array
+                let tempArray = Array.from(wordsString);
+                while (tempArray.length > 0) {
+                    let i = Math.floor(Math.random() * tempArray.length);
+                    letters.push(tempArray[i]);
+                    tempArray.splice(i, 1);
+                }
+
+                // Empty the grid
+                while (grid.hasChildNodes()) grid.lastChild.remove();
+
+                // Fill the grid with cells
+                letters.forEach((l) => {
+                    let cell = grid.appendChild(
+                        document.createElement('div')
+                    );
+
+                    cell.className = 'cell';
+                    cell.innerText = l;
+                    cell.tabIndex = 0;
+                });
+            }
+
+            /**
+             * @param {HTMLElement} id
+             * @param {boolean} state
+            */
+            function setCellVisibility(id, state) {
+                if (id) {
+                    id.style.opacity = state ? 1 : 0.1;
+                    id.tabIndex = state ? 0 : -1;
+                }
+            }
+
+            function resetCellsVisibility() {
+                for (const c of grid.children) {
+                    setCellVisibility(c, true);
+                }
+            }
+
+            function checkInput() {
+                // Reset cells' visibility if there's no input
+                if (wordInput.value === '') {
+                    resetCellsVisibility();
+                    return;
+                }
+
+                // Get the input converted to the upper case
+                let input = wordInput.value.toUpperCase();
+
+                // Remove letters when full word is typed
+                for (let i = 0; i < wordsList.length; i++) {
+                    if (wordsList[i] === input) {
+                        for (const l of wordsList[i]) {
+                            for (const c of grid.children) {
+                                if (c.innerText === l) {
+                                    c.remove();
+                                    break;
+                                }
+                            }
+                        }
+
+                        wordsList.splice(i, 1);
+                        wordInput.value = '';
+                        resetCellsVisibility();
+
+                        // Show victory text if all words are removed
+                        if (!grid.hasChildNodes()) {
+                            win.style.display = 'flex';
+                        }
+
+                        return;
+                    }
+                }
+
+                // If only a part of a word in typed, continue
+                /** @type {string[]} */
+                let neighbouringLetters = [Array.from(input)];
+
+                // Take the input, find matches with words, determine nearby letters
+                for (const w of wordsList) {
+                    if (w.startsWith(input)) {
+                        for (const l of w) {
+                            if (!neighbouringLetters.includes(l)) {
+                                neighbouringLetters.push(l);
+                            }
+                        }
+                    }
+                }
+
+                // Manage cells' visibility
+                for (const c of grid.children) {
+                    if (!neighbouringLetters.includes(c.innerText)) {
+                        setCellVisibility(c, false);
+                    } else {
+                        setCellVisibility(c, true);
+                    }
+                }
+            }
+
+            fillGrid();
+        </script>
+    </body>
+</html>
