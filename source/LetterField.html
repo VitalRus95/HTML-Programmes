@@ -8,6 +8,47 @@
         <link rel='stylesheet' href='../resources/VitalStyle.css' />
 
         <style>
+            @keyframes cell-show {
+                0% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+                50% {
+                    background-color: var(--accent1);
+                    color: var(--accent2);
+                }
+                100% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+            }
+
+            @keyframes win-show {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0%);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes win-fade-in-out {
+                0% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+                50% {
+                    background-color: var(--accent1);
+                    color: var(--accent2);
+                }
+                100% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+            }
+
             :root {
                 --cell-size: 2.1rem;
             }
@@ -25,6 +66,7 @@
                 width: var(--cell-size);
                 cursor: crosshair;
                 transition: background-color 1.75s ease-in;
+                animation: cell-show 1s linear;
             }
 
             .cell:focus,
@@ -85,6 +127,10 @@
                 font-family: 'Courier New', Courier, monospace;
                 font-size: 1.5em;
                 font-weight: 600;
+                border-radius: 7px;
+                padding: 4px;
+                animation: win-show 1s ease-out;
+                animation: win-fade-in-out 5s ease alternate infinite;
             }
 
             #grid-input {
@@ -258,12 +304,13 @@
                 while (grid.hasChildNodes()) grid.lastChild.remove();
 
                 // Fill the grid with cells
-                letters.forEach((l) => {
+                letters.forEach((l, i) => {
                     let cell = grid.appendChild(
                         document.createElement('div')
                     );
 
-                    cell.className = 'cell';
+                    cell.className = 'cell preserveFont';
+                    cell.style.animationDelay = `${0.02 * i}s`;
                     cell.innerText = l;
                     cell.tabIndex = 0;
                 });
@@ -345,8 +392,6 @@
                     }
                 }
             }
-
-            fillGrid();
         </script>
     </body>
 </html>
