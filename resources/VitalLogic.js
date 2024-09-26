@@ -86,7 +86,6 @@ let fontInput = fontDiv.appendChild(document.createElement('input'));
 
 fontLabel.id = 'fontLabel';
 fontLabel.htmlFor = 'fontInput';
-fontLabel.className = 'preserveFont';
 fontLabel.innerText = 'Font';
 fontLabel.style.marginRight = '2px';
 
@@ -338,9 +337,7 @@ async function loadColours() {
 function loadFont() {
     let font = localStorage.getItem('pageFont');
     document.getElementById('fontInput').value = font;
-    document.body.querySelectorAll('*').forEach((e) => {
-        if (!e.className.includes('preserveFont')) e.style.fontFamily = font;
-    });
+    document.documentElement.style.fontFamily = font;
 }
 
 loadFont();

@@ -556,7 +556,7 @@
                     /** @type {HTMLButtonElement} */
                     let number = document.createElement('button');
                     number.id = `${r};${c}`;
-                    number.className = `cell number preserveFont ${w.isVertical ? 'vertical' : 'horizontal'}`;
+                    number.className = `cell number ${w.isVertical ? 'vertical' : 'horizontal'}`;
                     number.tabIndex = 1;
                     number.innerText = w.number;
 

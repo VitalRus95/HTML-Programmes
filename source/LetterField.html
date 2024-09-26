@@ -34,7 +34,7 @@
                 }
             }
 
-            @keyframes win-fade-in-out {
+            @keyframes win-blink {
                 0% {
                     background-color: var(--primary-colour);
                     color: var(--secondary-colour);
@@ -62,10 +62,12 @@
                 font-weight: 600;
                 border: 2px outset var(--accent1);
                 border-radius: 2px;
+                opacity: 1;
                 height: var(--cell-size);
                 width: var(--cell-size);
-                cursor: crosshair;
+                cursor: cell;
                 transition: background-color 1.75s ease-in;
+                transition: opacity 0.5s ease-in;
                 animation: cell-show 1s linear;
             }
 
@@ -73,6 +75,12 @@
             .cell:hover {
                 background-color: var(--accent2);
                 transition: background-color 0s ease-out;
+            }
+
+            .cell-hidden {
+                opacity: 0.1;
+                cursor: not-allowed;
+                transition: opacity 0.5s ease;
             }
 
             .menuButton {
@@ -109,42 +117,63 @@
             #grid-container {
                 display: flex;
                 flex-direction: column;
-                position: relative;
                 border: 2px outset var(--accent1);
                 border-radius: 7px 7px 0px 7px;
             }
 
             #grid-letters {
-                display: flex;
+                display: none;
                 flex-wrap: wrap;
                 column-gap: 2px;
                 padding: 2px;
+                background-color: transparent;
             }
 
             #grid-win {
                 display: none;
                 align-self: center;
+                justify-content: center;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: 1.5em;
                 font-weight: 600;
                 border-radius: 7px;
-                padding: 4px;
+                margin: 4px;
+                padding: 2px;
+                width: 95%;
                 animation: win-show 1s ease-out;
-                animation: win-fade-in-out 5s ease alternate infinite;
+                animation: win-blink 5s ease alternate infinite;
             }
 
             #grid-input {
                 display: flex;
                 align-items: center;
-                column-gap: 4px;
                 position: sticky;
                 bottom: 2px;
+                margin: 0;
                 padding: 2px;
                 border-top: 2px ridge var(--accent2);
+                border-radius: 7px;
                 opacity: 0.9;
             }
 
             #wordInput {
+                margin-left: 4px;
+                width: 100%;
+            }
+
+            #backspace {
+                border-radius: 0px 7px 0px 0px;
+                font-weight: 700;
+                width: 2.5em;
+            }
+
+            #guessedWordsLabel {
+                display: flex;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-radius: 7px;
+                font-size: 1.05em;
+                font-weight: 600;
                 width: 100%;
             }
         </style>
@@ -155,15 +184,24 @@
         <!-- Settings -->
         <details id='settings'>
             <summary>Settings</summary>
+
+            <div style='display: flex; align-items: baseline;'>
+                <input type='checkbox' id='hideCells'>
+                <label for='hideCells'>Hide inactive cells completely</label>
+            </div>
         </details>
 
-        <!-- Page main body -->
+        <!-- Words list textarea -->
         <details>
-            <summary>Words</summary>
-            <textarea id='words' autocomplete='off'></textarea>
+            <summary>Words (answers)</summary>
+            <textarea
+                id='words'
+                autocomplete='off'
+                placeholder='The list of words to guess'
+            ></textarea>
         </details>
 
-        <!-- Buttons -->
+        <!-- Save & Load buttons -->
         <div style='display: flex; column-gap: 4px;'>
             <!-- Load button -->
             <button
@@ -199,31 +237,51 @@
             </a>
         </div>
 
+        <!-- Start button -->
         <button
             tabindex='1'
             onclick='fillGrid()'
-            style='border-radius: 0px 0px 7px 7px;'
+            style='font-weight: 600; border-radius: 0px 0px 7px 7px;'
         >
             Start
         </button>
 
+        <!-- Game grid -->
         <div id='grid-container'>
+            <!-- Letters -->
             <div id='grid-letters'></div>
 
-            <span id='grid-win' class='preserveFont'>You win!</span>
+            <!-- Victory text -->
+            <span id='grid-win'>You won!</span>
 
+            <!-- Input -->
             <div id='grid-input'>
-                <label for='wordInput' class='preserveFont'>
+                <label for='wordInput'>
                     Word:
                 </label>
+
                 <input
                     type='text'
                     id='wordInput'
-                    class='preserveFont'
                     tabindex='1'
                     autocomplete='off'
                     oninput='checkInput()'
+                    placeholder='Type your guess'
                 >
+
+                <button
+                    id='backspace'
+                    class='tooltipParent'
+                >
+                    &#60;
+                    <span class='tooltip'>Delete the last letter</span>
+                </button>
+            </div>
+
+            <!-- Guessed words list -->
+            <div>
+                <span id='guessedWordsLabel'>Guessed words</span>
+                <ul id='guessedList'></ul>
             </div>
         </div>
 
@@ -236,6 +294,8 @@
         <script>
             // Elements
             /** @type {HTMLInputElement} */
+            let hideCells = document.getElementById('hideCells');
+            /** @type {HTMLInputElement} */
             let loadWordsInput = document.getElementById('loadWordsInput');
             /** @type {HTMLAnchorElement} */
             let saveWordsButton = document.getElementById('saveWordsButton');
@@ -247,12 +307,22 @@
             let win = document.getElementById('grid-win');
             /** @type {HTMLInputElement} */
             let wordInput = document.getElementById('wordInput');
+            /** @type {HTMLButtonElement} */
+            let backspace = document.getElementById('backspace');
+            /** @type {HTMLUListElement} */
+            let guessedList = document.getElementById('guessedList');
 
             // Variables
             /** @type {string[]} */
             let wordsList = [];
             /** @type {string[]} */
             let letters = [];
+
+            backspace.addEventListener('click', function (event) {
+                if (!wordInput.value) return
+                wordInput.value = wordInput.value.substring(0, wordInput.value.length - 1);
+                checkInput();
+            });
 
             async function loadWords() {
                 await loadWordsInput.files[0].text().then((content) => {
@@ -272,10 +342,16 @@
             }
 
             function fillGrid() {
-                if (!words) return;
+                if (!words.value) return;
 
                 // Hide victory text
                 win.style.display = 'none';
+
+                // Show the grid
+                grid.style.display = 'flex';
+
+                // Empty the guessed words list
+                while (guessedList.hasChildNodes()) guessedList.lastChild.remove();
 
                 // Empty the letters array
                 letters = [];
@@ -309,10 +385,16 @@
                         document.createElement('div')
                     );
 
-                    cell.className = 'cell preserveFont';
+                    cell.className = 'cell';
                     cell.style.animationDelay = `${0.02 * i}s`;
-                    cell.innerText = l;
+                    cell.textContent = l;
                     cell.tabIndex = 0;
+
+                    cell.addEventListener('click', function (event) {
+                        if (this.classList.contains('cell-hidden')) return;
+                        wordInput.value += this.textContent;
+                        checkInput();
+                    });
                 });
             }
 
@@ -322,8 +404,21 @@
             */
             function setCellVisibility(id, state) {
                 if (id) {
-                    id.style.opacity = state ? 1 : 0.1;
                     id.tabIndex = state ? 0 : -1;
+
+                    // Hide completely or restore visibility
+                    id.style.visibility = hideCells.checked
+                        ? state
+                            ? 'visible'
+                            : 'hidden'
+                        : 'visible';
+
+                    // Make transparent
+                    if (state || hideCells.checked) {
+                        id.classList.remove('cell-hidden');
+                    } else {
+                        id.classList.add('cell-hidden');
+                    }
                 }
             }
 
@@ -348,20 +443,28 @@
                     if (wordsList[i] === input) {
                         for (const l of wordsList[i]) {
                             for (const c of grid.children) {
-                                if (c.innerText === l) {
+                                if (c.textContent === l) {
                                     c.remove();
                                     break;
                                 }
                             }
                         }
 
+                        // Append guessed words list
+                        let li = document.createElement('li');
+                        li.textContent = wordsList[i];
+                        guessedList.insertBefore(li, guessedList.firstChild);
+
+                        // Remove the word from the list and empty the input
                         wordsList.splice(i, 1);
                         wordInput.value = '';
-                        resetCellsVisibility();
 
                         // Show victory text if all words are removed
                         if (!grid.hasChildNodes()) {
                             win.style.display = 'flex';
+                            grid.style.display = 'none';
+                        } else {
+                            resetCellsVisibility();
                         }
 
                         return;
@@ -370,7 +473,7 @@
 
                 // If only a part of a word in typed, continue
                 /** @type {string[]} */
-                let neighbouringLetters = [Array.from(input)];
+                let neighbouringLetters = [];
 
                 // Take the input, find matches with words, determine nearby letters
                 for (const w of wordsList) {
@@ -385,7 +488,7 @@
 
                 // Manage cells' visibility
                 for (const c of grid.children) {
-                    if (!neighbouringLetters.includes(c.innerText)) {
+                    if (!neighbouringLetters.includes(c.textContent)) {
                         setCellVisibility(c, false);
                     } else {
                         setCellVisibility(c, true);

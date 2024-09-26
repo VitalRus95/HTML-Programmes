@@ -3,13 +3,14 @@
     --accent2: #D69F7E;
     --primary-colour: #eeebbd;
     --secondary-colour: #050609;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 * {
     background-color: inherit;
     box-sizing: border-box;
     color: inherit;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: inherit;
     font-size: 14pt;
     margin-top: 1.5px;
     margin-bottom: 1.5px;
@@ -99,6 +100,8 @@ details[open] > summary {
     font-size: 1.05em;
     font-weight: 600;
     padding-bottom: 2px;
+    position: sticky;
+    top: 0px;
 }
 
 details[open] > summary:focus,

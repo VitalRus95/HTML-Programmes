@@ -13,13 +13,14 @@
                 --accent2: #D69F7E;
                 --primary-colour: #eeebbd;
                 --secondary-colour: #050609;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
             
             * {
                 background-color: inherit;
                 box-sizing: border-box;
                 color: inherit;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-family: inherit;
                 font-size: 14pt;
                 margin-top: 1.5px;
                 margin-bottom: 1.5px;
@@ -109,6 +110,8 @@
                 font-size: 1.05em;
                 font-weight: 600;
                 padding-bottom: 2px;
+                position: sticky;
+                top: 0px;
             }
             
             details[open] > summary:focus,
@@ -763,7 +766,6 @@
             
             fontLabel.id = 'fontLabel';
             fontLabel.htmlFor = 'fontInput';
-            fontLabel.className = 'preserveFont';
             fontLabel.innerText = 'Font';
             fontLabel.style.marginRight = '2px';
             
@@ -1015,9 +1017,7 @@
             function loadFont() {
                 let font = localStorage.getItem('pageFont');
                 document.getElementById('fontInput').value = font;
-                document.body.querySelectorAll('*').forEach((e) => {
-                    if (!e.className.includes('preserveFont')) e.style.fontFamily = font;
-                });
+                document.documentElement.style.fontFamily = font;
             }
             
             loadFont();
@@ -1206,7 +1206,7 @@
                     /** @type {HTMLButtonElement} */
                     let number = document.createElement('button');
                     number.id = `${r};${c}`;
-                    number.className = `cell number preserveFont ${w.isVertical ? 'vertical' : 'horizontal'}`;
+                    number.className = `cell number ${w.isVertical ? 'vertical' : 'horizontal'}`;
                     number.tabIndex = 1;
                     number.innerText = w.number;
 
