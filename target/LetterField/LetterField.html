@@ -371,21 +371,27 @@
                 height: var(--cell-size);
                 width: var(--cell-size);
                 cursor: cell;
-                transition: background-color 1.75s ease-in;
-                transition: opacity 0.5s ease-in;
+                transition:
+                    background-color 1.75s ease-in,
+                    color 0.5s ease-in,
+                    opacity 0.5s ease;
                 animation: cell-show 1s linear;
             }
 
             .cell:focus,
             .cell:hover {
                 background-color: var(--accent2);
+                color: var(--secondary-colour);
                 transition: background-color 0s ease-out;
             }
 
             .cell-hidden {
-                opacity: 0.1;
-                cursor: not-allowed;
-                transition: opacity 0.5s ease;
+                color: var(--primary-colour);
+                opacity: 0.2;
+                cursor: default;
+                transition:
+                    all 0.5s ease,
+                    color 1s ease;
             }
 
             .menuButton {
@@ -476,7 +482,7 @@
                 display: flex;
                 justify-content: center;
                 background-color: var(--accent2);
-                border-radius: 7px;
+                border-radius: 0px 0px 0px 7px;
                 font-size: 1.05em;
                 font-weight: 600;
                 width: 100%;
@@ -585,7 +591,9 @@
 
             <!-- Guessed words list -->
             <div>
-                <span id='guessedWordsLabel'>Guessed words</span>
+                <span id='guessedWordsLabel' tabindex='1'>
+                    Guessed words
+                </span>
                 <ul id='guessedList'></ul>
             </div>
         </div>
@@ -1038,7 +1046,7 @@
                     cell.className = 'cell';
                     cell.style.animationDelay = `${0.02 * i}s`;
                     cell.textContent = l;
-                    cell.tabIndex = 0;
+                    cell.tabIndex = 2;
 
                     cell.addEventListener('click', function (event) {
                         if (this.classList.contains('cell-hidden')) return;
@@ -1103,6 +1111,7 @@
                         // Append guessed words list
                         let li = document.createElement('li');
                         li.textContent = wordsList[i];
+                        li.tabIndex = 1;
                         guessedList.insertBefore(li, guessedList.firstChild);
 
                         // Remove the word from the list and empty the input
