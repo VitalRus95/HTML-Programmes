@@ -432,8 +432,33 @@
                 border-radius: 7px 7px 0px 7px;
             }
 
+            #grid-header {
+                display: flex;
+                justify-content: center;
+                border-bottom: 2px ridge var(--accent2);
+                border-radius: 7px;
+                font-size: 1.05em;
+                font-weight: 600;
+                text-align: center;
+                padding: 2px;
+            }
+
+            #grid-stats {
+                display: flex;
+                justify-content: center;
+                position: sticky;
+                top: 0px;
+                z-index: 1;
+                column-gap: 4px;
+                background-color: var(--accent2);
+                margin: 0;
+                border-radius: 7px;
+                opacity: 0.9;
+            }
+
             #grid-letters {
                 display: none;
+                justify-content: center;
                 flex-wrap: wrap;
                 column-gap: 2px;
                 padding: 2px;
@@ -450,7 +475,7 @@
                 border-radius: 7px;
                 margin: 4px;
                 padding: 2px;
-                width: 95%;
+                width: 100%;
                 animation: win-show 1s ease-out;
                 animation: win-blink 5s ease alternate infinite;
             }
@@ -459,16 +484,17 @@
                 display: flex;
                 align-items: center;
                 position: sticky;
-                bottom: 2px;
+                bottom: 0px;
+                z-index: 1;
                 margin: 0;
-                padding: 2px;
+                padding: 1px;
                 border-top: 2px ridge var(--accent2);
                 border-radius: 7px;
                 opacity: 0.9;
             }
 
             #wordInput {
-                margin-left: 4px;
+                border-radius: 7px 0px 0px 0px;
                 width: 100%;
             }
 
@@ -485,6 +511,7 @@
                 border-radius: 0px 0px 0px 7px;
                 font-size: 1.05em;
                 font-weight: 600;
+                margin: 0;
                 width: 100%;
             }
         </style>
@@ -559,6 +586,15 @@
 
         <!-- Game grid -->
         <div id='grid-container'>
+            <!-- Header -->
+            <span id='grid-header'>...</span>
+
+            <!-- Stats -->
+            <div id='grid-stats'>
+                <span>Words on grid:</span>
+                <span id='grid-words-count'>0</span>
+            </div>
+
             <!-- Letters -->
             <div id='grid-letters'></div>
 
@@ -567,10 +603,6 @@
 
             <!-- Input -->
             <div id='grid-input'>
-                <label for='wordInput'>
-                    Word:
-                </label>
-
                 <input
                     type='text'
                     id='wordInput'
@@ -959,6 +991,10 @@
             let saveWordsButton = document.getElementById('saveWordsButton');
             /** @type {HTMLTextAreaElement} */
             let words = document.getElementById('words');
+            /** @type {HTMLSpanElement} */
+            let header = document.getElementById('grid-header');
+            /** @type {HTMLSpanElement} */
+            let wordCount = document.getElementById('grid-words-count');
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('grid-letters');
             /** @type {HTMLSpanElement} */
@@ -1005,6 +1041,11 @@
                 // Hide victory text
                 win.style.display = 'none';
 
+                // Set the header
+                if (loadWordsInput.files[0]?.name) {
+                    header.textContent = loadWordsInput.files[0].name.replace('.txt', '');
+                }
+
                 // Show the grid
                 grid.style.display = 'flex';
 
@@ -1025,6 +1066,9 @@
                     .toUpperCase()
                     .trim()
                     .replace(/\s/g, '');
+
+                // Set the initial value for the words counter
+                wordCount.textContent = wordsList.length;
 
                 // Push random letters from the string to the letters array
                 let tempArray = Array.from(wordsString);
@@ -1088,6 +1132,7 @@
 
             function checkInput() {
                 // Reset cells' visibility if there's no input
+                wordCount.textContent = wordsList.length;
                 if (wordInput.value === '') {
                     resetCellsVisibility();
                     return;
@@ -1118,6 +1163,9 @@
                         wordsList.splice(i, 1);
                         wordInput.value = '';
 
+                        // Update stats
+                        wordCount.textContent = wordsList.length;
+
                         // Show victory text if all words are removed
                         if (!grid.hasChildNodes()) {
                             win.style.display = 'flex';
@@ -1132,11 +1180,14 @@
 
                 // If only a part of a word in typed, continue
                 /** @type {string[]} */
+                let wordsLeftOnGrid = 0;
                 let neighbouringLetters = [];
 
                 // Take the input, find matches with words, determine nearby letters
                 for (const w of wordsList) {
                     if (w.startsWith(input)) {
+                        wordsLeftOnGrid ++;
+
                         for (const l of w) {
                             if (!neighbouringLetters.includes(l)) {
                                 neighbouringLetters.push(l);
@@ -1144,6 +1195,9 @@
                         }
                     }
                 }
+
+                // Update stats
+                wordCount.textContent = wordsLeftOnGrid;
 
                 // Manage cells' visibility
                 for (const c of grid.children) {
