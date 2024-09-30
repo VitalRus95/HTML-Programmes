@@ -123,32 +123,17 @@
             #grid-container {
                 display: flex;
                 flex-direction: column;
-                border: 2px outset var(--accent1);
-                border-radius: 7px 7px 0px 7px;
             }
 
             #grid-header {
                 display: flex;
                 justify-content: center;
-                border-bottom: 2px ridge var(--accent2);
+                border-bottom: 2px ridge var(--accent1);
                 border-radius: 7px;
                 font-size: 1.05em;
                 font-weight: 600;
                 text-align: center;
                 padding: 2px;
-            }
-
-            #grid-stats {
-                display: flex;
-                justify-content: center;
-                position: sticky;
-                top: 0px;
-                z-index: 1;
-                column-gap: 4px;
-                background-color: var(--accent2);
-                margin: 0;
-                border-radius: 7px;
-                opacity: 0.9;
             }
 
             #grid-letters {
@@ -177,32 +162,43 @@
 
             #grid-input {
                 display: flex;
-                align-items: center;
                 position: sticky;
                 bottom: 0px;
                 z-index: 1;
                 margin: 0;
-                padding: 1px;
-                border-top: 2px ridge var(--accent2);
-                border-radius: 7px;
                 opacity: 0.9;
             }
 
-            #wordInput {
+            #grid-stats {
+                display: flex;
+                justify-content: center;
+                cursor: help;
+                background-color: var(--accent2);
+                border: 2px outset var(--accent1);
                 border-radius: 7px 0px 0px 0px;
+                font-weight: 600;
+            }
+
+            #grid-words-count {
+                text-align: center;
+                min-width: 3em;
+            }
+
+            #wordInput {
                 width: 100%;
             }
 
             #backspace {
                 border-radius: 0px 7px 0px 0px;
                 font-weight: 700;
-                width: 2.5em;
+                min-width: 3em;
             }
 
             #guessedWordsLabel {
                 display: flex;
                 justify-content: center;
                 background-color: var(--accent2);
+                border-top: 2px outset var(--accent1);
                 border-radius: 0px 0px 0px 7px;
                 font-size: 1.05em;
                 font-weight: 600;
@@ -282,22 +278,24 @@
         <!-- Game grid -->
         <div id='grid-container'>
             <!-- Header -->
-            <span id='grid-header'>...</span>
-
-            <!-- Stats -->
-            <div id='grid-stats'>
-                <span>Words on grid:</span>
-                <span id='grid-words-count'>0</span>
-            </div>
+            <span id='grid-header' tabindex='1'>...</span>
 
             <!-- Letters -->
             <div id='grid-letters'></div>
 
             <!-- Victory text -->
-            <span id='grid-win'>You won!</span>
+            <span id='grid-win' tabindex='1'>You won!</span>
 
             <!-- Input -->
             <div id='grid-input'>
+                <!-- Stats -->
+                <div id='grid-stats' class='tooltipParent'>
+                    <span id='grid-words-count' tabindex='1'>0</span>
+                    <span class='tooltip'>
+                        Words on grid counter
+                    </span>
+                </div>
+
                 <input
                     type='text'
                     id='wordInput'
@@ -547,7 +545,7 @@
                 }
 
                 // Update stats
-                wordCount.textContent = wordsLeftOnGrid;
+                wordCount.textContent = `${wordsLeftOnGrid}/${wordsList.length}`;
 
                 // Manage cells' visibility
                 for (const c of grid.children) {
