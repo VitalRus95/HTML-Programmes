@@ -296,6 +296,7 @@
                 min-width: min-content;
                 width: max-content;
                 max-width: 75vw;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 font-weight: 600;
                 text-align: left;
                 text-wrap: wrap;
@@ -375,7 +376,7 @@
                     background-color 1.75s ease-in,
                     color 0.5s ease-in,
                     opacity 0.5s ease;
-                animation: cell-show 1s linear;
+                animation: cell-show 1s ease-in;
             }
 
             .cell:focus,
@@ -392,6 +393,14 @@
                 transition:
                     all 0.5s ease,
                     color 1s ease;
+            }
+
+            .cell-highlight {
+                background-color: var(--accent1);
+                color: var(--accent2);
+                transition:
+                    background-color 1.5s ease-in,
+                    color 0.5s ease-in;
             }
 
             .menuButton {
@@ -485,6 +494,7 @@
             }
 
             #grid-words-count {
+                background-color: transparent;
                 text-align: center;
                 min-width: 3em;
             }
@@ -597,7 +607,10 @@
                 <div id='grid-stats' class='tooltipParent'>
                     <span id='grid-words-count' tabindex='1'>0</span>
                     <span class='tooltip'>
-                        Words on grid counter
+                        <div style='margin: 0;'>
+                            Words on grid counter. Letters count:
+                            <span id='letters-count'></span>
+                        </div>
                     </span>
                 </div>
 
@@ -993,6 +1006,8 @@
             let header = document.getElementById('grid-header');
             /** @type {HTMLSpanElement} */
             let wordCount = document.getElementById('grid-words-count');
+            /** @type {HTMLSpanElement} */
+            let lettersCount = document.getElementById('letters-count');
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('grid-letters');
             /** @type {HTMLSpanElement} */
@@ -1008,7 +1023,11 @@
             /** @type {string[]} */
             let wordsList = [];
             /** @type {string[]} */
+            let wordsLeftOnGrid = [];
+            /** @type {string[]} */
             let letters = [];
+            /** @type {number} */
+            let highlight;
 
             backspace.addEventListener('click', function (event) {
                 if (!wordInput.value) return
@@ -1039,6 +1058,9 @@
                 // Hide victory text
                 win.style.display = 'none';
 
+                // Try to remove highlight interval
+                if (highlight) clearInterval(highlight);
+
                 // Set the header
                 if (loadWordsInput.files[0]?.name) {
                     header.textContent = loadWordsInput.files[0].name.replace('.txt', '');
@@ -1065,8 +1087,9 @@
                     .trim()
                     .replace(/\s/g, '');
 
-                // Set the initial value for the words counter
+                // Set the initial value for the words & letters counters
                 wordCount.textContent = wordsList.length;
+                countLetters(wordsList);
 
                 // Push random letters from the string to the letters array
                 let tempArray = Array.from(wordsString);
@@ -1085,8 +1108,10 @@
                         document.createElement('div')
                     );
 
+                    cell.style.animationDelay = `${
+                        (i / (letters.length - 1)) * 3
+                    }s`;
                     cell.className = 'cell';
-                    cell.style.animationDelay = `${0.02 * i}s`;
                     cell.textContent = l;
                     cell.tabIndex = 2;
 
@@ -1096,6 +1121,39 @@
                         checkInput();
                     });
                 });
+
+                // Create highlight interval
+                highlight = setInterval(() => {
+                    for (let c of grid.children) {
+                        c.classList.remove('cell-highlight');
+                    }
+
+                    setTimeout(() => {
+                        if (wordsList.length < 2 || wordInput.value) return;
+
+                        let word = wordsList[Math.floor(Math.random() * wordsList.length)];
+
+                        for (let l of word) {
+                            /** @type {HTMLDivElement[]} */
+                            let cells = [...grid.children].filter(
+                                (c) => (
+                                    c.textContent === l
+                                    && !c.classList.contains('cell-highlight')
+                                )
+                            );
+
+                            try {
+                                let i = Math.floor(Math.random() * cells.length);
+                                cells[i].classList.add('cell-highlight');
+                            } catch (error) {
+                                alert(`${error}:
+                                    word[letter]: ${word}[${l}]
+                                    cells: ${cells}
+                                `);
+                            }
+                        }
+                    }, 1900);
+                }, 6500);
             }
 
             /**
@@ -1123,16 +1181,33 @@
             }
 
             function resetCellsVisibility() {
-                for (const c of grid.children) {
+                for (let c of grid.children) {
+                    c.classList.remove('cell-highlight');
                     setCellVisibility(c, true);
                 }
             }
 
+            /**
+             * @param {string[]} words
+            */
+            function countLetters(words) {
+                lettersCount.textContent = '';
+                words.forEach((w, i) => {
+                    lettersCount.textContent += `${w.length}${
+                        i < words.length - 1 ? ', ' : '.'
+                    }`;
+                });
+            }
+
             function checkInput() {
+                // Empty the array of words left on the grid
+                wordsLeftOnGrid = [];
+
                 // Reset cells' visibility if there's no input
                 wordCount.textContent = wordsList.length;
                 if (wordInput.value === '') {
                     resetCellsVisibility();
+                    countLetters(wordsList);
                     return;
                 }
 
@@ -1142,8 +1217,8 @@
                 // Remove letters when full word is typed
                 for (let i = 0; i < wordsList.length; i++) {
                     if (wordsList[i] === input) {
-                        for (const l of wordsList[i]) {
-                            for (const c of grid.children) {
+                        for (let l of wordsList[i]) {
+                            for (let c of grid.children) {
                                 if (c.textContent === l) {
                                     c.remove();
                                     break;
@@ -1161,9 +1236,6 @@
                         wordsList.splice(i, 1);
                         wordInput.value = '';
 
-                        // Update stats
-                        wordCount.textContent = wordsList.length;
-
                         // Show victory text if all words are removed
                         if (!grid.hasChildNodes()) {
                             win.style.display = 'flex';
@@ -1172,21 +1244,24 @@
                             resetCellsVisibility();
                         }
 
+                        // Update stats
+                        wordCount.textContent = wordsList.length;
+                        countLetters(wordsList);
+                        
                         return;
                     }
                 }
 
                 // If only a part of a word in typed, continue
                 /** @type {string[]} */
-                let wordsLeftOnGrid = 0;
                 let neighbouringLetters = [];
 
                 // Take the input, find matches with words, determine nearby letters
-                for (const w of wordsList) {
+                for (let w of wordsList) {
                     if (w.startsWith(input)) {
-                        wordsLeftOnGrid ++;
+                        wordsLeftOnGrid.push(w);
 
-                        for (const l of w) {
+                        for (let l of w) {
                             if (!neighbouringLetters.includes(l)) {
                                 neighbouringLetters.push(l);
                             }
@@ -1195,10 +1270,13 @@
                 }
 
                 // Update stats
-                wordCount.textContent = `${wordsLeftOnGrid}/${wordsList.length}`;
+                wordCount.textContent = `${wordsLeftOnGrid.length}/${wordsList.length}`;
+                countLetters(wordsLeftOnGrid);
 
                 // Manage cells' visibility
-                for (const c of grid.children) {
+                for (let c of grid.children) {
+                    c.classList.remove('cell-highlight');
+
                     if (!neighbouringLetters.includes(c.textContent)) {
                         setCellVisibility(c, false);
                     } else {

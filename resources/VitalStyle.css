@@ -286,6 +286,7 @@ textarea::placeholder {
     min-width: min-content;
     width: max-content;
     max-width: 75vw;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 600;
     text-align: left;
     text-wrap: wrap;
