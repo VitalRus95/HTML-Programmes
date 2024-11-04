@@ -23,6 +23,26 @@
                 }
             }
 
+            @keyframes score-mistake {
+                33% {
+                    transform: translateX(-0.5em);
+                }
+                66% {
+                    background-color: var(--accent1);
+                    transform: translateX(0.5em);
+                }
+                100% {
+                    transform: translateX(0%);
+                }
+            }
+
+            @keyframes score-correct {
+                50% {
+                    background-color: var(--primary-colour);
+                    transform: scale(1.03);
+                }
+            }
+
             @keyframes win-show {
                 from {
                     transform: translateY(100%);
@@ -97,6 +117,14 @@
                     color 0.5s ease-in;
             }
 
+            .mistake {
+                animation: score-mistake 0.5s ease;
+            }
+
+            .correct {
+                animation: score-correct 0.7s ease;
+            }
+
             .menuButton {
                 cursor: pointer;
                 display: flex;
@@ -144,6 +172,29 @@
                 padding: 2px;
             }
 
+            #grid-score {
+                display: flex;
+                justify-content: center;
+                position: sticky;
+                top: 0px;
+                z-index: 1;
+                column-gap: 4px;
+                font-weight: 600;
+                background-color: var(--accent2);
+                border: 2px outset var(--accent1);
+                border-radius: 0px 0px 7px 7px;
+                opacity: 0.9;
+                margin: 0;
+            }
+
+            #grid-score-label {
+                background-color: transparent;
+            }
+
+            #grid-score-value {
+                background-color: transparent;
+            }
+
             #grid-letters {
                 display: none;
                 justify-content: center;
@@ -174,12 +225,14 @@
                 bottom: 0px;
                 z-index: 1;
                 margin: 0;
+                height: 2.1em;
                 opacity: 0.9;
             }
 
             #grid-stats {
                 display: flex;
                 justify-content: center;
+                align-items: center;
                 cursor: help;
                 background-color: var(--accent2);
                 border: 2px outset var(--accent1);
@@ -289,6 +342,12 @@
             <!-- Header -->
             <span id='grid-header' tabindex='1'>...</span>
 
+            <!-- Score -->
+            <div id='grid-score' tabindex='1'>
+                <span id='grid-score-label'>Score:</span>
+                <span id='grid-score-value'>0%</span>
+            </div>
+
             <!-- Letters -->
             <div id='grid-letters'></div>
 
@@ -353,6 +412,10 @@
             let words = document.getElementById('words');
             /** @type {HTMLSpanElement} */
             let header = document.getElementById('grid-header');
+            /** @type {HTMLDivElement} */
+            let scoreDiv = document.getElementById('grid-score');
+            /** @type {HTMLSpanElement} */
+            let scoreSpan = document.getElementById('grid-score-value');
             /** @type {HTMLSpanElement} */
             let wordCount = document.getElementById('grid-words-count');
             /** @type {HTMLSpanElement} */
@@ -377,6 +440,10 @@
             let letters = [];
             /** @type {number} */
             let highlight;
+            /** @type {number} */
+            let score;
+            /** @type {number} */
+            let maxScore;
 
             backspace.addEventListener('click', function (event) {
                 if (!wordInput.value) return
@@ -440,6 +507,11 @@
                 wordCount.textContent = wordsList.length;
                 countLetters(wordsList);
 
+                // Reset score
+                score = 0;
+                maxScore = wordsList.length;
+                updateScore();
+
                 // Push random letters from the string to the letters array
                 let tempArray = Array.from(wordsString);
                 while (tempArray.length > 0) {
@@ -470,6 +542,12 @@
                         checkInput();
                     });
                 });
+
+                // Block input for the duration of fade in animation
+                wordInput.readOnly = true;
+                setTimeout(() => {
+                    wordInput.readOnly = false;
+                }, 3100);
 
                 // Create highlight interval
                 highlight = setInterval(() => {
@@ -548,7 +626,20 @@
                 });
             }
 
+            function updateScore() {
+                let displayedScore = score / maxScore * 100;
+                displayedScore = displayedScore > 100
+                    ? 100
+                    : displayedScore < 0
+                        ? 0
+                        : displayedScore;
+                scoreSpan.textContent = `${displayedScore.toFixed(0)}%`;
+            }
+
             function checkInput() {
+                // Return if there are no words
+                if (wordsList.length === 0) return;
+
                 // Empty the array of words left on the grid
                 wordsLeftOnGrid = [];
 
@@ -584,6 +675,17 @@
                         // Remove the word from the list and empty the input
                         wordsList.splice(i, 1);
                         wordInput.value = '';
+
+                        // Add and update score
+                        score ++;
+                        updateScore();
+
+                        scoreDiv.classList.add('correct');
+                        wordInput.readOnly = true;
+                        setTimeout(() => {
+                            scoreDiv.classList.remove('correct');
+                            wordInput.readOnly = false;
+                        }, 800);
 
                         // Show victory text if all words are removed
                         if (!grid.hasChildNodes()) {
@@ -621,6 +723,23 @@
                 // Update stats
                 wordCount.textContent = `${wordsLeftOnGrid.length}/${wordsList.length}`;
                 countLetters(wordsLeftOnGrid);
+
+                // Subtract from score if there are no words left
+                if (
+                    wordsLeftOnGrid.length === 0
+                    && wordInput.value.length > 3
+                    && score >= 0.2
+                ) {
+                    score -= 0.2;
+                    updateScore();
+
+                    scoreDiv.classList.add('mistake');
+                    wordInput.readOnly = true;
+                    setTimeout(() => {
+                        scoreDiv.classList.remove('mistake');
+                        wordInput.readOnly = false;
+                    }, 600);
+                }
 
                 // Manage cells' visibility
                 for (let c of grid.children) {
