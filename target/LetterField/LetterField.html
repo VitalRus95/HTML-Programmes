@@ -344,7 +344,8 @@
 
             @keyframes score-correct {
                 50% {
-                    background-color: var(--primary-colour);
+                    background-color: var(--secondary-colour);
+                    color: var(--primary-colour);
                     transform: scale(1.03);
                 }
             }
@@ -1198,6 +1199,7 @@
                 wordInput.readOnly = true;
                 setTimeout(() => {
                     wordInput.readOnly = false;
+                    wordInput.focus();
                 }, 3100);
 
                 // Create highlight interval
@@ -1388,6 +1390,9 @@
                     wordInput.readOnly = true;
                     setTimeout(() => {
                         scoreDiv.classList.remove('mistake');
+                        wordInput.value = wordInput.value.substring(
+                            0, wordInput.value.length - 1
+                        );
                         wordInput.readOnly = false;
                     }, 600);
                 }
