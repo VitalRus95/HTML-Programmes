@@ -335,6 +335,7 @@
                 }
                 66% {
                     background-color: var(--accent1);
+                    color: var(--primary-colour);
                     transform: translateX(0.5em);
                 }
                 100% {
@@ -1076,12 +1077,18 @@
             let grid = document.getElementById('grid-letters');
             /** @type {HTMLSpanElement} */
             let win = document.getElementById('grid-win');
+            /** @type {HTMLDivElement} */
+            let gridInput = document.getElementById('grid-input');
             /** @type {HTMLInputElement} */
             let wordInput = document.getElementById('wordInput');
             /** @type {HTMLButtonElement} */
             let backspace = document.getElementById('backspace');
             /** @type {HTMLUListElement} */
             let guessedList = document.getElementById('guessedList');
+
+            // Constants
+            /** @type {number} */
+            const mistakeCost = 0.5;
 
             // Variables
             /** @type {string[]} */
@@ -1297,19 +1304,19 @@
                 wordsLeftOnGrid = [];
 
                 // Reset cells' visibility if there's no input
-                wordCount.textContent = wordsList.length;
                 if (wordInput.value === '') {
-                    resetCellsVisibility();
+                    wordCount.textContent = wordsList.length;
                     countLetters(wordsList);
+                    resetCellsVisibility();
                     return;
                 }
 
-                // Get the input converted to the upper case
-                let input = wordInput.value.toUpperCase();
+                // Convert the input's value to upper case
+                wordInput.value = wordInput.value.toUpperCase();
 
                 // Remove letters when full word is typed
                 for (let i = 0; i < wordsList.length; i++) {
-                    if (wordsList[i] === input) {
+                    if (wordsList[i] === wordInput.value) {
                         for (let l of wordsList[i]) {
                             for (let c of grid.children) {
                                 if (c.textContent === l) {
@@ -1362,7 +1369,7 @@
 
                 // Take the input, find matches with words, determine nearby letters
                 for (let w of wordsList) {
-                    if (w.startsWith(input)) {
+                    if (w.startsWith(wordInput.value)) {
                         wordsLeftOnGrid.push(w);
 
                         for (let l of w) {
@@ -1373,28 +1380,30 @@
                     }
                 }
 
-                // Update stats
-                wordCount.textContent = `${wordsLeftOnGrid.length}/${wordsList.length}`;
-                countLetters(wordsLeftOnGrid);
-
                 // Subtract from score if there are no words left
-                if (
-                    wordsLeftOnGrid.length === 0
-                    && wordInput.value.length > 3
-                    && score >= 0.2
-                ) {
-                    score -= 0.2;
-                    updateScore();
+                if (wordsLeftOnGrid.length === 0) {
+                    if (wordInput.value.length > 3 && score >= mistakeCost) {
+                        scoreDiv.classList.add('mistake');
+                        score -= mistakeCost;
+                        updateScore();
+                    }
 
-                    scoreDiv.classList.add('mistake');
                     wordInput.readOnly = true;
+                    gridInput.classList.add('mistake');
+
                     setTimeout(() => {
                         scoreDiv.classList.remove('mistake');
+                        gridInput.classList.remove('mistake');
                         wordInput.value = wordInput.value.substring(
                             0, wordInput.value.length - 1
                         );
                         wordInput.readOnly = false;
+                        checkInput();
                     }, 600);
+                } else {
+                    // Update stats
+                    wordCount.textContent = `${wordsLeftOnGrid.length}/${wordsList.length}`;
+                    countLetters(wordsLeftOnGrid);
                 }
 
                 // Manage cells' visibility
