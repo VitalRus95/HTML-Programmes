@@ -315,8 +315,7 @@
             }
 
             :root {
-                --cell-min-height: calc(20px + 1.5vmax);
-                --cell-max-height: calc(56px + 1.5vmax);
+                --cell-size: calc(42px + 1.5vmax);
             }
 
             li {
@@ -337,9 +336,8 @@
 
             .cell {
                 display: flex;
-                aspect-ratio: 1/1;
-                min-height: var(--cell-min-height);
-                max-height: var(--cell-max-height);
+                height: var(--cell-size);
+                width: var(--cell-size);
                 border-color: var(--secondary-colour);
                 border-style: inset;
                 border-width: calc(2px + 0.1vmax);
@@ -671,7 +669,7 @@
                 </div>
 
                 <div style='overflow: auto'>
-                    <div id='crosswordGrid' style='width: fit-content; min-width: min-content; max-width: 100%; width: 100%; resize: horizontal; overflow: auto; padding: calc(4px + 0.2vw); cursor: crosshair'></div>
+                    <div id='crosswordGrid' style='width: fit-content; min-width: min-content; max-width: 100%; overflow: auto; padding: calc(4px + 0.2vw); cursor: crosshair'></div>
                 </div>
             </details>
         </div>
@@ -1076,8 +1074,6 @@
             const statusBarIcon = '&#10002;';
             const deleteIcon = '&#10006;';
             const switchIcon = '&#8646;';
-            const cellMinHeight = getComputedStyle(document.body).getPropertyValue('--cell-min-height');
-            const cellMaxHeight = getComputedStyle(document.body).getPropertyValue('--cell-max-height');
 
             /** @type {Word[]} */
             let words = [];
@@ -1324,8 +1320,6 @@
                     /** @type {HTMLDivElement}  */
                     let row = crosswordGrid.appendChild(document.createElement('div'));
                     row.style.display = 'flex';
-                    row.style.aspectRatio = `${maxColumn / 1}`;
-                    row.style.maxHeight = `${cellMaxHeight}`;
 
                     for (var c = 0; c < maxColumn; c++) {
                         if (grid[r][c] === undefined) {

@@ -315,13 +315,13 @@
             }
 
             :root {
-                --cell-min-height: calc(36px + 1.5vmax);
+                --cell-size: calc(36px + 1.5vmax);
             }
 
             .cell {
                 display: flex;
-                aspect-ratio: 1/1;
-                min-height: var(--cell-min-height);
+                height: var(--cell-size);
+                width: var(--cell-size);
                 border-color: var(--secondary-colour);
                 background-color: var(--primary-colour);
                 color: var(--primary-colour);
@@ -380,14 +380,14 @@
             }
 
             .letterInput {
-                aspect-ratio: 1/1;
                 background-color: var(--accent2);
                 border-radius: 50%;
                 border-width: 2px;
                 outline-color: var(--secondary-colour);
                 outline-style: dashed;
                 height: 1.9em;
-                font-size: 1.4em;
+                width: 1.9em;
+                font-size: 1.5em;
                 font-weight: 600;
                 text-align: center;
             }

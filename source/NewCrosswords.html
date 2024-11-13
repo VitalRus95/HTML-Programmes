@@ -10,8 +10,8 @@
         <style>
             :root {
                 --cell-size: 48px;
-                --cell-border: calc(var(--cell-size) * 0.01 + 2px);
-                --cell-font: calc(var(--cell-size) * 0.9);
+                --cell-border: calc(var(--cell-size) * 0.05);
+                --cell-font: calc(var(--cell-size) * 0.7);
                 --cell-radius: 5%;
                 --gap-size: calc(var(--cell-size) * 0.04);
             }
@@ -23,6 +23,7 @@
                 overflow-x: auto;
                 overflow-y: hidden;
                 padding: 4px;
+                cursor: crosshair;
             }
 
             .row {
@@ -36,6 +37,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                background-color: var(--accent2);
                 border: var(--cell-border) solid var(--accent1);
                 border-radius: var(--cell-radius);
                 border-style: solid;
@@ -44,18 +46,19 @@
                 width: var(--cell-size);
                 font-size: var(--cell-font);
                 font-weight: 600;
-                transition: border-color 1.5s ease-in;
+                transition: all 1.5s ease-in;
             }
 
             .cell:focus,
             .cell:hover {
                 border-color: var(--secondary-colour);
-                transition: border-color 0.1s ease-in;
+                transition: border-color 0.1s ease;
             }
 
             .empty {
                 opacity: 0.2;
                 border-color: var(--accent1);
+                background-color: var(--primary-colour);
                 transition: opacity 1.5s ease-in;
             }
 
@@ -63,7 +66,9 @@
             .empty:hover {
                 opacity: 0.7;
                 border-color: var(--accent1);
-                transition: opacity 0.1s ease-in;
+                transition:
+                    all 0.1s ease,
+                    background-color 0.5s ease-in;
             }
 
             .cell-input {
@@ -74,19 +79,20 @@
                 text-align: center;
                 height: 100%;
                 width: 100%;
-                transition: background-color 1.5s ease-in;
+                transition: all 1s ease-in;
             }
 
             .cell-input:valid {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
+                transition: all 1s ease-in;
             }
 
             .cell-input:focus,
             .cell-input:hover {
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
-                transition: background-color 0.1s ease;
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                transition: none;
             }
         </style>
     </head>
@@ -100,53 +106,12 @@
 
         <!-- Page main body -->
 
-        <div id='crossword' class='grid'>
-            <div class='row'>
-                <div class='cell'>A</div>
-                <div class='cell'>B</div>
-                <div class='cell'>C</div>
-                <div class='cell empty'></div>
-                <div class='cell empty'></div>
-                <div class='cell empty'></div>
-            </div>
-
-            <div class='row'>
-                <div class='cell'>
-                    <input type='text' class='cell-input' maxlength='1' value='' pattern='A' required>
-                </div>
-                <div class='cell'>
-                    <input type='text' class='cell-input' maxlength='1' value='E' pattern='B'>
-                </div>
-                <div class='cell'>
-                    <input type='text' class='cell-input' maxlength='1' value='F' pattern='F'>
-                </div>
-                <div class='cell'>4</div>
-                <div class='cell empty'></div>
-                <div class='cell'>6</div>
-            </div>
-
-            <div class='row'>
-                <div class='cell'>G</div>
-                <div class='cell'>H</div>
-                <div class='cell'>I</div>
-                <div class='cell'>7</div>
-                <div class='cell empty'></div>
-                <div class='cell'>9</div>
-            </div>
-
-            <div class='row'>
-                <div class='cell'>J</div>
-                <div class='cell'>K</div>
-                <div class='cell'>L</div>
-                <div class='cell'>0</div>
-                <div class='cell'>1</div>
-                <div class='cell'>2</div>
-            </div>
-        </div>
+        <div id='crossword' class='grid'></div>
 
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
         </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
 
         <script src='../resources/VitalLogic.js'></script>
         <script>
@@ -161,7 +126,7 @@
              * @property {string} description
              * @property {boolean} vertical
              * @property {number} x
-             * @propety {number} y
+             * @property {number} y
             */
             /** @type {Word[]} */
             let words = [
@@ -293,17 +258,68 @@
                 }
             ];
             /** @type {number} */
-            let xMax;
+            let xMax = 0;
             /** @type {number} */
-            let yMax;
+            let yMax = 0;
+
+            /**
+             * @param {Word} word
+            */
+            function isWordOutOfBounds(word) {
+                return (
+                    word.x < 0
+                    || word.y < 0
+                    || word.x > xMax
+                    || word.y > yMax
+                );
+            }
+
+            /**
+             * @param {HTMLDivElement} cell
+             * @param {Word} word
+             * @param {number} letter
+             * @param {number} x
+             * @param {number} y
+            */
+            function setUpCell(cell, word, letter, x, y) {
+                if (!cell.classList.contains('empty')) return;
+
+                cell.classList.remove('empty');
+
+                let input = cell.appendChild(
+                    document.createElement('input')
+                );
+                input.classList.add('cell-input');
+                input.dataset.x = x;
+                input.dataset.y = y;
+                input.id = `${x};${y}`;
+                input.maxLength = 1;
+                input.pattern = word.word[letter].toUpperCase();
+                input.required = true;
+
+                input.addEventListener('input', function (event) {
+                    this.value = this.value.toUpperCase();
+
+                    if (this.checkValidity()) {
+                        /** @type {HTMLInputElement} */
+                        let next = document.getElementById(
+                            `${
+                                word.vertical ? x : x + 1
+                            };${
+                                word.vertical ? y + 1 : y
+                            }`
+                        );
+
+                        if (next) next.select();
+                    } else {
+                        this.select();
+                    }
+                });
+            }
 
             function fillGrid() {
                 // Return if there are no words
                 if (!words) return;
-
-                // Variables
-                /** @type {HTMLElement[]} */
-                let newGrid = [];
 
                 // Empty the grid
                 while (grid.hasChildNodes()) {
@@ -321,20 +337,49 @@
                         if (y + l > yMax) yMax = y + l;
                     } else {
                         if (x + l > xMax) xMax = x + l;
-                        if (y > yMax) yMax = x;
+                        if (y > yMax) yMax = y;
                     }
                 });
+
+                // Add one for numbers
+                xMax ++;
+                yMax ++;
 
                 // Sort by column (X) and row (Y)
                 words.sort((a, b) => a.x - b.x).sort((a, b) => a.y - b.y);
 
                 // Prepare an empty grid
                 for (var y = 0; y < yMax; y++) {
-                    grid.push([]);
+                    let row = grid.appendChild(
+                        document.createElement('div')
+                    );
+                    row.classList.add('row');
+
                     for (var x = 0; x < xMax; x++) {
-                        grid[y].push(undefined);
+                        let cell = row.appendChild(
+                            document.createElement('div')
+                        );
+                        cell.classList.add('cell', 'empty');
                     }
                 }
+
+                // Fill the grid
+                words.forEach((w, wi) => {
+                    if (isWordOutOfBounds(w)) return;
+
+                    // Fill empty cells with letters
+                    for (let i = 0; i < w.word.length; i++) {
+                        const x = w.vertical
+                            ? w.x
+                            : w.x + i + 1;
+                        const y = w.vertical
+                            ? w.y + i + 1
+                            : w.y;
+                        const cell = grid.children[y].children[x];
+
+                        setUpCell(cell, w, i, x, y);
+                    }
+                });
             }
 
             fillGrid();

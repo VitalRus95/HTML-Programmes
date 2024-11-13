@@ -15,6 +15,25 @@
         <!-- Settings -->
         <details id='settings'>
             <summary>Settings</summary>
+
+            <div style='display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                column-gap: 2px;
+                overflow: auto;'
+            >
+                <label id='langLabel' for='lang'>Language</label>
+
+                <select
+                    name='language'
+                    id='lang'
+                    onchange='setLanguage()'
+                    style='flex-grow: 1;'
+                >
+                    <option value='eng'>English [Vitaly Ulyanov]</option>
+                    <option value='rus'>Русский [Виталий Ульянов]</option>
+                </select>
+            </div>
         </details>
 
         <!-- Page main body -->
@@ -27,7 +46,45 @@
         <script src='../resources/VitalLogic.js'></script>
         <script>
             // Elements
-            /** @type {} */
+            /** @type {HTMLSelectElement} */
+            let lang = document.getElementById('lang');
+
+            lang.value = localStorage.getItem('lang') ?? 'eng';
+            if (lang.value !== 'eng') setLanguage();
+
+            function setLanguage() {
+                /** @type {{
+                    id: string,
+                    props: {}[]
+                }[]} */
+                let elements = [];
+
+                localStorage.setItem('lang', lang.value);
+
+                switch (lang.value) {
+                    case 'eng':
+                        elements = [];
+                        break;
+                    case 'rus':
+                        elements = [];
+                        break;
+                    default:
+                        break;
+                }
+
+                elements.forEach((e) => {
+                    const el = document.getElementById(e.id);
+
+                    if (!el) {
+                        console.log(`Translation error: element with ID '${e.id}' not found!`);
+                        return;
+                    }
+
+                    for (const prop in e.props) {
+                        el[prop] = e.props[prop];
+                    }
+                });
+            }
         </script>
     </body>
 </html>
