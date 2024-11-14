@@ -480,19 +480,24 @@
                 padding: 2px;
             }
 
-            #grid-score {
+            #grid-score-container {
                 display: flex;
-                justify-content: center;
                 position: sticky;
                 top: 0px;
                 z-index: 1;
+                opacity: 0.9;
+                margin: 0;
+            }
+
+            #grid-score {
+                display: flex;
+                flex-grow: 1;
+                justify-content: center;
                 column-gap: 4px;
                 font-weight: 600;
                 background-color: var(--accent2);
                 border: 2px outset var(--accent1);
-                border-radius: 0px 0px 7px 7px;
-                opacity: 0.9;
-                margin: 0;
+                border-radius: 0px 0px 0px 7px;
             }
 
             #grid-score-label {
@@ -501,6 +506,12 @@
 
             #grid-score-value {
                 background-color: transparent;
+            }
+
+            #undo-mistake {
+                border-radius: 0px 0px 7px 0px;
+                font-weight: 700;
+                min-width: 3em;
             }
 
             #grid-letters {
@@ -651,9 +662,20 @@
             <span id='grid-header' tabindex='1'>...</span>
 
             <!-- Score -->
-            <div id='grid-score' tabindex='1'>
-                <span id='grid-score-label'>Score:</span>
-                <span id='grid-score-value'>0%</span>
+            <div id='grid-score-container'>
+                <div id='grid-score' tabindex='1'>
+                    <span id='grid-score-label'>Score:</span>
+                    <span id='grid-score-value'>0%</span>
+                </div>
+                <button
+                    id='undo-mistake'
+                    class='tooltipParent'
+                    tabindex='1'
+                    disabled
+                >
+                    &#60;
+                    <span class='tooltip'>Undo the last mistake</span>
+                </button>
             </div>
 
             <!-- Letters -->
@@ -687,6 +709,7 @@
                 <button
                     id='backspace'
                     class='tooltipParent'
+                    tabindex='1'
                 >
                     &#60;
                     <span class='tooltip'>Delete the last letter</span>
@@ -1069,6 +1092,8 @@
             let scoreDiv = document.getElementById('grid-score');
             /** @type {HTMLSpanElement} */
             let scoreSpan = document.getElementById('grid-score-value');
+            /** @type {HTMLButtonElement} */
+            let undoMistake = document.getElementById('undo-mistake');
             /** @type {HTMLSpanElement} */
             let wordCount = document.getElementById('grid-words-count');
             /** @type {HTMLSpanElement} */
@@ -1108,6 +1133,12 @@
                 if (!wordInput.value) return
                 wordInput.value = wordInput.value.substring(0, wordInput.value.length - 1);
                 checkInput();
+            });
+
+            undoMistake.addEventListener('click', function (event) {
+                score += mistakeCost;
+                updateScore();
+                this.disabled = true;
             });
 
             async function loadWords() {
@@ -1384,6 +1415,7 @@
                 if (wordsLeftOnGrid.length === 0) {
                     if (wordInput.value.length > 3 && score >= mistakeCost) {
                         scoreDiv.classList.add('mistake');
+                        undoMistake.disabled = false;
                         score -= mistakeCost;
                         updateScore();
                     }

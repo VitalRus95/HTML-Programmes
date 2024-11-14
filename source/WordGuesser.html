@@ -106,6 +106,16 @@
                 display: flex;
                 flex-wrap: wrap;
             }
+
+            #wordInput {
+                border-radius: 7px 0px 0px 7px;
+            }
+
+            #revealWordButton {
+                flex-grow: 1;
+                min-width: 45%;
+                border-radius: 0px 7px 7px 0px;
+            }
         </style>
     </head>
     <body>
@@ -123,7 +133,6 @@
             <button
                 id='revealWordButton'
                 onclick='revealWord()'
-                style='flex-grow: 1; min-width: 45%;'
                 disabled
             >Раскрыть слово</button>
         </div>
