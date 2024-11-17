@@ -1,0 +1,79 @@
+[
+  {
+    "word": "expound",
+    "description": "To explain or set forth (an argument, theory, etc) in detail",
+    "x": 4,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "enlighten",
+    "description": "To give information or understanding to; instruct; edify",
+    "x": 9,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "rationalise",
+    "description": "To justify (one's actions, esp discreditable actions, or beliefs) with plausible reasons, esp after the event",
+    "x": 11,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "alluring",
+    "description": "Enticing; fascinating; attractive",
+    "x": 6,
+    "y": 3,
+    "vertical": false
+  },
+  {
+    "word": "troubling",
+    "description": "Causing worry, anxiety or upset",
+    "x": 0,
+    "y": 5,
+    "vertical": false
+  },
+  {
+    "word": "predilection",
+    "description": "A predisposition, preference, or bias",
+    "x": 0,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "attend",
+    "description": "To be present at (an event, meeting, etc)",
+    "x": 7,
+    "y": 10,
+    "vertical": true
+  },
+  {
+    "word": "factoid",
+    "description": "A piece of unreliable information believed to be true because of the way it is presented or repeated in print",
+    "x": 5,
+    "y": 11,
+    "vertical": false
+  },
+  {
+    "word": "endorse",
+    "description": "To give approval or sanction to",
+    "x": 9,
+    "y": 12,
+    "vertical": true
+  },
+  {
+    "word": "glean",
+    "description": "To gather (something) slowly and carefully in small pieces",
+    "x": 4,
+    "y": 14,
+    "vertical": false
+  },
+  {
+    "word": "score",
+    "description": "To get (a specified grade) on a test",
+    "x": 8,
+    "y": 18,
+    "vertical": false
+  }
+]

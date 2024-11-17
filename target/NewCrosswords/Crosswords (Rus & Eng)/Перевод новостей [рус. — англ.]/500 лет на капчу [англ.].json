@@ -1,0 +1,86 @@
+[
+  {
+    "word": "grainy",
+    "description": "Зернистый",
+    "x": 8,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "madness",
+    "description": "Безумие",
+    "x": 6,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "compatible",
+    "description": "Совместимый",
+    "x": 1,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "identity",
+    "description": "Личность",
+    "x": 9,
+    "y": 5,
+    "vertical": true
+  },
+  {
+    "word": "annoying",
+    "description": "Раздражающий",
+    "x": 3,
+    "y": 6,
+    "vertical": false
+  },
+  {
+    "word": "security",
+    "description": "Безопасность",
+    "x": 4,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "grant",
+    "description": "Предоставлять, разрешать",
+    "x": 13,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "integral",
+    "description": "Неотъемлемый",
+    "x": 7,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "signature",
+    "description": "Подпись",
+    "x": 5,
+    "y": 9,
+    "vertical": false
+  },
+  {
+    "word": "request",
+    "description": "Запрос",
+    "x": 0,
+    "y": 11,
+    "vertical": false
+  },
+  {
+    "word": "treat",
+    "description": "Рассматривать, относиться",
+    "x": 8,
+    "y": 12,
+    "vertical": false
+  },
+  {
+    "word": "network",
+    "description": "Сеть",
+    "x": 1,
+    "y": 14,
+    "vertical": false
+  }
+]

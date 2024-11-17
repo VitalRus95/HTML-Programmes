@@ -1,0 +1,72 @@
+[
+  {
+    "word": "обрывок",
+    "description": "Sliver",
+    "x": 8,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "кроватка",
+    "description": "Crib",
+    "x": 5,
+    "y": 1,
+    "vertical": false
+  },
+  {
+    "word": "отклонение",
+    "description": "Departure",
+    "x": 13,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "малыш",
+    "description": "Tot",
+    "x": 4,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "массив",
+    "description": "Pool",
+    "x": 1,
+    "y": 5,
+    "vertical": true
+  },
+  {
+    "word": "угадывание",
+    "description": "Guessing",
+    "x": 6,
+    "y": 5,
+    "vertical": true
+  },
+  {
+    "word": "многократно",
+    "description": "Iteratively",
+    "x": 2,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "путаться",
+    "description": "Get tangled up",
+    "x": 4,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "подвиг",
+    "description": "Feat",
+    "x": 3,
+    "y": 9,
+    "vertical": false
+  },
+  {
+    "word": "впитывать",
+    "description": "Soak up",
+    "x": 0,
+    "y": 11,
+    "vertical": false
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "word": "striatum",
+    "description": "Полосатое тело",
+    "x": 5,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "acute",
+    "description": "Острый",
+    "x": 1,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "rodent",
+    "description": "Грызун",
+    "x": 7,
+    "y": 3,
+    "vertical": true
+  },
+  {
+    "word": "disrupt",
+    "description": "Мешать, препятствовать",
+    "x": 3,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "rapid",
+    "description": "Быстрый",
+    "x": 3,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "reversal",
+    "description": "Выход [из состояния]",
+    "x": 12,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "administer",
+    "description": "Вводить [препарат]",
+    "x": 2,
+    "y": 8,
+    "vertical": false
+  },
+  {
+    "word": "stimuli",
+    "description": "Стимулы",
+    "x": 6,
+    "y": 10,
+    "vertical": true
+  },
+  {
+    "word": "density",
+    "description": "Плотность",
+    "x": 2,
+    "y": 11,
+    "vertical": false
+  },
+  {
+    "word": "shock",
+    "description": "Удар током",
+    "x": 4,
+    "y": 12,
+    "vertical": true
+  },
+  {
+    "word": "spine",
+    "description": "Шипик",
+    "x": 3,
+    "y": 13,
+    "vertical": false
+  },
+  {
+    "word": "release",
+    "description": "Высвобождение",
+    "x": 9,
+    "y": 15,
+    "vertical": false
+  },
+  {
+    "word": "induce",
+    "description": "Вызывать",
+    "x": 5,
+    "y": 17,
+    "vertical": false
+  }
+]

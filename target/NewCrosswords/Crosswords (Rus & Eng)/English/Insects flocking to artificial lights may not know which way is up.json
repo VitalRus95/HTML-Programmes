@@ -1,0 +1,86 @@
+[
+  {
+    "word": "myriad",
+    "description": "Having a large number or great variety",
+    "x": 4,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "topsy-turvy",
+    "description": "In a confused or disorganised state [informal]",
+    "x": 8,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "navigate",
+    "description": "To direct (oneself, one's way, etc) carefully or safely [informal]",
+    "x": 14,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "defy",
+    "description": "To resist (a powerful person, authority, etc) openly and boldly",
+    "x": 0,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "nocturnal",
+    "description": "Active mainly at night",
+    "x": 6,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "canopy",
+    "description": "A layer of something that spreads out and covers an area",
+    "x": 2,
+    "y": 5,
+    "vertical": false
+  },
+  {
+    "word": "erratic",
+    "description": "Irregular in performance, behaviour, or attitude; inconsistent and unpredictable",
+    "x": 10,
+    "y": 6,
+    "vertical": false
+  },
+  {
+    "word": "susceptible",
+    "description": "Very likely to be influenced by something or someone",
+    "x": 3,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "order",
+    "description": "Any of the taxonomic groups into which a class is divided and which contains one or more families",
+    "x": 6,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "flock",
+    "description": "To go in large numbers",
+    "x": 11,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "ultraviolet",
+    "description": "The part of the electromagnetic spectrum with wavelengths shorter than light but longer than X-rays",
+    "x": 2,
+    "y": 10,
+    "vertical": false
+  },
+  {
+    "word": "diffuse",
+    "description": "Not directed towards one place or concentrated in one place but spread out over a large area",
+    "x": 1,
+    "y": 16,
+    "vertical": false
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "word": "полёт",
+    "description": "Mission [space]",
+    "x": 7,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "испытание",
+    "description": "Travail",
+    "x": 9,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "процветать",
+    "description": "Thrive",
+    "x": 14,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "болезнетворный",
+    "description": "Pathogenic",
+    "x": 3,
+    "y": 3,
+    "vertical": true
+  },
+  {
+    "word": "изобретательность",
+    "description": "Ingenuity",
+    "x": 0,
+    "y": 5,
+    "vertical": false
+  },
+  {
+    "word": "смертельный",
+    "description": "Deadly",
+    "x": 0,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "заражение",
+    "description": "Contamination",
+    "x": 12,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "зараза",
+    "description": "Bug [informal]",
+    "x": 10,
+    "y": 10,
+    "vertical": false
+  },
+  {
+    "word": "живучий",
+    "description": "Resilient",
+    "x": 10,
+    "y": 11,
+    "vertical": true
+  },
+  {
+    "word": "засуха",
+    "description": "Aridity",
+    "x": 8,
+    "y": 12,
+    "vertical": true
+  },
+  {
+    "word": "трещина",
+    "description": "Cranny",
+    "x": 1,
+    "y": 14,
+    "vertical": false
+  },
+  {
+    "word": "скудный",
+    "description": "Scant",
+    "x": 7,
+    "y": 15,
+    "vertical": false
+  }
+]

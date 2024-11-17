@@ -1,0 +1,114 @@
+[
+  {
+    "word": "shaft",
+    "description": "Древко",
+    "x": 6,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "site",
+    "description": "Стоянка [археология]",
+    "x": 5,
+    "y": 1,
+    "vertical": false
+  },
+  {
+    "word": "burin",
+    "description": "Резец [орудие]",
+    "x": 8,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "bow",
+    "description": "Лук",
+    "x": 10,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "hearth",
+    "description": "Очаг",
+    "x": 3,
+    "y": 3,
+    "vertical": true
+  },
+  {
+    "word": "spearthyer",
+    "description": "Копьеметалка",
+    "x": 0,
+    "y": 5,
+    "vertical": false
+  },
+  {
+    "word": "tool",
+    "description": "Орудие",
+    "x": 6,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "thrusting",
+    "description": "Колющий",
+    "x": 0,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "dart",
+    "description": "Дротик",
+    "x": 8,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "reliable",
+    "description": "Достоверный",
+    "x": 3,
+    "y": 10,
+    "vertical": false
+  },
+  {
+    "word": "point",
+    "description": "Наконечник",
+    "x": 2,
+    "y": 11,
+    "vertical": true
+  },
+  {
+    "word": "projectile",
+    "description": "Метательный",
+    "x": 1,
+    "y": 12,
+    "vertical": false
+  },
+  {
+    "word": "excavation",
+    "description": "Раскопки",
+    "x": 4,
+    "y": 13,
+    "vertical": true
+  },
+  {
+    "word": "sinew",
+    "description": "Сухожилие",
+    "x": 0,
+    "y": 14,
+    "vertical": false
+  },
+  {
+    "word": "cave",
+    "description": "Пещера",
+    "x": 7,
+    "y": 15,
+    "vertical": true
+  },
+  {
+    "word": "range",
+    "description": "Дальность",
+    "x": 2,
+    "y": 19,
+    "vertical": false
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "word": "кафедра",
+    "description": "Работает с языками и переводом",
+    "x": 7,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "языки",
+    "description": "Ими мы орудуем",
+    "x": 3,
+    "y": 1,
+    "vertical": false
+  },
+  {
+    "word": "стипендия",
+    "description": "Награда для бюджетников",
+    "x": 0,
+    "y": 5,
+    "vertical": false
+  },
+  {
+    "word": "РГГУ",
+    "description": "Тут мы учимся",
+    "x": 1,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "столовая",
+    "description": "Ресторан быстрого пихания",
+    "x": 6,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "ИФИ",
+    "description": "Наш дом",
+    "x": 9,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "расписание",
+    "description": "Пугает своими переменами",
+    "x": 0,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "госы",
+    "description": "Страшный суд",
+    "x": 0,
+    "y": 9,
+    "vertical": false
+  },
+  {
+    "word": "диплом",
+    "description": "Награда для дошедших до конца",
+    "x": 1,
+    "y": 11,
+    "vertical": false
+  }
+]

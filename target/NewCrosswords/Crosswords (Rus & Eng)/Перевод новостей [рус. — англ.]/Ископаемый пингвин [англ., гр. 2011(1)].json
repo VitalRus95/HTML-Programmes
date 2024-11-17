@@ -1,0 +1,100 @@
+[
+  {
+    "word": "transfer",
+    "description": "Передавать",
+    "x": 12,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "fossil",
+    "description": "Ископаемый",
+    "x": 4,
+    "y": 1,
+    "vertical": true
+  },
+  {
+    "word": "current",
+    "description": "Течение",
+    "x": 9,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "preservation",
+    "description": "Сохранность",
+    "x": 0,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "junior",
+    "description": "Юный",
+    "x": 16,
+    "y": 4,
+    "vertical": true
+  },
+  {
+    "word": "beak",
+    "description": "Клюв",
+    "x": 9,
+    "y": 5,
+    "vertical": true
+  },
+  {
+    "word": "remains",
+    "description": "Останки",
+    "x": 2,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "thoroughly",
+    "description": "Тщательно",
+    "x": 6,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "relative",
+    "description": "Относительный",
+    "x": 1,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "extinction",
+    "description": "Вымирание",
+    "x": 11,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "spread",
+    "description": "Расселяться",
+    "x": 10,
+    "y": 12,
+    "vertical": true
+  },
+  {
+    "word": "genus",
+    "description": "Род",
+    "x": 5,
+    "y": 13,
+    "vertical": false
+  },
+  {
+    "word": "species",
+    "description": "Вид",
+    "x": 7,
+    "y": 16,
+    "vertical": false
+  },
+  {
+    "word": "diversity",
+    "description": "Разнообразие",
+    "x": 9,
+    "y": 18,
+    "vertical": false
+  }
+]

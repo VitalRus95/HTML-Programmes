@@ -1,0 +1,93 @@
+[
+  {
+    "word": "stage",
+    "description": "Этап",
+    "x": 6,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "dash",
+    "description": "Рывок",
+    "x": 12,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "plentiful",
+    "description": "Обильный",
+    "x": 4,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "thump",
+    "description": "Нарушить (дословно «стучать, колотить»)",
+    "x": 5,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "lagomorph",
+    "description": "Зайцеобразный",
+    "x": 3,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "average",
+    "description": "Составлять в среднем",
+    "x": 2,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "astounding",
+    "description": "Поразительный",
+    "x": 1,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "perilous",
+    "description": "Опасный",
+    "x": 6,
+    "y": 10,
+    "vertical": true
+  },
+  {
+    "word": "prey",
+    "description": "Добыча",
+    "x": 5,
+    "y": 11,
+    "vertical": false
+  },
+  {
+    "word": "endure",
+    "description": "Выдерживать",
+    "x": 1,
+    "y": 13,
+    "vertical": false
+  },
+  {
+    "word": "arid",
+    "description": "Засушливый, бесплодный",
+    "x": 2,
+    "y": 14,
+    "vertical": true
+  },
+  {
+    "word": "affix",
+    "description": "Прикреплять, надевать",
+    "x": 8,
+    "y": 14,
+    "vertical": true
+  },
+  {
+    "word": "mammalian",
+    "description": "Относящийся к млекопитающим",
+    "x": 0,
+    "y": 15,
+    "vertical": false
+  }
+]

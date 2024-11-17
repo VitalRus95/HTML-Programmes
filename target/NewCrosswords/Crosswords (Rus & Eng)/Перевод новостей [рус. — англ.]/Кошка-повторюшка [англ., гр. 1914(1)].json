@@ -1,0 +1,107 @@
+[
+  {
+    "word": "domestic",
+    "description": "Домашний",
+    "x": 11,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "renal",
+    "description": "Почечный",
+    "x": 3,
+    "y": 1,
+    "vertical": true
+  },
+  {
+    "word": "trial",
+    "description": "Испытание, исследование",
+    "x": 1,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "wobble",
+    "description": "Качаться, вилять",
+    "x": 9,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "copycat",
+    "description": "Повторюшка :)",
+    "x": 1,
+    "y": 3,
+    "vertical": true
+  },
+  {
+    "word": "conduct",
+    "description": "Проводить",
+    "x": 0,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "motivated",
+    "description": "Заинтересованный",
+    "x": 4,
+    "y": 6,
+    "vertical": false
+  },
+  {
+    "word": "cognition",
+    "description": "Познание",
+    "x": 7,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "conspecific",
+    "description": "Совидич :D",
+    "x": 0,
+    "y": 8,
+    "vertical": false
+  },
+  {
+    "word": "thorough",
+    "description": "Тщательный",
+    "x": 0,
+    "y": 10,
+    "vertical": false
+  },
+  {
+    "word": "mimic",
+    "description": "Повторять, имитировать",
+    "x": 11,
+    "y": 10,
+    "vertical": true
+  },
+  {
+    "word": "hind",
+    "description": "Задний [о лапках]",
+    "x": 13,
+    "y": 11,
+    "vertical": true
+  },
+  {
+    "word": "distinguish",
+    "description": "Различать",
+    "x": 2,
+    "y": 12,
+    "vertical": false
+  },
+  {
+    "word": "imitation",
+    "description": "Подражание",
+    "x": 4,
+    "y": 14,
+    "vertical": false
+  },
+  {
+    "word": "feline",
+    "description": "Кошачий",
+    "x": 2,
+    "y": 16,
+    "vertical": false
+  }
+]

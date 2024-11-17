@@ -1,0 +1,72 @@
+[
+  {
+    "word": "cumulative",
+    "description": "Gying in quantity, strength, or effect by successive additions or gradual steps",
+    "x": 7,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "witty",
+    "description": "Amusingly clever in perception and expression",
+    "x": 5,
+    "y": 4,
+    "vertical": true
+  },
+  {
+    "word": "negate",
+    "description": "To make ineffective or void; nullify; invalidate",
+    "x": 9,
+    "y": 4,
+    "vertical": true
+  },
+  {
+    "word": "elucidate",
+    "description": "To make clear (something obscure or difficult); clarify",
+    "x": 0,
+    "y": 6,
+    "vertical": false
+  },
+  {
+    "word": "eminence",
+    "description": "The quality of being very well-known and highly respected",
+    "x": 3,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "inextricable",
+    "description": "Not able to be escaped from",
+    "x": 0,
+    "y": 8,
+    "vertical": false
+  },
+  {
+    "word": "falsifiable",
+    "description": "Designating or of a statement, theory, etc. that is so formulated as to permit empirical testing and, therefore, can be shown to be false",
+    "x": 8,
+    "y": 10,
+    "vertical": true
+  },
+  {
+    "word": "egregious",
+    "description": "Outstandingly bad; flagrant",
+    "x": 2,
+    "y": 15,
+    "vertical": false
+  },
+  {
+    "word": "urge",
+    "description": "A strong impulse, inner drive, or yearning",
+    "x": 10,
+    "y": 17,
+    "vertical": true
+  },
+  {
+    "word": "slight",
+    "description": "To show indifference or disregard for (someone)",
+    "x": 6,
+    "y": 20,
+    "vertical": false
+  }
+]

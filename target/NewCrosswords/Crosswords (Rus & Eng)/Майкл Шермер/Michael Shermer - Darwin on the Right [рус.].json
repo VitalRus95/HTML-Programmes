@@ -1,0 +1,100 @@
+[
+  {
+    "word": "дружба",
+    "description": "Amity",
+    "x": 8,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "первородный",
+    "description": "Original [sin]",
+    "x": 2,
+    "y": 1,
+    "vertical": true
+  },
+  {
+    "word": "опрос",
+    "description": "Poll",
+    "x": 0,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "измена",
+    "description": "Adultery",
+    "x": 4,
+    "y": 3,
+    "vertical": true
+  },
+  {
+    "word": "происхождение",
+    "description": "Ancestry",
+    "x": 0,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "всемогущий",
+    "description": "Omnipotent",
+    "x": 7,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "воинственный",
+    "description": "Bellicose",
+    "x": 0,
+    "y": 8,
+    "vertical": false
+  },
+  {
+    "word": "благоговение",
+    "description": "Reverence",
+    "x": 9,
+    "y": 9,
+    "vertical": true
+  },
+  {
+    "word": "умалять",
+    "description": "Belittle",
+    "x": 5,
+    "y": 11,
+    "vertical": false
+  },
+  {
+    "word": "отвергать",
+    "description": "Repudiate",
+    "x": 11,
+    "y": 12,
+    "vertical": true
+  },
+  {
+    "word": "верность",
+    "description": "Fidelity",
+    "x": 2,
+    "y": 18,
+    "vertical": true
+  },
+  {
+    "word": "вызывать",
+    "description": "Elicit",
+    "x": 4,
+    "y": 18,
+    "vertical": true
+  },
+  {
+    "word": "заповедь",
+    "description": "Precept",
+    "x": 3,
+    "y": 21,
+    "vertical": false
+  },
+  {
+    "word": "ослаблять",
+    "description": "Attenuate",
+    "x": 0,
+    "y": 24,
+    "vertical": false
+  }
+]

@@ -1,0 +1,72 @@
+[
+  {
+    "word": "iterative",
+    "description": "Repetitious; repeating or repeated",
+    "x": 4,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "tot",
+    "description": "A very young child [informal]",
+    "x": 6,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "feat",
+    "description": "A remarkable, skilful, or daring action; exploit; achievement",
+    "x": 2,
+    "y": 3,
+    "vertical": false
+  },
+  {
+    "word": "tricky",
+    "description": "Involving snags or difficulties",
+    "x": 8,
+    "y": 3,
+    "vertical": true
+  },
+  {
+    "word": "departure",
+    "description": "A deviation or variation from previous custom; divergence",
+    "x": 0,
+    "y": 5,
+    "vertical": false
+  },
+  {
+    "word": "underlie",
+    "description": "To be the foundation, cause, or basis of",
+    "x": 10,
+    "y": 6,
+    "vertical": true
+  },
+  {
+    "word": "clue",
+    "description": "Something that helps to solve a problem or unravel a mystery",
+    "x": 7,
+    "y": 7,
+    "vertical": false
+  },
+  {
+    "word": "sliver",
+    "description": "A small thin piece or amount of something",
+    "x": 6,
+    "y": 9,
+    "vertical": true
+  },
+  {
+    "word": "pool",
+    "description": "Any communal combination of resources, funds, etc",
+    "x": 2,
+    "y": 11,
+    "vertical": false
+  },
+  {
+    "word": "caregiver",
+    "description": "Someone who is responsible for looking after another person",
+    "x": 2,
+    "y": 14,
+    "vertical": false
+  }
+]

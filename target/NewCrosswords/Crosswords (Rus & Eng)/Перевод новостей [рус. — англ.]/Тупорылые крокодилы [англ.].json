@@ -1,0 +1,100 @@
+[
+  {
+    "word": "captive",
+    "description": "Находящийся в неволе",
+    "x": 4,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "genus",
+    "description": "Род",
+    "x": 11,
+    "y": 1,
+    "vertical": true
+  },
+  {
+    "word": "interaction",
+    "description": "Общение",
+    "x": 1,
+    "y": 2,
+    "vertical": true
+  },
+  {
+    "word": "habitat",
+    "description": "Место обитания",
+    "x": 2,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "nocturnal",
+    "description": "Ведущий ночной образ жизни",
+    "x": 0,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "terrestrial",
+    "description": "Сухопутный",
+    "x": 13,
+    "y": 4,
+    "vertical": true
+  },
+  {
+    "word": "gust",
+    "description": "Шум ветра",
+    "x": 9,
+    "y": 5,
+    "vertical": false
+  },
+  {
+    "word": "slap",
+    "description": "Шлёпать",
+    "x": 3,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "deter",
+    "description": "Отпугивать",
+    "x": 9,
+    "y": 8,
+    "vertical": true
+  },
+  {
+    "word": "toot",
+    "description": "Гудеть",
+    "x": 6,
+    "y": 9,
+    "vertical": true
+  },
+  {
+    "word": "talkativeness",
+    "description": "Говорливость",
+    "x": 0,
+    "y": 10,
+    "vertical": false
+  },
+  {
+    "word": "order",
+    "description": "Отряд [биология]",
+    "x": 5,
+    "y": 12,
+    "vertical": false
+  },
+  {
+    "word": "moo",
+    "description": "Мычать",
+    "x": 11,
+    "y": 14,
+    "vertical": true
+  },
+  {
+    "word": "rumble",
+    "description": "Урчать",
+    "x": 8,
+    "y": 15,
+    "vertical": false
+  }
+]

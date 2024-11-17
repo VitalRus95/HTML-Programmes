@@ -9,10 +9,11 @@
 
         <style>
             :root {
-                --cell-size: 48px;
+                --cell-size: 52px;
                 --cell-border: calc(var(--cell-size) * 0.05);
                 --cell-font: calc(var(--cell-size) * 0.7);
                 --cell-radius: 5%;
+                --num-border: calc(var(--cell-border) * 1.5);
                 --gap-size: calc(var(--cell-size) * 0.04);
             }
 
@@ -85,7 +86,7 @@
             .cell-input:valid {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
-                transition: all 1s ease-in;
+                transition: all 1.2s ease-in;
             }
 
             .cell-input:focus,
@@ -93,6 +94,67 @@
                 background-color: var(--accent1);
                 color: var(--primary-colour);
                 transition: none;
+            }
+
+            .cell-input:valid:focus,
+            .cell-input:valid:hover {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                transition: none;
+            }
+
+            .cell-number {
+                background-color: transparent;
+                border-style: none;
+            }
+
+            .number {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                border-style: none;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: calc(var(--cell-font) * 0.75);
+                font-weight: 600;
+                cursor: pointer;
+                width: 100%;
+                height: 100%;
+                transition: all 0.5s ease;
+            }
+
+            .number:focus,
+            .number:hover {
+                background-color: var(--primary-colour);
+                border: var(--num-border) solid var(--accent1);
+                color: var(--secondary-colour);
+                outline-style: none;
+                transition: background-color 0.5s ease;
+            }
+
+            .vertical {
+                align-items: end;
+                border-radius: 50% 50% 0 0;
+                border-bottom: var(--num-border) solid var(--secondary-colour);
+            }
+
+            .horizontal {
+                justify-content: end;
+                border-radius: 50% 0 0 50%;
+                border-right: var(--num-border) solid var(--secondary-colour);
+            }
+
+            .questionTooltip {
+                font-size: 1.15rem;
+                max-width: 95vw;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .questionTooltip::before {
+                content: 'A';
+            }
+
+            #loadButton {
+                max-width: 100%;
             }
         </style>
     </head>
@@ -106,6 +168,16 @@
 
         <!-- Page main body -->
 
+        <!-- Load button -->
+        <div class='box' style='display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between'>
+            <label for='loadButton' style='flex-grow: 1; cursor: pointer'>&#128193; Открыть кроссворд</label>
+            <input id='loadButton' type='file' accept='.json' style='cursor: pointer' onchange='loadCrossword()' />
+        </div>
+
+        <!-- Crossword name -->
+        <h2 id='crosswordName'>...</h2>
+
+        <!-- Grid -->
         <div id='crossword' class='grid'></div>
 
         <p id='author' class='box' style='font-style: italic'>
@@ -118,6 +190,10 @@
             // Elements
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('crossword');
+            /** @type {HTMLInputElement} */
+            let loadButton = document.getElementById('loadButton');
+            /** @type {HTMLHeadingElement} */
+            let crosswordName = document.getElementById('crosswordName');
 
             // Variables
             /**
@@ -261,6 +337,10 @@
             let xMax = 0;
             /** @type {number} */
             let yMax = 0;
+            /** @type {boolean} */
+            let isFlowVertical = false;
+            /** @type {HTMLButtonElement} */
+            let lastNumber = undefined;
 
             /**
              * @param {Word} word
@@ -274,6 +354,75 @@
                 );
             }
 
+            async function loadCrossword() {
+                await loadButton.files[0].text().then((content) => {
+                    try {
+                        let data = JSON.parse(content);
+                        if (data) {
+                            words = data;
+                            crosswordName.textContent = loadButton.files[0].name.replace('.json', '');
+                            fillGrid();
+                        }
+                    } catch (error) {
+                        alert(`Ошибка при чтении файла или создании кроссворда: ${error}`);
+                    }
+                });
+            }
+
+            /**
+             * @param {Word} word
+             * @param {number} num
+            */
+            function setUpNumber(word, num) {
+                /** @type {HTMLDivElement} */
+                let cell = grid.children[word.y].children[word.x];
+                cell.classList.remove('empty');
+                cell.classList.add('cell-number')
+
+                let button = cell.appendChild(
+                    document.createElement('button')
+                );
+
+                button.id = `${word.x};${word.y}`;
+                button.tabIndex = 1;
+                button.classList.add(
+                    'number',
+                    'tooltipParent',
+                    word.vertical
+                        ? 'vertical'
+                        : 'horizontal'
+                );
+                button.textContent = num;
+
+                button.addEventListener('mouseover', function (event) {
+                    this.focus();
+                });
+
+                button.addEventListener('click', function (event) {
+                    isFlowVertical = word.vertical;
+                    lastNumber = this;
+
+                    /** @type {HTMLInputElement} */
+                    let next = document.getElementById(
+                        `${
+                            word.vertical ? word.x : word.x + 1
+                        };${
+                            word.vertical ? word.y + 1 : word.y
+                        }`
+                    );
+
+                    if (next) next.select();
+                });
+
+                let tooltip = button.appendChild(
+                    document.createElement('span')
+                );
+                tooltip.classList.add('tooltip', 'questionTooltip');
+                tooltip.textContent = `№${num}. ${word.description} [${
+                    word.word.length
+                }]`;
+            }
+
             /**
              * @param {HTMLDivElement} cell
              * @param {Word} word
@@ -283,7 +432,6 @@
             */
             function setUpCell(cell, word, letter, x, y) {
                 if (!cell.classList.contains('empty')) return;
-
                 cell.classList.remove('empty');
 
                 let input = cell.appendChild(
@@ -297,20 +445,34 @@
                 input.pattern = word.word[letter].toUpperCase();
                 input.required = true;
 
+                input.addEventListener('click', function (event) {
+                    this.select();
+                });
+
                 input.addEventListener('input', function (event) {
                     this.value = this.value.toUpperCase();
 
+                    // If the answer is correct, select the next letter
                     if (this.checkValidity()) {
                         /** @type {HTMLInputElement} */
                         let next = document.getElementById(
                             `${
-                                word.vertical ? x : x + 1
+                                isFlowVertical ? x : x + 1
                             };${
-                                word.vertical ? y + 1 : y
+                                isFlowVertical ? y + 1 : y
                             }`
                         );
 
-                        if (next) next.select();
+                        if (next && !next.classList.contains('number')) {
+                            next.select();
+                        } else {
+                            // If it's the last letter, try to select the last number button
+                            if (lastNumber) {
+                                lastNumber.focus();
+                            } else {
+                                this.blur();
+                            }
+                        }
                     } else {
                         this.select();
                     }
@@ -320,6 +482,16 @@
             function fillGrid() {
                 // Return if there are no words
                 if (!words) return;
+
+                // Reset numbers' counters
+                /** @type {number} */
+                let numVer = 0;
+                /** @type {number} */
+                let numHor = 0;
+
+                // Reset maximum X and Y
+                xMax = 0;
+                yMax = 0;
 
                 // Empty the grid
                 while (grid.hasChildNodes()) {
@@ -366,6 +538,15 @@
                 // Fill the grid
                 words.forEach((w, wi) => {
                     if (isWordOutOfBounds(w)) return;
+
+                    // Generate cell with number
+                    if (w.vertical) {
+                        numVer ++;
+                    } else {
+                        numHor ++;
+                    }
+
+                    setUpNumber(w, w.vertical ? numVer : numHor);
 
                     // Fill empty cells with letters
                     for (let i = 0; i < w.word.length; i++) {

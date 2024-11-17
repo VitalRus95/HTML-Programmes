@@ -1,0 +1,114 @@
+[
+  {
+    "word": "fearsome",
+    "description": "Страшный, пугающий",
+    "x": 6,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "prey",
+    "description": "Добыча",
+    "x": 4,
+    "y": 4,
+    "vertical": false
+  },
+  {
+    "word": "habituate",
+    "description": "Приучать",
+    "x": 8,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "predator",
+    "description": "Хищник",
+    "x": 13,
+    "y": 7,
+    "vertical": true
+  },
+  {
+    "word": "waterhole",
+    "description": "Водопой",
+    "x": 2,
+    "y": 8,
+    "vertical": false
+  },
+  {
+    "word": "wildlife",
+    "description": "Дикие животные",
+    "x": 2,
+    "y": 11,
+    "vertical": false
+  },
+  {
+    "word": "gunshot",
+    "description": "Выстрел",
+    "x": 6,
+    "y": 13,
+    "vertical": false
+  },
+  {
+    "word": "roar",
+    "description": "Рык",
+    "x": 4,
+    "y": 14,
+    "vertical": true
+  },
+  {
+    "word": "abandon",
+    "description": "Покидать",
+    "x": 11,
+    "y": 14,
+    "vertical": true
+  },
+  {
+    "word": "carnivorous",
+    "description": "Плотоядный",
+    "x": 6,
+    "y": 15,
+    "vertical": true
+  },
+  {
+    "word": "poacher",
+    "description": "Браконьер",
+    "x": 2,
+    "y": 16,
+    "vertical": false
+  },
+  {
+    "word": "broadcast",
+    "description": "Транслировать",
+    "x": 2,
+    "y": 17,
+    "vertical": true
+  },
+  {
+    "word": "reliant",
+    "description": "Зависимый",
+    "x": 5,
+    "y": 18,
+    "vertical": false
+  },
+  {
+    "word": "vocalisation",
+    "description": "Звуки, голос [биология]",
+    "x": 0,
+    "y": 20,
+    "vertical": false
+  },
+  {
+    "word": "deploy",
+    "description": "Устанавливать",
+    "x": 1,
+    "y": 22,
+    "vertical": false
+  },
+  {
+    "word": "warthog",
+    "description": "Бородавочник",
+    "x": 0,
+    "y": 24,
+    "vertical": false
+  }
+]

@@ -1,0 +1,128 @@
+[
+  {
+    "word": "фермент",
+    "description": "Enzyme",
+    "x": 11,
+    "y": 0,
+    "vertical": true
+  },
+  {
+    "word": "торгаш",
+    "description": "Huckster",
+    "x": 4,
+    "y": 1,
+    "vertical": true
+  },
+  {
+    "word": "отверстие",
+    "description": "Orifice",
+    "x": 2,
+    "y": 2,
+    "vertical": false
+  },
+  {
+    "word": "спор",
+    "description": "Controversy",
+    "x": 8,
+    "y": 3,
+    "vertical": true
+  },
+  {
+    "word": "предполагать",
+    "description": "Allege",
+    "x": 15,
+    "y": 4,
+    "vertical": true
+  },
+  {
+    "word": "свидетельство",
+    "description": "Testimonial",
+    "x": 13,
+    "y": 5,
+    "vertical": true
+  },
+  {
+    "word": "Навуходоносор",
+    "description": "Nebuchadnezzar",
+    "x": 2,
+    "y": 6,
+    "vertical": false
+  },
+  {
+    "word": "воспаление",
+    "description": "Inflammation",
+    "x": 3,
+    "y": 10,
+    "vertical": false
+  },
+  {
+    "word": "суеверие",
+    "description": "Superstition",
+    "x": 5,
+    "y": 12,
+    "vertical": false
+  },
+  {
+    "word": "пырей",
+    "description": "Wheatgrass",
+    "x": 2,
+    "y": 13,
+    "vertical": true
+  },
+  {
+    "word": "переваривать",
+    "description": "Digest",
+    "x": 1,
+    "y": 14,
+    "vertical": false
+  },
+  {
+    "word": "чушь",
+    "description": "Baloney",
+    "x": 4,
+    "y": 15,
+    "vertical": true
+  },
+  {
+    "word": "этилртуть",
+    "description": "Ethylmercury",
+    "x": 11,
+    "y": 15,
+    "vertical": true
+  },
+  {
+    "word": "причинный",
+    "description": "Causal",
+    "x": 0,
+    "y": 16,
+    "vertical": false
+  },
+  {
+    "word": "снимок",
+    "description": "Snapshot",
+    "x": 8,
+    "y": 18,
+    "vertical": false
+  },
+  {
+    "word": "целебный",
+    "description": "Salubrious",
+    "x": 7,
+    "y": 21,
+    "vertical": true
+  },
+  {
+    "word": "целостный",
+    "description": "Holistic",
+    "x": 5,
+    "y": 23,
+    "vertical": false
+  },
+  {
+    "word": "обходить",
+    "description": "Circumvent",
+    "x": 5,
+    "y": 26,
+    "vertical": false
+  }
+]

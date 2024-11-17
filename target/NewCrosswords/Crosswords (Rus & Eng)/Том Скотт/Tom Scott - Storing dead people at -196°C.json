@@ -1,0 +1,114 @@
+[
+    {
+        "word": "resurrection",
+        "description": "Воскрешение",
+        "x": 6,
+        "y": 0,
+        "vertical": true
+    },
+    {
+        "word": "fee",
+        "description": "Плата, взнос",
+        "x": 8,
+        "y": 0,
+        "vertical": true
+    },
+    {
+        "word": "declare",
+        "description": "Объявлять",
+        "x": 13,
+        "y": 0,
+        "vertical": true
+    },
+    {
+        "word": "vitrify",
+        "description": "Остекловывать",
+        "x": 2,
+        "y": 1,
+        "vertical": false
+    },
+    {
+        "word": "run",
+        "description": "Руководить",
+        "x": 4,
+        "y": 2,
+        "vertical": true
+    },
+    {
+        "word": "chest",
+        "description": "Грудная клетка",
+        "x": 10,
+        "y": 2,
+        "vertical": false
+    },
+    {
+        "word": "reverse",
+        "description": "Обращать вспять",
+        "x": 10,
+        "y": 4,
+        "vertical": true
+    },
+    {
+        "word": "controversial",
+        "description": "Противоречивый",
+        "x": 1,
+        "y": 5,
+        "vertical": false
+    },
+    {
+        "word": "ethical",
+        "description": "Моральный",
+        "x": 1,
+        "y": 7,
+        "vertical": true
+    },
+    {
+        "word": "consent",
+        "description": "Согласие",
+        "x": 5,
+        "y": 8,
+        "vertical": false
+    },
+    {
+        "word": "headline",
+        "description": "Заголовок",
+        "x": 0,
+        "y": 10,
+        "vertical": false
+    },
+    {
+        "word": "dispatch",
+        "description": "Отправлять",
+        "x": 7,
+        "y": 11,
+        "vertical": true
+    },
+    {
+        "word": "candid",
+        "description": "Прямой, откровенный",
+        "x": 3,
+        "y": 12,
+        "vertical": false
+    },
+    {
+        "word": "delay",
+        "description": "Задержка",
+        "x": 9,
+        "y": 13,
+        "vertical": true
+    },
+    {
+        "word": "biased",
+        "description": "Предвзятый",
+        "x": 3,
+        "y": 14,
+        "vertical": false
+    },
+    {
+        "word": "smallpox",
+        "description": "Оспа",
+        "x": 4,
+        "y": 16,
+        "vertical": false
+    }
+]
