@@ -145,6 +145,15 @@
                 font-size: 1.4em;
             }
             
+            h3 {
+                border-bottom-style: ridge;
+                border-bottom-width: 3px;
+                border-bottom-color: var(--secondary-colour);
+                border-radius: 0px 0px 7px 0px;
+                padding-left: 4px;
+                font-size: 1.3em;
+            }
+            
             hr {
                 border-color: var(--accent1);
                 width: 100%;
@@ -317,7 +326,7 @@
             :root {
                 --cell-size: 52px;
                 --cell-border: calc(var(--cell-size) * 0.05);
-                --cell-font: calc(var(--cell-size) * 0.7);
+                --cell-font: calc(var(--cell-size) * 0.65);
                 --cell-radius: 5%;
                 --num-border: calc(var(--cell-border) * 1.5);
                 --gap-size: calc(var(--cell-size) * 0.04);
@@ -389,6 +398,12 @@
                 transition: all 1s ease-in;
             }
 
+            .cell-input::selection {
+                background-color: transparent;
+                color: var(--accent2);
+                text-shadow: 2px 2px var(--secondary-colour);
+            }
+
             .cell-input:valid {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
@@ -420,7 +435,7 @@
                 border-style: none;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: calc(var(--cell-font) * 0.75);
-                font-weight: 600;
+                font-weight: 900;
                 cursor: pointer;
                 width: 100%;
                 height: 100%;
@@ -438,29 +453,58 @@
 
             .vertical {
                 align-items: end;
-                border-radius: 50% 50% 0 0;
+                border-radius: 50% 50% var(--cell-radius) var(--cell-radius);
                 border-bottom: var(--num-border) solid var(--secondary-colour);
             }
 
             .horizontal {
                 justify-content: end;
-                border-radius: 50% 0 0 50%;
+                border-radius: 50% var(--cell-radius) var(--cell-radius) 50%;
                 border-right: var(--num-border) solid var(--secondary-colour);
             }
 
-            .questionTooltip {
+            .question-tooltip {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-color: var(--secondary-colour);
                 font-size: 1.15rem;
                 max-width: 95vw;
                 left: 50%;
                 transform: translateX(-50%);
             }
 
-            .questionTooltip::before {
-                content: 'A';
+            .question-tooltip::before {
+                display: none;
+            }
+
+            .question-button {
+                border-style: none;
+                padding-inline: 4px;
             }
 
             #loadButton {
                 max-width: 100%;
+            }
+
+            #questions {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            #questions-ver,
+            #questions-hor {
+                flex-grow: 1;
+                font-size: 1.2em;
+                font-weight: 600;
+                min-width: 50%;
+            }
+
+            #questions-ver-name,
+            #questions-hor-name {
+                font-style: italic;
+                font-size: 1.1em;
+                font-weight: 600;
+                border-bottom: var(--cell-border) solid var(--accent1);
             }
         </style>
     </head>
@@ -482,6 +526,23 @@
 
         <!-- Crossword name -->
         <h2 id='crosswordName'>...</h2>
+
+        <!-- Questions -->
+        <div id='questions'>
+            <div id='questions-ver'>
+                <span id='questions-ver-name' tabindex='0'>
+                    Vertical
+                </span>
+                <ol id='questions-ver-list'></ol>
+            </div>
+
+            <div id='questions-hor'>
+                <span id='questions-hor-name' tabindex='0'>
+                    Horizontal
+                </span>
+                <ol id='questions-hor-list'></ol>
+            </div>
+        </div>
 
         <!-- Grid -->
         <div id='crossword' class='grid'></div>
@@ -845,6 +906,10 @@
             let loadButton = document.getElementById('loadButton');
             /** @type {HTMLHeadingElement} */
             let crosswordName = document.getElementById('crosswordName');
+            /** @type {HTMLOListElement} */
+            let verQuestions = document.getElementById('questions-ver-list');
+            /** @type {HTMLOListElement} */
+            let horQuestions = document.getElementById('questions-hor-list');
 
             // Variables
             /**
@@ -1022,6 +1087,45 @@
 
             /**
              * @param {Word} word
+             * @param {HTMLButtonElement} num
+            */
+            function setUpQuestion(word, num) {
+                /** @type {HTMLOListElement} */
+                let target = word.vertical
+                    ? verQuestions
+                    : horQuestions;
+                
+                let item = target.appendChild(
+                    document.createElement('li')
+                ).appendChild(
+                    document.createElement('button')
+                );
+
+                item.classList.add('question-button');
+                item.textContent = word.description + ` [${word.word.length}].`;
+
+                item.addEventListener('click', function (event) {
+                    isFlowVertical = word.vertical;
+                    lastNumber = num;
+
+                    /** @type {HTMLInputElement} */
+                    let next = document.getElementById(
+                        `${
+                            word.vertical ? word.x : word.x + 1
+                        };${
+                            word.vertical ? word.y + 1 : word.y
+                        }`
+                    );
+
+                    if (next) {
+                        next.focus();
+                        next.select();
+                    }
+                });
+            }
+
+            /**
+             * @param {Word} word
              * @param {number} num
             */
             function setUpNumber(word, num) {
@@ -1045,10 +1149,6 @@
                 );
                 button.textContent = num;
 
-                button.addEventListener('mouseover', function (event) {
-                    this.focus();
-                });
-
                 button.addEventListener('click', function (event) {
                     isFlowVertical = word.vertical;
                     lastNumber = this;
@@ -1065,10 +1165,12 @@
                     if (next) next.select();
                 });
 
+                setUpQuestion(word, button);
+
                 let tooltip = button.appendChild(
                     document.createElement('span')
                 );
-                tooltip.classList.add('tooltip', 'questionTooltip');
+                tooltip.classList.add('tooltip', 'question-tooltip');
                 tooltip.textContent = `№${num}. ${word.description} [${
                     word.word.length
                 }]`;
@@ -1143,6 +1245,15 @@
                 // Reset maximum X and Y
                 xMax = 0;
                 yMax = 0;
+
+                // Empty the questions
+                while (verQuestions.hasChildNodes()) {
+                    verQuestions.lastChild.remove();
+                }
+
+                while (horQuestions.hasChildNodes()) {
+                    horQuestions.lastChild.remove();
+                }
 
                 // Empty the grid
                 while (grid.hasChildNodes()) {
