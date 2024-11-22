@@ -16,11 +16,6 @@
     margin-bottom: 1.5px;
 }
 
-*::selection {
-    background-color: var(--secondary-colour);
-    color: var(--primary-colour);
-}
-
 body {
     display: flex;
     flex-direction: column;
@@ -77,22 +72,6 @@ details > summary:hover {
     color: var(--accent2);
 }
 
-@keyframes detailsOpening {
-    0% {
-        transform: translateX(0%);
-    }
-    50% {
-        transform: translateX(1%);
-    }
-    100% {
-        transform: translateX(0%)
-    }
-}
-
-details[open] {
-    animation: detailsOpening 0.7s ease-out;
-}
-
 details[open] > summary {
     border-bottom-color: var(--secondary-colour);
     border-bottom-style: inset;
@@ -114,7 +93,7 @@ h1 {
     border-bottom-style: dotted;
     border-bottom-width: 4px;
     border-color: var(--accent1);
-    font-size: 1.5em;
+    font-size: 1.6em;
     padding: 0px 4px;
     margin-bottom: 3px;
 }

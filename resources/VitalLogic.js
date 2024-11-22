@@ -65,7 +65,7 @@ fullscreen.addEventListener('click', function () {
 let fullscreenTooltip = document.createElement('span');
 fullscreenTooltip.id = 'fscrn_tip';
 fullscreenTooltip.className = 'tooltip';
-fullscreenTooltip.innerText = 'Fullscreen';
+fullscreenTooltip.textContent = 'Fullscreen';
 
 fullscreen.appendChild(fullscreenTooltip);
 
@@ -80,14 +80,14 @@ document.addEventListener('fullscreenchange', function () {
 let fontDiv = font.appendChild(document.createElement('div'));
 fontDiv.style.display = 'flex';
 fontDiv.style.alignItems = 'baseline';
+fontDiv.style.columnGap = '4px';
 
 let fontLabel = fontDiv.appendChild(document.createElement('label'));
 let fontInput = fontDiv.appendChild(document.createElement('input'));
 
 fontLabel.id = 'fontLabel';
 fontLabel.htmlFor = 'fontInput';
-fontLabel.innerText = 'Font';
-fontLabel.style.marginRight = '2px';
+fontLabel.textContent = 'Font';
 
 fontInput.id = 'fontInput';
 fontInput.type = 'text';
@@ -103,6 +103,7 @@ fontInput.addEventListener('change', function () {
 primDiv.style.display = 'flex';
 primDiv.style.minWidth = '50%';
 primDiv.style.alignItems = 'center';
+primDiv.style.columnGap = '4px';
 
 let primInput = primDiv.appendChild(document.createElement('input'));
 primInput.id = 'primCol';
@@ -115,14 +116,14 @@ primInput.addEventListener('input', function () {
 let primLabel = primDiv.appendChild(document.createElement('label'));
 primLabel.id = 'primLabel';
 primLabel.htmlFor = primInput.id;
-primLabel.innerText = 'Background colour';
-primLabel.style.marginLeft = '2px';
+primLabel.textContent = 'Background colour';
 primLabel.style.verticalAlign = 'center';
 //#endregion
 
 //#region Secondary colour
 secDiv.style.display = 'flex';
 secDiv.style.alignItems = 'center';
+secDiv.style.columnGap = '4px';
 
 let secInput = secDiv.appendChild(document.createElement('input'));
 secInput.id = 'secCol';
@@ -135,8 +136,7 @@ secInput.addEventListener('input', function () {
 let secLabel = secDiv.appendChild(document.createElement('label'));
 secLabel.id = 'secLabel';
 secLabel.htmlFor = secInput.id;
-secLabel.innerText = 'Text colour';
-secLabel.style.marginLeft = '2px';
+secLabel.textContent = 'Text colour';
 secLabel.style.verticalAlign = 'center';
 //#endregion
 
@@ -144,6 +144,7 @@ secLabel.style.verticalAlign = 'center';
 acc1Div.style.display = 'flex';
 acc1Div.style.minWidth = '50%';
 acc1Div.style.alignItems = 'center';
+acc1Div.style.columnGap = '4px';
 
 let acc1Input = acc1Div.appendChild(document.createElement('input'));
 acc1Input.id = 'acc1Col';
@@ -156,14 +157,14 @@ acc1Input.addEventListener('input', function () {
 let acc1Label = acc1Div.appendChild(document.createElement('label'));
 acc1Label.id = 'acc1Label';
 acc1Label.htmlFor = acc1Input.id;
-acc1Label.innerText = 'Accent colour 1';
-acc1Label.style.marginLeft = '2px';
+acc1Label.textContent = 'Accent colour 1';
 acc1Label.style.verticalAlign = 'center';
 //#endregion
 
 //#region Accent colour 2
 acc2Div.style.display = 'flex';
 acc2Div.style.alignItems = 'center';
+acc2Div.style.columnGap = '4px';
 
 let acc2Input = acc2Div.appendChild(document.createElement('input'));
 acc2Input.id = 'acc2Col';
@@ -176,8 +177,7 @@ acc2Input.addEventListener('input', function () {
 let acc2Label = acc2Div.appendChild(document.createElement('label'));
 acc2Label.id = 'acc2Label';
 acc2Label.htmlFor = acc2Input.id;
-acc2Label.innerText = 'Accent colour 2';
-acc2Label.style.marginLeft = '2px';
+acc2Label.textContent = 'Accent colour 2';
 acc2Label.style.verticalAlign = 'center';
 //#endregion
 

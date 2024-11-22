@@ -26,11 +26,6 @@
                 margin-bottom: 1.5px;
             }
             
-            *::selection {
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-            }
-            
             body {
                 display: flex;
                 flex-direction: column;
@@ -87,22 +82,6 @@
                 color: var(--accent2);
             }
             
-            @keyframes detailsOpening {
-                0% {
-                    transform: translateX(0%);
-                }
-                50% {
-                    transform: translateX(1%);
-                }
-                100% {
-                    transform: translateX(0%)
-                }
-            }
-            
-            details[open] {
-                animation: detailsOpening 0.7s ease-out;
-            }
-            
             details[open] > summary {
                 border-bottom-color: var(--secondary-colour);
                 border-bottom-style: inset;
@@ -124,7 +103,7 @@
                 border-bottom-style: dotted;
                 border-bottom-width: 4px;
                 border-color: var(--accent1);
-                font-size: 1.5em;
+                font-size: 1.6em;
                 padding: 0px 4px;
                 margin-bottom: 3px;
             }
@@ -398,12 +377,6 @@
                 transition: all 1s ease-in;
             }
 
-            .cell-input::selection {
-                background-color: transparent;
-                color: var(--accent2);
-                text-shadow: 2px 2px var(--secondary-colour);
-            }
-
             .cell-input:valid {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
@@ -429,6 +402,12 @@
                 border-style: none;
             }
 
+            @keyframes number-highlight {
+                50% {
+                    border-color: transparent;
+                }
+            }
+
             .number {
                 background-color: var(--accent1);
                 color: var(--primary-colour);
@@ -439,6 +418,9 @@
                 cursor: pointer;
                 width: 100%;
                 height: 100%;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
                 transition: all 0.5s ease;
             }
 
@@ -449,6 +431,7 @@
                 color: var(--secondary-colour);
                 outline-style: none;
                 transition: background-color 0.5s ease;
+                animation: number-highlight 3.0s ease infinite both;
             }
 
             .vertical {
@@ -478,8 +461,10 @@
             }
 
             .question-button {
+                border-radius: 0px 7px 7px 0px;
                 border-style: none;
                 padding-inline: 4px;
+                text-align: left;
             }
 
             #loadButton {
@@ -489,22 +474,33 @@
             #questions {
                 display: flex;
                 flex-wrap: wrap;
+                column-gap: 4px;
             }
 
             #questions-ver,
             #questions-hor {
                 flex-grow: 1;
-                font-size: 1.2em;
                 font-weight: 600;
-                min-width: 50%;
+                max-width: 100%;
             }
 
             #questions-ver-name,
             #questions-hor-name {
-                font-style: italic;
-                font-size: 1.1em;
+                display: flex;
+                border-top: var(--cell-border) solid var(--secondary-colour);
+                border-left: var(--cell-border) solid var(--secondary-colour);
+                background-color: transparent;
+                border-radius: 7px 7px 0px 0px;
+                margin-bottom: 4px;
+                padding-inline: 8px;
+                font-size: 1.1rem;
                 font-weight: 600;
-                border-bottom: var(--cell-border) solid var(--accent1);
+            }
+
+            #questions-ver-list,
+            #questions-hor-list {
+                border-left: var(--cell-border) solid var(--accent1);
+                border-bottom-left-radius: 7px;
             }
         </style>
     </head>
@@ -514,6 +510,11 @@
         <!-- Settings -->
         <details id='settings'>
             <summary>Settings</summary>
+
+            <div style='display: flex; column-gap: 2px; align-items: baseline;'>
+                <input type='checkbox' id='editor' autocomplete='off'>
+                <label for='editor'>Answers/Editor</label>
+            </div>
         </details>
 
         <!-- Page main body -->
@@ -528,21 +529,25 @@
         <h2 id='crosswordName'>...</h2>
 
         <!-- Questions -->
-        <div id='questions'>
-            <div id='questions-ver'>
-                <span id='questions-ver-name' tabindex='0'>
-                    Vertical
-                </span>
-                <ol id='questions-ver-list'></ol>
-            </div>
+        <details open>
+            <summary id='questions-summary'>Questions</summary>
 
-            <div id='questions-hor'>
-                <span id='questions-hor-name' tabindex='0'>
-                    Horizontal
-                </span>
-                <ol id='questions-hor-list'></ol>
+            <div id='questions'>
+                <div id='questions-ver'>
+                    <span id='questions-ver-name' tabindex='0'>
+                        Vertical
+                    </span>
+                    <ol id='questions-ver-list'></ol>
+                </div>
+    
+                <div id='questions-hor'>
+                    <span id='questions-hor-name' tabindex='0'>
+                        Horizontal
+                    </span>
+                    <ol id='questions-hor-list'></ol>
+                </div>
             </div>
-        </div>
+        </details>
 
         <!-- Grid -->
         <div id='crossword' class='grid'></div>
@@ -620,7 +625,7 @@
             let fullscreenTooltip = document.createElement('span');
             fullscreenTooltip.id = 'fscrn_tip';
             fullscreenTooltip.className = 'tooltip';
-            fullscreenTooltip.innerText = 'Fullscreen';
+            fullscreenTooltip.textContent = 'Fullscreen';
             
             fullscreen.appendChild(fullscreenTooltip);
             
@@ -635,14 +640,14 @@
             let fontDiv = font.appendChild(document.createElement('div'));
             fontDiv.style.display = 'flex';
             fontDiv.style.alignItems = 'baseline';
+            fontDiv.style.columnGap = '4px';
             
             let fontLabel = fontDiv.appendChild(document.createElement('label'));
             let fontInput = fontDiv.appendChild(document.createElement('input'));
             
             fontLabel.id = 'fontLabel';
             fontLabel.htmlFor = 'fontInput';
-            fontLabel.innerText = 'Font';
-            fontLabel.style.marginRight = '2px';
+            fontLabel.textContent = 'Font';
             
             fontInput.id = 'fontInput';
             fontInput.type = 'text';
@@ -658,6 +663,7 @@
             primDiv.style.display = 'flex';
             primDiv.style.minWidth = '50%';
             primDiv.style.alignItems = 'center';
+            primDiv.style.columnGap = '4px';
             
             let primInput = primDiv.appendChild(document.createElement('input'));
             primInput.id = 'primCol';
@@ -670,14 +676,14 @@
             let primLabel = primDiv.appendChild(document.createElement('label'));
             primLabel.id = 'primLabel';
             primLabel.htmlFor = primInput.id;
-            primLabel.innerText = 'Background colour';
-            primLabel.style.marginLeft = '2px';
+            primLabel.textContent = 'Background colour';
             primLabel.style.verticalAlign = 'center';
             //#endregion
             
             //#region Secondary colour
             secDiv.style.display = 'flex';
             secDiv.style.alignItems = 'center';
+            secDiv.style.columnGap = '4px';
             
             let secInput = secDiv.appendChild(document.createElement('input'));
             secInput.id = 'secCol';
@@ -690,8 +696,7 @@
             let secLabel = secDiv.appendChild(document.createElement('label'));
             secLabel.id = 'secLabel';
             secLabel.htmlFor = secInput.id;
-            secLabel.innerText = 'Text colour';
-            secLabel.style.marginLeft = '2px';
+            secLabel.textContent = 'Text colour';
             secLabel.style.verticalAlign = 'center';
             //#endregion
             
@@ -699,6 +704,7 @@
             acc1Div.style.display = 'flex';
             acc1Div.style.minWidth = '50%';
             acc1Div.style.alignItems = 'center';
+            acc1Div.style.columnGap = '4px';
             
             let acc1Input = acc1Div.appendChild(document.createElement('input'));
             acc1Input.id = 'acc1Col';
@@ -711,14 +717,14 @@
             let acc1Label = acc1Div.appendChild(document.createElement('label'));
             acc1Label.id = 'acc1Label';
             acc1Label.htmlFor = acc1Input.id;
-            acc1Label.innerText = 'Accent colour 1';
-            acc1Label.style.marginLeft = '2px';
+            acc1Label.textContent = 'Accent colour 1';
             acc1Label.style.verticalAlign = 'center';
             //#endregion
             
             //#region Accent colour 2
             acc2Div.style.display = 'flex';
             acc2Div.style.alignItems = 'center';
+            acc2Div.style.columnGap = '4px';
             
             let acc2Input = acc2Div.appendChild(document.createElement('input'));
             acc2Input.id = 'acc2Col';
@@ -731,8 +737,7 @@
             let acc2Label = acc2Div.appendChild(document.createElement('label'));
             acc2Label.id = 'acc2Label';
             acc2Label.htmlFor = acc2Input.id;
-            acc2Label.innerText = 'Accent colour 2';
-            acc2Label.style.marginLeft = '2px';
+            acc2Label.textContent = 'Accent colour 2';
             acc2Label.style.verticalAlign = 'center';
             //#endregion
             
@@ -900,6 +905,8 @@
         </script>
         <script>
             // Elements
+            /** @type {HTMLInputElement} */
+            let editor = document.getElementById('editor');
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('crossword');
             /** @type {HTMLInputElement} */
@@ -1058,6 +1065,11 @@
             /** @type {HTMLButtonElement} */
             let lastNumber = undefined;
 
+            // Elements' events
+            editor.addEventListener('change', function (event) {
+                fillGrid();
+            });
+
             /**
              * @param {Word} word
             */
@@ -1126,14 +1138,20 @@
 
             /**
              * @param {Word} word
+             * @param {number} wordIndex
              * @param {number} num
             */
-            function setUpNumber(word, num) {
+            function setUpNumber(word, wordIndex, num) {
                 /** @type {HTMLDivElement} */
-                let cell = grid.children[word.y].children[word.x];
+                let cell = grid?.children[word.y]?.children[word.x];
+
+                if (!cell) return;
+
+                // Manage styles
                 cell.classList.remove('empty');
                 cell.classList.add('cell-number')
 
+                // Add number's button
                 let button = cell.appendChild(
                     document.createElement('button')
                 );
@@ -1147,9 +1165,32 @@
                         ? 'vertical'
                         : 'horizontal'
                 );
+                button.style.cursor = editor.checked
+                    ? 'grab'
+                    : 'pointer';
+                button.draggable = editor.checked;
                 button.textContent = num;
 
+                // Button events
+                button.addEventListener('mouseenter', function (event) {
+                    this.focus();
+                });
+
+                button.addEventListener('mouseleave', function (event) {
+                    this.blur();
+                });
+
+                button.addEventListener('dragstart', function (event) {
+                    event.dataTransfer.setData('text/plain', `${wordIndex}`);
+                });
+
                 button.addEventListener('click', function (event) {
+                    if (editor.checked) {
+                        word.vertical = !word.vertical;
+                        fillGrid();
+                        return;
+                    }
+
                     isFlowVertical = word.vertical;
                     lastNumber = this;
 
@@ -1165,8 +1206,14 @@
                     if (next) next.select();
                 });
 
+                button.addEventListener('keydown', function (event) {
+                    processControls(event, this, word.x, word.y);
+                });
+
+                // Add question to the list of questions
                 setUpQuestion(word, button);
 
+                // Add question tooltip
                 let tooltip = button.appendChild(
                     document.createElement('span')
                 );
@@ -1185,21 +1232,38 @@
             */
             function setUpCell(cell, word, letter, x, y) {
                 if (!cell.classList.contains('empty')) return;
+
+                // Remove empty cell's style
                 cell.classList.remove('empty');
 
+                // Only show the right letter if the editor is on
+                if (editor.checked) {
+                    cell.textContent = word.word[letter].toUpperCase();
+                    return;
+                }
+
+                // Add letter input
                 let input = cell.appendChild(
                     document.createElement('input')
                 );
-                input.classList.add('cell-input');
-                input.dataset.x = x;
-                input.dataset.y = y;
                 input.id = `${x};${y}`;
+                input.classList.add('cell-input');
                 input.maxLength = 1;
+                input.autocomplete = 'off';
                 input.pattern = word.word[letter].toUpperCase();
                 input.required = true;
 
+                // Letter input events
                 input.addEventListener('click', function (event) {
+                    lastNumber = undefined;
+                });
+
+                input.addEventListener('focus', function (event) {
                     this.select();
+                });
+
+                input.addEventListener('keydown', function (event) {
+                    processControls(event, this, x, y);
                 });
 
                 input.addEventListener('input', function (event) {
@@ -1230,6 +1294,68 @@
                         this.select();
                     }
                 });
+            }
+
+            /**
+             * @param {KeyboardEvent} event
+             * @param {HTMLElement} cell
+             * @param {number} x
+             * @param {number} y
+            */
+            function processControls(event, cell, x, y) {
+                if (
+                    event.key !== 'ArrowUp'
+                    && event.key !== 'ArrowDown'
+                    && event.key !== 'ArrowLeft'
+                    && event.key !== 'ArrowRight'
+                    && event.key !== 'Escape'
+                ) return;
+
+                if (event.key === 'Escape') {
+                    cell.blur();
+                    return;
+                }
+
+                event.preventDefault();
+
+                let deltaX = event.key === 'ArrowLeft'
+                    ? -1
+                    : event.key === 'ArrowRight'
+                        ? 1
+                        : 0;
+
+                let deltaY = event.key === 'ArrowUp'
+                    ? -1
+                    : event.key === 'ArrowDown'
+                        ? 1
+                        : 0;
+
+
+                let next = document.getElementById(`${x + deltaX};${y + deltaY}`);
+                if (next) {
+                    isFlowVertical = (deltaY !== 0);
+                    next.focus();
+                }
+            }
+
+            /**
+             * @param {DragEvent} event
+            */
+            function dropCell(event) {
+                try {
+                    let i = parseInt(event.dataTransfer.getData('text/plain'));
+                    let x = parseInt(event.target.dataset.x);
+                    let y = parseInt(event.target.dataset.y);
+                    let cell = grid?.children[y]?.children[x];
+
+                    if (cell && !cell.classList.contains('number')) {
+                        words[i].x = x;
+                        words[i].y = y;
+                        fillGrid();
+                    }
+                } catch (error) {
+                    alert(error);
+                }
             }
 
             function fillGrid() {
@@ -1294,6 +1420,17 @@
                             document.createElement('div')
                         );
                         cell.classList.add('cell', 'empty');
+                        cell.dataset.x = x;
+                        cell.dataset.y = y;
+
+                        // Process drag & drop
+                        cell.addEventListener('dragover', function (event) {
+                            event.preventDefault();
+                        });
+
+                        cell.addEventListener('drop', function (event) {
+                            dropCell(event);
+                        });
                     }
                 }
 
@@ -1308,7 +1445,7 @@
                         numHor ++;
                     }
 
-                    setUpNumber(w, w.vertical ? numVer : numHor);
+                    setUpNumber(w, wi, w.vertical ? numVer : numHor);
 
                     // Fill empty cells with letters
                     for (let i = 0; i < w.word.length; i++) {
@@ -1318,9 +1455,9 @@
                         const y = w.vertical
                             ? w.y + i + 1
                             : w.y;
-                        const cell = grid.children[y].children[x];
+                        const cell = grid?.children[y]?.children[x];
 
-                        setUpCell(cell, w, i, x, y);
+                        if (cell) setUpCell(cell, w, i, x, y);
                     }
                 });
             }
