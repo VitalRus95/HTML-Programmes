@@ -318,7 +318,7 @@
                 overflow-x: auto;
                 overflow-y: hidden;
                 padding: 4px;
-                cursor: crosshair;
+                cursor: default;
             }
 
             .row {
@@ -502,6 +502,61 @@
                 border-left: var(--cell-border) solid var(--accent1);
                 border-bottom-left-radius: 7px;
             }
+
+            #editor-add {
+                display: none;
+                column-gap: 2px;
+                position: sticky;
+                bottom: 0px;
+                overflow: auto;
+                opacity: 0.9;
+            }
+
+            #editor-word,
+            #editor-description{
+                flex-grow: 1;
+            }
+
+            #editor-ok,
+            #editor-delete {
+                flex-grow: 0;
+                font-weight: 700;
+                padding-inline: 8px;
+                width: 2em;
+                height: 2em;
+            }
+
+            #editor-ok {
+                border-radius: 7px 0px 0px 7px;
+            }
+
+            #editor-delete {
+                border-radius: 0px 7px 7px 0px;
+            }
+
+            #load-button-div {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between
+            }
+
+            #load-button-label {
+                flex-grow: 1;
+                cursor: pointer
+            }
+
+            #save-button {
+                display: none;
+                background-color: var(--accent2);
+                text-decoration: none;
+                width: 100%;
+            }
+
+            #save-button:focus,
+            #save-button:hover {
+                background-color: var(--accent1);
+            }
         </style>
     </head>
     <body>
@@ -520,9 +575,17 @@
         <!-- Page main body -->
 
         <!-- Load button -->
-        <div class='box' style='display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between'>
-            <label for='loadButton' style='flex-grow: 1; cursor: pointer'>&#128193; Открыть кроссворд</label>
-            <input id='loadButton' type='file' accept='.json' style='cursor: pointer' onchange='loadCrossword()' />
+        <div id='load-button-div' class='box'>
+            <label id='load-button-label' for='load-button'>
+                &#128193; Open crossword
+            </label>
+            <input
+                id='load-button'
+                type='file'
+                accept='.json'
+                style='cursor: pointer'
+                onchange='loadCrossword()'
+            />
         </div>
 
         <!-- Crossword name -->
@@ -549,8 +612,29 @@
             </div>
         </details>
 
+        <!-- Save button -->
+        <a id='save-button' class='box' download='Crossword.json' href='' onclick='saveCrossword()'>
+            &#128190; Save crossword
+        </a>
+
         <!-- Grid -->
         <div id='crossword' class='grid'></div>
+
+        <!-- Add a new word -->
+        <div id='editor-add'>
+            <button id='editor-ok' class='tooltipParent'>
+                V
+                <span class='tooltip'>Apply all changes and rebuild the crossword</span>
+            </button>
+
+            <input id='editor-word' type='text' placeholder='Word'>
+            <input id='editor-description' type='text' placeholder='Description'>
+
+            <button id='editor-delete' class='tooltipParent'>
+                X
+                <span class='tooltip'>Remove current word</span>
+            </button>
+        </div>
 
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
@@ -910,13 +994,25 @@
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('crossword');
             /** @type {HTMLInputElement} */
-            let loadButton = document.getElementById('loadButton');
+            let loadButton = document.getElementById('load-button');
+            /** @type {HTMLAnchorElement} */
+            let saveButton = document.getElementById('save-button');
             /** @type {HTMLHeadingElement} */
             let crosswordName = document.getElementById('crosswordName');
             /** @type {HTMLOListElement} */
             let verQuestions = document.getElementById('questions-ver-list');
             /** @type {HTMLOListElement} */
             let horQuestions = document.getElementById('questions-hor-list');
+            /** @type {HTMLDivElement} */
+            let editorAdd = document.getElementById('editor-add');
+            /** @type {HTMLButtonElement} */
+            let editorOk = document.getElementById('editor-ok');
+            /** @type {HTMLButtonElement} */
+            let editorDelete = document.getElementById('editor-delete');
+            /** @type {HTMLInputElement} */
+            let editorWord = document.getElementById('editor-word');
+            /** @type {HTMLInputElement} */
+            let editorDescription = document.getElementById('editor-description');
 
             // Variables
             /**
@@ -928,145 +1024,47 @@
              * @property {number} y
             */
             /** @type {Word[]} */
-            let words = [
-                {
-                    "word": "pebble",
-                    "description": "Камушек",
-                    "x": 1,
-                    "y": 0,
-                    "vertical": true
-                },
-                {
-                    "word": "dictum",
-                    "description": "Изречение",
-                    "x": 7,
-                    "y": 0,
-                    "vertical": true
-                },
-                {
-                    "word": "extremist",
-                    "description": "Крайний",
-                    "x": 0,
-                    "y": 2,
-                    "vertical": false
-                },
-                {
-                    "word": "manual",
-                    "description": "Руководство",
-                    "x": 12,
-                    "y": 2,
-                    "vertical": true
-                },
-                {
-                    "word": "bias",
-                    "description": "Предвзятость",
-                    "x": 0,
-                    "y": 4,
-                    "vertical": false
-                },
-                {
-                    "word": "exquisite",
-                    "description": "Изысканный",
-                    "x": 5,
-                    "y": 4,
-                    "vertical": true
-                },
-                {
-                    "word": "equation",
-                    "description": "Уравнение",
-                    "x": 4,
-                    "y": 5,
-                    "vertical": false
-                },
-                {
-                    "word": "decimal",
-                    "description": "Десятичный",
-                    "x": 1,
-                    "y": 7,
-                    "vertical": true
-                },
-                {
-                    "word": "denouement",
-                    "description": "Завершение",
-                    "x": 0,
-                    "y": 8,
-                    "vertical": false
-                },
-                {
-                    "word": "curve",
-                    "description": "Кривая [сущ.]",
-                    "x": 11,
-                    "y": 8,
-                    "vertical": true
-                },
-                {
-                    "word": "descent",
-                    "description": "Происхождение",
-                    "x": 2,
-                    "y": 10,
-                    "vertical": false
-                },
-                {
-                    "word": "suppress",
-                    "description": "Подавлять",
-                    "x": 8,
-                    "y": 11,
-                    "vertical": true
-                },
-                {
-                    "word": "expunge",
-                    "description": "Вычёркивать, исключать",
-                    "x": 4,
-                    "y": 13,
-                    "vertical": false
-                },
-                {
-                    "word": "proffer",
-                    "description": "Предлагать",
-                    "x": 3,
-                    "y": 14,
-                    "vertical": true
-                },
-                {
-                    "word": "percept",
-                    "description": "Объект восприятия",
-                    "x": 2,
-                    "y": 15,
-                    "vertical": false
-                },
-                {
-                    "word": "frenzy",
-                    "description": "Безумие, бешенство",
-                    "x": 6,
-                    "y": 18,
-                    "vertical": true
-                },
-                {
-                    "word": "fossil",
-                    "description": "Ископаемый",
-                    "x": 5,
-                    "y": 19,
-                    "vertical": false
-                },
-                {
-                    "word": "forebear",
-                    "description": "Предок",
-                    "x": 0,
-                    "y": 21,
-                    "vertical": false
-                }
-            ];
+            let words = [];
             /** @type {number} */
-            let xMax = 0;
+            let xMax = 4;
             /** @type {number} */
-            let yMax = 0;
+            let yMax = 4;
             /** @type {boolean} */
             let isFlowVertical = false;
             /** @type {HTMLButtonElement} */
             let lastNumber = undefined;
+            /** @type {number} */
+            let editedWordIndex = undefined;
 
             // Elements' events
             editor.addEventListener('change', function (event) {
+                saveButton.style.display = editor.checked
+                    ? 'flex'
+                    : 'none';
+
+                editorAdd.style.display = editor.checked
+                    ? 'flex'
+                    : 'none';
+                
+                fillGrid();
+            });
+
+            editorOk.addEventListener('click', function (event) {
+                editorWord.value = '';
+                editorDescription.value = '';
+                fillGrid();
+            });
+
+            editorWord.addEventListener('input', function (event) {
+                words[editedWordIndex].word = editorWord.value;
+            });
+
+            editorDescription.addEventListener('input', function (event) {
+                words[editedWordIndex].description = editorDescription.value;
+            });
+
+            editorDelete.addEventListener('click', function (event) {
+                words.splice(editedWordIndex, 1);
                 fillGrid();
             });
 
@@ -1075,10 +1073,10 @@
             */
             function isWordOutOfBounds(word) {
                 return (
-                    word.x < 0
-                    || word.y < 0
-                    || word.x > xMax
-                    || word.y > yMax
+                    +word.x < 0
+                    || +word.y < 0
+                    || +word.x > xMax
+                    || +word.y > yMax
                 );
             }
 
@@ -1095,6 +1093,11 @@
                         alert(`Ошибка при чтении файла или создании кроссворда: ${error}`);
                     }
                 });
+            }
+
+            function saveCrossword() {
+                let data = encodeURIComponent(JSON.stringify(words, undefined, 2));
+                saveButton.href = `data:text/plain;charset=utf-8,${data}`;
             }
 
             /**
@@ -1117,15 +1120,20 @@
                 item.textContent = word.description + ` [${word.word.length}].`;
 
                 item.addEventListener('click', function (event) {
+                    if (editor.checked) {
+                        num.focus();
+                        return;
+                    }
+
                     isFlowVertical = word.vertical;
                     lastNumber = num;
 
                     /** @type {HTMLInputElement} */
                     let next = document.getElementById(
                         `${
-                            word.vertical ? word.x : word.x + 1
+                            word.vertical ? +word.x : +word.x + 1
                         };${
-                            word.vertical ? word.y + 1 : word.y
+                            word.vertical ? +word.y + 1 : +word.y
                         }`
                     );
 
@@ -1143,13 +1151,13 @@
             */
             function setUpNumber(word, wordIndex, num) {
                 /** @type {HTMLDivElement} */
-                let cell = grid?.children[word.y]?.children[word.x];
+                let cell = grid?.children[+word.y]?.children[+word.x];
 
                 if (!cell) return;
 
                 // Manage styles
                 cell.classList.remove('empty');
-                cell.classList.add('cell-number')
+                cell.classList.add('cell-number');
 
                 // Add number's button
                 let button = cell.appendChild(
@@ -1172,12 +1180,26 @@
                 button.textContent = num;
 
                 // Button events
+                if (editor.checked) {
+                    button.addEventListener('focus', function (event) {
+                        editedWordIndex = wordIndex;
+                        editorWord.value = word.word;
+                        editorDescription.value = word.description;
+
+                        if (word.word.length === 0) {
+                            editorWord.focus();
+                        } else if (word.description.length === 0) {
+                            editorDescription.focus();
+                        }
+                    });
+                }
+
                 button.addEventListener('mouseenter', function (event) {
                     this.focus();
                 });
 
                 button.addEventListener('mouseleave', function (event) {
-                    this.blur();
+                    if (!editor.checked) this.blur();
                 });
 
                 button.addEventListener('dragstart', function (event) {
@@ -1197,9 +1219,9 @@
                     /** @type {HTMLInputElement} */
                     let next = document.getElementById(
                         `${
-                            word.vertical ? word.x : word.x + 1
+                            word.vertical ? +word.x : +word.x + 1
                         };${
-                            word.vertical ? word.y + 1 : word.y
+                            word.vertical ? +word.y + 1 : +word.y
                         }`
                     );
 
@@ -1213,14 +1235,16 @@
                 // Add question to the list of questions
                 setUpQuestion(word, button);
 
-                // Add question tooltip
-                let tooltip = button.appendChild(
-                    document.createElement('span')
-                );
-                tooltip.classList.add('tooltip', 'question-tooltip');
-                tooltip.textContent = `№${num}. ${word.description} [${
-                    word.word.length
-                }]`;
+                // Add question tooltip when not in editor
+                if (!editor.checked) {
+                    let tooltip = button.appendChild(
+                        document.createElement('span')
+                    );
+                    tooltip.classList.add('tooltip', 'question-tooltip');
+                    tooltip.textContent = `№${num}. ${word.description} [${
+                        word.word.length
+                    }]`;
+                }
             }
 
             /**
@@ -1230,7 +1254,7 @@
              * @param {number} x
              * @param {number} y
             */
-            function setUpCell(cell, word, letter, x, y) {
+            function setUpLetterCell(cell, word, letter, x, y) {
                 if (!cell.classList.contains('empty')) return;
 
                 // Remove empty cell's style
@@ -1343,9 +1367,9 @@
             */
             function dropCell(event) {
                 try {
-                    let i = parseInt(event.dataTransfer.getData('text/plain'));
-                    let x = parseInt(event.target.dataset.x);
-                    let y = parseInt(event.target.dataset.y);
+                    let i = +event.dataTransfer.getData('text/plain');
+                    let x = +event.target.dataset.x;
+                    let y = +event.target.dataset.y;
                     let cell = grid?.children[y]?.children[x];
 
                     if (cell && !cell.classList.contains('number')) {
@@ -1358,10 +1382,28 @@
                 }
             }
 
-            function fillGrid() {
-                // Return if there are no words
-                if (!words) return;
+            /**
+             * @param {MouseEvent | KeyboardEvent} event
+             * @param {HTMLElement} cell
+            */
+            function addWord(event, cell) {
+                if (cell.classList.contains('empty') && editor.checked) {
+                    words.push({
+                        word: '',
+                        description: '',
+                        vertical: false,
+                        x: +cell.dataset.x,
+                        y: +cell.dataset.y
+                    });
 
+                    fillGrid();
+
+                    editedWordIndex = words.length - 1;
+                    editorWord.focus();
+                }
+            }
+
+            function fillGrid() {
                 // Reset numbers' counters
                 /** @type {number} */
                 let numVer = 0;
@@ -1369,8 +1411,8 @@
                 let numHor = 0;
 
                 // Reset maximum X and Y
-                xMax = 0;
-                yMax = 0;
+                xMax = 4;
+                yMax = 4;
 
                 // Empty the questions
                 while (verQuestions.hasChildNodes()) {
@@ -1388,8 +1430,8 @@
 
                 // Determine the maximum for X and Y
                 words.forEach((w) => {
-                    const x = w.x;
-                    const y = w.y;
+                    const x = +w.x;
+                    const y = +w.y;
                     const l = w.word.length;
 
                     if (w.vertical) {
@@ -1406,7 +1448,7 @@
                 yMax ++;
 
                 // Sort by column (X) and row (Y)
-                words.sort((a, b) => a.x - b.x).sort((a, b) => a.y - b.y);
+                words.sort((a, b) => +a.x - +b.x).sort((a, b) => +a.y - +b.y);
 
                 // Prepare an empty grid
                 for (var y = 0; y < yMax; y++) {
@@ -1422,6 +1464,14 @@
                         cell.classList.add('cell', 'empty');
                         cell.dataset.x = x;
                         cell.dataset.y = y;
+                        cell.style.cursor = editor.checked
+                            ? 'cell'
+                            : 'default';
+
+                        // Adding a word
+                        cell.addEventListener('click', function (event) {
+                            addWord(event, this);
+                        });
 
                         // Process drag & drop
                         cell.addEventListener('dragover', function (event) {
@@ -1450,14 +1500,14 @@
                     // Fill empty cells with letters
                     for (let i = 0; i < w.word.length; i++) {
                         const x = w.vertical
-                            ? w.x
-                            : w.x + i + 1;
+                            ? +w.x
+                            : +w.x + i + 1;
                         const y = w.vertical
-                            ? w.y + i + 1
-                            : w.y;
+                            ? +w.y + i + 1
+                            : +w.y;
                         const cell = grid?.children[y]?.children[x];
 
-                        if (cell) setUpCell(cell, w, i, x, y);
+                        if (cell) setUpLetterCell(cell, w, i, x, y);
                     }
                 });
             }
