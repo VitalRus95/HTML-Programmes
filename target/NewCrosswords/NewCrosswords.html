@@ -513,13 +513,12 @@
             }
 
             #editor-word,
-            #editor-description{
-                flex-grow: 1;
+            #editor-description {
+                width: 100%;
             }
 
             #editor-ok,
             #editor-delete {
-                flex-grow: 0;
                 font-weight: 700;
                 padding-inline: 8px;
                 width: 2em;
@@ -538,12 +537,16 @@
                 display: flex;
                 flex-wrap: wrap;
                 align-items: center;
-                justify-content: space-between
+                justify-content: space-between;
             }
 
             #load-button-label {
                 flex-grow: 1;
-                cursor: pointer
+                cursor: pointer;
+            }
+
+            #load-button {
+                max-width: 100%;
             }
 
             #save-button {
@@ -627,8 +630,8 @@
                 <span class='tooltip'>Apply all changes and rebuild the crossword</span>
             </button>
 
-            <input id='editor-word' type='text' placeholder='Word'>
-            <input id='editor-description' type='text' placeholder='Description'>
+            <input id='editor-word' type='text' placeholder='Word' autocomplete='off'>
+            <input id='editor-description' type='text' placeholder='Description' autocomplete='off'>
 
             <button id='editor-delete' class='tooltipParent'>
                 X
@@ -1204,12 +1207,20 @@
 
                 button.addEventListener('dragstart', function (event) {
                     event.dataTransfer.setData('text/plain', `${wordIndex}`);
+                    this.focus();
                 });
 
                 button.addEventListener('click', function (event) {
                     if (editor.checked) {
-                        word.vertical = !word.vertical;
-                        fillGrid();
+                        if (word.word.length > 0
+                            && word.description.length > 0
+                        ) {
+                            word.vertical = !word.vertical;
+                            fillGrid();
+                        } else {
+                            this.focus();
+                        }
+
                         return;
                     }
 
@@ -1397,9 +1408,6 @@
                     });
 
                     fillGrid();
-
-                    editedWordIndex = words.length - 1;
-                    editorWord.focus();
                 }
             }
 
