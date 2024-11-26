@@ -467,6 +467,13 @@
                 text-align: left;
             }
 
+            .shift-button {
+                background-color: var(--primary-colour);
+                border-radius: 0px;
+                font-weight: 600;
+                width: 3em;
+            }
+
             #loadButton {
                 max-width: 100%;
             }
@@ -503,13 +510,34 @@
                 border-bottom-left-radius: 7px;
             }
 
+            #editor-shift {
+                display: none;
+                column-gap: 2px;
+                justify-content: center;
+                background-color: transparent;
+                position: sticky;
+                top: 0px;
+                z-index: 1;
+                opacity: 0.9;
+            }
+
+            #shift-left {
+                border-radius: 7px 0px 0px 7px;
+            }
+
+            #shift-down {
+                border-radius: 0px 7px 7px 0px;
+            }
+
             #editor-add {
                 display: none;
                 column-gap: 2px;
                 position: sticky;
                 bottom: 0px;
-                overflow: auto;
+                z-index: 1;
                 opacity: 0.9;
+                overflow: auto;
+                height: 2em;
             }
 
             #editor-word,
@@ -517,12 +545,16 @@
                 width: 100%;
             }
 
+            #editor-word:focus,
+            #editor-description:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
             #editor-ok,
             #editor-delete {
                 font-weight: 700;
                 padding-inline: 8px;
-                width: 2em;
-                height: 2em;
             }
 
             #editor-ok {
@@ -621,22 +653,45 @@
         </a>
 
         <!-- Grid -->
-        <div id='crossword' class='grid'></div>
+        <div>
+            <!-- Shift all words -->
+            <div id='editor-shift'>
+                <button id='shift-left' class='shift-button tooltipParent'>
+                    &lt;
+                    <span class='tooltip'>Shift all words left</span>
+                </button>
+                <button id='shift-right' class='shift-button tooltipParent'>
+                    &gt;
+                    <span class='tooltip'>Shift all words right</span>
+                </button>
+                <button id='shift-up' class='shift-button tooltipParent'>
+                    ^
+                    <span class='tooltip'>Shift all words up</span>
+                </button>
+                <button id='shift-down' class='shift-button tooltipParent'>
+                    v
+                    <span class='tooltip'>Shift all words down</span>
+                </button>
+            </div>
 
-        <!-- Add a new word -->
-        <div id='editor-add'>
-            <button id='editor-ok' class='tooltipParent'>
-                V
-                <span class='tooltip'>Apply all changes and rebuild the crossword</span>
-            </button>
+            <!-- Crossword -->
+            <div id='crossword' class='grid'></div>
 
-            <input id='editor-word' type='text' placeholder='Word' autocomplete='off'>
-            <input id='editor-description' type='text' placeholder='Description' autocomplete='off'>
+            <!-- Add a new word -->
+            <div id='editor-add'>
+                <button id='editor-ok' class='tooltipParent'>
+                    OK
+                    <span class='tooltip'>Apply all changes and rebuild the crossword</span>
+                </button>
 
-            <button id='editor-delete' class='tooltipParent'>
-                X
-                <span class='tooltip'>Remove current word</span>
-            </button>
+                <input id='editor-word' type='text' placeholder='Word' autocomplete='off'>
+                <input id='editor-description' type='text' placeholder='Description' autocomplete='off'>
+
+                <button id='editor-delete' class='tooltipParent'>
+                    X
+                    <span class='tooltip'>Remove current word</span>
+                </button>
+            </div>
         </div>
 
         <p id='author' class='box' style='font-style: italic'>
@@ -1007,6 +1062,16 @@
             /** @type {HTMLOListElement} */
             let horQuestions = document.getElementById('questions-hor-list');
             /** @type {HTMLDivElement} */
+            let editorShift = document.getElementById('editor-shift');
+            /** @type {HTMLButtonElement} */
+            let shiftLeft = document.getElementById('shift-left');
+            /** @type {HTMLButtonElement} */
+            let shiftRight = document.getElementById('shift-right');
+            /** @type {HTMLButtonElement} */
+            let shiftUp = document.getElementById('shift-up');
+            /** @type {HTMLButtonElement} */
+            let shiftDown = document.getElementById('shift-down');
+            /** @type {HTMLDivElement} */
             let editorAdd = document.getElementById('editor-add');
             /** @type {HTMLButtonElement} */
             let editorOk = document.getElementById('editor-ok');
@@ -1045,6 +1110,10 @@
                     ? 'flex'
                     : 'none';
 
+                editorShift.style.display = editor.checked
+                    ? 'flex'
+                    : 'none';
+
                 editorAdd.style.display = editor.checked
                     ? 'flex'
                     : 'none';
@@ -1070,6 +1139,40 @@
                 words.splice(editedWordIndex, 1);
                 fillGrid();
             });
+
+            shiftLeft.addEventListener('click', function (event) {
+                shiftWords(-1, 0);
+            });
+
+            shiftRight.addEventListener('click', function (event) {
+                shiftWords(1, 0);
+            });
+
+            shiftUp.addEventListener('click', function (event) {
+                shiftWords(0, -1);
+            });
+
+            shiftDown.addEventListener('click', function (event) {
+                shiftWords(0, 1);
+            });
+
+            /**
+             * @param {number} x
+             * @param {number} y
+            */
+            function shiftWords(x, y) {
+                words.forEach((w) => {
+                    w.x = w.x + x >= 0
+                        ? w.x + x
+                        : w.x;
+
+                    w.y = w.y + y >= 0
+                        ? w.y + y
+                        : w.y;
+                });
+
+                fillGrid();
+            }
 
             /**
              * @param {Word} word
