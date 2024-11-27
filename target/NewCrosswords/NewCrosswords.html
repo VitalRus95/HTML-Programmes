@@ -366,6 +366,17 @@
                     background-color 0.5s ease-in;
             }
 
+            .cell-answer {
+                cursor: pointer;
+                transition: all 0.9s ease;
+            }
+
+            .cell-highlight {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                transition: all 0.9s ease;
+            }
+
             .cell-input {
                 background-color: transparent;
                 border-style: none;
@@ -470,8 +481,11 @@
             .shift-button {
                 background-color: var(--primary-colour);
                 border-radius: 0px;
+                font-family: monospace;
+                font-size: 1.2em;
                 font-weight: 600;
-                width: 3em;
+                width: 2.5em;
+                height: 1.3em;
             }
 
             #loadButton {
@@ -657,19 +671,19 @@
             <!-- Shift all words -->
             <div id='editor-shift'>
                 <button id='shift-left' class='shift-button tooltipParent'>
-                    &lt;
+                    &larr;
                     <span class='tooltip'>Shift all words left</span>
                 </button>
                 <button id='shift-right' class='shift-button tooltipParent'>
-                    &gt;
+                    &rarr;
                     <span class='tooltip'>Shift all words right</span>
                 </button>
                 <button id='shift-up' class='shift-button tooltipParent'>
-                    ^
+                    &uarr;
                     <span class='tooltip'>Shift all words up</span>
                 </button>
                 <button id='shift-down' class='shift-button tooltipParent'>
-                    v
+                    &darr;
                     <span class='tooltip'>Shift all words down</span>
                 </button>
             </div>
@@ -1094,9 +1108,9 @@
             /** @type {Word[]} */
             let words = [];
             /** @type {number} */
-            let xMax = 4;
+            let xMax;
             /** @type {number} */
-            let yMax = 4;
+            let yMax;
             /** @type {boolean} */
             let isFlowVertical = false;
             /** @type {HTMLButtonElement} */
@@ -1376,7 +1390,27 @@
 
                 // Only show the right letter if the editor is on
                 if (editor.checked) {
+                    cell.style.cursor = 'pointer';
+                    cell.classList.add('cell-answer');
                     cell.textContent = word.word[letter].toUpperCase();
+
+                    // Highlight cells with the same letter
+                    cell.addEventListener('click', function (event) {
+                        if (!this.classList.contains('cell-highlight')) {
+                            for (let c of grid.getElementsByClassName('cell-answer')) {
+                                if (c.textContent === this.textContent) {
+                                    c.classList.add('cell-highlight');
+                                }
+                            }
+                        } else {
+                            for (let c of grid.getElementsByClassName('cell-answer')) {
+                                if (c.textContent === this.textContent) {
+                                    c.classList.remove('cell-highlight');
+                                }
+                            }
+                        }
+                    });
+
                     return;
                 }
 
