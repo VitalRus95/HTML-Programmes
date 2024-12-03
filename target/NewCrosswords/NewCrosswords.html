@@ -134,7 +134,8 @@
             }
             
             hr {
-                border-color: var(--accent1);
+                border: 2px ridge var(--accent1);
+                border-radius: 7px;
                 width: 100%;
             }
             
@@ -305,7 +306,7 @@
             :root {
                 --cell-size: 52px;
                 --cell-border: calc(var(--cell-size) * 0.05);
-                --cell-font: calc(var(--cell-size) * 0.65);
+                --cell-font: calc(var(--cell-size) * 0.6);
                 --cell-radius: 5%;
                 --num-border: calc(var(--cell-border) * 1.5);
                 --gap-size: calc(var(--cell-size) * 0.04);
@@ -366,6 +367,10 @@
                     background-color 0.5s ease-in;
             }
 
+            .borderless {
+                border-style: none;
+            }
+
             .cell-answer {
                 cursor: pointer;
                 transition: all 0.9s ease;
@@ -379,7 +384,8 @@
 
             .cell-input {
                 background-color: transparent;
-                border-style: none;
+                border: var(--cell-border) solid var(--accent1);
+                border-radius: var(--cell-radius);
                 font-size: var(--cell-font);
                 font-weight: 600;
                 text-align: center;
@@ -486,6 +492,18 @@
                 font-weight: 600;
                 width: 2.5em;
                 height: 1.3em;
+            }
+
+            .setting {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 2px;
+                align-items: baseline;
+            }
+
+            #roundness {
+                flex-grow: 1;
+                align-self: center;
             }
 
             #loadButton {
@@ -615,10 +633,18 @@
         <details id='settings'>
             <summary>Settings</summary>
 
-            <div style='display: flex; column-gap: 2px; align-items: baseline;'>
+            <div class='setting'>
                 <input type='checkbox' id='editor' autocomplete='off'>
                 <label for='editor'>Answers/Editor</label>
             </div>
+
+            <div class='setting'>
+                <label for='roundness'>Cell roundness</label>
+                <input type='range' id='roundness' min='0' max='50'>
+                <span id='roundness-value'>%</span>
+            </div>
+
+            <hr>
         </details>
 
         <!-- Page main body -->
@@ -1060,7 +1086,11 @@
 
         </script>
         <script>
-            // Elements
+            //#region HTML Elements
+            /** @type {HTMLInputElement} */
+            let roundness = document.getElementById('roundness');
+            /** @type {HTMLSpanElement} */
+            let roundnessValue = document.getElementById('roundness-value');
             /** @type {HTMLInputElement} */
             let editor = document.getElementById('editor');
             /** @type {HTMLDivElement} */
@@ -1095,6 +1125,7 @@
             let editorWord = document.getElementById('editor-word');
             /** @type {HTMLInputElement} */
             let editorDescription = document.getElementById('editor-description');
+            //#endregion
 
             // Variables
             /**
@@ -1118,7 +1149,23 @@
             /** @type {number} */
             let editedWordIndex = undefined;
 
+            roundness.value = localStorage.getItem('roundness') ?? '5%';
+            document.body.style.setProperty('--cell-radius', `${roundness.value}%`);
+            roundnessValue.textContent = `${roundness.value}%`;
+
             // Elements' events
+            roundness.addEventListener('input', function (event) {
+                let r = roundness.value > 50
+                    ? 50
+                    : roundness.value < 0
+                        ? 0
+                        : roundness.value;
+
+                localStorage.setItem('roundness', r);
+                document.body.style.setProperty('--cell-radius', `${r}%`);
+                roundnessValue.textContent = `${r}%`;
+            });
+
             editor.addEventListener('change', function (event) {
                 saveButton.style.display = editor.checked
                     ? 'flex'
@@ -1170,6 +1217,7 @@
                 shiftWords(0, 1);
             });
 
+            // Functions
             /**
              * @param {number} x
              * @param {number} y
@@ -1237,7 +1285,9 @@
                 );
 
                 item.classList.add('question-button');
-                item.textContent = word.description + ` [${word.word.length}].`;
+                item.textContent = !editor.checked
+                    ? word.description + ` [${word.word.length}].`
+                    : word.description + ` [${word.word}].`;
 
                 item.addEventListener('click', function (event) {
                     if (editor.checked) {
@@ -1414,6 +1464,10 @@
                     return;
                 }
 
+                // Remove cell borders to make the input fill it entirely
+                // (it fixes transparent edges in inputs)
+                cell.classList.add('borderless');
+
                 // Add letter input
                 let input = cell.appendChild(
                     document.createElement('input')
@@ -1428,6 +1482,7 @@
                 // Letter input events
                 input.addEventListener('click', function (event) {
                     lastNumber = undefined;
+                    isFlowVertical = word.vertical;
                 });
 
                 input.addEventListener('focus', function (event) {

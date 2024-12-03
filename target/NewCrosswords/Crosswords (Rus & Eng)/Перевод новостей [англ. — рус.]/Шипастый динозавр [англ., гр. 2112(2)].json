@@ -1,0 +1,93 @@
+[
+  {
+    "word": "slender",
+    "description": "Тонкий",
+    "vertical": true,
+    "x": 2,
+    "y": 0
+  },
+  {
+    "word": "split",
+    "description": "Расхождение",
+    "vertical": true,
+    "x": 7,
+    "y": 1
+  },
+  {
+    "word": "spiky",
+    "description": "Шипастый",
+    "vertical": true,
+    "x": 13,
+    "y": 1
+  },
+  {
+    "word": "blade",
+    "description": "Лезвие",
+    "vertical": false,
+    "x": 0,
+    "y": 2
+  },
+  {
+    "word": "species",
+    "description": "Вид",
+    "vertical": false,
+    "x": 6,
+    "y": 2
+  },
+  {
+    "word": "resemble",
+    "description": "Напоминать, походить",
+    "vertical": true,
+    "x": 12,
+    "y": 5
+  },
+  {
+    "word": "evolutionary",
+    "description": "🦠➡🐵➡👨 (прил.)",
+    "vertical": false,
+    "x": 1,
+    "y": 6
+  },
+  {
+    "word": "armored",
+    "description": "Бронированный",
+    "vertical": true,
+    "x": 8,
+    "y": 9
+  },
+  {
+    "word": "cranium",
+    "description": "Череп",
+    "vertical": false,
+    "x": 5,
+    "y": 10
+  },
+  {
+    "word": "genus",
+    "description": "Род",
+    "vertical": true,
+    "x": 17,
+    "y": 11
+  },
+  {
+    "word": "lineage",
+    "description": "Происхождение, родословная",
+    "vertical": false,
+    "x": 11,
+    "y": 12
+  },
+  {
+    "word": "shield",
+    "description": "Защищать, заслонять",
+    "vertical": false,
+    "x": 4,
+    "y": 15
+  },
+  {
+    "word": "club",
+    "description": "Булава",
+    "vertical": false,
+    "x": 14,
+    "y": 15
+  }
+]

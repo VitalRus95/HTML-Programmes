@@ -1,0 +1,121 @@
+[
+  {
+    "word": "pedestrian",
+    "description": "Пешеход",
+    "vertical": true,
+    "x": 5,
+    "y": 0
+  },
+  {
+    "word": "puddle",
+    "description": "Лужа",
+    "vertical": true,
+    "x": 7,
+    "y": 0
+  },
+  {
+    "word": "pepper",
+    "description": "Усеивать, осыпать",
+    "vertical": false,
+    "x": 4,
+    "y": 1
+  },
+  {
+    "word": "crevasse",
+    "description": "Расщелина",
+    "vertical": true,
+    "x": 13,
+    "y": 2
+  },
+  {
+    "word": "dodge",
+    "description": "Избегать, уворачиваться",
+    "vertical": false,
+    "x": 4,
+    "y": 3
+  },
+  {
+    "word": "crawl",
+    "description": "Ползать",
+    "vertical": false,
+    "x": 10,
+    "y": 7
+  },
+  {
+    "word": "torrent",
+    "description": "Поток",
+    "vertical": true,
+    "x": 9,
+    "y": 9
+  },
+  {
+    "word": "pothole",
+    "description": "Выбоина",
+    "vertical": true,
+    "x": 11,
+    "y": 9
+  },
+  {
+    "word": "onomatopoeic",
+    "description": "Звукоподражательный",
+    "vertical": false,
+    "x": 3,
+    "y": 10
+  },
+  {
+    "word": "renovate",
+    "description": "Обновлять",
+    "vertical": false,
+    "x": 7,
+    "y": 14
+  },
+  {
+    "word": "muddy",
+    "description": "Грязный",
+    "vertical": true,
+    "x": 6,
+    "y": 15
+  },
+  {
+    "word": "melt",
+    "description": "Таять",
+    "vertical": false,
+    "x": 5,
+    "y": 16
+  },
+  {
+    "word": "drain",
+    "description": "Водосток",
+    "vertical": true,
+    "x": 4,
+    "y": 19
+  },
+  {
+    "word": "shoddy",
+    "description": "Низкопробный, некачественный",
+    "vertical": false,
+    "x": 0,
+    "y": 20
+  },
+  {
+    "word": "soot",
+    "description": "Копоть, сажа",
+    "vertical": true,
+    "x": 1,
+    "y": 21
+  },
+  {
+    "word": "grim",
+    "description": "Мрачный",
+    "vertical": true,
+    "x": 9,
+    "y": 21
+  },
+  {
+    "word": "sprawling",
+    "description": "Расползающийся",
+    "vertical": false,
+    "x": 0,
+    "y": 22
+  }
+]

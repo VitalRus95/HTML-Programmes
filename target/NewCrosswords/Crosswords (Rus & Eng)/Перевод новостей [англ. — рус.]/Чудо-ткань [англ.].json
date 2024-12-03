@@ -1,0 +1,128 @@
+[
+  {
+    "word": "eavesdrop",
+    "description": "Подслушивать",
+    "vertical": true,
+    "x": 6,
+    "y": 0
+  },
+  {
+    "word": "weave",
+    "description": "Ткать, плести",
+    "vertical": true,
+    "x": 12,
+    "y": 1
+  },
+  {
+    "word": "voltage",
+    "description": "Напряжение",
+    "vertical": false,
+    "x": 5,
+    "y": 3
+  },
+  {
+    "word": "detangle",
+    "description": "Распутывать [здесь ≈«отделять»]",
+    "vertical": true,
+    "x": 4,
+    "y": 4
+  },
+  {
+    "word": "convert",
+    "description": "Преобразовывать",
+    "vertical": false,
+    "x": 8,
+    "y": 5
+  },
+  {
+    "word": "acoustic",
+    "description": "Звуковой",
+    "vertical": true,
+    "x": 8,
+    "y": 6
+  },
+  {
+    "word": "thread",
+    "description": "Нить",
+    "vertical": false,
+    "x": 3,
+    "y": 7
+  },
+  {
+    "word": "enhance",
+    "description": "Усиливать",
+    "vertical": true,
+    "x": 2,
+    "y": 10
+  },
+  {
+    "word": "speaker",
+    "description": "Динамик",
+    "vertical": true,
+    "x": 14,
+    "y": 10
+  },
+  {
+    "word": "integrity",
+    "description": "Целостность",
+    "vertical": false,
+    "x": 0,
+    "y": 12
+  },
+  {
+    "word": "eardrum",
+    "description": "Барабанная перепонка",
+    "vertical": true,
+    "x": 5,
+    "y": 13
+  },
+  {
+    "word": "dampen",
+    "description": "Подавлять [шум]",
+    "vertical": false,
+    "x": 0,
+    "y": 14
+  },
+  {
+    "word": "cochlea",
+    "description": "Улитка [строение уха]",
+    "vertical": false,
+    "x": 7,
+    "y": 14
+  },
+  {
+    "word": "processing",
+    "description": "Обработка",
+    "vertical": true,
+    "x": 11,
+    "y": 15
+  },
+  {
+    "word": "chirp",
+    "description": "Щебетать",
+    "vertical": false,
+    "x": 1,
+    "y": 16
+  },
+  {
+    "word": "murmur",
+    "description": "Шум [в сердце]",
+    "vertical": false,
+    "x": 8,
+    "y": 17
+  },
+  {
+    "word": "soundtrack",
+    "description": "Звуковая дорожка",
+    "vertical": false,
+    "x": 2,
+    "y": 19
+  },
+  {
+    "word": "fiber",
+    "description": "Волокно [американская орфография]",
+    "vertical": false,
+    "x": 9,
+    "y": 23
+  }
+]
