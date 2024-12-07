@@ -187,6 +187,7 @@
             
             table {
                 width: 100%;
+                border-collapse: collapse;
             }
             
             td,
@@ -194,12 +195,11 @@
                 border-color: var(--secondary-colour);
                 border-style: inset;
                 border-width: 2px;
-                padding: 2px;
+                padding: 1px;
                 text-align: center;
             }
             
             td {
-                border-radius: 0px 0px 5px 0px;
                 font-weight: 600;
             }
             
@@ -212,9 +212,8 @@
             th {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
-                border-radius: 5px 5px 0px 0px;
-                font-size: 13pt;
-                font-weight: bold;
+                font-size: 1.05em;
+                font-weight: 700;
             }
             
             th:focus,
@@ -512,10 +511,9 @@
                 background-color: transparent;
             }
 
-            #grid-win {
-                display: none;
+            #grid-victory {
                 align-self: center;
-                justify-content: center;
+                text-align: center;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: 1.5em;
                 font-weight: 600;
@@ -525,6 +523,11 @@
                 width: 100%;
                 animation: win-show 1s ease-out;
                 animation: win-blink 5s ease alternate infinite;
+            }
+
+            #grid-win {
+                display: none;
+                flex-direction: column;
             }
 
             #grid-input {
@@ -588,6 +591,8 @@
                 <input type='checkbox' id='hideCells'>
                 <label for='hideCells'>Hide inactive cells completely</label>
             </div>
+
+            <hr>
         </details>
 
         <!-- Words list textarea -->
@@ -671,7 +676,34 @@
             <div id='grid-letters'></div>
 
             <!-- Victory text -->
-            <span id='grid-win' tabindex='1'>You won!</span>
+            <div id='grid-win' tabindex='1'>
+                <span id='grid-victory'>Victory!</span>
+                
+                <!-- End stats -->
+                <table id='grid-win-stats'>
+                    <th id='grid-win-stats-label' colspan='2'>
+                        Statistics
+                    </th>
+
+                    <tr>
+                        <td>
+                            <span id='grid-win-time-label'>Time (min:sec)</span>
+                        </td>
+                        <td>
+                            <span id='grid-win-time'>00:00</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <span id='grid-win-mistakes-label'>Mistakes</span>
+                        </td>
+                        <td>
+                            <span id='grid-win-mistakes'>0</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
             <!-- Input -->
             <div id='grid-input'>
@@ -1091,6 +1123,10 @@
             let grid = document.getElementById('grid-letters');
             /** @type {HTMLSpanElement} */
             let win = document.getElementById('grid-win');
+            /** {HTMLSpanElement} */
+            let time = document.getElementById('grid-win-time');
+            /** {HTMLSpanElement} */
+            let mistakes = document.getElementById('grid-win-mistakes');
             /** @type {HTMLDivElement} */
             let gridInput = document.getElementById('grid-input');
             /** @type {HTMLInputElement} */
@@ -1117,6 +1153,12 @@
             let score;
             /** @type {number} */
             let maxScore;
+            /** @type {number} */
+            let mistakesCount;
+            /** @type {number} */
+            let timerStart;
+            /** @type {number} */
+            let timerEnd;
 
             backspace.addEventListener('click', function (event) {
                 if (!wordInput.value) return
@@ -1126,6 +1168,7 @@
 
             undoMistake.addEventListener('click', function (event) {
                 score += mistakeCost;
+                mistakesCount --;
                 updateScore();
                 this.disabled = true;
             });
@@ -1150,7 +1193,7 @@
             function fillGrid() {
                 if (!words.value) return;
 
-                // Hide victory text
+                // Hide victory block
                 win.style.display = 'none';
 
                 // Try to remove highlight interval
@@ -1186,8 +1229,9 @@
                 wordCount.textContent = wordsList.length;
                 countLetters(wordsList);
 
-                // Reset score
+                // Reset score & stats
                 score = 0;
+                mistakesCount = 0;
                 maxScore = wordsList.length;
                 updateScore();
 
@@ -1227,6 +1271,7 @@
                 setTimeout(() => {
                     wordInput.readOnly = false;
                     wordInput.focus();
+                    timerStart = Date.now();
                 }, 3100);
 
                 // Create highlight interval
@@ -1371,6 +1416,18 @@
                         if (!grid.hasChildNodes()) {
                             win.style.display = 'flex';
                             grid.style.display = 'none';
+                            timerEnd = Date.now();
+
+                            let date = new Date(timerEnd - timerStart);
+                            let min = date.getMinutes();
+                            let sec = date.getSeconds();
+
+                            time.textContent = `${
+                                min > 9 ? min : `0${min}`
+                            }:${
+                                sec > 9 ? sec : `0${sec}`
+                            }`;
+                            mistakes.textContent = mistakesCount;
                         } else {
                             resetCellsVisibility();
                         }
@@ -1400,12 +1457,13 @@
                     }
                 }
 
-                // Subtract from score if there are no words left
+                // No words left -> mistake
                 if (wordsLeftOnGrid.length === 0) {
                     if (wordInput.value.length > 3 && score >= mistakeCost) {
                         scoreDiv.classList.add('mistake');
                         undoMistake.disabled = false;
                         score -= mistakeCost;
+                        mistakesCount ++;
                         updateScore();
                     }
 

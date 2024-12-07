@@ -177,6 +177,7 @@ select {
 
 table {
     width: 100%;
+    border-collapse: collapse;
 }
 
 td,
@@ -184,33 +185,29 @@ th {
     border-color: var(--secondary-colour);
     border-style: inset;
     border-width: 2px;
-    padding: 2px;
+    padding: 1px;
     text-align: center;
 }
 
 td {
-    border-radius: 0px 0px 5px 0px;
     font-weight: 600;
 }
 
 td:focus,
-td:hover {
+td:hover,
+th:focus,
+th:hover {
     background-color: var(--accent2);
     color: var(--secondary-colour);
+    border-color: var(--accent1);
+    border-style: solid;
 }
 
 th {
     background-color: var(--secondary-colour);
     color: var(--primary-colour);
-    border-radius: 5px 5px 0px 0px;
-    font-size: 13pt;
-    font-weight: bold;
-}
-
-th:focus,
-th:hover {
-    background-color: var(--accent2);
-    color: var(--secondary-colour);
+    font-size: 1.05em;
+    font-weight: 700;
 }
 
 textarea {
