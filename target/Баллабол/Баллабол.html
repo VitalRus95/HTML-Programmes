@@ -204,9 +204,13 @@
             }
             
             td:focus,
-            td:hover {
+            td:hover,
+            th:focus,
+            th:hover {
                 background-color: var(--accent2);
                 color: var(--secondary-colour);
+                border-color: var(--accent1);
+                border-style: solid;
             }
             
             th {
@@ -214,12 +218,6 @@
                 color: var(--primary-colour);
                 font-size: 1.05em;
                 font-weight: 700;
-            }
-            
-            th:focus,
-            th:hover {
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
             }
             
             textarea {

@@ -204,9 +204,13 @@
             }
             
             td:focus,
-            td:hover {
+            td:hover,
+            th:focus,
+            th:hover {
                 background-color: var(--accent2);
                 color: var(--secondary-colour);
+                border-color: var(--accent1);
+                border-style: solid;
             }
             
             th {
@@ -214,12 +218,6 @@
                 color: var(--primary-colour);
                 font-size: 1.05em;
                 font-weight: 700;
-            }
-            
-            th:focus,
-            th:hover {
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
             }
             
             textarea {
@@ -309,6 +307,32 @@
                 --cell-radius: 5%;
                 --num-border: calc(var(--cell-border) * 1.5);
                 --gap-size: calc(var(--cell-size) * 0.04);
+            }
+
+            @keyframes win-show {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0%);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes win-blink {
+                0% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+                50% {
+                    background-color: var(--accent1);
+                    color: var(--accent2);
+                }
+                100% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
             }
 
             .grid {
@@ -596,6 +620,24 @@
                 border-radius: 0px 7px 7px 0px;
             }
 
+            #grid-victory {
+                align-self: center;
+                text-align: center;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.5em;
+                font-weight: 600;
+                border-radius: 7px 7px 0px 0px;
+                padding: 2px;
+                width: 100%;
+                animation: win-show 1s ease-out;
+                animation: win-blink 5s ease alternate infinite;
+            }
+
+            #grid-win {
+                display: none;
+                flex-direction: column;
+            }
+
             #load-button-div {
                 display: flex;
                 flex-wrap: wrap;
@@ -690,6 +732,36 @@
         <a id='save-button' class='box' download='Crossword.json' href='' onclick='saveCrossword()'>
             &#128190; Save crossword
         </a>
+
+        <!-- Victory text -->
+        <div id='grid-win' tabindex='1'>
+            <span id='grid-victory'>Victory!</span>
+            
+            <!-- End stats -->
+            <table id='grid-win-stats'>
+                <th id='grid-win-stats-label' colspan='2'>
+                    Statistics
+                </th>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-time-label'>Time (min:sec)</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-time'>00:00</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-mistakes-label'>Mistakes</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-mistakes'>0</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
         <!-- Grid -->
         <div>
@@ -1104,6 +1176,12 @@
             let verQuestions = document.getElementById('questions-ver-list');
             /** @type {HTMLOListElement} */
             let horQuestions = document.getElementById('questions-hor-list');
+            /** @type {HTMLSpanElement} */
+            let win = document.getElementById('grid-win');
+            /** {HTMLSpanElement} */
+            let time = document.getElementById('grid-win-time');
+            /** {HTMLSpanElement} */
+            let mistakes = document.getElementById('grid-win-mistakes');
             /** @type {HTMLDivElement} */
             let editorShift = document.getElementById('editor-shift');
             /** @type {HTMLButtonElement} */
@@ -1147,8 +1225,14 @@
             let lastNumber = undefined;
             /** @type {number} */
             let editedWordIndex = undefined;
+            /** @type {number} */
+            let mistakesCount;
+            /** @type {number} */
+            let timerStart;
+            /** @type {number} */
+            let timerEnd;
 
-            roundness.value = localStorage.getItem('roundness') ?? '5%';
+            roundness.value = localStorage.getItem('roundness') ?? '5';
             document.body.style.setProperty('--cell-radius', `${roundness.value}%`);
             roundnessValue.textContent = `${roundness.value}%`;
 
@@ -1495,7 +1579,7 @@
                 input.addEventListener('input', function (event) {
                     this.value = this.value.toUpperCase();
 
-                    // If the answer is correct, select the next letter
+                    // If the input is correct, select the next letter
                     if (this.checkValidity()) {
                         /** @type {HTMLInputElement} */
                         let next = document.getElementById(
@@ -1516,7 +1600,11 @@
                                 this.blur();
                             }
                         }
+
+                        checkWin();
                     } else {
+                        // Wrong letter
+                        mistakesCount ++;
                         this.select();
                     }
                 });
@@ -1602,6 +1690,36 @@
                 }
             }
 
+            function checkWin() {
+                /** @type {boolean} */
+                let allCorrect = true;
+                /** @type {HTMLInputElement[]} */
+                let inputs = grid.getElementsByClassName('cell-input');
+                
+                for (let i of inputs) {
+                    if (!i.checkValidity()) {
+                        allCorrect = false;
+                        return;
+                    }
+                }
+
+                if (allCorrect) {
+                    win.style.display = 'flex';
+                    timerEnd = Date.now();
+
+                    let date = new Date(timerEnd - timerStart);
+                    let min = date.getMinutes();
+                    let sec = date.getSeconds();
+
+                    time.textContent = `${
+                        min > 9 ? min : `0${min}`
+                    }:${
+                        sec > 9 ? sec : `0${sec}`
+                    }`;
+                    mistakes.textContent = mistakesCount;
+                }
+            }
+
             function fillGrid() {
                 // Reset numbers' counters
                 /** @type {number} */
@@ -1612,6 +1730,10 @@
                 // Reset maximum X and Y
                 xMax = 4;
                 yMax = 4;
+
+                // Reset mistakes counter and victory DIV
+                win.style.display = 'none';
+                mistakesCount = 0;
 
                 // Empty the questions
                 while (verQuestions.hasChildNodes()) {
@@ -1709,6 +1831,9 @@
                         if (cell) setUpLetterCell(cell, w, i, x, y);
                     }
                 });
+
+                // Reset the timer
+                timerStart = Date.now();
             }
 
             fillGrid();

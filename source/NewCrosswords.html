@@ -72,6 +72,22 @@
                     background-color 0.5s ease-in;
             }
 
+            @keyframes input-mistake {
+                33% {
+                    transform: rotate(-10deg);
+                }
+                66% {
+                    transform: rotate(10deg);
+                }
+                100% {
+                    transform: rotate(0deg);
+                }
+            }
+
+            .mistake {
+                animation: input-mistake 0.5s ease;
+            }
+
             .borderless {
                 border-style: none;
             }
@@ -302,6 +318,50 @@
                 border-radius: 0px 7px 7px 0px;
             }
 
+            @keyframes win-show {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0%);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes win-blink {
+                0% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+                50% {
+                    background-color: var(--accent1);
+                    color: var(--accent2);
+                }
+                100% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+            }
+
+            #grid-victory {
+                align-self: center;
+                text-align: center;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.5em;
+                font-weight: 600;
+                border-radius: 7px 7px 0px 0px;
+                padding: 2px;
+                width: 100%;
+                animation: win-show 1s ease-out;
+                animation: win-blink 5s ease alternate infinite;
+            }
+
+            #grid-win {
+                display: none;
+                flex-direction: column;
+            }
+
             #load-button-div {
                 display: flex;
                 flex-wrap: wrap;
@@ -397,6 +457,36 @@
             &#128190; Save crossword
         </a>
 
+        <!-- Victory text -->
+        <div id='grid-win' tabindex='0'>
+            <span id='grid-victory' tabindex='0'>Victory!</span>
+            
+            <!-- End stats -->
+            <table id='grid-win-stats'>
+                <th id='grid-win-stats-label' colspan='2' tabindex='0'>
+                    Statistics
+                </th>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-time-label' tabindex='0'>Time (min:sec)</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-time' tabindex='0'>00:00</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-mistakes-label' tabindex='0'>Mistakes</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-mistakes' tabindex='0'>0</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
         <!-- Grid -->
         <div>
             <!-- Shift all words -->
@@ -465,6 +555,12 @@
             let verQuestions = document.getElementById('questions-ver-list');
             /** @type {HTMLOListElement} */
             let horQuestions = document.getElementById('questions-hor-list');
+            /** @type {HTMLSpanElement} */
+            let win = document.getElementById('grid-win');
+            /** {HTMLSpanElement} */
+            let time = document.getElementById('grid-win-time');
+            /** {HTMLSpanElement} */
+            let mistakes = document.getElementById('grid-win-mistakes');
             /** @type {HTMLDivElement} */
             let editorShift = document.getElementById('editor-shift');
             /** @type {HTMLButtonElement} */
@@ -508,8 +604,14 @@
             let lastNumber = undefined;
             /** @type {number} */
             let editedWordIndex = undefined;
+            /** @type {number} */
+            let mistakesCount;
+            /** @type {number} */
+            let timerStart;
+            /** @type {number} */
+            let timerEnd;
 
-            roundness.value = localStorage.getItem('roundness') ?? '5%';
+            roundness.value = localStorage.getItem('roundness') ?? '5';
             document.body.style.setProperty('--cell-radius', `${roundness.value}%`);
             roundnessValue.textContent = `${roundness.value}%`;
 
@@ -856,7 +958,7 @@
                 input.addEventListener('input', function (event) {
                     this.value = this.value.toUpperCase();
 
-                    // If the answer is correct, select the next letter
+                    // If the input is correct, select the next letter
                     if (this.checkValidity()) {
                         /** @type {HTMLInputElement} */
                         let next = document.getElementById(
@@ -877,8 +979,20 @@
                                 this.blur();
                             }
                         }
+
+                        checkWin();
                     } else {
-                        this.select();
+                        // Wrong letter
+                        this.classList.add('mistake');
+                        this.readOnly = true;
+                        mistakesCount ++;
+
+                        setTimeout(() => {
+                            this.classList.remove('mistake');
+                            this.readOnly = false;
+                            this.value = '';
+                            this.focus();
+                        }, 600);
                     }
                 });
             }
@@ -963,6 +1077,40 @@
                 }
             }
 
+            function checkWin() {
+                /** @type {boolean} */
+                let allCorrect = true;
+                /** @type {HTMLInputElement[]} */
+                let inputs = grid.getElementsByClassName('cell-input');
+                
+                for (let i of inputs) {
+                    if (!i.checkValidity()) {
+                        allCorrect = false;
+                        return;
+                    }
+                }
+
+                if (allCorrect) {
+                    if (win.style.display === 'flex') return;
+
+                    win.style.display = 'flex';
+                    timerEnd = Date.now();
+
+                    let date = new Date(timerEnd - timerStart);
+                    let min = date.getMinutes();
+                    let sec = date.getSeconds();
+
+                    time.textContent = `${
+                        min > 9 ? min : `0${min}`
+                    }:${
+                        sec > 9 ? sec : `0${sec}`
+                    }`;
+                    mistakes.textContent = mistakesCount;
+
+                    win.focus();
+                }
+            }
+
             function fillGrid() {
                 // Reset numbers' counters
                 /** @type {number} */
@@ -973,6 +1121,10 @@
                 // Reset maximum X and Y
                 xMax = 4;
                 yMax = 4;
+
+                // Reset mistakes counter and victory DIV
+                win.style.display = 'none';
+                mistakesCount = 0;
 
                 // Empty the questions
                 while (verQuestions.hasChildNodes()) {
@@ -1070,6 +1222,9 @@
                         if (cell) setUpLetterCell(cell, w, i, x, y);
                     }
                 });
+
+                // Reset the timer
+                timerStart = Date.now();
             }
 
             fillGrid();
