@@ -309,32 +309,6 @@
                 --gap-size: calc(var(--cell-size) * 0.04);
             }
 
-            @keyframes win-show {
-                from {
-                    transform: translateY(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateY(0%);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes win-blink {
-                0% {
-                    background-color: var(--primary-colour);
-                    color: var(--secondary-colour);
-                }
-                50% {
-                    background-color: var(--accent1);
-                    color: var(--accent2);
-                }
-                100% {
-                    background-color: var(--primary-colour);
-                    color: var(--secondary-colour);
-                }
-            }
-
             .grid {
                 display: flex;
                 flex-direction: column;
@@ -388,6 +362,22 @@
                 transition:
                     all 0.1s ease,
                     background-color 0.5s ease-in;
+            }
+
+            @keyframes input-mistake {
+                33% {
+                    transform: rotate(-10deg);
+                }
+                66% {
+                    transform: rotate(10deg);
+                }
+                100% {
+                    transform: rotate(0deg);
+                }
+            }
+
+            .mistake {
+                animation: input-mistake 0.5s ease;
             }
 
             .borderless {
@@ -620,6 +610,32 @@
                 border-radius: 0px 7px 7px 0px;
             }
 
+            @keyframes win-show {
+                from {
+                    transform: translateY(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0%);
+                    opacity: 1;
+                }
+            }
+
+            @keyframes win-blink {
+                0% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+                50% {
+                    background-color: var(--accent1);
+                    color: var(--accent2);
+                }
+                100% {
+                    background-color: var(--primary-colour);
+                    color: var(--secondary-colour);
+                }
+            }
+
             #grid-victory {
                 align-self: center;
                 text-align: center;
@@ -734,30 +750,30 @@
         </a>
 
         <!-- Victory text -->
-        <div id='grid-win' tabindex='1'>
-            <span id='grid-victory'>Victory!</span>
+        <div id='grid-win' tabindex='0'>
+            <span id='grid-victory' tabindex='0'>Victory!</span>
             
             <!-- End stats -->
             <table id='grid-win-stats'>
-                <th id='grid-win-stats-label' colspan='2'>
+                <th id='grid-win-stats-label' colspan='2' tabindex='0'>
                     Statistics
                 </th>
 
                 <tr>
                     <td>
-                        <span id='grid-win-time-label'>Time (min:sec)</span>
+                        <span id='grid-win-time-label' tabindex='0'>Time (min:sec)</span>
                     </td>
                     <td>
-                        <span id='grid-win-time'>00:00</span>
+                        <span id='grid-win-time' tabindex='0'>00:00</span>
                     </td>
                 </tr>
 
                 <tr>
                     <td>
-                        <span id='grid-win-mistakes-label'>Mistakes</span>
+                        <span id='grid-win-mistakes-label' tabindex='0'>Mistakes</span>
                     </td>
                     <td>
-                        <span id='grid-win-mistakes'>0</span>
+                        <span id='grid-win-mistakes' tabindex='0'>0</span>
                     </td>
                 </tr>
             </table>
@@ -1604,8 +1620,16 @@
                         checkWin();
                     } else {
                         // Wrong letter
+                        this.classList.add('mistake');
+                        this.readOnly = true;
                         mistakesCount ++;
-                        this.select();
+
+                        setTimeout(() => {
+                            this.classList.remove('mistake');
+                            this.readOnly = false;
+                            this.value = '';
+                            this.select();
+                        }, 600);
                     }
                 });
             }
@@ -1704,6 +1728,8 @@
                 }
 
                 if (allCorrect) {
+                    if (win.style.display === 'flex') return;
+
                     win.style.display = 'flex';
                     timerEnd = Date.now();
 
@@ -1717,6 +1743,8 @@
                         sec > 9 ? sec : `0${sec}`
                     }`;
                     mistakes.textContent = mistakesCount;
+
+                    win.focus();
                 }
             }
 
