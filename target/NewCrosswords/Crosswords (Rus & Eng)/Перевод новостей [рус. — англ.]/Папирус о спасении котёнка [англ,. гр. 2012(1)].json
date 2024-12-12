@@ -3,47 +3,96 @@
     "word": "scribe",
     "description": "✍👨",
     "vertical": true,
-    "x": 2,
+    "x": 5,
     "y": 0
   },
   {
     "word": "culprit",
     "description": "Виновник",
     "vertical": true,
-    "x": 4,
+    "x": 7,
     "y": 0
   },
   {
     "word": "epistates",
     "description": "Эпистат",
     "vertical": true,
-    "x": 6,
+    "x": 9,
     "y": 0
   },
   {
     "word": "sacred",
     "description": "😸🛐🛐🛐(прил.)",
     "vertical": false,
-    "x": 1,
+    "x": 4,
     "y": 1
+  },
+  {
+    "word": "deliberate",
+    "description": "Преднамеренный",
+    "vertical": true,
+    "x": 4,
+    "y": 5
   },
   {
     "word": "vindicate",
     "description": "👨‍⚖️😅(глаг.)",
     "vertical": true,
-    "x": 9,
+    "x": 12,
     "y": 5
   },
   {
     "word": "derivative",
     "description": "🅰➡🅱(сущ.)",
     "vertical": false,
-    "x": 0,
+    "x": 3,
     "y": 6
   },
   {
-    "word": "deliberate",
-    "description": "Преднамеренный",
+    "word": "temple",
+    "description": "🏛",
+    "vertical": true,
+    "x": 1,
+    "y": 7
+  },
+  {
+    "word": "tomcat",
+    "description": "🐈(🚹)",
+    "vertical": true,
+    "x": 6,
+    "y": 10
+  },
+  {
+    "word": "nurse",
+    "description": "👩‍⚕️(глаг.)",
+    "vertical": true,
+    "x": 8,
+    "y": 10
+  },
+  {
+    "word": "mummify",
+    "description": "Мумифицировать",
+    "vertical": true,
+    "x": 16,
+    "y": 10
+  },
+  {
+    "word": "priest",
+    "description": "🛐",
+    "vertical": false,
+    "x": 0,
+    "y": 11
+  },
+  {
+    "word": "papyrus",
+    "description": "📜",
+    "vertical": false,
+    "x": 10,
+    "y": 12
+  },
+  {
+    "word": "embalmer",
+    "description": "Бальзамировщик",
     "vertical": false,
     "x": 0,
     "y": 13
@@ -51,71 +100,22 @@
   {
     "word": "lynch",
     "description": "😡🔪😡🔪😡🔪😱(глаг.)",
-    "vertical": false,
-    "x": 0,
-    "y": 18
-  },
-  {
-    "word": "tomcat",
-    "description": "🐈(🚹)",
-    "vertical": false,
-    "x": 0,
-    "y": 19
-  },
-  {
-    "word": "embalmer",
-    "description": "Бальзамировщик",
-    "vertical": false,
-    "x": 0,
-    "y": 20
-  },
-  {
-    "word": "mummify",
-    "description": "Мумифицировать",
-    "vertical": false,
-    "x": 0,
-    "y": 21
-  },
-  {
-    "word": "offspring",
-    "description": "👫➡👶👶👶/🐈+🐈=😺😺😺",
-    "vertical": false,
-    "x": 0,
-    "y": 22
+    "vertical": true,
+    "x": 21,
+    "y": 13
   },
   {
     "word": "testimony",
     "description": "Свидетельство",
     "vertical": false,
-    "x": 0,
-    "y": 23
+    "x": 10,
+    "y": 14
   },
   {
-    "word": "nurse",
-    "description": "👩‍⚕️(глаг.)",
+    "word": "offspring",
+    "description": "👫➡👶👶👶/🐈+🐈=😺😺😺",
     "vertical": false,
-    "x": 0,
-    "y": 24
-  },
-  {
-    "word": "papyrus",
-    "description": "📜",
-    "vertical": false,
-    "x": 0,
-    "y": 27
-  },
-  {
-    "word": "temple",
-    "description": "🏛",
-    "vertical": false,
-    "x": 0,
-    "y": 28
-  },
-  {
-    "word": "priest",
-    "description": "🛐",
-    "vertical": false,
-    "x": 0,
-    "y": 29
+    "x": 13,
+    "y": 16
   }
 ]

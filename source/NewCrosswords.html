@@ -34,6 +34,13 @@
                 width: fit-content;
             }
 
+            @keyframes cell-show {
+                50% {
+                    background-color: var(--secondary-colour);
+                    border-color: var(--accent2);
+                }
+            }
+
             .cell {
                 display: flex;
                 align-items: center;
@@ -48,6 +55,7 @@
                 font-size: var(--cell-font);
                 font-weight: 600;
                 transition: all 1.5s ease-in;
+                animation: cell-show ease;
             }
 
             .cell:focus,
@@ -137,6 +145,7 @@
 
             .cell-number {
                 background-color: transparent;
+                border-radius: 50%;
                 border-style: none;
             }
 
@@ -427,6 +436,8 @@
                 onchange='loadCrossword()'
             />
         </div>
+
+        <button id='start' onclick='fillGrid()'>Start</button>
 
         <!-- Crossword name -->
         <h2 id='crosswordName'>...</h2>
@@ -975,6 +986,7 @@
                             // If it's the last letter, try to select the last number button
                             if (lastNumber) {
                                 lastNumber.focus();
+                                lastNumber = undefined;
                             } else {
                                 this.blur();
                             }
@@ -1179,6 +1191,9 @@
                         cell.style.cursor = editor.checked
                             ? 'cell'
                             : 'default';
+                        cell.style.animationDuration = editor.checked
+                            ? `0s`
+                            : `${((x + y) / (xMax + yMax)) * 9 + 1}s`;
 
                         // Adding a word
                         cell.addEventListener('click', function (event) {

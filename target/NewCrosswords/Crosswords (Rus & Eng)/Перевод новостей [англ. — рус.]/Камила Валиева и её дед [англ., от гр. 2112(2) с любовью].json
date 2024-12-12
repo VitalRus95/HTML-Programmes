@@ -1,0 +1,65 @@
+[
+  {
+    "word": "doping",
+    "description": "💊⛸(сущ.)",
+    "vertical": true,
+    "x": 2,
+    "y": 0
+  },
+  {
+    "word": "irreparable",
+    "description": "Непоправимый",
+    "vertical": true,
+    "x": 9,
+    "y": 0
+  },
+  {
+    "word": "contender",
+    "description": "🥇🏃‍♂️",
+    "vertical": false,
+    "x": 0,
+    "y": 2
+  },
+  {
+    "word": "minor",
+    "description": "🔞",
+    "vertical": false,
+    "x": 0,
+    "y": 4
+  },
+  {
+    "word": "ordeal",
+    "description": "Испытание",
+    "vertical": true,
+    "x": 16,
+    "y": 7
+  },
+  {
+    "word": "angina",
+    "description": "стена + ❤",
+    "vertical": true,
+    "x": 19,
+    "y": 7
+  },
+  {
+    "word": "contamination",
+    "description": "Заражение (здесь — «попадание»)",
+    "vertical": false,
+    "x": 4,
+    "y": 8
+  },
+  {
+    "word": "sample",
+    "description": "🧪",
+    "vertical": false,
+    "x": 4,
+    "y": 10
+  },
+  {
+    "word": "drug",
+    "description": "💊",
+    "vertical": false,
+    "x": 15,
+    "y": 10
+  }
+]
