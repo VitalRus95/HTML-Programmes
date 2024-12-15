@@ -2,105 +2,92 @@
   {
     "word": "catalyst",
     "description": "A person or thing that causes a change",
-    "column": 13,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 13,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "counterfeit",
     "description": "Made in imitation of something genuine with the intent to deceive or defraud",
-    "column": 11,
-    "row": 1,
-    "isVertical": true,
-    "number": 2
+    "x": 11,
+    "y": 1,
+    "vertical": true
   },
   {
     "word": "tincture",
     "description": "A medicinal extract in a solution of alcohol",
-    "column": 15,
-    "row": 1,
-    "isVertical": true,
-    "number": 3
+    "x": 15,
+    "y": 1,
+    "vertical": true
   },
   {
     "word": "tout",
     "description": "To recommend flatteringly or excessively",
-    "column": 9,
-    "row": 3,
-    "isVertical": false,
-    "number": 1
+    "x": 9,
+    "y": 3,
+    "vertical": false
   },
   {
     "word": "dissemble",
     "description": "To conceal (one's real motives, emotions, etc) by pretence",
-    "column": 7,
-    "row": 4,
-    "isVertical": true,
-    "number": 4
+    "x": 7,
+    "y": 4,
+    "vertical": true
   },
   {
     "word": "lace",
     "description": "To include a lot of words of a particular kind in one's speech or writing",
-    "column": 12,
-    "row": 5,
-    "isVertical": false,
-    "number": 2
+    "x": 12,
+    "y": 5,
+    "vertical": false
   },
   {
     "word": "chortle",
     "description": "To laugh in a way that shows you are very pleased",
-    "column": 2,
-    "row": 6,
-    "isVertical": true,
-    "number": 5
+    "x": 2,
+    "y": 6,
+    "vertical": true
   },
   {
     "word": "assuage",
     "description": "To soothe, moderate, or relieve (grief, pain, etc)",
-    "column": 4,
-    "row": 7,
-    "isVertical": false,
-    "number": 3
+    "x": 4,
+    "y": 7,
+    "vertical": false
   },
   {
     "word": "tiptoe",
     "description": "To walk silently or stealthily",
-    "column": 18,
-    "row": 7,
-    "isVertical": true,
-    "number": 6
+    "x": 18,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "garment",
     "description": "An article of clothing",
-    "column": 4,
-    "row": 8,
-    "isVertical": true,
-    "number": 7
+    "x": 4,
+    "y": 8,
+    "vertical": true
   },
   {
     "word": "bunkum",
     "description": "Empty talk; nonsense [informal]",
-    "column": 16,
-    "row": 8,
-    "isVertical": true,
-    "number": 8
+    "x": 16,
+    "y": 8,
+    "vertical": true
   },
   {
     "word": "debris",
     "description": "Fragments or remnants of something destroyed or broken; rubble",
-    "column": 13,
-    "row": 9,
-    "isVertical": false,
-    "number": 4
+    "x": 13,
+    "y": 9,
+    "vertical": false
   },
   {
     "word": "broad-minded",
     "description": "Tolerant of opposing viewpoints; not prejudiced; liberal",
-    "column": 0,
-    "row": 10,
-    "isVertical": false,
-    "number": 5
+    "x": 0,
+    "y": 10,
+    "vertical": false
   }
 ]

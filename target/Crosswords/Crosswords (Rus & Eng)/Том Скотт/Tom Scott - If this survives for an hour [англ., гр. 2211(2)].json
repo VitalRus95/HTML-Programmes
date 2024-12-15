@@ -2,161 +2,141 @@
   {
     "word": "enrichment",
     "description": "Создание удобных условий",
-    "column": 7,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 7,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "campsite",
     "description": "Палаточный лагерь",
-    "column": 10,
-    "row": 0,
-    "isVertical": true,
-    "number": 2
+    "x": 10,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "kibble",
     "description": "Корм",
-    "column": 1,
-    "row": 1,
-    "isVertical": false,
-    "number": 1
+    "x": 1,
+    "y": 1,
+    "vertical": false
   },
   {
     "word": "cub",
     "description": "👶🐻",
-    "column": 9,
-    "row": 1,
-    "isVertical": false,
-    "number": 2
+    "x": 9,
+    "y": 1,
+    "vertical": false
   },
   {
     "word": "rummage",
     "description": "Рыться",
-    "column": 6,
-    "row": 3,
-    "isVertical": false,
-    "number": 3
+    "x": 6,
+    "y": 3,
+    "vertical": false
   },
   {
     "word": "reminder",
     "description": "Напоминание",
-    "column": 4,
-    "row": 4,
-    "isVertical": true,
-    "number": 3
+    "x": 4,
+    "y": 4,
+    "vertical": true
   },
   {
     "word": "euthanise",
     "description": "Оживить (🔁)",
-    "column": 3,
-    "row": 6,
-    "isVertical": false,
-    "number": 4
+    "x": 3,
+    "y": 6,
+    "vertical": false
   },
   {
     "word": "wilderness",
     "description": "🌲🐻🦋",
-    "column": 2,
-    "row": 8,
-    "isVertical": false,
-    "number": 5
+    "x": 2,
+    "y": 8,
+    "vertical": false
   },
   {
     "word": "mistreat",
     "description": "Плохо обращаться",
-    "column": 11,
-    "row": 9,
-    "isVertical": true,
-    "number": 4
+    "x": 11,
+    "y": 9,
+    "vertical": true
   },
   {
     "word": "lid",
     "description": "🔝🏠'+ка",
-    "column": 13,
-    "row": 10,
-    "isVertical": true,
-    "number": 5
+    "x": 13,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "jam",
     "description": "Заклинивать",
-    "column": 16,
-    "row": 10,
-    "isVertical": true,
-    "number": 6
+    "x": 16,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "cooler",
     "description": "👜🧊",
-    "column": 2,
-    "row": 11,
-    "isVertical": true,
-    "number": 7
+    "x": 2,
+    "y": 11,
+    "vertical": true
   },
   {
     "word": "aisle",
     "description": "Ряд [в магазине]",
-    "column": 9,
-    "row": 11,
-    "isVertical": false,
-    "number": 6
+    "x": 9,
+    "y": 11,
+    "vertical": false
   },
   {
     "word": "cpr",
     "description": "🙌🧡",
-    "column": 1,
-    "row": 12,
-    "isVertical": false,
-    "number": 7
+    "x": 1,
+    "y": 12,
+    "vertical": false
   },
   {
     "word": "log",
     "description": "🌳+🪓=",
-    "column": 5,
-    "row": 12,
-    "isVertical": true,
-    "number": 8
+    "x": 5,
+    "y": 12,
+    "vertical": true
   },
   {
     "word": "welfare",
     "description": "Благополучие",
-    "column": 8,
-    "row": 12,
-    "isVertical": true,
-    "number": 9
+    "x": 8,
+    "y": 12,
+    "vertical": true
   },
   {
     "word": "dummy",
     "description": "Пустышка [здесь — «обычный»]",
-    "column": 12,
-    "row": 13,
-    "isVertical": false,
-    "number": 8
+    "x": 12,
+    "y": 13,
+    "vertical": false
   },
   {
     "word": "allegedly",
     "description": "Якобы",
-    "column": 0,
-    "row": 15,
-    "isVertical": false,
-    "number": 9
+    "x": 0,
+    "y": 15,
+    "vertical": false
   },
   {
     "word": "paw",
     "description": "🐾",
-    "column": 6,
-    "row": 16,
-    "isVertical": true,
-    "number": 10
+    "x": 6,
+    "y": 16,
+    "vertical": true
   },
   {
     "word": "peanut",
     "description": "🥜",
-    "column": 5,
-    "row": 17,
-    "isVertical": false,
-    "number": 10
+    "x": 5,
+    "y": 17,
+    "vertical": false
   }
 ]

@@ -1,0 +1,162 @@
+[
+  {
+    "word": "via",
+    "description": "С помощью",
+    "column": 7,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "limb",
+    "description": "💪🦵",
+    "column": 3,
+    "row": 1,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "liquid",
+    "description": "💦",
+    "column": 2,
+    "row": 2,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "prosthetic",
+    "description": "🦾(прил.)",
+    "column": 5,
+    "row": 3,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "modality",
+    "description": "Разновидность",
+    "column": 9,
+    "row": 3,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "residual",
+    "description": "Остаточный",
+    "column": 11,
+    "row": 3,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "map",
+    "description": "Соотносить",
+    "column": 2,
+    "row": 4,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "sensation",
+    "description": "Ощущение",
+    "column": 4,
+    "row": 7,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "elicit",
+    "description": "Вызывать",
+    "column": 7,
+    "row": 9,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "differentiate",
+    "description": "Различать",
+    "column": 0,
+    "row": 10,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "accuracy",
+    "description": "Точность",
+    "column": 2,
+    "row": 11,
+    "isVertical": true,
+    "number": 7
+  },
+  {
+    "word": "phantom",
+    "description": "👻",
+    "column": 10,
+    "row": 12,
+    "isVertical": true,
+    "number": 8
+  },
+  {
+    "word": "copper",
+    "description": "Cuprum",
+    "column": 6,
+    "row": 13,
+    "isVertical": false,
+    "number": 5
+  },
+  {
+    "word": "humidity",
+    "description": "Сырость",
+    "column": 0,
+    "row": 15,
+    "isVertical": false,
+    "number": 6
+  },
+  {
+    "word": "feedback",
+    "description": "🔁",
+    "column": 7,
+    "row": 16,
+    "isVertical": true,
+    "number": 9
+  },
+  {
+    "word": "sensor",
+    "description": "Воспринимающее устройство",
+    "column": 5,
+    "row": 18,
+    "isVertical": false,
+    "number": 7
+  },
+  {
+    "word": "fingertip",
+    "description": "☝",
+    "column": 12,
+    "row": 20,
+    "isVertical": true,
+    "number": 10
+  },
+  {
+    "word": "Band-Aid",
+    "description": "🩹",
+    "column": 5,
+    "row": 22,
+    "isVertical": false,
+    "number": 8
+  },
+  {
+    "word": "lag",
+    "description": "Отставать",
+    "column": 10,
+    "row": 25,
+    "isVertical": true,
+    "number": 11
+  },
+  {
+    "word": "intact",
+    "description": "💪(прил.)",
+    "column": 6,
+    "row": 27,
+    "isVertical": false,
+    "number": 9
+  }
+]

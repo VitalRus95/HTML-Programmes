@@ -2,145 +2,127 @@
   {
     "word": "фермент",
     "description": "Enzyme",
-    "column": 11,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 11,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "торгаш",
     "description": "Huckster",
-    "column": 4,
-    "row": 1,
-    "isVertical": true,
-    "number": 2
+    "x": 4,
+    "y": 1,
+    "vertical": true
   },
   {
     "word": "отверстие",
     "description": "Orifice",
-    "column": 2,
-    "row": 2,
-    "isVertical": false,
-    "number": 1
+    "x": 2,
+    "y": 2,
+    "vertical": false
   },
   {
     "word": "спор",
     "description": "Controversy",
-    "column": 8,
-    "row": 3,
-    "isVertical": true,
-    "number": 3
+    "x": 8,
+    "y": 3,
+    "vertical": true
   },
   {
     "word": "предполагать",
     "description": "Allege",
-    "column": 15,
-    "row": 4,
-    "isVertical": true,
-    "number": 4
+    "x": 15,
+    "y": 4,
+    "vertical": true
   },
   {
     "word": "свидетельство",
     "description": "Testimonial",
-    "column": 13,
-    "row": 5,
-    "isVertical": true,
-    "number": 5
+    "x": 13,
+    "y": 5,
+    "vertical": true
   },
   {
     "word": "Навуходоносор",
     "description": "Nebuchadnezzar",
-    "column": 2,
-    "row": 6,
-    "isVertical": false,
-    "number": 2
+    "x": 2,
+    "y": 6,
+    "vertical": false
   },
   {
     "word": "воспаление",
     "description": "Inflammation",
-    "column": 3,
-    "row": 10,
-    "isVertical": false,
-    "number": 3
+    "x": 3,
+    "y": 10,
+    "vertical": false
   },
   {
     "word": "суеверие",
     "description": "Superstition",
-    "column": 5,
-    "row": 12,
-    "isVertical": false,
-    "number": 4
+    "x": 5,
+    "y": 12,
+    "vertical": false
   },
   {
     "word": "пырей",
     "description": "Wheatgrass",
-    "column": 2,
-    "row": 13,
-    "isVertical": true,
-    "number": 6
+    "x": 2,
+    "y": 13,
+    "vertical": true
   },
   {
     "word": "переваривать",
     "description": "Digest",
-    "column": 1,
-    "row": 14,
-    "isVertical": false,
-    "number": 5
+    "x": 1,
+    "y": 14,
+    "vertical": false
   },
   {
     "word": "чушь",
     "description": "Baloney",
-    "column": 4,
-    "row": 15,
-    "isVertical": true,
-    "number": 7
+    "x": 4,
+    "y": 15,
+    "vertical": true
   },
   {
     "word": "этилртуть",
     "description": "Ethylmercury",
-    "column": 11,
-    "row": 15,
-    "isVertical": true,
-    "number": 8
+    "x": 11,
+    "y": 15,
+    "vertical": true
   },
   {
     "word": "причинный",
     "description": "Causal",
-    "column": 0,
-    "row": 16,
-    "isVertical": false,
-    "number": 6
+    "x": 0,
+    "y": 16,
+    "vertical": false
   },
   {
     "word": "снимок",
     "description": "Snapshot",
-    "column": 8,
-    "row": 18,
-    "isVertical": false,
-    "number": 7
+    "x": 8,
+    "y": 18,
+    "vertical": false
   },
   {
     "word": "целебный",
     "description": "Salubrious",
-    "column": 7,
-    "row": 21,
-    "isVertical": true,
-    "number": 9
+    "x": 7,
+    "y": 21,
+    "vertical": true
   },
   {
     "word": "целостный",
     "description": "Holistic",
-    "column": 5,
-    "row": 23,
-    "isVertical": false,
-    "number": 8
+    "x": 5,
+    "y": 23,
+    "vertical": false
   },
   {
     "word": "обходить",
     "description": "Circumvent",
-    "column": 5,
-    "row": 26,
-    "isVertical": false,
-    "number": 9
+    "x": 5,
+    "y": 26,
+    "vertical": false
   }
 ]

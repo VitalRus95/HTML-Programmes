@@ -2,113 +2,99 @@
   {
     "word": "transmit",
     "description": "Передавать",
-    "column": 10,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 10,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "invention",
     "description": "Изобретение",
-    "column": 7,
-    "row": 2,
-    "isVertical": true,
-    "number": 2
+    "x": 7,
+    "y": 2,
+    "vertical": true
   },
   {
     "word": "redundant",
     "description": "Излишний",
-    "column": 2,
-    "row": 4,
-    "isVertical": false,
-    "number": 1
+    "x": 2,
+    "y": 4,
+    "vertical": false
   },
   {
     "word": "sensor",
     "description": "Датчик",
-    "column": 3,
-    "row": 5,
-    "isVertical": true,
-    "number": 3
+    "x": 3,
+    "y": 5,
+    "vertical": true
   },
   {
     "word": "spare",
     "description": "Избавлять",
-    "column": 2,
-    "row": 6,
-    "isVertical": false,
-    "number": 2
+    "x": 2,
+    "y": 6,
+    "vertical": false
   },
   {
     "word": "pathetic",
     "description": "Жалкий",
-    "column": 4,
-    "row": 8,
-    "isVertical": false,
-    "number": 3
+    "x": 4,
+    "y": 8,
+    "vertical": false
   },
   {
     "word": "locust",
     "description": "Саранча",
-    "column": 15,
-    "row": 8,
-    "isVertical": true,
-    "number": 4
+    "x": 15,
+    "y": 8,
+    "vertical": true
   },
   {
     "word": "clap",
     "description": "Хлопо́к в ладоши",
-    "column": 13,
-    "row": 9,
-    "isVertical": false,
-    "number": 4
+    "x": 13,
+    "y": 9,
+    "vertical": false
   },
   {
     "word": "cumbersome",
     "description": "Громоздкий",
-    "column": 5,
-    "row": 10,
-    "isVertical": true,
-    "number": 5
+    "x": 5,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "nutrient",
     "description": "Питательное вещество",
-    "column": 8,
-    "row": 10,
-    "isVertical": true,
-    "number": 6
+    "x": 8,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "reconnaissance",
     "description": "Разведка",
-    "column": 2,
-    "row": 11,
-    "isVertical": false,
-    "number": 5
+    "x": 2,
+    "y": 11,
+    "vertical": false
   },
   {
     "word": "compete",
     "description": "Соревноваться",
-    "column": 2,
-    "row": 13,
-    "isVertical": false,
-    "number": 6
+    "x": 2,
+    "y": 13,
+    "vertical": false
   },
   {
     "word": "increasingly",
     "description": "Всё чаще/больше",
-    "column": 0,
-    "row": 15,
-    "isVertical": false,
-    "number": 7
+    "x": 0,
+    "y": 15,
+    "vertical": false
   },
   {
     "word": "design",
     "description": "Проектировать",
-    "column": 2,
-    "row": 17,
-    "isVertical": false,
-    "number": 8
+    "x": 2,
+    "y": 17,
+    "vertical": false
   }
 ]

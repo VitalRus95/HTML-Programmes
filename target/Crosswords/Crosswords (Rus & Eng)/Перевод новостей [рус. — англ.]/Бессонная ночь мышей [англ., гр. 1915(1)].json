@@ -2,105 +2,92 @@
   {
     "word": "striatum",
     "description": "Полосатое тело",
-    "column": 5,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 5,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "acute",
     "description": "Острый",
-    "column": 1,
-    "row": 2,
-    "isVertical": false,
-    "number": 1
+    "x": 1,
+    "y": 2,
+    "vertical": false
   },
   {
     "word": "rodent",
     "description": "Грызун",
-    "column": 7,
-    "row": 3,
-    "isVertical": true,
-    "number": 2
+    "x": 7,
+    "y": 3,
+    "vertical": true
   },
   {
     "word": "disrupt",
     "description": "Мешать, препятствовать",
-    "column": 3,
-    "row": 4,
-    "isVertical": false,
-    "number": 2
+    "x": 3,
+    "y": 4,
+    "vertical": false
   },
   {
     "word": "rapid",
     "description": "Быстрый",
-    "column": 3,
-    "row": 6,
-    "isVertical": true,
-    "number": 3
+    "x": 3,
+    "y": 6,
+    "vertical": true
   },
   {
     "word": "reversal",
     "description": "Выход [из состояния]",
-    "column": 12,
-    "row": 7,
-    "isVertical": true,
-    "number": 4
+    "x": 12,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "administer",
     "description": "Вводить [препарат]",
-    "column": 2,
-    "row": 8,
-    "isVertical": false,
-    "number": 3
+    "x": 2,
+    "y": 8,
+    "vertical": false
   },
   {
     "word": "stimuli",
     "description": "Стимулы",
-    "column": 6,
-    "row": 10,
-    "isVertical": true,
-    "number": 5
+    "x": 6,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "density",
     "description": "Плотность",
-    "column": 2,
-    "row": 11,
-    "isVertical": false,
-    "number": 4
+    "x": 2,
+    "y": 11,
+    "vertical": false
   },
   {
     "word": "shock",
     "description": "Удар током",
-    "column": 4,
-    "row": 12,
-    "isVertical": true,
-    "number": 6
+    "x": 4,
+    "y": 12,
+    "vertical": true
   },
   {
     "word": "spine",
     "description": "Шипик",
-    "column": 3,
-    "row": 13,
-    "isVertical": false,
-    "number": 5
+    "x": 3,
+    "y": 13,
+    "vertical": false
   },
   {
     "word": "release",
     "description": "Высвобождение",
-    "column": 9,
-    "row": 15,
-    "isVertical": false,
-    "number": 6
+    "x": 9,
+    "y": 15,
+    "vertical": false
   },
   {
     "word": "induce",
     "description": "Вызывать",
-    "column": 5,
-    "row": 17,
-    "isVertical": false,
-    "number": 7
+    "x": 5,
+    "y": 17,
+    "vertical": false
   }
 ]

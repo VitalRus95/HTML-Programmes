@@ -2,97 +2,85 @@
   {
     "word": "ghoul",
     "description": "A malevolent spirit or ghost",
-    "column": 6,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 6,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "dub",
     "description": "To invest with a title, name, or nickname",
-    "column": 8,
-    "row": 0,
-    "isVertical": true,
-    "number": 2
+    "x": 8,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "resuscitate",
     "description": "To restore to consciousness; revive",
-    "column": 4,
-    "row": 1,
-    "isVertical": true,
-    "number": 3
+    "x": 4,
+    "y": 1,
+    "vertical": true
   },
   {
     "word": "haunt",
     "description": "To visit (a person or place) in the form of a ghost",
-    "column": 5,
-    "row": 2,
-    "isVertical": false,
-    "number": 1
+    "x": 5,
+    "y": 2,
+    "vertical": false
   },
   {
     "word": "qualia",
     "description": "Essential properties or qualities",
-    "column": 2,
-    "row": 5,
-    "isVertical": false,
-    "number": 2
+    "x": 2,
+    "y": 5,
+    "vertical": false
   },
   {
     "word": "elusive",
     "description": "Difficult to catch",
-    "column": 13,
-    "row": 5,
-    "isVertical": true,
-    "number": 4
+    "x": 13,
+    "y": 5,
+    "vertical": true
   },
   {
     "word": "whisk",
     "description": "To move, carry, etc, with a light or rapid sweeping motion",
-    "column": 1,
-    "row": 6,
-    "isVertical": true,
-    "number": 5
+    "x": 1,
+    "y": 6,
+    "vertical": true
   },
   {
     "word": "collate",
     "description": "To gather pieces of information together and examine them",
-    "column": 11,
-    "row": 7,
-    "isVertical": true,
-    "number": 6
+    "x": 11,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "torment",
     "description": "To afflict with great pain, suffering, or anguish; torture",
-    "column": 7,
-    "row": 8,
-    "isVertical": true,
-    "number": 7
+    "x": 7,
+    "y": 8,
+    "vertical": true
   },
   {
     "word": "instantaneous",
     "description": "Occurring with almost no delay; happening or completed within a moment",
-    "column": 0,
-    "row": 9,
-    "isVertical": false,
-    "number": 3
+    "x": 0,
+    "y": 9,
+    "vertical": false
   },
   {
     "word": "mediate",
     "description": "To serve as a medium for causing (a result) or transferring (objects, information, etc)",
-    "column": 6,
-    "row": 12,
-    "isVertical": false,
-    "number": 4
+    "x": 6,
+    "y": 12,
+    "vertical": false
   },
   {
     "word": "induce",
     "description": "To cause or bring about",
-    "column": 5,
-    "row": 14,
-    "isVertical": false,
-    "number": 5
+    "x": 5,
+    "y": 14,
+    "vertical": false
   }
 ]

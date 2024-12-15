@@ -1,0 +1,98 @@
+[
+  {
+    "word": "myriad",
+    "description": "Having a large number or great variety",
+    "column": 4,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "topsy-turvy",
+    "description": "In a confused or disorganised state [informal]",
+    "column": 8,
+    "row": 0,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "navigate",
+    "description": "To direct (oneself, one's way, etc) carefully or safely [informal]",
+    "column": 14,
+    "row": 0,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "defy",
+    "description": "To resist (a powerful person, authority, etc) openly and boldly",
+    "column": 0,
+    "row": 2,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "nocturnal",
+    "description": "Active mainly at night",
+    "column": 6,
+    "row": 2,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "canopy",
+    "description": "A layer of something that spreads out and covers an area",
+    "column": 2,
+    "row": 5,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "erratic",
+    "description": "Irregular in performance, behaviour, or attitude; inconsistent and unpredictable",
+    "column": 10,
+    "row": 6,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "susceptible",
+    "description": "Very likely to be influenced by something or someone",
+    "column": 3,
+    "row": 8,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "order",
+    "description": "Any of the taxonomic groups into which a class is divided and which contains one or more families",
+    "column": 6,
+    "row": 8,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "flock",
+    "description": "To go in large numbers",
+    "column": 11,
+    "row": 8,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "ultraviolet",
+    "description": "The part of the electromagnetic spectrum with wavelengths shorter than light but longer than X-rays",
+    "column": 2,
+    "row": 10,
+    "isVertical": false,
+    "number": 5
+  },
+  {
+    "word": "diffuse",
+    "description": "Not directed towards one place or concentrated in one place but spread out over a large area",
+    "column": 1,
+    "row": 16,
+    "isVertical": false,
+    "number": 6
+  }
+]

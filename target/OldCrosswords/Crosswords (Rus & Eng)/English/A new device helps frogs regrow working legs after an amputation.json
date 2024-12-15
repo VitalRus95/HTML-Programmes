@@ -1,0 +1,82 @@
+[
+  {
+    "word": "promoter",
+    "description": "A substance added in small amounts to a catalyst to increase its activity",
+    "column": 2,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "bud",
+    "description": "A small pointed lump that appears on a tree or plant and develops into a leaf or flower",
+    "column": 8,
+    "row": 0,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "spur",
+    "description": "To make a change or event happen faster or sooner",
+    "column": 4,
+    "row": 1,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "compound",
+    "description": "A substance that contains atoms of two or more chemical elements held together by chemical bonds",
+    "column": 0,
+    "row": 3,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "tank",
+    "description": "A large container or reservoir for the storage of liquids or gases",
+    "column": 9,
+    "row": 4,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "coordinate",
+    "description": "To work together, esp harmoniously",
+    "column": 0,
+    "row": 5,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "stiff",
+    "description": "Not easily bent; rigid; inflexible",
+    "column": 12,
+    "row": 6,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "prod",
+    "description": "To poke or jab with or as if with a pointed object",
+    "column": 14,
+    "row": 6,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "coax",
+    "description": "To work on or tend (something) carefully and patiently so as to make it function as one desires",
+    "column": 8,
+    "row": 7,
+    "isVertical": true,
+    "number": 7
+  },
+  {
+    "word": "kick-start",
+    "description": "To make (something) active, functional, or productive again",
+    "column": 5,
+    "row": 8,
+    "isVertical": false,
+    "number": 3
+  }
+]

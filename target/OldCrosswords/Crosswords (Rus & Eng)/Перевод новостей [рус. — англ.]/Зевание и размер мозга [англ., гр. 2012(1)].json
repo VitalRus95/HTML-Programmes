@@ -1,0 +1,98 @@
+[
+  {
+    "word": "cavity",
+    "description": "Полость [анатомия]",
+    "column": 7,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "robust",
+    "description": "Надёжный",
+    "column": 9,
+    "row": 0,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "record",
+    "description": "Запись",
+    "column": 4,
+    "row": 1,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "enigma",
+    "description": "Загадка",
+    "column": 3,
+    "row": 2,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "jaw",
+    "description": "Челюсть",
+    "column": 5,
+    "row": 2,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "conclude",
+    "description": "Заключать",
+    "column": 1,
+    "row": 3,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "contagious",
+    "description": "Заразный",
+    "column": 0,
+    "row": 4,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "yawn",
+    "description": "Зевать",
+    "column": 5,
+    "row": 6,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "coevolve",
+    "description": "Изменяться вместе с чем-либо",
+    "column": 8,
+    "row": 7,
+    "isVertical": true,
+    "number": 7
+  },
+  {
+    "word": "cool",
+    "description": "Охлаждать",
+    "column": 7,
+    "row": 8,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "definite",
+    "description": "Окончательный",
+    "column": 0,
+    "row": 10,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "mammal",
+    "description": "Млекопитающее",
+    "column": 2,
+    "row": 13,
+    "isVertical": false,
+    "number": 5
+  }
+]

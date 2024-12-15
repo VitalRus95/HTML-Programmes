@@ -2,81 +2,71 @@
   {
     "word": "promoter",
     "description": "A substance added in small amounts to a catalyst to increase its activity",
-    "column": 2,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 2,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "bud",
     "description": "A small pointed lump that appears on a tree or plant and develops into a leaf or flower",
-    "column": 8,
-    "row": 0,
-    "isVertical": true,
-    "number": 2
+    "x": 8,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "spur",
     "description": "To make a change or event happen faster or sooner",
-    "column": 4,
-    "row": 1,
-    "isVertical": true,
-    "number": 3
+    "x": 4,
+    "y": 1,
+    "vertical": true
   },
   {
     "word": "compound",
     "description": "A substance that contains atoms of two or more chemical elements held together by chemical bonds",
-    "column": 0,
-    "row": 3,
-    "isVertical": false,
-    "number": 1
+    "x": 0,
+    "y": 3,
+    "vertical": false
   },
   {
     "word": "tank",
     "description": "A large container or reservoir for the storage of liquids or gases",
-    "column": 9,
-    "row": 4,
-    "isVertical": true,
-    "number": 4
+    "x": 9,
+    "y": 4,
+    "vertical": true
   },
   {
     "word": "coordinate",
     "description": "To work together, esp harmoniously",
-    "column": 0,
-    "row": 5,
-    "isVertical": false,
-    "number": 2
+    "x": 0,
+    "y": 5,
+    "vertical": false
   },
   {
     "word": "stiff",
     "description": "Not easily bent; rigid; inflexible",
-    "column": 12,
-    "row": 6,
-    "isVertical": true,
-    "number": 5
+    "x": 12,
+    "y": 6,
+    "vertical": true
   },
   {
     "word": "prod",
     "description": "To poke or jab with or as if with a pointed object",
-    "column": 14,
-    "row": 6,
-    "isVertical": true,
-    "number": 6
+    "x": 14,
+    "y": 6,
+    "vertical": true
   },
   {
     "word": "coax",
     "description": "To work on or tend (something) carefully and patiently so as to make it function as one desires",
-    "column": 8,
-    "row": 7,
-    "isVertical": true,
-    "number": 7
+    "x": 8,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "kick-start",
     "description": "To make (something) active, functional, or productive again",
-    "column": 5,
-    "row": 8,
-    "isVertical": false,
-    "number": 3
+    "x": 5,
+    "y": 8,
+    "vertical": false
   }
 ]

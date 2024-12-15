@@ -2,145 +2,127 @@
   {
     "word": "ignoble",
     "description": "Неблагородный",
-    "column": 6,
-    "row": 1,
-    "isVertical": true,
-    "number": 1
+    "x": 6,
+    "y": 1,
+    "vertical": true
   },
   {
     "word": "density",
     "description": "Population …",
-    "column": 3,
-    "row": 2,
-    "isVertical": true,
-    "number": 2
+    "x": 3,
+    "y": 2,
+    "vertical": true
   },
   {
     "word": "yield",
     "description": "Contain; produce",
-    "column": 10,
-    "row": 3,
-    "isVertical": true,
-    "number": 3
+    "x": 10,
+    "y": 3,
+    "vertical": true
   },
   {
     "word": "brute",
     "description": "Beast, monster",
-    "column": 5,
-    "row": 6,
-    "isVertical": false,
-    "number": 1
+    "x": 5,
+    "y": 6,
+    "vertical": false
   },
   {
     "word": "reverence",
     "description": "Respect",
-    "column": 1,
-    "row": 7,
-    "isVertical": true,
-    "number": 4
+    "x": 1,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "ruthless",
     "description": "Безжалостный",
-    "column": 0,
-    "row": 8,
-    "isVertical": false,
-    "number": 2
+    "x": 0,
+    "y": 8,
+    "vertical": false
   },
   {
     "word": "reincarnate",
     "description": "Rebirth",
-    "column": 0,
-    "row": 12,
-    "isVertical": false,
-    "number": 3
+    "x": 0,
+    "y": 12,
+    "vertical": false
   },
   {
     "word": "jar",
     "description": "Склянка",
-    "column": 7,
-    "row": 13,
-    "isVertical": true,
-    "number": 5
+    "x": 7,
+    "y": 13,
+    "vertical": true
   },
   {
     "word": "irrigation",
     "description": "💦🌼🚿",
-    "column": 9,
-    "row": 14,
-    "isVertical": true,
-    "number": 6
+    "x": 9,
+    "y": 14,
+    "vertical": true
   },
   {
     "word": "cannibalism",
     "description": "💀🍴😀",
-    "column": 0,
-    "row": 15,
-    "isVertical": false,
-    "number": 4
+    "x": 0,
+    "y": 15,
+    "vertical": false
   },
   {
     "word": "graveyard",
     "description": "💀💀💀",
-    "column": 6,
-    "row": 16,
-    "isVertical": true,
-    "number": 7
+    "x": 6,
+    "y": 16,
+    "vertical": true
   },
   {
     "word": "savage",
     "description": "Дикарь",
-    "column": 4,
-    "row": 19,
-    "isVertical": false,
-    "number": 5
+    "x": 4,
+    "y": 19,
+    "vertical": false
   },
   {
     "word": "fossilized",
     "description": "Ископаемый",
-    "column": 3,
-    "row": 20,
-    "isVertical": true,
-    "number": 8
+    "x": 3,
+    "y": 20,
+    "vertical": true
   },
   {
     "word": "feces",
     "description": "💩",
-    "column": 2,
-    "row": 21,
-    "isVertical": false,
-    "number": 6
+    "x": 2,
+    "y": 21,
+    "vertical": false
   },
   {
     "word": "marrow",
     "description": "🦴🧠",
-    "column": 4,
-    "row": 23,
-    "isVertical": false,
-    "number": 7
+    "x": 4,
+    "y": 23,
+    "vertical": false
   },
   {
     "word": "burial",
     "description": "💀",
-    "column": 8,
-    "row": 25,
-    "isVertical": true,
-    "number": 9
+    "x": 8,
+    "y": 25,
+    "vertical": true
   },
   {
     "word": "buffalo",
     "description": "🐃",
-    "column": 6,
-    "row": 27,
-    "isVertical": false,
-    "number": 8
+    "x": 6,
+    "y": 27,
+    "vertical": false
   },
   {
     "word": "pernicious",
     "description": "Malign, evil, detrimental",
-    "column": 1,
-    "row": 29,
-    "isVertical": false,
-    "number": 9
+    "x": 1,
+    "y": 29,
+    "vertical": false
   }
 ]

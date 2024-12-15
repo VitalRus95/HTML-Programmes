@@ -2,121 +2,106 @@
   {
     "word": "domestic",
     "description": "Домашний",
-    "column": 11,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 11,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "renal",
     "description": "Почечный",
-    "column": 3,
-    "row": 1,
-    "isVertical": true,
-    "number": 2
+    "x": 3,
+    "y": 1,
+    "vertical": true
   },
   {
     "word": "trial",
     "description": "Испытание, исследование",
-    "column": 1,
-    "row": 2,
-    "isVertical": false,
-    "number": 1
+    "x": 1,
+    "y": 2,
+    "vertical": false
   },
   {
     "word": "wobble",
     "description": "Качаться, вилять",
-    "column": 9,
-    "row": 2,
-    "isVertical": false,
-    "number": 2
+    "x": 9,
+    "y": 2,
+    "vertical": false
   },
   {
     "word": "copycat",
     "description": "Повторюшка :)",
-    "column": 1,
-    "row": 3,
-    "isVertical": true,
-    "number": 3
+    "x": 1,
+    "y": 3,
+    "vertical": true
   },
   {
     "word": "conduct",
     "description": "Проводить",
-    "column": 0,
-    "row": 4,
-    "isVertical": false,
-    "number": 3
+    "x": 0,
+    "y": 4,
+    "vertical": false
   },
   {
     "word": "motivated",
     "description": "Заинтересованный",
-    "column": 4,
-    "row": 6,
-    "isVertical": false,
-    "number": 4
+    "x": 4,
+    "y": 6,
+    "vertical": false
   },
   {
     "word": "cognition",
     "description": "Познание",
-    "column": 7,
-    "row": 7,
-    "isVertical": true,
-    "number": 4
+    "x": 7,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "conspecific",
     "description": "Совидич :D",
-    "column": 0,
-    "row": 8,
-    "isVertical": false,
-    "number": 5
+    "x": 0,
+    "y": 8,
+    "vertical": false
   },
   {
     "word": "thorough",
     "description": "Тщательный",
-    "column": 0,
-    "row": 10,
-    "isVertical": false,
-    "number": 6
+    "x": 0,
+    "y": 10,
+    "vertical": false
   },
   {
     "word": "mimic",
     "description": "Повторять, имитировать",
-    "column": 11,
-    "row": 10,
-    "isVertical": true,
-    "number": 5
+    "x": 11,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "hind",
     "description": "Задний [о лапках]",
-    "column": 13,
-    "row": 11,
-    "isVertical": true,
-    "number": 6
+    "x": 13,
+    "y": 11,
+    "vertical": true
   },
   {
     "word": "distinguish",
     "description": "Различать",
-    "column": 2,
-    "row": 12,
-    "isVertical": false,
-    "number": 7
+    "x": 2,
+    "y": 12,
+    "vertical": false
   },
   {
     "word": "imitation",
     "description": "Подражание",
-    "column": 4,
-    "row": 14,
-    "isVertical": false,
-    "number": 8
+    "x": 4,
+    "y": 14,
+    "vertical": false
   },
   {
     "word": "feline",
     "description": "Кошачий",
-    "column": 2,
-    "row": 16,
-    "isVertical": false,
-    "number": 9
+    "x": 2,
+    "y": 16,
+    "vertical": false
   }
 ]

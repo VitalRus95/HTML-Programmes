@@ -1,0 +1,130 @@
+[
+  {
+    "word": "shaft",
+    "description": "Древко",
+    "column": 6,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "site",
+    "description": "Стоянка [археология]",
+    "column": 5,
+    "row": 1,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "burin",
+    "description": "Резец [орудие]",
+    "column": 8,
+    "row": 2,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "bow",
+    "description": "Лук",
+    "column": 10,
+    "row": 2,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "hearth",
+    "description": "Очаг",
+    "column": 3,
+    "row": 3,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "spearthrower",
+    "description": "Копьеметалка",
+    "column": 0,
+    "row": 5,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "tool",
+    "description": "Орудие",
+    "column": 6,
+    "row": 6,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "thrusting",
+    "description": "Колющий",
+    "column": 0,
+    "row": 7,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "dart",
+    "description": "Дротик",
+    "column": 8,
+    "row": 8,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "reliable",
+    "description": "Достоверный",
+    "column": 3,
+    "row": 10,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "point",
+    "description": "Наконечник",
+    "column": 2,
+    "row": 11,
+    "isVertical": true,
+    "number": 7
+  },
+  {
+    "word": "projectile",
+    "description": "Метательный",
+    "column": 1,
+    "row": 12,
+    "isVertical": false,
+    "number": 5
+  },
+  {
+    "word": "excavation",
+    "description": "Раскопки",
+    "column": 4,
+    "row": 13,
+    "isVertical": true,
+    "number": 8
+  },
+  {
+    "word": "sinew",
+    "description": "Сухожилие",
+    "column": 0,
+    "row": 14,
+    "isVertical": false,
+    "number": 6
+  },
+  {
+    "word": "cave",
+    "description": "Пещера",
+    "column": 7,
+    "row": 15,
+    "isVertical": true,
+    "number": 9
+  },
+  {
+    "word": "range",
+    "description": "Дальность",
+    "column": 2,
+    "row": 19,
+    "isVertical": false,
+    "number": 7
+  }
+]

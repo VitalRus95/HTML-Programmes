@@ -2,89 +2,78 @@
   {
     "word": "expound",
     "description": "To explain or set forth (an argument, theory, etc) in detail",
-    "column": 4,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 4,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "enlighten",
     "description": "To give information or understanding to; instruct; edify",
-    "column": 9,
-    "row": 0,
-    "isVertical": true,
-    "number": 2
+    "x": 9,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "rationalise",
     "description": "To justify (one's actions, esp discreditable actions, or beliefs) with plausible reasons, esp after the event",
-    "column": 11,
-    "row": 2,
-    "isVertical": true,
-    "number": 3
+    "x": 11,
+    "y": 2,
+    "vertical": true
   },
   {
     "word": "alluring",
     "description": "Enticing; fascinating; attractive",
-    "column": 6,
-    "row": 3,
-    "isVertical": false,
-    "number": 1
+    "x": 6,
+    "y": 3,
+    "vertical": false
   },
   {
     "word": "troubling",
     "description": "Causing worry, anxiety or upset",
-    "column": 0,
-    "row": 5,
-    "isVertical": false,
-    "number": 2
+    "x": 0,
+    "y": 5,
+    "vertical": false
   },
   {
     "word": "predilection",
     "description": "A predisposition, preference, or bias",
-    "column": 0,
-    "row": 7,
-    "isVertical": false,
-    "number": 3
+    "x": 0,
+    "y": 7,
+    "vertical": false
   },
   {
     "word": "attend",
     "description": "To be present at (an event, meeting, etc)",
-    "column": 7,
-    "row": 10,
-    "isVertical": true,
-    "number": 4
+    "x": 7,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "factoid",
     "description": "A piece of unreliable information believed to be true because of the way it is presented or repeated in print",
-    "column": 5,
-    "row": 11,
-    "isVertical": false,
-    "number": 4
+    "x": 5,
+    "y": 11,
+    "vertical": false
   },
   {
     "word": "endorse",
     "description": "To give approval or sanction to",
-    "column": 9,
-    "row": 12,
-    "isVertical": true,
-    "number": 5
+    "x": 9,
+    "y": 12,
+    "vertical": true
   },
   {
     "word": "glean",
     "description": "To gather (something) slowly and carefully in small pieces",
-    "column": 4,
-    "row": 14,
-    "isVertical": false,
-    "number": 5
+    "x": 4,
+    "y": 14,
+    "vertical": false
   },
   {
     "word": "score",
     "description": "To get (a specified grade) on a test",
-    "column": 8,
-    "row": 18,
-    "isVertical": false,
-    "number": 6
+    "x": 8,
+    "y": 18,
+    "vertical": false
   }
 ]

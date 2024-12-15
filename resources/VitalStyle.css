@@ -81,6 +81,7 @@ details[open] > summary {
     padding-bottom: 2px;
     position: sticky;
     top: 0px;
+    z-index: 1;
 }
 
 details[open] > summary:focus,
@@ -133,6 +134,10 @@ input {
     border-color: var(--secondary-colour);
     border-style: outset;
     accent-color: var(--accent2);
+}
+
+input::placeholder {
+    color: var(--accent1);
 }
 
 input[type='file'] {

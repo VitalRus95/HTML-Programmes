@@ -2,105 +2,92 @@
   {
     "word": "vertebrate",
     "description": "Позвоночный",
-    "column": 8,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 8,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "sofa",
     "description": "Диван",
-    "column": 2,
-    "row": 3,
-    "isVertical": true,
-    "number": 2
+    "x": 2,
+    "y": 3,
+    "vertical": true
   },
   {
     "word": "homogeneous",
     "description": "Однородный",
-    "column": 0,
-    "row": 5,
-    "isVertical": false,
-    "number": 1
+    "x": 0,
+    "y": 5,
+    "vertical": false
   },
   {
     "word": "radiocarbon",
     "description": "Радиоуглеродный",
-    "column": 0,
-    "row": 7,
-    "isVertical": false,
-    "number": 2
+    "x": 0,
+    "y": 7,
+    "vertical": false
   },
   {
     "word": "turtle",
     "description": "Черепаха",
-    "column": 6,
-    "row": 8,
-    "isVertical": true,
-    "number": 3
+    "x": 6,
+    "y": 8,
+    "vertical": true
   },
   {
     "word": "habitation",
     "description": "Проживание",
-    "column": 1,
-    "row": 9,
-    "isVertical": false,
-    "number": 3
+    "x": 1,
+    "y": 9,
+    "vertical": false
   },
   {
     "word": "jaw",
     "description": "Челюсть",
-    "column": 2,
-    "row": 10,
-    "isVertical": true,
-    "number": 4
+    "x": 2,
+    "y": 10,
+    "vertical": true
   },
   {
     "word": "aquatic",
     "description": "Водяной",
-    "column": 1,
-    "row": 12,
-    "isVertical": false,
-    "number": 4
+    "x": 1,
+    "y": 12,
+    "vertical": false
   },
   {
     "word": "specimen",
     "description": "Образец",
-    "column": 7,
-    "row": 13,
-    "isVertical": true,
-    "number": 5
+    "x": 7,
+    "y": 13,
+    "vertical": true
   },
   {
     "word": "freshwater",
     "description": "Пресноводный",
-    "column": 3,
-    "row": 14,
-    "isVertical": false,
-    "number": 5
+    "x": 3,
+    "y": 14,
+    "vertical": false
   },
   {
     "word": "mean",
     "description": "Средний",
-    "column": 11,
-    "row": 15,
-    "isVertical": true,
-    "number": 6
+    "x": 11,
+    "y": 15,
+    "vertical": true
   },
   {
     "word": "shell",
     "description": "Панцирь",
-    "column": 8,
-    "row": 17,
-    "isVertical": false,
-    "number": 6
+    "x": 8,
+    "y": 17,
+    "vertical": false
   },
   {
     "word": "marine",
     "description": "Морской",
-    "column": 6,
-    "row": 19,
-    "isVertical": false,
-    "number": 7
+    "x": 6,
+    "y": 19,
+    "vertical": false
   }
 ]

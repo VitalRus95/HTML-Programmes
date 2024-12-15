@@ -2,81 +2,71 @@
   {
     "word": "обрывок",
     "description": "Sliver",
-    "column": 8,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 8,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "кроватка",
     "description": "Crib",
-    "column": 5,
-    "row": 1,
-    "isVertical": false,
-    "number": 1
+    "x": 5,
+    "y": 1,
+    "vertical": false
   },
   {
     "word": "отклонение",
     "description": "Departure",
-    "column": 13,
-    "row": 2,
-    "isVertical": true,
-    "number": 2
+    "x": 13,
+    "y": 2,
+    "vertical": true
   },
   {
     "word": "малыш",
     "description": "Tot",
-    "column": 4,
-    "row": 4,
-    "isVertical": false,
-    "number": 2
+    "x": 4,
+    "y": 4,
+    "vertical": false
   },
   {
     "word": "массив",
     "description": "Pool",
-    "column": 1,
-    "row": 5,
-    "isVertical": true,
-    "number": 3
+    "x": 1,
+    "y": 5,
+    "vertical": true
   },
   {
     "word": "угадывание",
     "description": "Guessing",
-    "column": 6,
-    "row": 5,
-    "isVertical": true,
-    "number": 4
+    "x": 6,
+    "y": 5,
+    "vertical": true
   },
   {
     "word": "многократно",
     "description": "Iteratively",
-    "column": 2,
-    "row": 7,
-    "isVertical": false,
-    "number": 3
+    "x": 2,
+    "y": 7,
+    "vertical": false
   },
   {
     "word": "путаться",
     "description": "Get tangled up",
-    "column": 4,
-    "row": 8,
-    "isVertical": true,
-    "number": 5
+    "x": 4,
+    "y": 8,
+    "vertical": true
   },
   {
     "word": "подвиг",
     "description": "Feat",
-    "column": 3,
-    "row": 9,
-    "isVertical": false,
-    "number": 4
+    "x": 3,
+    "y": 9,
+    "vertical": false
   },
   {
     "word": "впитывать",
     "description": "Soak up",
-    "column": 0,
-    "row": 11,
-    "isVertical": false,
-    "number": 5
+    "x": 0,
+    "y": 11,
+    "vertical": false
   }
 ]

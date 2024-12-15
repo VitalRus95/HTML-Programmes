@@ -1,0 +1,82 @@
+[
+  {
+    "word": "cumulative",
+    "description": "Growing in quantity, strength, or effect by successive additions or gradual steps",
+    "column": 7,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "witty",
+    "description": "Amusingly clever in perception and expression",
+    "column": 5,
+    "row": 4,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "negate",
+    "description": "To make ineffective or void; nullify; invalidate",
+    "column": 9,
+    "row": 4,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "elucidate",
+    "description": "To make clear (something obscure or difficult); clarify",
+    "column": 0,
+    "row": 6,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "eminence",
+    "description": "The quality of being very well-known and highly respected",
+    "column": 3,
+    "row": 7,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "inextricable",
+    "description": "Not able to be escaped from",
+    "column": 0,
+    "row": 8,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "falsifiable",
+    "description": "Designating or of a statement, theory, etc. that is so formulated as to permit empirical testing and, therefore, can be shown to be false",
+    "column": 8,
+    "row": 10,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "egregious",
+    "description": "Outstandingly bad; flagrant",
+    "column": 2,
+    "row": 15,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "urge",
+    "description": "A strong impulse, inner drive, or yearning",
+    "column": 10,
+    "row": 17,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "slight",
+    "description": "To show indifference or disregard for (someone)",
+    "column": 6,
+    "row": 20,
+    "isVertical": false,
+    "number": 4
+  }
+]

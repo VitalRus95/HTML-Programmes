@@ -2,129 +2,113 @@
   {
     "word": "fearsome",
     "description": "Страшный, пугающий",
-    "column": 6,
-    "row": 0,
-    "isVertical": true,
-    "number": 1
+    "x": 6,
+    "y": 0,
+    "vertical": true
   },
   {
     "word": "prey",
     "description": "Добыча",
-    "column": 4,
-    "row": 4,
-    "isVertical": false,
-    "number": 1
+    "x": 4,
+    "y": 4,
+    "vertical": false
   },
   {
     "word": "habituate",
     "description": "Приучать",
-    "column": 8,
-    "row": 7,
-    "isVertical": true,
-    "number": 2
+    "x": 8,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "predator",
     "description": "Хищник",
-    "column": 13,
-    "row": 7,
-    "isVertical": true,
-    "number": 3
+    "x": 13,
+    "y": 7,
+    "vertical": true
   },
   {
     "word": "waterhole",
     "description": "Водопой",
-    "column": 2,
-    "row": 8,
-    "isVertical": false,
-    "number": 2
+    "x": 2,
+    "y": 8,
+    "vertical": false
   },
   {
     "word": "wildlife",
     "description": "Дикие животные",
-    "column": 2,
-    "row": 11,
-    "isVertical": false,
-    "number": 3
+    "x": 2,
+    "y": 11,
+    "vertical": false
   },
   {
     "word": "gunshot",
     "description": "Выстрел",
-    "column": 6,
-    "row": 13,
-    "isVertical": false,
-    "number": 4
+    "x": 6,
+    "y": 13,
+    "vertical": false
   },
   {
     "word": "roar",
     "description": "Рык",
-    "column": 4,
-    "row": 14,
-    "isVertical": true,
-    "number": 4
+    "x": 4,
+    "y": 14,
+    "vertical": true
   },
   {
     "word": "abandon",
     "description": "Покидать",
-    "column": 11,
-    "row": 14,
-    "isVertical": true,
-    "number": 5
+    "x": 11,
+    "y": 14,
+    "vertical": true
   },
   {
     "word": "carnivorous",
     "description": "Плотоядный",
-    "column": 6,
-    "row": 15,
-    "isVertical": true,
-    "number": 6
+    "x": 6,
+    "y": 15,
+    "vertical": true
   },
   {
     "word": "poacher",
     "description": "Браконьер",
-    "column": 2,
-    "row": 16,
-    "isVertical": false,
-    "number": 5
+    "x": 2,
+    "y": 16,
+    "vertical": false
   },
   {
     "word": "broadcast",
     "description": "Транслировать",
-    "column": 2,
-    "row": 17,
-    "isVertical": true,
-    "number": 7
+    "x": 2,
+    "y": 17,
+    "vertical": true
   },
   {
     "word": "reliant",
     "description": "Зависимый",
-    "column": 5,
-    "row": 18,
-    "isVertical": false,
-    "number": 6
+    "x": 5,
+    "y": 18,
+    "vertical": false
   },
   {
     "word": "vocalisation",
     "description": "Звуки, голос [биология]",
-    "column": 0,
-    "row": 20,
-    "isVertical": false,
-    "number": 7
+    "x": 0,
+    "y": 20,
+    "vertical": false
   },
   {
     "word": "deploy",
     "description": "Устанавливать",
-    "column": 1,
-    "row": 22,
-    "isVertical": false,
-    "number": 8
+    "x": 1,
+    "y": 22,
+    "vertical": false
   },
   {
     "word": "warthog",
     "description": "Бородавочник",
-    "column": 0,
-    "row": 24,
-    "isVertical": false,
-    "number": 9
+    "x": 0,
+    "y": 24,
+    "vertical": false
   }
 ]

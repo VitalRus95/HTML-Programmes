@@ -1,0 +1,98 @@
+[
+  {
+    "word": "fruit",
+    "description": "Плодоносить",
+    "column": 3,
+    "row": 0,
+    "isVertical": true,
+    "number": 1
+  },
+  {
+    "word": "individual",
+    "description": "Экземпляр [вида]",
+    "column": 11,
+    "row": 0,
+    "isVertical": true,
+    "number": 2
+  },
+  {
+    "word": "deforestation",
+    "description": "Вырубка лесов",
+    "column": 0,
+    "row": 1,
+    "isVertical": false,
+    "number": 1
+  },
+  {
+    "word": "specimen",
+    "description": "Образец",
+    "column": 1,
+    "row": 2,
+    "isVertical": true,
+    "number": 3
+  },
+  {
+    "word": "catfish",
+    "description": "Сом",
+    "column": 7,
+    "row": 2,
+    "isVertical": true,
+    "number": 4
+  },
+  {
+    "word": "extinct",
+    "description": "Вымерший",
+    "column": 0,
+    "row": 5,
+    "isVertical": false,
+    "number": 2
+  },
+  {
+    "word": "seedling",
+    "description": "Саженец",
+    "column": 3,
+    "row": 8,
+    "isVertical": true,
+    "number": 5
+  },
+  {
+    "word": "conservation",
+    "description": "Охрана природы",
+    "column": 9,
+    "row": 8,
+    "isVertical": true,
+    "number": 6
+  },
+  {
+    "word": "holly",
+    "description": "Падуб",
+    "column": 7,
+    "row": 10,
+    "isVertical": false,
+    "number": 3
+  },
+  {
+    "word": "sugarcane",
+    "description": "Сахарный тростник",
+    "column": 4,
+    "row": 14,
+    "isVertical": false,
+    "number": 4
+  },
+  {
+    "word": "germinate",
+    "description": "Разводить [семена]",
+    "column": 2,
+    "row": 16,
+    "isVertical": false,
+    "number": 5
+  },
+  {
+    "word": "fungus",
+    "description": "Гриб",
+    "column": 6,
+    "row": 20,
+    "isVertical": false,
+    "number": 6
+  }
+]
