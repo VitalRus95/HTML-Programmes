@@ -1,0 +1,128 @@
+[
+  {
+    "word": "perfidious",
+    "description": "Вероломный, коварный",
+    "vertical": true,
+    "x": 5,
+    "y": 0
+  },
+  {
+    "word": "credible",
+    "description": "Заслуживающий доверия",
+    "vertical": true,
+    "x": 7,
+    "y": 0
+  },
+  {
+    "word": "fad",
+    "description": "Причуда, мода",
+    "vertical": false,
+    "x": 4,
+    "y": 4
+  },
+  {
+    "word": "debunk",
+    "description": "Разоблачать",
+    "vertical": false,
+    "x": 4,
+    "y": 6
+  },
+  {
+    "word": "credentials",
+    "description": "Опыт, успехи",
+    "vertical": true,
+    "x": 2,
+    "y": 7
+  },
+  {
+    "word": "trial",
+    "description": "Испытание, исследование",
+    "vertical": true,
+    "x": 10,
+    "y": 7
+  },
+  {
+    "word": "operation",
+    "description": "Компания, организация",
+    "vertical": false,
+    "x": 4,
+    "y": 8
+  },
+  {
+    "word": "unflattering",
+    "description": "Нелестный",
+    "vertical": true,
+    "x": 12,
+    "y": 9
+  },
+  {
+    "word": "verisimilitude",
+    "description": "Правдоподобие",
+    "vertical": false,
+    "x": 0,
+    "y": 10
+  },
+  {
+    "word": "chagrin",
+    "description": "Досада",
+    "vertical": true,
+    "x": 5,
+    "y": 13
+  },
+  {
+    "word": "amid",
+    "description": "Среди, между",
+    "vertical": true,
+    "x": 15,
+    "y": 13
+  },
+  {
+    "word": "trump",
+    "description": "Превосходить",
+    "vertical": false,
+    "x": 11,
+    "y": 15
+  },
+  {
+    "word": "lunge",
+    "description": "Выпад [фехтование]",
+    "vertical": false,
+    "x": 1,
+    "y": 17
+  },
+  {
+    "word": "remedy",
+    "description": "Лекарство",
+    "vertical": false,
+    "x": 10,
+    "y": 17
+  },
+  {
+    "word": "confuse",
+    "description": "Сбивать с толку",
+    "vertical": true,
+    "x": 6,
+    "y": 19
+  },
+  {
+    "word": "congested",
+    "description": "Набитый людьми",
+    "vertical": true,
+    "x": 8,
+    "y": 19
+  },
+  {
+    "word": "concoction",
+    "description": "Варево, смесь",
+    "vertical": false,
+    "x": 2,
+    "y": 20
+  },
+  {
+    "word": "cure",
+    "description": "Исцелять",
+    "vertical": false,
+    "x": 4,
+    "y": 24
+  }
+]

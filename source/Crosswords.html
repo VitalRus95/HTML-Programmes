@@ -312,6 +312,11 @@
                 color: var(--primary-colour);
             }
 
+            #editor-word:focus::placeholder,
+            #editor-description:focus::placeholder {
+                color: var(--accent2);
+            }
+
             #editor-ok,
             #editor-delete {
                 font-weight: 700;
@@ -967,6 +972,7 @@
 
                 input.addEventListener('input', function (event) {
                     this.value = this.value.toUpperCase();
+                    this.blur();
 
                     // If the input is correct, select the next letter
                     if (this.checkValidity()) {
@@ -986,8 +992,6 @@
                             if (lastNumber) {
                                 lastNumber.focus();
                                 lastNumber = undefined;
-                            } else {
-                                this.blur();
                             }
                         }
 

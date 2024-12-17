@@ -1,0 +1,135 @@
+[
+  {
+    "word": "accolade",
+    "description": "Награда",
+    "vertical": true,
+    "x": 13,
+    "y": 0
+  },
+  {
+    "word": "whizzy",
+    "description": "Крутой, эффектный, современный",
+    "vertical": true,
+    "x": 15,
+    "y": 1
+  },
+  {
+    "word": "looping",
+    "description": "Зацикленный",
+    "vertical": false,
+    "x": 10,
+    "y": 4
+  },
+  {
+    "word": "cut",
+    "description": "Доля",
+    "vertical": true,
+    "x": 10,
+    "y": 6
+  },
+  {
+    "word": "cuddly",
+    "description": "Милый",
+    "vertical": false,
+    "x": 9,
+    "y": 7
+  },
+  {
+    "word": "endeavour",
+    "description": "Старание, усилие",
+    "vertical": true,
+    "x": 6,
+    "y": 8
+  },
+  {
+    "word": "instalment",
+    "description": "Часть серии",
+    "vertical": true,
+    "x": 8,
+    "y": 8
+  },
+  {
+    "word": "delist",
+    "description": "Убирать, удалять",
+    "vertical": false,
+    "x": 4,
+    "y": 9
+  },
+  {
+    "word": "objective",
+    "description": "Цель, задача",
+    "vertical": false,
+    "x": 2,
+    "y": 12
+  },
+  {
+    "word": "shovelware",
+    "description": "Низкокачественная игра",
+    "vertical": false,
+    "x": 2,
+    "y": 14
+  },
+  {
+    "word": "quid",
+    "description": "Фунт стерлингов (разг.)",
+    "vertical": true,
+    "x": 3,
+    "y": 15
+  },
+  {
+    "word": "pants",
+    "description": "Трусы́ (брит.)",
+    "vertical": true,
+    "x": 5,
+    "y": 16
+  },
+  {
+    "word": "blueprint",
+    "description": "Шаблон",
+    "vertical": false,
+    "x": 0,
+    "y": 17
+  },
+  {
+    "word": "stroke",
+    "description": "Гладить",
+    "vertical": true,
+    "x": 6,
+    "y": 20
+  },
+  {
+    "word": "crackdown",
+    "description": "Суровые меры",
+    "vertical": true,
+    "x": 10,
+    "y": 20
+  },
+  {
+    "word": "amass",
+    "description": "Копить",
+    "vertical": false,
+    "x": 1,
+    "y": 21
+  },
+  {
+    "word": "pre-tax",
+    "description": "До вычета налогов (прил.)",
+    "vertical": false,
+    "x": 4,
+    "y": 23
+  },
+  {
+    "word": "Dik-Dik",
+    "description": "Дикдик",
+    "vertical": false,
+    "x": 3,
+    "y": 25
+  },
+  {
+    "word": "pop",
+    "description": "Штука (разг.)",
+    "vertical": false,
+    "x": 8,
+    "y": 27
+  }
+]
