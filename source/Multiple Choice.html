@@ -13,6 +13,20 @@
                 list-style: square;
             }
 
+            .settings {
+                display: flex;
+                column-gap: 4px;
+                flex-wrap: wrap;
+            }
+
+            .setting {
+                display: flex;
+                column-gap: 4px;
+                flex-grow: 1;
+                flex-wrap: wrap;
+                align-items: baseline;
+            }
+
             .score {
                 display: flex;
                 border-color: var(--accent1);
@@ -56,23 +70,25 @@
         </style>
     </head>
     <body>
-        <h1>Выбирайка</h1>
+        <h1>Multiple choice</h1>
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Настройки</summary>
+            <summary>Settings</summary>
         </details>
 
         <!-- Page main body -->
 
-        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
-            <label id="numQuestionsLabel" for='numQuestionsInput'>Число вопросов:</label>
-            <input id='numQuestionsInput' type='number' min='1' max='10' value='10' style='flex-grow: 1;'>
-        </div>
+        <div class='settings'>
+            <div class='setting'>
+                <label id="numQuestionsLabel" for='numQuestionsInput'>Questions count:</label>
+                <input id='numQuestionsInput' type='number' min='1' max='10' value='10' style='flex-grow: 1;'>
+            </div>
 
-        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
-            <label id="numVariantsLabel" for='numVariantsInput'>Число вариантов:</label>
-            <input id='numVariantsInput' type='number' min='2' max='5' value='4' style='flex-grow: 1;'>
+            <div class='setting'>
+                <label id="numVariantsLabel" for='numVariantsInput'>Answers count:</label>
+                <input id='numVariantsInput' type='number' min='2' max='5' value='4' style='flex-grow: 1;'>
+            </div>
         </div>
 
         <div
@@ -82,22 +98,23 @@
                 for='loadTest'
                 style='flex-grow: 1; cursor: pointer;'
             >
-                &#128193; Загрузить тест
+                &#128193; Load test
             </label>
             <input
                 id='loadTest'
                 type='file'
-                accept='.json'
-                style='cursor: pointer;'>
+                accept='.txt'
+                style='cursor: pointer; max-width: 100%;'>
         </div>
 
-        <button id='startTest'>Начать тест</button>
+        <button id='startTest'>Begin test</button>
 
         <div id='testBody' style='position: relative;'></div>
 
         <div class='box' style='font-style: italic'>
-            Автор — Виталий Павлович Ульянов.
+            Made by Vitaly Pavlovich Ulyanov.
         </div>
+        <!-- Автор — Виталий Павлович Ульянов. -->
 
         <script src='../resources/VitalLogic.js'></script>
         <script>
@@ -127,7 +144,7 @@
                 await this.files[0].text().then((content) => {
                     try {
                         /** @type {string[][]} */
-                        let data = JSON.parse(content);
+                        let data = content.split('\n').map(s => s.split('\t'));
                         if (data && data.length > 0) {
                             test = data;
                             startTest.disabled = false;
