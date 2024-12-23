@@ -348,8 +348,9 @@
                     autocomplete='off'
                     placeholder='Text 1 content'
                     rows='10'
-                    oninput='updateCounter(true)'
-                    onselect='updateCounter(true)'
+                    onclick='updateCounters()'
+                    oninput='updateCounters()'
+                    onselect='updateCounters()'
                 ></textarea>
 
                 <!-- Right editor -->
@@ -359,8 +360,9 @@
                     autocomplete='off'
                     placeholder='Text 2 content'
                     rows='10'
-                    oninput='updateCounter(false)'
-                    onselect='updateCounter(false)'
+                    onclick='updateCounters()'
+                    oninput='updateCounters()'
+                    onselect='updateCounters()'
                 ></textarea>
             </div>
         </div>
@@ -373,7 +375,7 @@
                 tabindex='0'
             >
                 <p id='leftCounter'></p>
-                <span id='tsc_l_tip' class='tooltip'>Text 1 symbol count</span>
+                <span id='tsc_l_tip' class='tooltip'>Text 1 symbol count & Text 1 to 2 symbol ratio</span>
             </div>
 
             <div
@@ -382,7 +384,7 @@
                 tabindex='0'
             >
                 <p id='rightCounter'></p>
-                <span id='tsc_r_tip' class='tooltip'>Text 2 symbol count</span>
+                <span id='tsc_r_tip' class='tooltip'>Text 2 symbol count & Text 2 to 1 symbol ratio</span>
             </div>
         </div>
 
@@ -445,6 +447,11 @@
             /** @type {HTMLTextAreaElement}*/
             let userNotes = document.getElementById('userNotes');
 
+            /** @type {HTMLParagraphElement} */
+            let leftCounter = document.getElementById('leftCounter');
+            /** @type {HTMLParagraphElement} */
+            let rightCounter = document.getElementById('rightCounter');
+
             /** @type {HTMLAnchorElement} */
             let saveFile1 = document.getElementById('saveFile1');
             /** @type {HTMLAnchorElement} */
@@ -459,13 +466,13 @@
             /** @type {HTMLInputElement} */
             let loadText2 = document.getElementById('loadText2');
 
-            /** @type {HTMLParagraphElement} */
-            let leftCounter = document.getElementById('leftCounterDiv');
-            /** @type {HTMLParagraphElement} */
-            let rightCounter = document.getElementById('rightCounterDiv');
+            /** @type {HTMLDivElement} */
+            let leftCounterDiv = document.getElementById('leftCounterDiv');
+            /** @type {HTMLDivElement} */
+            let rightCounterDiv = document.getElementById('rightCounterDiv');
 
-            let leftPanel = [headerLeft, saveFile1, loadText1Button, textLeft, leftCounter];
-            let rightPanel = [headerRight, saveFile2, loadText2Button, textRight, rightCounter];
+            let leftPanel = [headerLeft, saveFile1, loadText1Button, textLeft, leftCounterDiv];
+            let rightPanel = [headerRight, saveFile2, loadText2Button, textRight, rightCounterDiv];
             let bothPanels = leftPanel.concat(rightPanel);
 
             shrinkLeft.addEventListener('click', function () {
@@ -509,8 +516,7 @@
 
             lang.value = localStorage.getItem('lang') ?? 'eng';
             if (lang.value !== 'eng') setLanguage();
-            updateCounter(true);
-            updateCounter(false);
+            updateCounters();
 
             document.body.addEventListener('keydown', function (event) {
                 if (!event.ctrlKey) return;
@@ -582,8 +588,7 @@
 
                         userNotes.value = project.notes ?? '';
 
-                        updateCounter(true);
-                        updateCounter(false);
+                        updateCounters();
                     } catch (error) {
                         alert(`Error while reading project file: ${error}`);
                     }
@@ -652,7 +657,7 @@
                 }
 
                 text.value = text.value.trim();
-                updateCounter(left);
+                updateCounters();
             }
 
             /**
@@ -688,7 +693,7 @@
                 }
 
                 text.value = text.value.trim();
-                updateCounter(left);
+                updateCounters();
             }
 
             /**
@@ -727,22 +732,38 @@
             /**
              * @param {boolean} left
             */
-            function updateCounter(left) {
-                /** @type {HTMLParagraphElement} */
-                let counter = document.getElementById(
-                    left ? 'leftCounter' : 'rightCounter'
-                );
+            function updateCounters() {
+                // Variables
+                let selectionLeft = textLeft.selectionEnd - textLeft.selectionStart;
+                let selectionRight = textRight.selectionEnd - textRight.selectionStart;
 
-                let text = left ? textLeft : textRight;
-                let selection = text.selectionEnd - text.selectionStart;
+                let lengthLeft = textLeft.value.length;
+                let lengthRight = textRight.value.length;
 
-                let textLength = left
-                    ? textLeft.value.length
-                    : textRight.value.length;
+                leftCounter.textContent = selectionLeft > 0
+                    ? `${selectionLeft}/${lengthLeft}`
+                    : `${lengthLeft}`;
 
-                counter.innerText = selection > 0
-                    ? `${selection}/${textLength}`
-                    : `${textLength}`;
+                rightCounter.textContent = selectionRight > 0
+                    ? `${selectionRight}/${lengthRight}`
+                    : `${lengthRight}`;
+
+                // Percentages
+                let percentLeft = textRight.value.length > 0
+                    ? textLeft.value.length / textRight.value.length * 100
+                    : 0;
+
+                let percentRight = textLeft.value.length > 0
+                    ? textRight.value.length / textLeft.value.length * 100
+                    : 0;
+
+                if (percentLeft > 0 && percentLeft < 1001) {
+                    leftCounter.textContent += ` (${percentLeft.toFixed(0)}%)`;
+                }
+
+                if (percentRight > 0 && percentRight < 1001) {
+                    rightCounter.textContent += ` (${percentRight.toFixed(0)}%)`;
+                }
             }
 
             function setLanguage() {
