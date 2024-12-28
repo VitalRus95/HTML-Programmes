@@ -1,0 +1,142 @@
+[
+  {
+    "word": "rock",
+    "description": "Порода",
+    "vertical": true,
+    "x": 13,
+    "y": 0
+  },
+  {
+    "word": "moon",
+    "description": "Спутник",
+    "vertical": true,
+    "x": 6,
+    "y": 1
+  },
+  {
+    "word": "soil",
+    "description": "Почва",
+    "vertical": true,
+    "x": 9,
+    "y": 1
+  },
+  {
+    "word": "composition",
+    "description": "Состав",
+    "vertical": false,
+    "x": 3,
+    "y": 2
+  },
+  {
+    "word": "evaporate",
+    "description": "Испаряться",
+    "vertical": true,
+    "x": 5,
+    "y": 4
+  },
+  {
+    "word": "nascent",
+    "description": "Зарождающийся",
+    "vertical": false,
+    "x": 0,
+    "y": 5
+  },
+  {
+    "word": "celestial",
+    "description": "Небесный",
+    "vertical": true,
+    "x": 9,
+    "y": 7
+  },
+  {
+    "word": "multi-stage",
+    "description": "Многоступенчатый",
+    "vertical": true,
+    "x": 11,
+    "y": 7
+  },
+  {
+    "word": "carbonaceous",
+    "description": "Углеродистый",
+    "vertical": false,
+    "x": 0,
+    "y": 9
+  },
+  {
+    "word": "ambient",
+    "description": "Окружающий",
+    "vertical": false,
+    "x": 4,
+    "y": 11
+  },
+  {
+    "word": "terrestrial",
+    "description": "Земной",
+    "vertical": true,
+    "x": 6,
+    "y": 13
+  },
+  {
+    "word": "refractory",
+    "description": "Тугоплавкий",
+    "vertical": false,
+    "x": 4,
+    "y": 15
+  },
+  {
+    "word": "deuterium",
+    "description": "Дейтерий",
+    "vertical": true,
+    "x": 3,
+    "y": 16
+  },
+  {
+    "word": "nebulae",
+    "description": "Туманности",
+    "vertical": false,
+    "x": 4,
+    "y": 18
+  },
+  {
+    "word": "originally",
+    "description": "Изначально",
+    "vertical": false,
+    "x": 1,
+    "y": 22
+  },
+  {
+    "word": "liquid",
+    "description": "Жидкость",
+    "vertical": true,
+    "x": 11,
+    "y": 23
+  },
+  {
+    "word": "subglacial",
+    "description": "Подлёдный",
+    "vertical": false,
+    "x": 1,
+    "y": 24
+  },
+  {
+    "word": "bowels",
+    "description": "Недра",
+    "vertical": true,
+    "x": 7,
+    "y": 26
+  },
+  {
+    "word": "chondrite",
+    "description": "Хондрит",
+    "vertical": false,
+    "x": 4,
+    "y": 28
+  },
+  {
+    "word": "matter",
+    "description": "Материя",
+    "vertical": false,
+    "x": 2,
+    "y": 30
+  }
+]

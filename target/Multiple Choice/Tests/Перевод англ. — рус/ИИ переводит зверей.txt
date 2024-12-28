@@ -1,0 +1,6 @@
+Host	Множество
+Twitch	Подёргивание
+Couple	Соединять
+Convey	Сообщать
+Pitfall	Ловушка
+Misuse	Злоупотребление

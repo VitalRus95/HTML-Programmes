@@ -1,0 +1,7 @@
+Angina	Стенокардия
+Ingest	Проглатывать
+Ordeal	Испытание
+Contender	Претендент
+Jeopardize	Подвергать опасности
+Minor	Несовершеннолетний
+Sample	Образец

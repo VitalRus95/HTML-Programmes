@@ -1,0 +1,7 @@
+Club	Палица
+Blade	Лезвие
+Lineage	Происхождение
+Split	Расхождение
+Cranium	Череп
+Spiky	Шипастый
+Shin	Голень

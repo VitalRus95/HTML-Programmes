@@ -1,0 +1,9 @@
+Eavesdrop	Подслушивать
+Chirp	Щебетать
+Dampen	Приглушать
+Cochlea	Улитка
+Weave	Ткать
+Buckle	Сгибать
+Detangle	Распутывать
+Integrity	Целостность
+Murmur	Шум (в сердце)

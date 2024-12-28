@@ -342,7 +342,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: var(--accent2);
+                background-color: var(--primary-colour);
                 border: var(--cell-border) solid var(--accent1);
                 border-radius: var(--cell-radius);
                 border-style: solid;
@@ -407,7 +407,7 @@
             }
 
             .cell-input {
-                background-color: transparent;
+                background-color: var(--accent2);
                 border: var(--cell-border) outset var(--accent1);
                 border-radius: var(--cell-radius);
                 font-size: var(--cell-font);
@@ -415,13 +415,26 @@
                 text-align: center;
                 height: 100%;
                 width: 100%;
-                transition: all 1s ease-in;
+                transition: all 1.5s ease-in;
+            }
+
+            @keyframes input-correct {
+                0% {
+                    background-color: var(--accent2);
+                    color: transparent;
+                }
+                50% {
+                    background-color: var(--accent2);
+                    color: transparent;
+                    transform: scaleX(0);
+                }
             }
 
             .cell-input:valid {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
-                transition: all 1.2s ease-in;
+                transition: all 1.5s ease-in;
+                animation: input-correct 1.3s ease;
             }
 
             .cell-input:focus,
@@ -430,6 +443,10 @@
                 border-color: var(--secondary-colour);
                 color: var(--primary-colour);
                 transition: none;
+            }
+
+            .cell-input:valid:focus {
+                animation: none;
             }
 
             .cell-input:valid:focus,

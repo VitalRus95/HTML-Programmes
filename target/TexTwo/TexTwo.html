@@ -312,6 +312,7 @@
 
             .projectName {
                 border-radius: 0px 0px 7px 7px;
+                border-style: inset;
                 margin-bottom: 0;
                 margin-top: 0;
                 font-size: 1.05em;
@@ -326,6 +327,7 @@
             }
 
             .textName {
+                border-style: inset;
                 flex-grow: 1;
                 margin-bottom: 0;
                 font-weight: 600;
@@ -342,30 +344,27 @@
             .editor {
                 display: flex;
                 flex-grow: 1;
-                border-color: var(--secondary-colour);
-                border-style: outset;
-                border-width: 2px;
-                margin-top: 0;
+                border: 2px outset var(--secondary-colour);
+                border-radius: 0px 0px 0px 7px;
                 resize: none;
+                padding-inline: 4px;
                 width: 100%;
             }
 
             .menuButton {
                 cursor: pointer;
                 display: flex;
+                flex-grow: 1;
                 align-items: center;
                 justify-content: center;
                 background-color: var(--accent2);
-                border-color: var(--accent1);
-                border-style: outset;
-                border-width: 2px;
+                border: 2px outset var(--accent1);
                 font-weight: 600;
                 text-align: center;
                 text-decoration: none;
                 text-wrap: nowrap;
                 overflow: auto;
                 padding: 2px;
-                width: 100%;
             }
 
             .menuButton:hover,
@@ -376,17 +375,16 @@
 
             .counter {
                 display: flex;
-                border-color: var(--accent1);
-                border-style: outset;
-                border-width: 2px;
-                margin-top: 0;
+                cursor: help;
                 width: 100%;
+                margin-bottom: 0;
             }
 
             .counter::before {
                 content: 'Aa:';
-                background-color: var(--secondary-colour);
+                background-color: var(--accent1);
                 color: var(--primary-colour);
+                border-left: 3px dashed var(--primary-colour);
                 border-radius: 0px 7px 7px 0px;
                 margin-right: 4px;
                 padding-inline: 4px;
@@ -396,47 +394,52 @@
             .notes {
                 display: flex;
                 flex-grow: 1;
-                border-color: var(--secondary-colour);
+                border: 2px outset var(--secondary-colour);
                 border-radius: 0px 0px 0px 7px;
-                border-style: outset;
-                border-width: 2px;
                 resize: vertical;
                 min-height: 2em;
                 width: 100%;
             }
 
-            @keyframes shrinkAnim {
-                from {
-                    opacity: 1;
-                    width: 100%;
-                }
-                to {
-                    opacity: 0;
-                    width: 0%;
-                }
+            .projectName,
+            .textName,
+            .editor,
+            .notes {
+                outline-style: none;
             }
 
-            @keyframes expandAnim {
-                from {
-                    opacity: 0;
-                    overflow: hidden;
-                    width: 0%;
-                }
-                to {
-                    opacity: 1;
-                    overflow: auto;
-                    width: 100%;
-                }
+            .projectName:focus,
+            .textName:focus,
+            .editor:focus,
+            .notes:focus {
+                border-color: var(--accent1);
+                box-shadow: inset 0px 0px 5px var(--accent1);
             }
 
-            .shrink {
-                animation: shrinkAnim 1s ease-in;
-                overflow: hidden;
+            #saveProjectButton,
+            #loadProjectButton {
+                width: 100%;
             }
 
-            .expand {
-                animation: expandAnim 1s ease-out;
+            #panels {
                 display: flex;
+                column-gap: 4px;
+                margin: 0;
+            }
+
+            #panelLeft,
+            #panelRight {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            #buttonsLeft,
+            #buttonsRight {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 4px;
+                margin-bottom: 0;
             }
         </style>
     </head>
@@ -514,10 +517,10 @@
             class='projectName'
         >
 
-        <!-- Editing -->
-        <div style='margin-bottom: 0;'>
-            <!-- Headers -->
-            <div style='display: flex; column-gap: 4px;'>
+        <!-- Panels -->
+        <div id='panels'>
+            <!-- Left panel -->
+            <div id='panelLeft'>
                 <!-- Left header -->
                 <div id='headerLeft' style='display: flex; width: 100%;'>
                     <input
@@ -539,6 +542,65 @@
                     </button>
                 </div>
 
+                <!-- Left buttons -->
+                <div id='buttonsLeft'>
+                    <a
+                        id='saveFile1'
+                        href=''
+                        class='menuButton tooltipParent'
+                        onclick='saveFile(true)'
+                        style='margin-top: 0;'
+                    >
+                        &#128190; Save
+                        <span class='tooltip'>Save text 1 to .txt file</span>
+                    </a>
+
+                    <button
+                        id='loadText1Button'
+                        class='menuButton tooltipParent'
+                        ondrop='dropText(event, true)'
+                        ondragover='cancelDragOver(event)'
+                        onclick='document.getElementById("loadText1").click()'
+                        style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
+                    >
+                        &#128193; Open
+                        <span class='tooltip'>Open text 1. To open files, click the button or drag and drop them on it.</span>
+                    </button>
+                    <input
+                        id='loadText1'
+                        type='file'
+                        multiple
+                        onchange='loadFile(true)'
+                        style='display: none;'
+                    >
+                    </input>
+                </div>
+
+                <!-- Left editor -->
+                <textarea
+                    id='textLeft'
+                    class='editor'
+                    autocomplete='off'
+                    placeholder='Text 1 content. Press Alt + Right arrow to quickly switch to Text 2.'
+                    rows='10'
+                    onclick='updateCounters()'
+                    oninput='updateCounters()'
+                    onselect='updateCounters()'
+                ></textarea>
+
+                <!-- Left symbol counter -->
+                <div
+                    id='leftCounterDiv'
+                    class='counter tooltipParent'
+                    tabindex='0'
+                >
+                    <p id='leftCounter'></p>
+                    <span id='tsc_l_tip' class='tooltip'>Text 1 symbol count & Text 1 to 2 symbol ratio</span>
+                </div>
+            </div>
+
+            <!-- Right panel -->
+            <div id='panelRight'>
                 <!-- Right header -->
                 <div id='headerRight' style='display: flex; width: 100%;'>
                     <button
@@ -559,129 +621,62 @@
                         placeholder='Text 2 name'
                         style='border-radius: 0px 7px 0px 0px   ;'>
                 </div>
-            </div>
 
-            <!-- Save buttons -->
-            <div style='display: flex; column-gap: 4px;'>
-                <a
-                    id='saveFile1'
-                    href=''
-                    class='menuButton tooltipParent'
-                    onclick='saveFile(true)'
-                    style='margin-top: 0;'
-                >
-                    &#128190; Save
-                    <span class='tooltip'>Save text 1 to .txt file</span>
-                </a>
+                <!-- Right buttons -->
+                <div id='buttonsRight'>
+                    <a
+                        id='saveFile2'
+                        href=''
+                        class='menuButton tooltipParent'
+                        onclick='saveFile(false)'
+                        style='margin-top: 0;'
+                    >
+                        &#128190; Save
+                        <span class='tooltip'>Save text 2 to .txt file</span>
+                    </a>
 
-                <a
-                    id='saveFile2'
-                    href=''
-                    class='menuButton tooltipParent'
-                    onclick='saveFile(false)'
-                    style='margin-top: 0;'
-                >
-                    &#128190; Save
-                    <span class='tooltip'>Save text 2 to .txt file</span>
-                </a>
-            </div>
-
-            <!-- Load buttons -->
-            <div style='display: flex; column-gap: 4px;'>
-                <!-- Load left -->
-                <button
-                    id='loadText1Button'
-                    class='menuButton tooltipParent'
-                    ondrop='dropText(event, true)'
-                    ondragover='cancelDragOver(event)'
-                    onclick='document.getElementById("loadText1").click()'
-                    style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
-                >
-                    &#128193; Open
-                    <span class='tooltip'>Open text 1. To open files, click the button or drag and drop them on it.</span>
-                </button>
-                <input
-                    id='loadText1'
-                    type='file'
-                    multiple
-                    onchange='loadFile(true)'
-                    style='display: none;'
-                >
-                </input>
-
-                <!-- Load right -->
-                <button
-                    id='loadText2Button'
-                    class='menuButton tooltipParent'
-                    ondrop='dropText(event, false)'
-                    ondragover='cancelDragOver(event)'
-                    onclick='document.getElementById("loadText2").click()'
-                    style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
-                >
-                    &#128193; Open
-                    <span class='tooltip'>Open text 2. To open files, click the button or drag and drop them on it.</span>
-                </button>
-                <input
-                    id='loadText2'
-                    type='file'
-                    multiple
-                    onchange='loadFile(false)'
-                    style='display: none;'
-                >
-                </input>
-            </div>
-
-            <!-- Editors -->
-            <div style='display: flex;
-                column-gap: 4px;
-                min-height: 35vh;
-                overflow: auto;
-                resize: vertical;'
-            >
-                <!-- Left editor -->
-                <textarea
-                    id='textLeft'
-                    class='editor'
-                    autocomplete='off'
-                    placeholder='Text 1 content'
-                    rows='10'
-                    onclick='updateCounters()'
-                    oninput='updateCounters()'
-                    onselect='updateCounters()'
-                ></textarea>
+                    <button
+                        id='loadText2Button'
+                        class='menuButton tooltipParent'
+                        ondrop='dropText(event, false)'
+                        ondragover='cancelDragOver(event)'
+                        onclick='document.getElementById("loadText2").click()'
+                        style='margin-top: 0; border-radius: 0px 0px 0px 0px;'
+                    >
+                        &#128193; Open
+                        <span class='tooltip'>Open text 2. To open files, click the button or drag and drop them on it.</span>
+                    </button>
+                    <input
+                        id='loadText2'
+                        type='file'
+                        multiple
+                        onchange='loadFile(false)'
+                        style='display: none;'
+                    >
+                    </input>
+                </div>
 
                 <!-- Right editor -->
                 <textarea
                     id='textRight'
                     class='editor'
                     autocomplete='off'
-                    placeholder='Text 2 content'
+                    placeholder='Text 2 content. Press Alt + Left arrow to quickly switch to Text 1.'
                     rows='10'
                     onclick='updateCounters()'
                     oninput='updateCounters()'
                     onselect='updateCounters()'
                 ></textarea>
-            </div>
-        </div>
 
-        <!-- Texts' symbols counter -->
-        <div style='display: flex; column-gap: 4px;margin-top: 0;'>
-            <div
-                id='leftCounterDiv'
-                class='counter tooltipParent'
-                tabindex='0'
-            >
-                <p id='leftCounter'></p>
-                <span id='tsc_l_tip' class='tooltip'>Text 1 symbol count & Text 1 to 2 symbol ratio</span>
-            </div>
-
-            <div
-                id='rightCounterDiv'
-                class='counter tooltipParent'
-                tabindex='0'
-            >
-                <p id='rightCounter'></p>
-                <span id='tsc_r_tip' class='tooltip'>Text 2 symbol count & Text 2 to 1 symbol ratio</span>
+                <!-- Right symbol counter -->
+                <div
+                    id='rightCounterDiv'
+                    class='counter tooltipParent'
+                    tabindex='0'
+                >
+                    <p id='rightCounter'></p>
+                    <span id='tsc_r_tip' class='tooltip'>Text 2 symbol count & Text 2 to 1 symbol ratio</span>
+                </div>
             </div>
         </div>
 
@@ -691,7 +686,7 @@
             href=''
             class='menuButton tooltipParent'
             onclick='saveComparison()'
-            style='margin-top: 0;'
+            style='border-radius: 7px 0px 0px 0px;'
         >
             &#128190; Save comparison
             <span class='tooltip'>Save paragraph by paragraph comparison of both texts to .txt file</span>
@@ -1062,6 +1057,11 @@
             let lang = document.getElementById('lang');
 
             /** @type {HTMLDivElement} */
+            let panelLeft = document.getElementById('panelLeft');
+            /** @type {HTMLDivElement} */
+            let panelRight = document.getElementById('panelRight');
+
+            /** @type {HTMLDivElement} */
             let headerLeft = document.getElementById('headerLeft');
             /** @type {HTMLDivElement} */
             let headerRight = document.getElementById('headerRight');
@@ -1073,10 +1073,16 @@
             /** @type {HTMLInputElement} */
             let nameRight = document.getElementById('nameRight');
 
+            /** @type {HTMLDivElement} */
+            let buttonsLeft = document.getElementById('buttonsLeft');
+            /** @type {HTMLDivElement} */
+            let buttonsRight = document.getElementById('buttonsRight');
+
             /** @type {HTMLButtonElement} */
             let shrinkLeft = document.getElementById('shrinkLeft');
             /** @type {HTMLButtonElement} */
             let shrinkRight = document.getElementById('shrinkRight');
+
             /** @type {HTMLButtonElement} */
             let loadText1Button = document.getElementById('loadText1Button');
             /** @type {HTMLButtonElement} */
@@ -1086,6 +1092,7 @@
             let textLeft = document.getElementById('textLeft');
             /** @type {HTMLTextAreaElement} */
             let textRight = document.getElementById('textRight');
+
             /** @type {HTMLTextAreaElement}*/
             let userNotes = document.getElementById('userNotes');
 
@@ -1113,47 +1120,42 @@
             /** @type {HTMLDivElement} */
             let rightCounterDiv = document.getElementById('rightCounterDiv');
 
-            let leftPanel = [headerLeft, saveFile1, loadText1Button, textLeft, leftCounterDiv];
-            let rightPanel = [headerRight, saveFile2, loadText2Button, textRight, rightCounterDiv];
-            let bothPanels = leftPanel.concat(rightPanel);
-
-            shrinkLeft.addEventListener('click', function () {
-                if (!headerRight.classList.contains('shrink')) {
-                    leftPanel.forEach((e) => {
-                        e.classList.remove('expand');
-                        e.classList.add('shrink');
-                    });
+            shrinkLeft.addEventListener('click', function (event) {
+                if (panelRight.style.display !== 'none') {
+                    panelLeft.style.display = 'none';
                     shrinkRight.focus();
                 } else {
-                    rightPanel.forEach((e) => {
-                        e.style.display = 'flex';
-                        e.classList.remove('shrink');
-                        e.classList.add('expand');
-                    });
+                    panelRight.style.display = 'flex';
                 }
             });
 
-            shrinkRight.addEventListener('click', function () {
-                if (!headerLeft.classList.contains('shrink')) {
-                    rightPanel.forEach((e) => {
-                        e.classList.remove('expand');
-                        e.classList.add('shrink');
-                    });
+            shrinkRight.addEventListener('click', function (event) {
+                if (panelLeft.style.display !== 'none') {
+                    panelRight.style.display = 'none';
                     shrinkLeft.focus();
                 } else {
-                    leftPanel.forEach((e) => {
-                        e.style.display = 'flex';
-                        e.classList.remove('shrink');
-                        e.classList.add('expand');
-                    });
+                    panelLeft.style.display = 'flex';
                 }
             });
 
-            bothPanels.forEach((e) => {
-                e.addEventListener('animationend', function (event) {
-                    if (event.animationName === 'shrinkAnim')
-                        e.style.display = 'none';
-                });
+            textLeft.addEventListener('keydown', function (event) {
+                if (event.altKey
+                    && event.key === 'ArrowRight'
+                    && panelRight.style.display !== 'none'
+                ) {
+                    event.preventDefault();
+                    textRight.focus();
+                }
+            });
+
+            textRight.addEventListener('keydown', function (event) {
+                if (event.altKey
+                    && event.key === 'ArrowLeft'
+                    && panelLeft.style.display !== 'none'
+                ) {
+                    event.preventDefault();
+                    textLeft.focus();
+                }
             });
 
             lang.value = localStorage.getItem('lang') ?? 'eng';
