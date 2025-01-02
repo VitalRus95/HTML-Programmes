@@ -661,30 +661,26 @@
 
             @keyframes win-blink {
                 0% {
-                    background-color: var(--primary-colour);
-                    color: var(--secondary-colour);
+                    box-shadow: inset 0px 0px 25px var(--accent1);
                 }
                 50% {
-                    background-color: var(--accent1);
-                    color: var(--accent2);
+                    box-shadow: none;
                 }
                 100% {
-                    background-color: var(--primary-colour);
-                    color: var(--secondary-colour);
+                    box-shadow: inset 0px 0px 25px var(--accent2);
                 }
             }
 
             #grid-victory {
                 align-self: center;
                 text-align: center;
-                font-family: 'Courier New', Courier, monospace;
                 font-size: 1.5em;
                 font-weight: 600;
+                border: 2px solid var(--accent1);
                 border-radius: 7px 7px 0px 0px;
                 padding: 2px;
                 width: 100%;
-                animation: win-show 1s ease-out;
-                animation: win-blink 5s ease alternate infinite;
+                animation: win-blink 6s ease alternate infinite;
             }
 
             #grid-win {

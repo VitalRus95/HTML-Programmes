@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Pairs</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --card-height: 96px;
+                --card-width: calc(var(--card-height) * 0.7);
+                --card-border: calc(var(--card-width) * 0.06);
+                --card-shadow: calc(var(--card-border) * 2);
+                --card-gap: var(--card-border);
+                --card-font: calc(var(--card-width) * 0.7);
+                --card-anim-speed: 0.4s;
+            }
+
+            .menuButton {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                text-wrap: nowrap;
+                overflow: auto;
+                margin-bottom: 0;
+                padding: 2px;
+                width: 100%;
+            }
+
+            .menuButton:hover,
+            .menuButton:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
+            .card {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                counter-increment: count 1;
+                background-color: var(--accent2);
+                color: transparent;
+                border: var(--card-border) double var(--accent1);
+                border-radius: 4px;
+                font-size: var(--card-font);
+                font-weight: 600;
+                height: var(--card-height);
+                width: var(--card-width);
+                cursor: grab;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                outline-style: none;
+                position: relative;
+                transition: all var(--card-anim-speed) ease;
+            }
+
+            .card:focus,
+            .card:hover {
+                background-color: var(--accent1);
+                color: transparent;
+                box-shadow: 0px 0px var(--card-shadow) var(--secondary-colour);
+                border-color: var(--primary-colour);
+                z-index: 1;
+                transform:
+                    rotateZ(1deg)
+                    scale(1.15)
+                    translate(-2%,8%);
+                transition: all var(--card-anim-speed) ease-out;
+            }
+
+            .open {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-color: var(--accent2);
+                cursor: not-allowed;
+            }
+
+            .open:focus,
+            .open:hover {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+            }
+
+            .card::before {
+                content: counter(count);
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                color: var(--secondary-colour);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: calc(var(--card-font) * 0.4);
+                padding-inline: 2px;
+            }
+
+            .card:focus::before,
+            .card:hover::before {
+                color: var(--primary-colour);
+            }
+
+            .open::before {
+                color: var(--primary-colour);
+            }
+
+            .open:focus::before,
+            .open:hover::before {
+                color: var(--secondary-colour);
+            }
+
+            #cards {
+                border-radius: 0px 0px 0px 7px;
+                width: 100%;
+            }
+
+            #grid {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                column-gap: var(--card-gap);
+            }
+
+            @keyframes win-blink {
+                0% {
+                    box-shadow: inset 0px 0px 25px var(--accent1);
+                }
+                50% {
+                    box-shadow: none;
+                }
+                100% {
+                    box-shadow: inset 0px 0px 25px var(--accent2);
+                }
+            }
+
+            #grid-victory {
+                align-self: center;
+                text-align: center;
+                font-size: 1.5em;
+                font-weight: 600;
+                border: 2px solid var(--accent1);
+                border-radius: 7px 7px 0px 0px;
+                padding: 2px;
+                width: 100%;
+                animation: win-blink 6s ease alternate infinite;
+            }
+
+            #grid-win {
+                display: none;
+                flex-direction: column;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Pairs</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+        <details>
+            <summary id='cards-summary'>Cards</summary>
+
+            <!-- Save & Load buttons -->
+            <div style='display: flex; column-gap: 4px;'>
+                <!-- Load button -->
+                <button
+                    id='loadPackButton'
+                    class='menuButton tooltipParent'
+                    onclick='document.getElementById("loadPackInput").click()'
+                    style='border-radius: 7px 0px 0px 0px;'
+                >
+                    &#128193; Load
+                    <span class='tooltip'>Load pack from .txt file</span>
+                </button>
+                <input
+                    id='loadPackInput'
+                    type='file'
+                    accept='.txt'
+                    onchange='loadPack()'
+                    style='display: none;'
+                >
+                </input>
+
+                <!-- Save button -->
+                <a
+                    id='savePackButton'
+                    href=''
+                    class='menuButton tooltipParent'
+                    onclick='savePack()'
+                    style='border-radius: 0px 7px 0px 0px;'
+                >
+                    &#128190; Save
+                    <span class='tooltip'>Save pack to .txt file</span>
+                </a>
+            </div>
+
+            <input id='cards' type='text' placeholder="Cards' symbols (separated by space)">
+        </details>
+
+        <button id='start' onclick='fillGrid()'>Start game</button>
+
+        <!-- Victory text -->
+        <div id='grid-win' tabindex='0'>
+            <span id='grid-victory' tabindex='0'>Victory!</span>
+            
+            <!-- End stats -->
+            <table id='grid-win-stats'>
+                <th id='grid-win-stats-label' colspan='2' tabindex='0'>
+                    Statistics
+                </th>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-time-label' tabindex='0'>Time (min:sec)</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-time' tabindex='0'>00:00</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-mistakes-label' tabindex='0'>Mistakes</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-mistakes' tabindex='0'>0</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id='grid'></div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLInputElement} */
+            let loadPackInput = document.getElementById('loadPackInput');
+            /** @type {HTMLAnchorElement} */
+            let savePackButton = document.getElementById('savePackButton');
+            /** @type {HTMLInputElement} */
+            let cardsInput = document.getElementById('cards');
+            /** @type {HTMLSpanElement} */
+            let win = document.getElementById('grid-win');
+            /** {HTMLSpanElement} */
+            let time = document.getElementById('grid-win-time');
+            /** {HTMLSpanElement} */
+            let mistakes = document.getElementById('grid-win-mistakes');
+            /** @type {HTMLDivElement} */
+            let grid = document.getElementById('grid');
+
+            // Variables
+            /** @type {HTMLDivElement} */
+            let lastOpenCard = undefined;
+            /** @type {number} */
+            let maxOpenCards = 1;
+            /** @type {number} */
+            let hideSpeed = 5000;
+            /** @type {number} */
+            let mistakesCount;
+            /** @type {number} */
+            let timerStart;
+            /** @type {number} */
+            let timerEnd;
+
+            cardsInput.value = localStorage.getItem('cards') ?? '';
+
+            cardsInput.addEventListener('input', function (event) {
+                localStorage.setItem('cards', cardsInput.value);
+            });
+
+            async function loadPack() {
+                await loadPackInput.files[0].text().then(c => {
+                    localStorage.setItem('cards', c);
+                    cardsInput.value = c;
+                    fillGrid();
+                });
+            }
+
+            function savePack() {
+                let data = encodeURIComponent(cardsInput.value);
+                savePackButton.download = 'Pack.txt';
+                savePackButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            function fillGrid() {
+                /** @type {string[]} */
+                let cards = cardsInput.value.trim().split(' ');
+
+                if (cards.length < 2) return;
+
+                win.style.display = 'none';
+                lastOpenCard = undefined;
+                timerStart = Date.now();
+                mistakesCount = 0;
+
+                while (grid.hasChildNodes()) {
+                    grid.lastChild.remove();
+                }
+
+                /** @type {string[]} */
+                let tempArray = cards.concat(cards);
+
+                while (tempArray.length > 0) {
+                    let i = Math.floor(Math.random() * tempArray.length);
+
+                    /** @type {HTMLDivElement} */
+                    let card = grid.appendChild(
+                        document.createElement('button')
+                    );
+
+                    card.classList.add('card', 'open');
+                    card.textContent = tempArray[i];
+
+                    setTimeout(() => {
+                        card.classList.remove('open');
+                    }, hideSpeed);
+
+                    card.addEventListener('click', function (event) {
+                        if (this.classList.contains('open')) {
+                            return;
+                        } else {
+                            this.classList.add('open');
+                        }
+
+                        setTimeout(() => {
+                            if (lastOpenCard) {
+                                if (lastOpenCard.textContent !== this.textContent) {
+                                    lastOpenCard.classList.remove('open');
+                                    this.classList.remove('open');
+                                    mistakesCount ++;
+                                } else {
+                                    checkWin();
+                                }
+
+                                lastOpenCard = undefined;
+                            } else {
+                                lastOpenCard = card;
+                            }
+                        }, 700);
+                    });
+
+                    tempArray.splice(i, 1);
+                }
+            }
+
+            function checkWin() {
+                /** @type {boolean} */
+                let allCorrect = true;
+                /** @type {HTMLInputElement[]} */
+                let cards = grid.getElementsByClassName('card');
+                
+                for (let c of cards) {
+                    if (!c.classList.contains('open')) {
+                        allCorrect = false;
+                        return;
+                    }
+                }
+
+                if (allCorrect) {
+                    if (win.style.display === 'flex') return;
+
+                    win.style.display = 'flex';
+                    timerEnd = Date.now();
+
+                    let date = new Date(timerEnd - timerStart);
+                    let min = date.getMinutes();
+                    let sec = date.getSeconds();
+
+                    time.textContent = `${
+                        min > 9 ? min : `0${min}`
+                    }:${
+                        sec > 9 ? sec : `0${sec}`
+                    }`;
+                    mistakes.textContent = mistakesCount;
+
+                    win.focus();
+                }
+            }
+
+            fillGrid();
+        </script>
+    </body>
+</html>

@@ -3,7 +3,7 @@
     <head>
         <meta charset='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <title>Letter Field</title>
+        <title>Pairs</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         
 
@@ -305,120 +305,14 @@
                 font-weight: 600;
             }
 
-            @keyframes cell-show {
-                0% {
-                    background-color: var(--primary-colour);
-                    color: var(--secondary-colour);
-                }
-                50% {
-                    background-color: var(--accent1);
-                    color: var(--accent2);
-                }
-                100% {
-                    background-color: var(--primary-colour);
-                    color: var(--secondary-colour);
-                }
-            }
-
-            @keyframes score-mistake {
-                33% {
-                    transform: translateX(-0.5em);
-                }
-                66% {
-                    background-color: var(--accent1);
-                    color: var(--primary-colour);
-                    transform: translateX(0.5em);
-                }
-                100% {
-                    transform: translateX(0%);
-                }
-            }
-
-            @keyframes score-correct {
-                50% {
-                    background-color: var(--secondary-colour);
-                    color: var(--primary-colour);
-                    transform: scale(1.03);
-                }
-            }
-
-            @keyframes win-show {
-                from {
-                    transform: translateY(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateY(0%);
-                    opacity: 1;
-                }
-            }
-
-            @keyframes win-blink {
-                0% {
-                    box-shadow: inset 0px 0px 25px var(--accent1);
-                }
-                50% {
-                    box-shadow: none;
-                }
-                100% {
-                    box-shadow: inset 0px 0px 25px var(--accent2);
-                }
-            }
-
             :root {
-                --cell-size: 2.1rem;
-            }
-
-            .cell {
-                display: flex;
-                align-items: end;
-                justify-content: center;
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 1.6em;
-                font-weight: 600;
-                border: 2px outset var(--accent1);
-                border-radius: 2px;
-                opacity: 1;
-                height: var(--cell-size);
-                width: var(--cell-size);
-                cursor: cell;
-                transition:
-                    background-color 1.75s ease-in,
-                    color 0.5s ease-in,
-                    opacity 0.5s ease;
-                animation: cell-show 1s ease-in;
-            }
-
-            .cell:focus,
-            .cell:hover {
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
-                transition: background-color 0s ease-out;
-            }
-
-            .cell-hidden {
-                color: var(--primary-colour);
-                opacity: 0.2;
-                cursor: default;
-                transition:
-                    all 0.5s ease,
-                    color 1s ease;
-            }
-
-            .cell-highlight {
-                background-color: var(--accent1);
-                color: var(--accent2);
-                transition:
-                    background-color 1.5s ease-in,
-                    color 0.5s ease-in;
-            }
-
-            .mistake {
-                animation: score-mistake 0.5s ease;
-            }
-
-            .correct {
-                animation: score-correct 0.7s ease;
+                --card-height: 96px;
+                --card-width: calc(var(--card-height) * 0.7);
+                --card-border: calc(var(--card-width) * 0.06);
+                --card-shadow: calc(var(--card-border) * 2);
+                --card-gap: var(--card-border);
+                --card-font: calc(var(--card-width) * 0.7);
+                --card-anim-speed: 0.4s;
             }
 
             .menuButton {
@@ -435,6 +329,7 @@
                 text-decoration: none;
                 text-wrap: nowrap;
                 overflow: auto;
+                margin-bottom: 0;
                 padding: 2px;
                 width: 100%;
             }
@@ -445,70 +340,103 @@
                 color: var(--primary-colour);
             }
 
-            #words {
-                border-radius: 0px 7px;
-                width: 100%;
-                resize: vertical;
-                min-height: 2em;
-            }
-
-            #grid-container {
+            .card {
                 display: flex;
-                flex-direction: column;
-            }
-
-            #grid-header {
-                display: flex;
+                align-items: center;
                 justify-content: center;
-                border-bottom: 2px ridge var(--accent1);
-                border-radius: 7px;
-                font-size: 1.05em;
-                font-weight: 600;
-                text-align: center;
-                padding: 2px;
-            }
-
-            #grid-score-container {
-                display: flex;
-                position: sticky;
-                top: 0px;
-                z-index: 1;
-                opacity: 0.9;
-                margin: 0;
-            }
-
-            #grid-score {
-                display: flex;
-                flex-grow: 1;
-                justify-content: center;
-                column-gap: 4px;
-                font-weight: 600;
+                counter-increment: count 1;
                 background-color: var(--accent2);
-                border: 2px outset var(--accent1);
+                color: transparent;
+                border: var(--card-border) double var(--accent1);
+                border-radius: 4px;
+                font-size: var(--card-font);
+                font-weight: 600;
+                height: var(--card-height);
+                width: var(--card-width);
+                cursor: grab;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                outline-style: none;
+                position: relative;
+                transition: all var(--card-anim-speed) ease;
+            }
+
+            .card:focus,
+            .card:hover {
+                background-color: var(--accent1);
+                color: transparent;
+                box-shadow: 0px 0px var(--card-shadow) var(--secondary-colour);
+                border-color: var(--primary-colour);
+                z-index: 1;
+                transform:
+                    rotateZ(1deg)
+                    scale(1.15)
+                    translate(-2%,8%);
+                transition: all var(--card-anim-speed) ease-out;
+            }
+
+            .open {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-color: var(--accent2);
+                cursor: not-allowed;
+            }
+
+            .open:focus,
+            .open:hover {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+            }
+
+            .card::before {
+                content: counter(count);
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                color: var(--secondary-colour);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: calc(var(--card-font) * 0.4);
+                padding-inline: 2px;
+            }
+
+            .card:focus::before,
+            .card:hover::before {
+                color: var(--primary-colour);
+            }
+
+            .open::before {
+                color: var(--primary-colour);
+            }
+
+            .open:focus::before,
+            .open:hover::before {
+                color: var(--secondary-colour);
+            }
+
+            #cards {
                 border-radius: 0px 0px 0px 7px;
+                width: 100%;
             }
 
-            #grid-score-label {
-                background-color: transparent;
-            }
-
-            #grid-score-value {
-                background-color: transparent;
-            }
-
-            #undo-mistake {
-                border-radius: 0px 0px 7px 0px;
-                font-weight: 700;
-                min-width: 3em;
-            }
-
-            #grid-letters {
-                display: none;
-                justify-content: center;
+            #grid {
+                display: flex;
                 flex-wrap: wrap;
-                column-gap: 2px;
-                padding: 2px;
-                background-color: transparent;
+                justify-content: center;
+                column-gap: var(--card-gap);
+            }
+
+            @keyframes win-blink {
+                0% {
+                    box-shadow: inset 0px 0px 25px var(--accent1);
+                }
+                50% {
+                    box-shadow: none;
+                }
+                100% {
+                    box-shadow: inset 0px 0px 25px var(--accent2);
+                }
             }
 
             #grid-victory {
@@ -527,222 +455,90 @@
                 display: none;
                 flex-direction: column;
             }
-
-            #grid-input {
-                display: flex;
-                position: sticky;
-                bottom: 0px;
-                z-index: 1;
-                margin: 0;
-                height: 2.1em;
-                opacity: 0.9;
-            }
-
-            #grid-stats {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: help;
-                background-color: var(--accent2);
-                border: 2px outset var(--accent1);
-                border-radius: 7px 0px 0px 0px;
-                font-weight: 600;
-            }
-
-            #grid-words-count {
-                background-color: transparent;
-                text-align: center;
-                min-width: 3em;
-            }
-
-            #wordInput {
-                width: 100%;
-            }
-
-            #backspace {
-                border-radius: 0px 7px 0px 0px;
-                font-weight: 700;
-                min-width: 3em;
-            }
-
-            #guessedWordsLabel {
-                display: flex;
-                justify-content: center;
-                background-color: var(--accent2);
-                border-top: 2px outset var(--accent1);
-                border-radius: 0px 0px 0px 7px;
-                font-size: 1.05em;
-                font-weight: 600;
-                margin: 0;
-                width: 100%;
-            }
         </style>
     </head>
     <body>
-        <h1>Letter Field</h1>
+        <h1>Pairs</h1>
 
         <!-- Settings -->
         <details id='settings'>
             <summary>Settings</summary>
-
-            <div style='display: flex; align-items: baseline;'>
-                <input type='checkbox' id='hideCells'>
-                <label for='hideCells'>Hide inactive cells completely</label>
-            </div>
-
-            <hr>
         </details>
 
-        <!-- Words list textarea -->
+        <!-- Page main body -->
         <details>
-            <summary>Words (answers)</summary>
-            <textarea
-                id='words'
-                autocomplete='off'
-                placeholder='The list of words to guess'
-            ></textarea>
+            <summary id='cards-summary'>Cards</summary>
+
+            <!-- Save & Load buttons -->
+            <div style='display: flex; column-gap: 4px;'>
+                <!-- Load button -->
+                <button
+                    id='loadPackButton'
+                    class='menuButton tooltipParent'
+                    onclick='document.getElementById("loadPackInput").click()'
+                    style='border-radius: 7px 0px 0px 0px;'
+                >
+                    &#128193; Load
+                    <span class='tooltip'>Load pack from .txt file</span>
+                </button>
+                <input
+                    id='loadPackInput'
+                    type='file'
+                    accept='.txt'
+                    onchange='loadPack()'
+                    style='display: none;'
+                >
+                </input>
+
+                <!-- Save button -->
+                <a
+                    id='savePackButton'
+                    href=''
+                    class='menuButton tooltipParent'
+                    onclick='savePack()'
+                    style='border-radius: 0px 7px 0px 0px;'
+                >
+                    &#128190; Save
+                    <span class='tooltip'>Save pack to .txt file</span>
+                </a>
+            </div>
+
+            <input id='cards' type='text' placeholder="Cards' symbols (separated by space)">
         </details>
 
-        <!-- Save & Load buttons -->
-        <div style='display: flex; column-gap: 4px;'>
-            <!-- Load button -->
-            <button
-                id='loadWordsButton'
-                class='menuButton tooltipParent'
-                tabindex='1'
-                onclick='document.getElementById("loadWordsInput").click()'
-                style='border-radius: 7px 0px 0px 0px;'
-            >
-                &#128193; Load
-                <span class='tooltip'>Load words list from .txt file</span>
-            </button>
-            <input
-                id='loadWordsInput'
-                type='file'
-                accept='.txt'
-                onchange='loadWords()'
-                style='display: none;'
-            >
-            </input>
+        <button id='start' onclick='fillGrid()'>Start game</button>
 
-            <!-- Save button -->
-            <a
-                id='saveWordsButton'
-                href=''
-                class='menuButton tooltipParent'
-                tabindex='1'
-                onclick='saveWords()'
-                style='border-radius: 0px 7px 0px 0px;'
-            >
-                &#128190; Save
-                <span class='tooltip'>Save words list to .txt file</span>
-            </a>
+        <!-- Victory text -->
+        <div id='grid-win' tabindex='0'>
+            <span id='grid-victory' tabindex='0'>Victory!</span>
+            
+            <!-- End stats -->
+            <table id='grid-win-stats'>
+                <th id='grid-win-stats-label' colspan='2' tabindex='0'>
+                    Statistics
+                </th>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-time-label' tabindex='0'>Time (min:sec)</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-time' tabindex='0'>00:00</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-mistakes-label' tabindex='0'>Mistakes</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-mistakes' tabindex='0'>0</span>
+                    </td>
+                </tr>
+            </table>
         </div>
 
-        <!-- Start button -->
-        <button
-            tabindex='1'
-            onclick='fillGrid()'
-            style='font-weight: 600; border-radius: 0px 0px 7px 7px;'
-        >
-            Start
-        </button>
-
-        <!-- Game grid -->
-        <div id='grid-container'>
-            <!-- Header -->
-            <span id='grid-header' tabindex='1'>...</span>
-
-            <!-- Score -->
-            <div id='grid-score-container'>
-                <div id='grid-score' tabindex='1'>
-                    <span id='grid-score-label'>Score:</span>
-                    <span id='grid-score-value'>0%</span>
-                </div>
-                <button
-                    id='undo-mistake'
-                    class='tooltipParent'
-                    tabindex='1'
-                    disabled
-                >
-                    &#60;
-                    <span class='tooltip'>Undo the last mistake</span>
-                </button>
-            </div>
-
-            <!-- Letters -->
-            <div id='grid-letters'></div>
-
-            <!-- Victory text -->
-            <div id='grid-win' tabindex='0'>
-                <span id='grid-victory' tabindex='0'>Victory!</span>
-                
-                <!-- End stats -->
-                <table id='grid-win-stats'>
-                    <th id='grid-win-stats-label' colspan='2' tabindex='0'>
-                        Statistics
-                    </th>
-    
-                    <tr>
-                        <td>
-                            <span id='grid-win-time-label' tabindex='0'>Time (min:sec)</span>
-                        </td>
-                        <td>
-                            <span id='grid-win-time' tabindex='0'>00:00</span>
-                        </td>
-                    </tr>
-    
-                    <tr>
-                        <td>
-                            <span id='grid-win-mistakes-label' tabindex='0'>Mistakes</span>
-                        </td>
-                        <td>
-                            <span id='grid-win-mistakes' tabindex='0'>0</span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- Input -->
-            <div id='grid-input'>
-                <!-- Stats -->
-                <div id='grid-stats' class='tooltipParent'>
-                    <span id='grid-words-count' tabindex='1'>0</span>
-                    <span class='tooltip'>
-                        <div style='margin: 0;'>
-                            Words on grid counter. Letters count:
-                            <span id='letters-count'></span>
-                        </div>
-                    </span>
-                </div>
-
-                <input
-                    type='text'
-                    id='wordInput'
-                    tabindex='1'
-                    autocomplete='off'
-                    oninput='checkInput()'
-                    placeholder='Type your guess'
-                >
-
-                <button
-                    id='backspace'
-                    class='tooltipParent'
-                    tabindex='1'
-                >
-                    &#60;
-                    <span class='tooltip'>Delete the last letter</span>
-                </button>
-            </div>
-
-            <!-- Guessed words list -->
-            <div>
-                <span id='guessedWordsLabel' tabindex='1'>
-                    Guessed words
-                </span>
-                <ul id='guessedList'></ul>
-            </div>
-        </div>
+        <div id='grid'></div>
 
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
@@ -1098,27 +894,11 @@
         <script>
             // Elements
             /** @type {HTMLInputElement} */
-            let hideCells = document.getElementById('hideCells');
-            /** @type {HTMLInputElement} */
-            let loadWordsInput = document.getElementById('loadWordsInput');
+            let loadPackInput = document.getElementById('loadPackInput');
             /** @type {HTMLAnchorElement} */
-            let saveWordsButton = document.getElementById('saveWordsButton');
-            /** @type {HTMLTextAreaElement} */
-            let words = document.getElementById('words');
-            /** @type {HTMLSpanElement} */
-            let header = document.getElementById('grid-header');
-            /** @type {HTMLDivElement} */
-            let scoreDiv = document.getElementById('grid-score');
-            /** @type {HTMLSpanElement} */
-            let scoreSpan = document.getElementById('grid-score-value');
-            /** @type {HTMLButtonElement} */
-            let undoMistake = document.getElementById('undo-mistake');
-            /** @type {HTMLSpanElement} */
-            let wordCount = document.getElementById('grid-words-count');
-            /** @type {HTMLSpanElement} */
-            let lettersCount = document.getElementById('letters-count');
-            /** @type {HTMLDivElement} */
-            let grid = document.getElementById('grid-letters');
+            let savePackButton = document.getElementById('savePackButton');
+            /** @type {HTMLInputElement} */
+            let cardsInput = document.getElementById('cards');
             /** @type {HTMLSpanElement} */
             let win = document.getElementById('grid-win');
             /** {HTMLSpanElement} */
@@ -1126,31 +906,15 @@
             /** {HTMLSpanElement} */
             let mistakes = document.getElementById('grid-win-mistakes');
             /** @type {HTMLDivElement} */
-            let gridInput = document.getElementById('grid-input');
-            /** @type {HTMLInputElement} */
-            let wordInput = document.getElementById('wordInput');
-            /** @type {HTMLButtonElement} */
-            let backspace = document.getElementById('backspace');
-            /** @type {HTMLUListElement} */
-            let guessedList = document.getElementById('guessedList');
-
-            // Constants
-            /** @type {number} */
-            const mistakeCost = 0.5;
+            let grid = document.getElementById('grid');
 
             // Variables
-            /** @type {string[]} */
-            let wordsList = [];
-            /** @type {string[]} */
-            let wordsLeftOnGrid = [];
-            /** @type {string[]} */
-            let letters = [];
+            /** @type {HTMLDivElement} */
+            let lastOpenCard = undefined;
             /** @type {number} */
-            let highlight;
+            let maxOpenCards = 1;
             /** @type {number} */
-            let score;
-            /** @type {number} */
-            let maxScore;
+            let hideSpeed = 5000;
             /** @type {number} */
             let mistakesCount;
             /** @type {number} */
@@ -1158,342 +922,122 @@
             /** @type {number} */
             let timerEnd;
 
-            backspace.addEventListener('click', function (event) {
-                if (!wordInput.value) return
-                wordInput.value = wordInput.value.substring(0, wordInput.value.length - 1);
-                checkInput();
+            cardsInput.value = localStorage.getItem('cards') ?? '';
+
+            cardsInput.addEventListener('input', function (event) {
+                localStorage.setItem('cards', cardsInput.value);
             });
 
-            undoMistake.addEventListener('click', function (event) {
-                score += mistakeCost;
-                mistakesCount --;
-                updateScore();
-                this.disabled = true;
-            });
-
-            async function loadWords() {
-                await loadWordsInput.files[0].text().then((content) => {
-                    try {
-                        words.value = content;
-                        fillGrid();
-                    } catch (error) {
-                        alert(`Error while reading words file: ${error}`);
-                    }
+            async function loadPack() {
+                await loadPackInput.files[0].text().then(c => {
+                    localStorage.setItem('cards', c);
+                    cardsInput.value = c;
+                    fillGrid();
                 });
             }
 
-            function saveWords() {
-                let data = encodeURIComponent(words.value);
-                saveWordsButton.download = 'Words.txt';
-                saveWordsButton.href = `data:text/plain;charset=utf-8,${data}`;
+            function savePack() {
+                let data = encodeURIComponent(cardsInput.value);
+                savePackButton.download = 'Pack.txt';
+                savePackButton.href = `data:text/plain;charset=utf-8,${data}`;
             }
 
             function fillGrid() {
-                if (!words.value) return;
+                /** @type {string[]} */
+                let cards = cardsInput.value.trim().split(' ');
 
-                // Hide victory block
+                if (cards.length < 2) return;
+
                 win.style.display = 'none';
+                lastOpenCard = undefined;
+                timerStart = Date.now();
+                mistakesCount = 0;
 
-                // Try to remove highlight interval
-                if (highlight) clearInterval(highlight);
-
-                // Set the header
-                if (loadWordsInput.files[0]?.name) {
-                    header.textContent = loadWordsInput.files[0].name.replace('.txt', '');
+                while (grid.hasChildNodes()) {
+                    grid.lastChild.remove();
                 }
 
-                // Show the grid
-                grid.style.display = 'flex';
+                /** @type {string[]} */
+                let tempArray = cards.concat(cards);
 
-                // Empty the guessed words list
-                while (guessedList.hasChildNodes()) guessedList.lastChild.remove();
-
-                // Empty the letters array
-                letters = [];
-
-                // Fill the list of words
-                wordsList = words.value
-                    .toUpperCase()
-                    .trim()
-                    .split(/\s/);
-
-                // Create a string with all words from the list
-                let wordsString = words.value
-                    .toUpperCase()
-                    .trim()
-                    .replace(/\s/g, '');
-
-                // Set the initial value for the words & letters counters
-                wordCount.textContent = wordsList.length;
-                countLetters(wordsList);
-
-                // Reset score & stats
-                score = 0;
-                mistakesCount = 0;
-                maxScore = wordsList.length;
-                updateScore();
-
-                // Push random letters from the string to the letters array
-                let tempArray = Array.from(wordsString);
                 while (tempArray.length > 0) {
                     let i = Math.floor(Math.random() * tempArray.length);
-                    letters.push(tempArray[i]);
-                    tempArray.splice(i, 1);
-                }
 
-                // Empty the grid
-                while (grid.hasChildNodes()) grid.lastChild.remove();
-
-                // Fill the grid with cells
-                letters.forEach((l, i) => {
-                    let cell = grid.appendChild(
-                        document.createElement('div')
+                    /** @type {HTMLDivElement} */
+                    let card = grid.appendChild(
+                        document.createElement('button')
                     );
 
-                    cell.style.animationDelay = `${
-                        (i / (letters.length - 1)) * 3
-                    }s`;
-                    cell.className = 'cell';
-                    cell.textContent = l;
-                    cell.tabIndex = 2;
-
-                    cell.addEventListener('click', function (event) {
-                        if (this.classList.contains('cell-hidden')) return;
-                        wordInput.value += this.textContent;
-                        checkInput();
-                    });
-                });
-
-                // Block input for the duration of fade in animation
-                wordInput.readOnly = true;
-                setTimeout(() => {
-                    wordInput.readOnly = false;
-                    wordInput.focus();
-                    timerStart = Date.now();
-                }, 3100);
-
-                // Create highlight interval
-                highlight = setInterval(() => {
-                    for (let c of grid.children) {
-                        c.classList.remove('cell-highlight');
-                    }
+                    card.classList.add('card', 'open');
+                    card.textContent = tempArray[i];
 
                     setTimeout(() => {
-                        if (wordsList.length < 2 || wordInput.value) return;
+                        card.classList.remove('open');
+                    }, hideSpeed);
 
-                        let word = wordsList[Math.floor(Math.random() * wordsList.length)];
-
-                        for (let l of word) {
-                            /** @type {HTMLDivElement[]} */
-                            let cells = [...grid.children].filter(
-                                (c) => (
-                                    c.textContent === l
-                                    && !c.classList.contains('cell-highlight')
-                                )
-                            );
-
-                            try {
-                                let i = Math.floor(Math.random() * cells.length);
-                                cells[i].classList.add('cell-highlight');
-                            } catch (error) {
-                                alert(`${error}:
-                                    word[letter]: ${word}[${l}]
-                                    cells: ${cells}
-                                `);
-                            }
-                        }
-                    }, 1900);
-                }, 6500);
-            }
-
-            /**
-             * @param {HTMLElement} id
-             * @param {boolean} state
-            */
-            function setCellVisibility(id, state) {
-                if (id) {
-                    id.tabIndex = state ? 0 : -1;
-
-                    // Hide completely or restore visibility
-                    id.style.visibility = hideCells.checked
-                        ? state
-                            ? 'visible'
-                            : 'hidden'
-                        : 'visible';
-
-                    // Make transparent
-                    if (state || hideCells.checked) {
-                        id.classList.remove('cell-hidden');
-                    } else {
-                        id.classList.add('cell-hidden');
-                    }
-                }
-            }
-
-            function resetCellsVisibility() {
-                for (let c of grid.children) {
-                    c.classList.remove('cell-highlight');
-                    setCellVisibility(c, true);
-                }
-            }
-
-            /**
-             * @param {string[]} words
-            */
-            function countLetters(words) {
-                lettersCount.textContent = '';
-                words.forEach((w, i) => {
-                    lettersCount.textContent += `${w.length}${
-                        i < words.length - 1 ? ', ' : '.'
-                    }`;
-                });
-            }
-
-            function updateScore() {
-                let displayedScore = score / maxScore * 100;
-                displayedScore = displayedScore > 100
-                    ? 100
-                    : displayedScore < 0
-                        ? 0
-                        : displayedScore;
-                scoreSpan.textContent = `${displayedScore.toFixed(0)}%`;
-            }
-
-            function checkInput() {
-                // Return if there are no words
-                if (wordsList.length === 0) return;
-
-                // Empty the array of words left on the grid
-                wordsLeftOnGrid = [];
-
-                // Reset cells' visibility if there's no input
-                if (wordInput.value === '') {
-                    wordCount.textContent = wordsList.length;
-                    countLetters(wordsList);
-                    resetCellsVisibility();
-                    return;
-                }
-
-                // Convert the input's value to upper case
-                wordInput.value = wordInput.value.toUpperCase();
-
-                // Remove letters when full word is typed
-                for (let i = 0; i < wordsList.length; i++) {
-                    if (wordsList[i] === wordInput.value) {
-                        for (let l of wordsList[i]) {
-                            for (let c of grid.children) {
-                                if (c.textContent === l) {
-                                    c.remove();
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Append guessed words list
-                        let li = document.createElement('li');
-                        li.textContent = wordsList[i];
-                        li.tabIndex = 1;
-                        guessedList.insertBefore(li, guessedList.firstChild);
-
-                        // Remove the word from the list and empty the input
-                        wordsList.splice(i, 1);
-                        wordInput.value = '';
-
-                        // Add and update score
-                        score ++;
-                        updateScore();
-
-                        scoreDiv.classList.add('correct');
-                        wordInput.readOnly = true;
-                        setTimeout(() => {
-                            scoreDiv.classList.remove('correct');
-                            wordInput.readOnly = false;
-                        }, 800);
-
-                        // Show victory text if all words are removed
-                        if (!grid.hasChildNodes()) {
-                            win.style.display = 'flex';
-                            grid.style.display = 'none';
-                            timerEnd = Date.now();
-
-                            let date = new Date(timerEnd - timerStart);
-                            let min = date.getMinutes();
-                            let sec = date.getSeconds();
-
-                            time.textContent = `${
-                                min > 9 ? min : `0${min}`
-                            }:${
-                                sec > 9 ? sec : `0${sec}`
-                            }`;
-                            mistakes.textContent = mistakesCount;
+                    card.addEventListener('click', function (event) {
+                        if (this.classList.contains('open')) {
+                            return;
                         } else {
-                            resetCellsVisibility();
+                            this.classList.add('open');
                         }
 
-                        // Update stats
-                        wordCount.textContent = wordsList.length;
-                        countLetters(wordsList);
-                        
+                        setTimeout(() => {
+                            if (lastOpenCard) {
+                                if (lastOpenCard.textContent !== this.textContent) {
+                                    lastOpenCard.classList.remove('open');
+                                    this.classList.remove('open');
+                                    mistakesCount ++;
+                                } else {
+                                    checkWin();
+                                }
+
+                                lastOpenCard = undefined;
+                            } else {
+                                lastOpenCard = card;
+                            }
+                        }, 700);
+                    });
+
+                    tempArray.splice(i, 1);
+                }
+            }
+
+            function checkWin() {
+                /** @type {boolean} */
+                let allCorrect = true;
+                /** @type {HTMLInputElement[]} */
+                let cards = grid.getElementsByClassName('card');
+                
+                for (let c of cards) {
+                    if (!c.classList.contains('open')) {
+                        allCorrect = false;
                         return;
                     }
                 }
 
-                // If only a part of a word is typed, continue
-                /** @type {string[]} */
-                let neighbouringLetters = [];
+                if (allCorrect) {
+                    if (win.style.display === 'flex') return;
 
-                // Take the input, find matches with words, determine nearby letters
-                for (let w of wordsList) {
-                    if (w.startsWith(wordInput.value)) {
-                        wordsLeftOnGrid.push(w);
+                    win.style.display = 'flex';
+                    timerEnd = Date.now();
 
-                        for (let l of w) {
-                            if (!neighbouringLetters.includes(l)) {
-                                neighbouringLetters.push(l);
-                            }
-                        }
-                    }
-                }
+                    let date = new Date(timerEnd - timerStart);
+                    let min = date.getMinutes();
+                    let sec = date.getSeconds();
 
-                // No words left -> mistake
-                if (wordsLeftOnGrid.length === 0) {
-                    if (wordInput.value.length > 3 && score >= mistakeCost) {
-                        scoreDiv.classList.add('mistake');
-                        undoMistake.disabled = false;
-                        score -= mistakeCost;
-                        mistakesCount ++;
-                        updateScore();
-                    }
+                    time.textContent = `${
+                        min > 9 ? min : `0${min}`
+                    }:${
+                        sec > 9 ? sec : `0${sec}`
+                    }`;
+                    mistakes.textContent = mistakesCount;
 
-                    wordInput.readOnly = true;
-                    gridInput.classList.add('mistake');
-
-                    setTimeout(() => {
-                        scoreDiv.classList.remove('mistake');
-                        gridInput.classList.remove('mistake');
-                        wordInput.value = wordInput.value.substring(
-                            0, wordInput.value.length - 1
-                        );
-                        wordInput.readOnly = false;
-                        checkInput();
-                    }, 600);
-                } else {
-                    // Update stats
-                    wordCount.textContent = `${wordsLeftOnGrid.length}/${wordsList.length}`;
-                    countLetters(wordsLeftOnGrid);
-                }
-
-                // Manage cells' visibility
-                for (let c of grid.children) {
-                    c.classList.remove('cell-highlight');
-
-                    if (!neighbouringLetters.includes(c.textContent)) {
-                        setCellVisibility(c, false);
-                    } else {
-                        setCellVisibility(c, true);
-                    }
+                    win.focus();
                 }
             }
+
+            fillGrid();
         </script>
     </body>
 </html>
