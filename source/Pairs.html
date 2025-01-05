@@ -9,12 +9,12 @@
 
         <style>
             :root {
-                --card-height: 96px;
+                --card-height: calc(80px + 3vmax);
                 --card-width: calc(var(--card-height) * 0.7);
                 --card-border: calc(var(--card-width) * 0.06);
                 --card-shadow: calc(var(--card-border) * 2);
                 --card-gap: var(--card-border);
-                --card-font: calc(var(--card-width) * 0.7);
+                --card-font: calc(var(--card-width) * 0.6);
                 --card-anim-speed: 0.4s;
             }
 
@@ -45,7 +45,7 @@
 
             .card {
                 display: flex;
-                align-items: center;
+                align-items: first last center;
                 justify-content: center;
                 counter-increment: count 1;
                 background-color: var(--accent2);
@@ -79,6 +79,13 @@
                 transition: all var(--card-anim-speed) ease-out;
             }
 
+            .x-ray:focus,
+            .x-ray:hover {
+                background-color: rgb(10, 10, 10);
+                color: rgb(240, 240, 240);
+                opacity: 0.8;
+            }
+
             .open {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
@@ -100,7 +107,8 @@
                 top: 0px;
                 color: var(--secondary-colour);
                 font-family: 'Courier New', Courier, monospace;
-                font-size: calc(var(--card-font) * 0.4);
+                font-size: calc(var(--card-font) * 0.45);
+                font-weight: 900;
                 padding-inline: 2px;
             }
 
@@ -118,6 +126,64 @@
                 color: var(--secondary-colour);
             }
 
+            .special::after {
+                position: absolute;
+                right: 0px;
+                bottom: 0px;
+                background-color: var(--accent1);
+                color: var(--accent2);
+                border-radius: 7px 0px 0px 0px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: calc(var(--card-font) * 0.4);
+                font-weight: 900;
+                padding: 2px;
+                height: calc(var(--card-font) * 0.35);
+                width: calc(var(--card-font) * 0.35);
+                opacity: 0.8;
+            }
+
+            .special:focus::after,
+            .special:hover::after {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+            }
+
+            .special.open::after {
+                background-color: var(--accent2);
+                color: var(--accent1);
+            }
+
+            .special.open:focus::after,
+            .special.open:hover::after {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+            }
+
+            .plus::after {
+                content: '+';
+            }
+
+            .minus::after {
+                content: '-';
+            }
+
+            .greater-than::after {
+                content: '>';
+            }
+
+            .less-than::after {
+                content: '<';
+            }
+
+            .equals::after {
+                content: '=';
+            }
+
+            .x-ray:focus::before,
+            .x-ray:hover::before {
+                color: rgb(230, 230, 230);
+            }
+
             #cards {
                 border-radius: 0px 0px 0px 7px;
                 width: 100%;
@@ -126,8 +192,13 @@
             #grid {
                 display: flex;
                 flex-wrap: wrap;
+                align-self: center;
                 justify-content: center;
                 column-gap: var(--card-gap);
+            }
+
+            #grid-size {
+                width: 100%;
             }
 
             @keyframes win-blink {
@@ -158,6 +229,53 @@
                 display: none;
                 flex-direction: column;
             }
+
+            #score-div {
+                display: flex;
+                column-gap: 4px;
+                justify-content: center;
+                position: sticky;
+                bottom: 0px;
+                border: 2px ridge var(--accent2);
+                border-radius: 7px 7px 0px 0px;
+                font-weight: 600;
+                opacity: 0.9;
+            }
+
+            #special-help {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #special-help-header {
+                font-weight: 600;
+            }
+
+            .special-help-symbol {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent1);
+                color: var(--accent2);
+                border-radius: 7px 0px 0px 0px;
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: 900;
+                height: calc(var(--card-font) * 0.5);
+                width: calc(var(--card-font) * 0.5);
+                opacity: 0.8;
+            }
+
+            .special-help-item {
+                display: flex;
+                align-items: center;
+                margin-left: 8px;
+            }
+
+            .special-help-description {
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: 600;
+            }
         </style>
     </head>
     <body>
@@ -169,47 +287,62 @@
         </details>
 
         <!-- Page main body -->
-        <details>
-            <summary id='cards-summary'>Cards</summary>
+        
+        <!-- Save & Load buttons -->
+        <div style='display: flex; column-gap: 4px;'>
+            <!-- Load button -->
+            <button
+                id='loadPackButton'
+                class='menuButton tooltipParent'
+                onclick='document.getElementById("loadPackInput").click()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load pack from .txt file</span>
+            </button>
+            <input
+                id='loadPackInput'
+                type='file'
+                accept='.txt'
+                onchange='loadPack()'
+                style='display: none;'
+            >
+            </input>
 
-            <!-- Save & Load buttons -->
-            <div style='display: flex; column-gap: 4px;'>
-                <!-- Load button -->
-                <button
-                    id='loadPackButton'
-                    class='menuButton tooltipParent'
-                    onclick='document.getElementById("loadPackInput").click()'
-                    style='border-radius: 7px 0px 0px 0px;'
-                >
-                    &#128193; Load
-                    <span class='tooltip'>Load pack from .txt file</span>
-                </button>
-                <input
-                    id='loadPackInput'
-                    type='file'
-                    accept='.txt'
-                    onchange='loadPack()'
-                    style='display: none;'
-                >
-                </input>
+            <!-- Save button -->
+            <a
+                id='savePackButton'
+                href=''
+                class='menuButton tooltipParent'
+                onclick='savePack()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save pack to .txt file</span>
+            </a>
+        </div>
 
-                <!-- Save button -->
-                <a
-                    id='savePackButton'
-                    href=''
-                    class='menuButton tooltipParent'
-                    onclick='savePack()'
-                    style='border-radius: 0px 7px 0px 0px;'
-                >
-                    &#128190; Save
-                    <span class='tooltip'>Save pack to .txt file</span>
-                </a>
-            </div>
+        <!-- Cards -->
+        <input id='cards' type='text' placeholder="Cards' symbols (separated by space)">
 
-            <input id='cards' type='text' placeholder="Cards' symbols (separated by space)">
-        </details>
-
+        <!-- Start button -->
         <button id='start' onclick='fillGrid()'>Start game</button>
+
+        <!-- Grid size slider -->
+        <div id='grid-size-div' class='tooltipParent'>
+            <input id='grid-size' type='range' min='30' max='100' step='5' value='100' list='slider'>
+            <span class='tooltip'>Grid size slider</span>
+        </div>
+
+        <!-- Values of grid size slider -->
+        <datalist id='slider'>
+            <option value='40'></option>
+            <option value='50'></option>
+            <option value='60'></option>
+            <option value='70'></option>
+            <option value='80'></option>
+            <option value='90'></option>
+        </datalist>
 
         <!-- Victory text -->
         <div id='grid-win' tabindex='0'>
@@ -241,7 +374,30 @@
             </table>
         </div>
 
+        <!-- Grid -->
         <div id='grid'></div>
+
+        <!-- Score -->
+        <div id='score-div'>
+            <label for='score-count'>Score:</label>
+            <span id='score-count'>0</span>
+        </div>
+
+        <!-- Bonuses shop -->
+
+        <!-- Game rules -->
+        <details open>
+            <summary id='rules'>Rules</summary>
+
+            <p id='rules-general'>Look for pairs of cards by trying to memorise as many as you can before the game begins or by careful guessing. A right guess gives you a reward (<b>2</b> points), while a wrong one results in a penalty (<b>-1</b> point). Use points to buy <b>bonuses</b> that make the game a bit easier. And take <b>special cards</b> into account, they have some additional effects (see below).</p>
+
+            <h3 id='rules-special-cards'>Special cards</h3>
+
+            <div id='special-help'>
+                <p id='special-help-header'>Card | Reward | Penalty</p>
+                <div id='special-list'></div>
+            </div>
+        </details>
 
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
@@ -265,27 +421,98 @@
             let mistakes = document.getElementById('grid-win-mistakes');
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('grid');
+            /** @type {HTMLInputElement} */
+            let gridSize = document.getElementById('grid-size');
+            /** @type {HTMLSpanElement} */
+            let scoreCount = document.getElementById('score-count');
+
+            // Constants
+            /**
+             * @typedef {Object} SpecialCard
+             * @property {string} name
+             * @property {string} symbol
+             * @property {number} mistakeAdd
+             * @property {number} correctAdd
+             * @property {number} mistakeMult
+             * @property {number} correctMult
+            */
+            /** @type {SpecialCard[]} */
+            let specialCards = [
+                {
+                    name: 'plus',
+                    symbol: '+',
+                    mistakeAdd: -1,
+                    correctAdd: 3,
+                    mistakeMult: 1,
+                    correctMult: 1
+                },
+                {
+                    name: 'minus',
+                    symbol: '-',
+                    mistakeAdd: -3,
+                    correctAdd: 1,
+                    mistakeMult: 1,
+                    correctMult: 1
+                },
+                {
+                    name: 'greater-than',
+                    symbol: '>',
+                    mistakeAdd: 0,
+                    correctAdd: 2,
+                    mistakeMult: 0,
+                    correctMult: 1
+                },
+                {
+                    name: 'less-than',
+                    symbol: '<',
+                    mistakeAdd: -2,
+                    correctAdd: 0,
+                    mistakeMult: 1,
+                    correctMult: 0
+                },
+                {
+                    name: 'equals',
+                    symbol: '=',
+                    mistakeAdd: 0,
+                    correctAdd: 0,
+                    mistakeMult: 0,
+                    correctMult: 0
+                },
+            ];
+            /** @type {string[]} */
+            let specialClasses = specialCards.map(c => c.name);
 
             // Variables
             /** @type {HTMLDivElement} */
             let lastOpenCard = undefined;
             /** @type {number} */
-            let maxOpenCards = 1;
-            /** @type {number} */
-            let hideSpeed = 5000;
+            let hideSpeed;
             /** @type {number} */
             let mistakesCount;
             /** @type {number} */
             let timerStart;
             /** @type {number} */
             let timerEnd;
+            /** @type {number} */
+            let score = parseInt(localStorage.getItem('score')) || 0;
 
+            // Restore saved data
             cardsInput.value = localStorage.getItem('cards') ?? '';
+            gridSize.value = localStorage.getItem('gridSize') ?? '100';
+            grid.style.width = `${gridSize.value}%`;
+            scoreCount.textContent = score;
 
+            // General events
             cardsInput.addEventListener('input', function (event) {
                 localStorage.setItem('cards', cardsInput.value);
             });
 
+            gridSize.addEventListener('input', function (event) {
+                localStorage.setItem('gridSize', gridSize.value);
+                grid.style.width = `${gridSize.value}%`;
+            });
+
+            // Functions
             async function loadPack() {
                 await loadPackInput.files[0].text().then(c => {
                     localStorage.setItem('cards', c);
@@ -306,10 +533,12 @@
 
                 if (cards.length < 2) return;
 
+                hideSpeed = cards.length * 1000;
                 win.style.display = 'none';
                 lastOpenCard = undefined;
                 timerStart = Date.now();
                 mistakesCount = 0;
+                changeScore(-1);
 
                 while (grid.hasChildNodes()) {
                     grid.lastChild.remove();
@@ -336,20 +565,40 @@
                     card.addEventListener('click', function (event) {
                         if (this.classList.contains('open')) {
                             return;
-                        } else {
-                            this.classList.add('open');
-                        }
+                        } 
+                        
+                        this.classList.add('open');
+                        timerEnd = Date.now();
 
                         setTimeout(() => {
                             if (lastOpenCard) {
                                 if (lastOpenCard.textContent !== this.textContent) {
+                                    // Mistake
                                     lastOpenCard.classList.remove('open');
                                     this.classList.remove('open');
                                     mistakesCount ++;
+
+                                    if (!this.classList.contains('special') &&
+                                        !lastOpenCard.classList.contains('special')
+                                    ) {
+                                        changeScore(-1);
+                                    } else {
+                                        processMistake([this, lastOpenCard]);
+                                    }
                                 } else {
+                                    // Correct
+                                    if (!this.classList.contains('special') &&
+                                        !lastOpenCard.classList.contains('special')
+                                    ) {
+                                        changeScore(2);
+                                    } else {
+                                        processCorrect([this, lastOpenCard]);
+                                    }
                                     checkWin();
                                 }
 
+                                this.classList.remove('special', ...specialClasses);
+                                lastOpenCard.classList.remove('special', ...specialClasses);
                                 lastOpenCard = undefined;
                             } else {
                                 lastOpenCard = card;
@@ -359,6 +608,54 @@
 
                     tempArray.splice(i, 1);
                 }
+
+                createSpecialCards();
+            }
+
+            /**
+             * @param {HTMLDivElement} cards
+            */
+            function processMistake(cards) {
+                /** @type {number} */
+                let result = 0;
+                /** @type {number[]} */
+                let mult = [];
+
+                for (const card of cards) {
+                    for (const special of specialCards) {
+                        if (card.classList.contains(special.name)) {
+                            result += special.mistakeAdd;
+                            mult.push(special.mistakeMult);
+                            break;
+                        }
+                    }
+                }
+
+                mult.forEach(m => result *= m);
+                changeScore(result);
+            }
+
+            /**
+             * @param {HTMLDivElement[]} cards
+            */
+            function processCorrect(cards) {
+                /** @type {number} */
+                let result = 0;
+                /** @type {number[]} */
+                let mult = [];
+
+                for (const card of cards) {
+                    for (const special of specialCards) {
+                        if (card.classList.contains(special.name)) {
+                            result += special.correctAdd;
+                            mult.push(special.correctMult);
+                            break;
+                        }
+                    }
+                }
+
+                mult.forEach(m => result *= m);
+                changeScore(result);
             }
 
             function checkWin() {
@@ -378,7 +675,7 @@
                     if (win.style.display === 'flex') return;
 
                     win.style.display = 'flex';
-                    timerEnd = Date.now();
+                    localStorage.setItem('score', score);
 
                     let date = new Date(timerEnd - timerStart);
                     let min = date.getMinutes();
@@ -395,7 +692,67 @@
                 }
             }
 
+            /**
+             * @param {number} change
+            */
+            function changeScore(change) {
+                score = score + change < 0
+                    ? 0
+                    : score + change > 100
+                        ? 100
+                        : score + change;
+                
+                scoreCount.textContent = score;
+            }
+
+            function removeSpecialCards() {}
+
+            function createSpecialCards() {
+                for (const card of grid.children) {
+                    /** @type {number} */
+                    let random = Math.floor(Math.random() * 10);
+
+                    if (random === 0) {
+                        /** @type {number} */
+                        let index = Math.floor(Math.random() * specialClasses.length);
+                        card.classList.add('special', specialClasses[index]);
+                    }
+                }
+            }
+
+            function fillSpecialCardsTable() {
+                /** @type {HTMLUListElement} */
+                let table = document.getElementById('special-list');
+                
+                for (const special of specialCards) {
+                    /** @type {HTMLLIElement} */
+                    let item = table.appendChild(
+                        document.createElement('div')
+                    );
+                    item.classList.add('special-help-item');
+
+                    /** @type {HTMLSpanElement} */
+                    let symbol = item.appendChild(
+                        document.createElement('span')
+                    );
+                    symbol.classList.add('special-help-symbol');
+                    symbol.textContent = special.symbol;
+
+                    /** @type {HTMLParagraphElement} */
+                    let description = item.appendChild(
+                        document.createElement('p')
+                    );
+                    description.classList.add('special-help-description');
+                    description.textContent = `| ${
+                        special.correctAdd
+                    } | ${
+                        special.mistakeAdd
+                    }`;
+                }
+            }
+
             fillGrid();
+            fillSpecialCardsTable();
         </script>
     </body>
 </html>
