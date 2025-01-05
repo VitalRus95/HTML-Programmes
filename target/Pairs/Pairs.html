@@ -343,9 +343,10 @@
 
             .card {
                 display: flex;
-                align-items: first last center;
+                align-items: center;
                 justify-content: center;
                 counter-increment: count 1;
+                background-image: linear-gradient(45deg, var(--accent1), transparent 15% 85%, var(--accent1));
                 background-color: var(--accent2);
                 color: transparent;
                 border: var(--card-border) double var(--accent1);
@@ -365,6 +366,7 @@
 
             .card:focus,
             .card:hover {
+                background-image: linear-gradient(45deg, var(--primary-colour), transparent 15% 85%, var(--primary-colour));
                 background-color: var(--accent1);
                 color: transparent;
                 box-shadow: 0px 0px var(--card-shadow) var(--secondary-colour);
@@ -385,6 +387,7 @@
             }
 
             .open {
+                background-image: linear-gradient(45deg, var(--accent2), transparent 15% 85%, var(--accent2));
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
                 border-color: var(--accent2);
@@ -393,6 +396,7 @@
 
             .open:focus,
             .open:hover {
+                background-image: linear-gradient(45deg, var(--accent1), transparent 15% 85%, var(--accent1));
                 background-color: var(--primary-colour);
                 color: var(--secondary-colour);
                 border-color: var(--accent1);
@@ -426,10 +430,13 @@
 
             .special::after {
                 position: absolute;
+                display: flex;
+                align-items: baseline;
+                justify-content: center;
                 right: 0px;
                 bottom: 0px;
-                background-color: var(--accent1);
-                color: var(--accent2);
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
                 border-radius: 7px 0px 0px 0px;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: calc(var(--card-font) * 0.4);
@@ -447,13 +454,13 @@
             }
 
             .special.open::after {
-                background-color: var(--accent2);
-                color: var(--accent1);
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
             }
 
             .special.open:focus::after,
             .special.open:hover::after {
-                background-color: var(--accent1);
+                background-color: var(--secondary-colour);
                 color: var(--primary-colour);
             }
 
@@ -507,7 +514,7 @@
                     box-shadow: none;
                 }
                 100% {
-                    box-shadow: inset 0px 0px 25px var(--accent2);
+                    box-shadow: inset 0px 0px 25px var(--secondary-colour);
                 }
             }
 
@@ -516,6 +523,7 @@
                 text-align: center;
                 font-size: 1.5em;
                 font-weight: 600;
+                background-image: linear-gradient(315deg, var(--accent1), transparent 10% 90%, var(--accent1));
                 border: 2px solid var(--accent1);
                 border-radius: 7px 7px 0px 0px;
                 padding: 2px;
@@ -534,10 +542,15 @@
                 justify-content: center;
                 position: sticky;
                 bottom: 0px;
-                border: 2px ridge var(--accent2);
+                border: 2px groove var(--accent1);
                 border-radius: 7px 7px 0px 0px;
                 font-weight: 600;
                 opacity: 0.9;
+            }
+
+            #rules-general {
+                text-align: justify;
+                text-indent: 16px;
             }
 
             #special-help {
@@ -554,8 +567,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: var(--accent1);
-                color: var(--accent2);
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
                 border-radius: 7px 0px 0px 0px;
                 font-family: 'Courier New', Courier, monospace;
                 font-weight: 900;
@@ -684,10 +697,10 @@
         <!-- Bonuses shop -->
 
         <!-- Game rules -->
-        <details open>
+        <details>
             <summary id='rules'>Rules</summary>
 
-            <p id='rules-general'>Look for pairs of cards by trying to memorise as many as you can before the game begins or by careful guessing. A right guess gives you a reward (<b>2</b> points), while a wrong one results in a penalty (<b>-1</b> point). Use points to buy <b>bonuses</b> that make the game a bit easier. And take <b>special cards</b> into account, they have some additional effects (see below).</p>
+            <p id='rules-general'>Find pairs of cards by trying to memorise as many as you can in the beginning of the game and by careful guessing. A right guess gives you a reward (<b>2</b> points), while a wrong one results in a penalty (<b>-1</b> point). Use points to buy <b>bonuses</b> that make the game a bit easier. And take <b>special cards</b> into account, they have some additional effects (see below).</p>
 
             <h3 id='rules-special-cards'>Special cards</h3>
 
@@ -1353,7 +1366,7 @@
             function createSpecialCards() {
                 for (const card of grid.children) {
                     /** @type {number} */
-                    let random = Math.floor(Math.random() * 10);
+                    let random = Math.floor(Math.random() * 7);
 
                     if (random === 0) {
                         /** @type {number} */
@@ -1363,13 +1376,13 @@
                 }
             }
 
-            function fillSpecialCardsTable() {
-                /** @type {HTMLUListElement} */
-                let table = document.getElementById('special-list');
+            function fillSpecialCardsList() {
+                /** @type {HTMLDivElement} */
+                let list = document.getElementById('special-list');
                 
                 for (const special of specialCards) {
-                    /** @type {HTMLLIElement} */
-                    let item = table.appendChild(
+                    /** @type {HTMLDivElement} */
+                    let item = list.appendChild(
                         document.createElement('div')
                     );
                     item.classList.add('special-help-item');
@@ -1395,7 +1408,7 @@
             }
 
             fillGrid();
-            fillSpecialCardsTable();
+            fillSpecialCardsList();
         </script>
     </body>
 </html>
