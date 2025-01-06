@@ -37,6 +37,31 @@
                 max-width: 85%;
             }
             
+            .menuButton {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                text-wrap: nowrap;
+                overflow: auto;
+                margin-bottom: 0;
+                padding: 2px;
+                width: 100%;
+            }
+            
+            .menuButton:hover,
+            .menuButton:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
             a.button,
             button {
                 display: inline-flex;
@@ -70,8 +95,9 @@
             
             details > summary {
                 background-color: var(--accent2);
+                border-left: 2px solid var(--secondary-colour);
+                border-top: 2px solid var(--secondary-colour);
                 border-radius: 7px 0px 7px 0px;
-                box-shadow: 1px 1px 2px var(--secondary-colour);
                 cursor: pointer;
                 padding: 2px;
             }
@@ -83,20 +109,12 @@
             }
             
             details[open] > summary {
-                border-bottom-color: var(--secondary-colour);
-                border-bottom-style: inset;
-                border-bottom-width: 2px;
                 font-size: 1.05em;
                 font-weight: 600;
                 padding-bottom: 2px;
                 position: sticky;
                 top: 0px;
                 z-index: 1;
-            }
-            
-            details[open] > summary:focus,
-            details[open] > summary:hover {
-                border-bottom-color: var(--accent2);
             }
             
             h1 {
@@ -422,30 +440,6 @@
                 animation: score-correct 0.7s ease;
             }
 
-            .menuButton {
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: var(--accent2);
-                border-color: var(--accent1);
-                border-style: outset;
-                border-width: 2px;
-                font-weight: 600;
-                text-align: center;
-                text-decoration: none;
-                text-wrap: nowrap;
-                overflow: auto;
-                padding: 2px;
-                width: 100%;
-            }
-
-            .menuButton:hover,
-            .menuButton:focus {
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-            }
-
             #words {
                 border-radius: 0px 7px;
                 width: 100%;
@@ -517,7 +511,7 @@
                 text-align: center;
                 font-size: 1.5em;
                 font-weight: 600;
-                background-image: linear-gradient(315deg, var(--accent1), transparent 10% 90%, var(--accent1));
+                background-image: linear-gradient(315deg, var(--accent1), transparent 15% 85%, var(--accent1));
                 border: 2px solid var(--accent1);
                 border-radius: 7px 7px 0px 0px;
                 padding: 2px;

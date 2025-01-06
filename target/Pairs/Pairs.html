@@ -37,6 +37,31 @@
                 max-width: 85%;
             }
             
+            .menuButton {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: var(--accent2);
+                border-color: var(--accent1);
+                border-style: outset;
+                border-width: 2px;
+                font-weight: 600;
+                text-align: center;
+                text-decoration: none;
+                text-wrap: nowrap;
+                overflow: auto;
+                margin-bottom: 0;
+                padding: 2px;
+                width: 100%;
+            }
+            
+            .menuButton:hover,
+            .menuButton:focus {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
             a.button,
             button {
                 display: inline-flex;
@@ -70,8 +95,9 @@
             
             details > summary {
                 background-color: var(--accent2);
+                border-left: 2px solid var(--secondary-colour);
+                border-top: 2px solid var(--secondary-colour);
                 border-radius: 7px 0px 7px 0px;
-                box-shadow: 1px 1px 2px var(--secondary-colour);
                 cursor: pointer;
                 padding: 2px;
             }
@@ -83,20 +109,12 @@
             }
             
             details[open] > summary {
-                border-bottom-color: var(--secondary-colour);
-                border-bottom-style: inset;
-                border-bottom-width: 2px;
                 font-size: 1.05em;
                 font-weight: 600;
                 padding-bottom: 2px;
                 position: sticky;
                 top: 0px;
                 z-index: 1;
-            }
-            
-            details[open] > summary:focus,
-            details[open] > summary:hover {
-                border-bottom-color: var(--accent2);
             }
             
             h1 {
@@ -316,31 +334,6 @@
                 --card-anim-speed: 0.4s;
             }
 
-            .menuButton {
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: var(--accent2);
-                border-color: var(--accent1);
-                border-style: outset;
-                border-width: 2px;
-                font-weight: 600;
-                text-align: center;
-                text-decoration: none;
-                text-wrap: nowrap;
-                overflow: auto;
-                margin-bottom: 0;
-                padding: 2px;
-                width: 100%;
-            }
-
-            .menuButton:hover,
-            .menuButton:focus {
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-            }
-
             .card {
                 display: flex;
                 align-items: center;
@@ -472,6 +465,14 @@
                 content: '-';
             }
 
+            .multiply::after {
+                content: '*';
+            }
+
+            .divide::after {
+                content: '/'
+            }
+
             .greater-than::after {
                 content: '>';
             }
@@ -523,7 +524,7 @@
                 text-align: center;
                 font-size: 1.5em;
                 font-weight: 600;
-                background-image: linear-gradient(315deg, var(--accent1), transparent 10% 90%, var(--accent1));
+                background-image: linear-gradient(315deg, var(--accent1), transparent 15% 85%, var(--accent1));
                 border: 2px solid var(--accent1);
                 border-radius: 7px 7px 0px 0px;
                 padding: 2px;
@@ -546,6 +547,21 @@
                 border-radius: 7px 7px 0px 0px;
                 font-weight: 600;
                 opacity: 0.9;
+            }
+
+            #bonuses-shop {
+                display: none;
+            }
+
+            .bonus {
+                border-style: none;
+                background-image: linear-gradient(20deg, var(--accent1), transparent 30% 70%, var(--accent1));
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border: var(--card-border) double var(--accent2);
+                border-radius: 4px;
+                font-weight: 600;
+                padding-inline: 6px;
             }
 
             #rules-general {
@@ -695,12 +711,95 @@
         </div>
 
         <!-- Bonuses shop -->
+        <details id='bonuses-shop'>
+            <summary id='bonuses-shop-summary'>Bonuses shop</summary>
+
+            <ul>
+                <li>
+                    <button
+                        id='bonus-remove-special'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-remove-special")'
+                    >
+                        Nothing extra
+                        <span class='tooltip'>
+                            Remove all special effects from cards.
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        id='bonus-indifference'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-indifference")'
+                    >
+                        Indifference
+                        <span class='tooltip'>
+                            Turn all special cards into type =.
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        id='bonus-chance'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-chance")'
+                    >
+                        Power of chance
+                        <span class='tooltip'>
+                            Remove all special effects from cards and pick new ones randomly.
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        id='bonus-experimenter'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-experimenter")'
+                    >
+                        Experimenter
+                        <span class='tooltip'>
+                            Turn all special cards into type >.
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        id='bonus-x-ray'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-x-ray")'
+                    >
+                        X-ray
+                        <span class='tooltip'>
+                            X-ray mode: reveal the card on hovering. Disables after choosing a card.
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        id='bonus-optimist'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-optimist")'
+                    >
+                        Optimist
+                        <span class='tooltip'>
+                            Turn all special cards into type +.
+                        </span>
+                    </button>
+                </li>
+            </ul>
+        </details>
 
         <!-- Game rules -->
         <details>
-            <summary id='rules'>Rules</summary>
+            <summary id='rules-summary'>Rules</summary>
 
-            <p id='rules-general'>Find pairs of cards by trying to memorise as many as you can in the beginning of the game and by careful guessing. A right guess gives you a reward (<b>2</b> points), while a wrong one results in a penalty (<b>-1</b> point). Use points to buy <b>bonuses</b> that make the game a bit easier. And take <b>special cards</b> into account, they have some additional effects (see below).</p>
+            <p id='rules-general'>Find pairs of cards by trying to memorise as many as you can in the beginning of the game and by careful guessing. A right guess gives you a reward (<b>2</b> points), while a wrong one results in a penalty (<b>-1</b> point). Use points to buy <b>bonuses</b> that make the game a bit easier. And pay attention to <b>special cards</b>, they have some additional effects (see below).</p>
 
             <h3 id='rules-special-cards'>Special cards</h3>
 
@@ -1081,8 +1180,10 @@
             let gridSize = document.getElementById('grid-size');
             /** @type {HTMLSpanElement} */
             let scoreCount = document.getElementById('score-count');
+            /** @type {HTMLDetailsElement} */
+            let shop = document.getElementById('bonuses-shop');
 
-            // Constants
+            // Special cards
             /**
              * @typedef {Object} SpecialCard
              * @property {string} name
@@ -1091,6 +1192,8 @@
              * @property {number} correctAdd
              * @property {number} mistakeMult
              * @property {number} correctMult
+             * @property {string} mistakeDescr
+             * @property {string} correctDescr
             */
             /** @type {SpecialCard[]} */
             let specialCards = [
@@ -1100,7 +1203,9 @@
                     mistakeAdd: -1,
                     correctAdd: 3,
                     mistakeMult: 1,
-                    correctMult: 1
+                    correctMult: 1,
+                    mistakeDescr: '-1',
+                    correctDescr: '+3'
                 },
                 {
                     name: 'minus',
@@ -1108,7 +1213,19 @@
                     mistakeAdd: -3,
                     correctAdd: 1,
                     mistakeMult: 1,
-                    correctMult: 1
+                    correctMult: 1,
+                    mistakeDescr: '-3',
+                    correctDescr: '+1'
+                },
+                {
+                    name: 'multiply',
+                    symbol: '*',
+                    mistakeAdd: -1,
+                    correctAdd: 2,
+                    mistakeMult: 2,
+                    correctMult: 2,
+                    mistakeDescr: '*2',
+                    correctDescr: '*2'
                 },
                 {
                     name: 'greater-than',
@@ -1116,7 +1233,9 @@
                     mistakeAdd: 0,
                     correctAdd: 2,
                     mistakeMult: 0,
-                    correctMult: 1
+                    correctMult: 1,
+                    mistakeDescr: '*0',
+                    correctDescr: '+2'
                 },
                 {
                     name: 'less-than',
@@ -1124,7 +1243,9 @@
                     mistakeAdd: -2,
                     correctAdd: 0,
                     mistakeMult: 1,
-                    correctMult: 0
+                    correctMult: 0,
+                    mistakeDescr: '-2',
+                    correctDescr: '*0'
                 },
                 {
                     name: 'equals',
@@ -1132,15 +1253,83 @@
                     mistakeAdd: 0,
                     correctAdd: 0,
                     mistakeMult: 0,
-                    correctMult: 0
-                },
+                    correctMult: 0,
+                    mistakeDescr: '*0',
+                    correctDescr: '*0'
+                }
             ];
             /** @type {string[]} */
             let specialClasses = specialCards.map(c => c.name);
 
-            // Variables
+            // Bonuses
+            /** @typedef {Object} Bonus
+             * @property {string} name
+             * @property {number} cost
+             * @property {Function} func
+            */
+            /** @type {Bonus[]} */
+            let bonuses = [
+                {
+                    name: 'bonus-remove-special',
+                    cost: 8,
+                    func: function () {
+                        removeSpecialCards();
+                    }
+                },
+                {
+                    name: 'bonus-indifference',
+                    cost: 10,
+                    func: function () {
+                        replaceSpecialCards('equals');
+                    }
+                },
+                {
+                    name: 'bonus-chance',
+                    cost: 12,
+                    func: function () {
+                        removeSpecialCards();
+                        createSpecialCards();
+                    }
+                },
+                {
+                    name: 'bonus-experimenter',
+                    cost: 15,
+                    func: function () {
+                        replaceSpecialCards('greater-than');
+                    }
+                },
+                {
+                    name: 'bonus-x-ray',
+                    cost: 20,
+                    func: function () {
+                        xRay = true;
+                        switchXRay();
+                    }
+                },
+                {
+                    name: 'bonus-optimist',
+                    cost: 30,
+                    func: function () {
+                        replaceSpecialCards('plus');
+                    }
+                }
+            ];
+            
+            // Add prices to bonuses in the shop
+            for (const bonus of bonuses) {
+                /** @type {HTMLButtonElement} */
+                let button = document.getElementById(bonus.name);
+
+                if (button) {
+                    button.firstChild.textContent += ` [${bonus.cost}]`;
+                }
+            }
+
+            // Other variables
             /** @type {HTMLDivElement} */
             let lastOpenCard = undefined;
+            /** @type {boolean} */
+            let xRay = false;
             /** @type {number} */
             let hideSpeed;
             /** @type {number} */
@@ -1186,10 +1375,11 @@
             function fillGrid() {
                 /** @type {string[]} */
                 let cards = cardsInput.value.trim().split(' ');
-
                 if (cards.length < 2) return;
 
+                // Clean up before the new game
                 hideSpeed = cards.length * 1000;
+                shop.style.display = 'flex';
                 win.style.display = 'none';
                 lastOpenCard = undefined;
                 timerStart = Date.now();
@@ -1203,6 +1393,7 @@
                 /** @type {string[]} */
                 let tempArray = cards.concat(cards);
 
+                // Fill the grid with cards
                 while (tempArray.length > 0) {
                     let i = Math.floor(Math.random() * tempArray.length);
 
@@ -1218,10 +1409,16 @@
                         card.classList.remove('open');
                     }, hideSpeed);
 
+                    // Handle the click event
                     card.addEventListener('click', function (event) {
                         if (this.classList.contains('open')) {
                             return;
-                        } 
+                        }
+
+                        if (xRay) {
+                            xRay = false;
+                            switchXRay();
+                        }
                         
                         this.classList.add('open');
                         timerEnd = Date.now();
@@ -1235,8 +1432,8 @@
                                     mistakesCount ++;
 
                                     if (!this.classList.contains('special') &&
-                                        !lastOpenCard.classList.contains('special')
-                                    ) {
+                                        !lastOpenCard.classList.contains('special'))
+                                    {
                                         changeScore(-1);
                                     } else {
                                         processMistake([this, lastOpenCard]);
@@ -1244,8 +1441,8 @@
                                 } else {
                                     // Correct
                                     if (!this.classList.contains('special') &&
-                                        !lastOpenCard.classList.contains('special')
-                                    ) {
+                                        !lastOpenCard.classList.contains('special'))
+                                    {
                                         changeScore(2);
                                     } else {
                                         processCorrect([this, lastOpenCard]);
@@ -1331,6 +1528,7 @@
                     if (win.style.display === 'flex') return;
 
                     win.style.display = 'flex';
+                    shop.style.display = 'none';
                     localStorage.setItem('score', score);
 
                     let date = new Date(timerEnd - timerStart);
@@ -1361,12 +1559,18 @@
                 scoreCount.textContent = score;
             }
 
-            function removeSpecialCards() {}
+            function removeSpecialCards() {
+                for (const card of grid.children) {
+                    if (card.classList.contains('special')) {
+                        card.classList.remove('special', ...specialClasses);
+                    }
+                }
+            }
 
             function createSpecialCards() {
                 for (const card of grid.children) {
                     /** @type {number} */
-                    let random = Math.floor(Math.random() * 7);
+                    let random = Math.floor(Math.random() * 5);
 
                     if (random === 0) {
                         /** @type {number} */
@@ -1400,10 +1604,45 @@
                     );
                     description.classList.add('special-help-description');
                     description.textContent = `| ${
-                        special.correctAdd
-                    } | ${
-                        special.mistakeAdd
+                        special.correctDescr} | ${special.mistakeDescr
                     }`;
+                }
+            }
+
+            function switchXRay() {
+                for (const card of grid.children) {
+                    if (xRay) {
+                        card.classList.add('x-ray');
+                    } else {
+                        card.classList.remove('x-ray');
+                    }
+                }
+            }
+
+            /**
+             * @param {string} bonusId
+            */
+            function buyBonus(bonusId) {
+                for (const bonus of bonuses) {
+                    if (bonusId === bonus.name) {
+                        if (score >= bonus.cost) {
+                            changeScore(bonus.cost * -1);
+                            bonus.func();
+                        }
+                        break;
+                    }
+                }
+            }
+
+            /**
+             * @param {string} newType
+            */
+            function replaceSpecialCards(newType) {
+                for (const card of grid.children) {
+                    if (card.classList.contains('special')) {
+                        card.classList.remove(...specialClasses);
+                        card.classList.add(newType);
+                    }
                 }
             }
 
