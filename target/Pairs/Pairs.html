@@ -237,8 +237,8 @@
             }
             
             th {
-                box-shadow: inset 0px 0px 2px var(--accent1);
-                border-color: var(--accent2);
+                background-image: linear-gradient(45deg, var(--accent2), transparent 20% 80%, var(--accent2));
+                border-color: var(--accent1);
                 color: var(--accent1);
                 font-size: 1.05em;
                 font-weight: 600;
@@ -551,17 +551,25 @@
 
             #bonuses-shop {
                 display: none;
+                flex-direction: column;
             }
 
             .bonus {
-                border-style: none;
-                background-image: linear-gradient(20deg, var(--accent1), transparent 30% 70%, var(--accent1));
+                background-image: linear-gradient(20deg, var(--accent1), transparent 20% 80%, var(--accent1));
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
                 border: var(--card-border) double var(--accent2);
                 border-radius: 4px;
                 font-weight: 600;
                 padding-inline: 6px;
+            }
+
+            .bonus:focus,
+            .bonus:hover {
+                background-image: linear-gradient(20deg, var(--accent2), transparent 20% 80%, var(--accent2));
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
             }
 
             #rules-general {
