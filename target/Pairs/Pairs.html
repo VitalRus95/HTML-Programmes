@@ -88,6 +88,12 @@
                 color: var(--primary-colour);
             }
             
+            button,
+            .box,
+            .menuButton {
+                background-image: linear-gradient(7deg, var(--accent1), transparent 5% 95%, var(--accent1));
+            }
+            
             details {
                 cursor: default;
                 width: 100%;
@@ -543,15 +549,23 @@
                 justify-content: center;
                 position: sticky;
                 bottom: 0px;
+                background-image: linear-gradient(315deg, var(--accent1), transparent 15% 85%, var(--accent1));
                 border: 2px groove var(--accent1);
                 border-radius: 7px 7px 0px 0px;
                 font-weight: 600;
                 opacity: 0.9;
+                transition: all 0.6s ease;
             }
 
-            #bonuses-shop {
-                display: none;
-                flex-direction: column;
+            #score-count-label,
+            #score-count {
+                background-color: transparent;
+            }
+
+            .not-enough-score {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                transition: all 0.6s ease;
             }
 
             .bonus {
@@ -609,12 +623,12 @@
 
             .special-help-description {
                 font-family: 'Courier New', Courier, monospace;
-                font-weight: 600;
+                font-weight: 900;
             }
         </style>
     </head>
     <body>
-        <h1>Pairs</h1>
+        <h1 id='game-name'>Pairs</h1>
 
         <!-- Settings -->
         <details id='settings'>
@@ -661,7 +675,7 @@
         <input id='cards' type='text' placeholder="Cards' symbols (separated by space)">
 
         <!-- Start button -->
-        <button id='start' onclick='fillGrid()'>Start game</button>
+        <button id='start' onclick='fillGrid()'>Start</button>
 
         <!-- Grid size slider -->
         <div id='grid-size-div' class='tooltipParent'>
@@ -706,15 +720,27 @@
                         <span id='grid-win-mistakes' tabindex='0'>0</span>
                     </td>
                 </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-bonuses-label' tabindex='0'>Bonuses used</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-bonuses' tabindex='0'>0</span>
+                    </td>
+                </tr>
             </table>
         </div>
 
         <!-- Grid -->
         <div id='grid'></div>
 
+        <!-- Invisible welcome message -->
+        <p id='welcome-msg' style='display: none;'>WELCOME TO PAIRS!</p>
+
         <!-- Score -->
         <div id='score-div'>
-            <label for='score-count'>Score:</label>
+            <label id='score-count-label' for='score-count'>Score:</label>
             <span id='score-count'>0</span>
         </div>
 
@@ -1174,18 +1200,24 @@
             let loadPackInput = document.getElementById('loadPackInput');
             /** @type {HTMLAnchorElement} */
             let savePackButton = document.getElementById('savePackButton');
+            /** @type {HTMLButtonElement} */
+            let startButton = document.getElementById('start');
             /** @type {HTMLInputElement} */
             let cardsInput = document.getElementById('cards');
             /** @type {HTMLSpanElement} */
             let win = document.getElementById('grid-win');
-            /** {HTMLSpanElement} */
-            let time = document.getElementById('grid-win-time');
-            /** {HTMLSpanElement} */
-            let mistakes = document.getElementById('grid-win-mistakes');
+            /** @type {HTMLSpanElement} */
+            let winTime = document.getElementById('grid-win-time');
+            /** @type {HTMLSpanElement} */
+            let winMistakes = document.getElementById('grid-win-mistakes');
+            /** @type {HTMLSpanElement} */
+            let winBonuses = document.getElementById('grid-win-bonuses');
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('grid');
             /** @type {HTMLInputElement} */
             let gridSize = document.getElementById('grid-size');
+            /** @type {HTMLDivElement} */
+            let scoreDiv = document.getElementById('score-div');
             /** @type {HTMLSpanElement} */
             let scoreCount = document.getElementById('score-count');
             /** @type {HTMLDetailsElement} */
@@ -1324,7 +1356,7 @@
             ];
             
             // Add prices to bonuses in the shop
-            for (const bonus of bonuses) {
+            for (let bonus of bonuses) {
                 /** @type {HTMLButtonElement} */
                 let button = document.getElementById(bonus.name);
 
@@ -1337,11 +1369,15 @@
             /** @type {HTMLDivElement} */
             let lastOpenCard = undefined;
             /** @type {boolean} */
+            let isGameInProcess = false;
+            /** @type {boolean} */
             let xRay = false;
             /** @type {number} */
             let hideSpeed;
             /** @type {number} */
             let mistakesCount;
+            /** @type {number} */
+            let bonusesCount;
             /** @type {number} */
             let timerStart;
             /** @type {number} */
@@ -1354,6 +1390,16 @@
             gridSize.value = localStorage.getItem('gridSize') ?? '100';
             grid.style.width = `${gridSize.value}%`;
             scoreCount.textContent = score;
+
+            // Show the welcome message
+            for (let s of document.getElementById('welcome-msg').textContent) {
+                let card = grid.appendChild(
+                    document.createElement('div')
+                );
+
+                card.classList.add('card', 'open');
+                card.textContent = s;
+            }
 
             // General events
             cardsInput.addEventListener('input', function (event) {
@@ -1387,12 +1433,12 @@
 
                 // Clean up before the new game
                 hideSpeed = cards.length * 1000;
-                shop.style.display = 'flex';
                 win.style.display = 'none';
                 lastOpenCard = undefined;
+                isGameInProcess = false;
                 timerStart = Date.now();
                 mistakesCount = 0;
-                changeScore(-1);
+                bonusesCount = 0;
 
                 while (grid.hasChildNodes()) {
                     grid.lastChild.remove();
@@ -1415,6 +1461,7 @@
 
                     setTimeout(() => {
                         card.classList.remove('open');
+                        isGameInProcess = true;
                     }, hideSpeed);
 
                     // Handle the click event
@@ -1455,6 +1502,9 @@
                                     } else {
                                         processCorrect([this, lastOpenCard]);
                                     }
+
+                                    this.classList.add('pair-found');
+                                    lastOpenCard.classList.add('pair-found');
                                     checkWin();
                                 }
 
@@ -1482,8 +1532,8 @@
                 /** @type {number[]} */
                 let mult = [];
 
-                for (const card of cards) {
-                    for (const special of specialCards) {
+                for (let card of cards) {
+                    for (let special of specialCards) {
                         if (card.classList.contains(special.name)) {
                             result += special.mistakeAdd;
                             mult.push(special.mistakeMult);
@@ -1505,8 +1555,8 @@
                 /** @type {number[]} */
                 let mult = [];
 
-                for (const card of cards) {
-                    for (const special of specialCards) {
+                for (let card of cards) {
+                    for (let special of specialCards) {
                         if (card.classList.contains(special.name)) {
                             result += special.correctAdd;
                             mult.push(special.correctMult);
@@ -1535,6 +1585,7 @@
                 if (allCorrect) {
                     if (win.style.display === 'flex') return;
 
+                    isGameInProcess = false;
                     win.style.display = 'flex';
                     shop.style.display = 'none';
                     localStorage.setItem('score', score);
@@ -1543,12 +1594,13 @@
                     let min = date.getMinutes();
                     let sec = date.getSeconds();
 
-                    time.textContent = `${
+                    winTime.textContent = `${
                         min > 9 ? min : `0${min}`
                     }:${
                         sec > 9 ? sec : `0${sec}`
                     }`;
-                    mistakes.textContent = mistakesCount;
+                    winMistakes.textContent = mistakesCount;
+                    winBonuses.textContent = bonusesCount;
 
                     win.focus();
                 }
@@ -1568,7 +1620,7 @@
             }
 
             function removeSpecialCards() {
-                for (const card of grid.children) {
+                for (let card of grid.children) {
                     if (card.classList.contains('special')) {
                         card.classList.remove('special', ...specialClasses);
                     }
@@ -1576,7 +1628,11 @@
             }
 
             function createSpecialCards() {
-                for (const card of grid.children) {
+                for (let card of grid.children) {
+                    if (card.classList.contains('pair-found')) {
+                        continue;
+                    }
+
                     /** @type {number} */
                     let random = Math.floor(Math.random() * 5);
 
@@ -1592,7 +1648,7 @@
                 /** @type {HTMLDivElement} */
                 let list = document.getElementById('special-list');
                 
-                for (const special of specialCards) {
+                for (let special of specialCards) {
                     /** @type {HTMLDivElement} */
                     let item = list.appendChild(
                         document.createElement('div')
@@ -1618,7 +1674,7 @@
             }
 
             function switchXRay() {
-                for (const card of grid.children) {
+                for (let card of grid.children) {
                     if (xRay) {
                         card.classList.add('x-ray');
                     } else {
@@ -1631,11 +1687,22 @@
              * @param {string} bonusId
             */
             function buyBonus(bonusId) {
-                for (const bonus of bonuses) {
+                if (isGameInProcess === false) {
+                    startButton.focus();
+                    return;
+                }
+
+                for (let bonus of bonuses) {
                     if (bonusId === bonus.name) {
                         if (score >= bonus.cost) {
                             changeScore(bonus.cost * -1);
+                            bonusesCount ++;
                             bonus.func();
+                        } else {
+                            scoreDiv.classList.add('not-enough-score');
+                            setTimeout(() => {
+                                scoreDiv.classList.remove('not-enough-score');
+                            }, 700);
                         }
                         break;
                     }
@@ -1646,7 +1713,7 @@
              * @param {string} newType
             */
             function replaceSpecialCards(newType) {
-                for (const card of grid.children) {
+                for (let card of grid.children) {
                     if (card.classList.contains('special')) {
                         card.classList.remove(...specialClasses);
                         card.classList.add(newType);
@@ -1654,8 +1721,8 @@
                 }
             }
 
-            fillGrid();
             fillSpecialCardsList();
+            createSpecialCards();
         </script>
     </body>
 </html>
