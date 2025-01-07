@@ -55,6 +55,12 @@
                 width: 24px;
                 height: 24px;
             }
+
+            #copyMark,
+            #copyAll {
+                width: 50%;
+                font-weight: 600;
+            }
         </style>
     </head>
 
@@ -267,12 +273,20 @@
         </div>
 
         <!-- #region Results -->
-        <div style='display: flex'>
-            <button id='copyMark' style='width: 50%' onclick='copy(false)'>
-                <b>Копировать балл</b>
+        <div style='display: flex; column-gap: 4px;'>
+            <button
+                id='copyMark'
+                style='border-radius: 7px 0px 0px 0px;'
+                onclick='copy(false)'
+            >
+                Копировать балл
             </button>
-            <button id='copyAll' style='width: 50%' onclick='copy(true)'>
-                <b>Копировать отчёт</b>
+            <button
+                id='copyAll' 
+                style='border-radius: 0px 7px 0px 0px;'
+                onclick='copy(true)'
+            >
+                Копировать отчёт
             </button>
         </div>
         <!-- #endregion -->

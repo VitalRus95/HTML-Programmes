@@ -33,9 +33,9 @@ body {
     align-items: center;
     justify-content: center;
     background-color: var(--accent2);
-    border-color: var(--accent1);
-    border-style: outset;
-    border-width: 2px;
+    color: var(--secondary-colour);
+    box-shadow: inset 0px 0px 6px var(--accent1);
+    border: 2px outset var(--accent1);
     font-weight: 600;
     text-align: center;
     text-decoration: none;
@@ -57,9 +57,9 @@ button {
     display: inline-flex;
     background-color: var(--accent2);
     color: var(--secondary-colour);
-    border-color: var(--accent1);
+    box-shadow: inset 0px 0px 6px var(--accent1);
+    border: 2px outset var(--accent1);
     border-radius: 7px 0px 7px 0px;
-    border-style: outset;
     cursor: pointer;
     padding: 1px;
     align-items: center;
@@ -76,12 +76,6 @@ button:focus,
 button:hover {
     background-color: var(--secondary-colour);
     color: var(--primary-colour);
-}
-
-button,
-.box,
-.menuButton {
-    background-image: linear-gradient(25deg, transparent 95%, var(--accent1));
 }
 
 details {
