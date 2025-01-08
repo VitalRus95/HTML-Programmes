@@ -59,6 +59,13 @@
             #copyMark,
             #copyAll {
                 width: 50%;
+            }
+
+            #reset,
+            #copyAll,
+            #copyMark,
+            #resultLabel,
+            #mistakesLabel {
                 font-weight: 600;
             }
         </style>
@@ -72,7 +79,7 @@
         </details>
 
         <!-- Clear button -->
-        <button id='reset' onclick='resetValues()'><b>Сброс</b></button>
+        <button id='reset' onclick='resetValues()'>Сброс</button>
 
         <!-- #region Mistakes -->
         <details open>
@@ -122,8 +129,8 @@
                                     style='vertical-align: middle'
                                     checked
                                 />
-                                грамматическая</label
-                            >
+                                грамматическая
+                            </label>
                         </div>
 
                         <div>
@@ -134,8 +141,8 @@
                                     id='vocabulary'
                                     style='vertical-align: middle'
                                 />
-                                лексическая</label
-                            >
+                                лексическая
+                            </label>
                         </div>
 
                         <div>
@@ -146,8 +153,8 @@
                                     id='orthography'
                                     style='vertical-align: middle'
                                 />
-                                орфографическая</label
-                            >
+                                орфографическая
+                            </label>
                         </div>
 
                         <div>
@@ -158,8 +165,8 @@
                                     id='punctuation'
                                     style='vertical-align: middle'
                                 />
-                                пунктуационная</label
-                            >
+                                пунктуационная
+                            </label>
                         </div>
 
                         <div>
@@ -170,8 +177,8 @@
                                     id='complex'
                                     style='vertical-align: middle'
                                 />
-                                комплексная</label
-                            >
+                                комплексная
+                            </label>
                         </div>
                     </td>
                 </tr>
@@ -191,8 +198,8 @@
                                     id='deletion'
                                     style='vertical-align: middle'
                                 />
-                                опущение</label
-                            >
+                                опущение
+                            </label>
                         </div>
                         <div>
                             <label for='modification'
@@ -203,8 +210,8 @@
                                     style='vertical-align: middle'
                                     checked
                                 />
-                                изменение</label
-                            >
+                                изменение
+                            </label>
                         </div>
                         <div>
                             <label for='addition'
@@ -214,8 +221,8 @@
                                     id='addition'
                                     style='vertical-align: middle'
                                 />
-                                добавление</label
-                            >
+                                добавление
+                            </label>
                         </div>
                     </td>
                 </tr>
@@ -236,8 +243,8 @@
                                     style='vertical-align: middle'
                                     checked
                                 />
-                                не затруднено</label
-                            >
+                                не затруднено
+                            </label>
                         </div>
                         <div>
                             <label for='obscured'
@@ -247,8 +254,8 @@
                                     id='obscured'
                                     style='vertical-align: middle'
                                 />
-                                затруднено</label
-                            >
+                                затруднено
+                            </label>
                         </div>
                         <div>
                             <label for='lost'
@@ -258,8 +265,8 @@
                                     id='lost'
                                     style='vertical-align: middle'
                                 />
-                                невозможно</label
-                            >
+                                невозможно
+                            </label>
                         </div>
                     </td>
                 </tr>
@@ -268,7 +275,7 @@
         <!-- #endregion -->
 
         <div style='display: flex; align-items: center'>
-            <label for='resultingMark'><b>Итоги:</b></label>
+            <label id='resultLabel' for='resultingMark'>Итоги:</label>
             <p id='resultingMark' style='padding-left: 5px'></p>
         </div>
 
@@ -294,7 +301,7 @@
         <hr />
 
         <!-- #region Mistakes list -->
-        <label for='mistakesList'><b>Обнаруженные ошибки:</b></label>
+        <label id='mistakesLabel' for='mistakesList'>Обнаруженные ошибки:</label>
         <ol id='mistakesList'></ol>
         <!-- #endregion -->
 
@@ -358,7 +365,7 @@
             </ol>
             <hr />
             <ul>
-                <u>Примечания:</u>
+                <h3>Примечания:</h3>
                 <li><b>Повторяющаяся ошибка</b> считается за одну ошибку.</li>
                 <li>
                     <b>Ближайшим контекстом</b> для удобства можно считать
