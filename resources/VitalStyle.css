@@ -30,6 +30,7 @@ body {
 .menuButton {
     cursor: pointer;
     display: flex;
+    flex-grow: 1;
     align-items: center;
     justify-content: center;
     background-color: var(--accent2);
@@ -41,9 +42,7 @@ body {
     text-decoration: none;
     text-wrap: nowrap;
     overflow: auto;
-    margin-bottom: 0;
     padding: 2px;
-    width: 100%;
 }
 
 .menuButton:hover,
@@ -99,6 +98,7 @@ details > summary:hover {
 }
 
 details[open] > summary {
+    border-radius: 0px 0px 7px 0px;
     font-size: 1.05em;
     font-weight: 600;
     padding-bottom: 2px;

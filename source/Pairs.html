@@ -372,7 +372,7 @@
             <option value='90'></option>
         </datalist>
 
-        <!-- Victory text -->
+        <!-- Victory text & Statistics -->
         <div id='grid-win' tabindex='0'>
             <span id='grid-victory' tabindex='0'>Victory!</span>
             
@@ -397,6 +397,24 @@
                     </td>
                     <td>
                         <span id='grid-win-mistakes' tabindex='0'>0</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-loss-label' tabindex='0'>Points lost</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-loss' tabindex='0'>0</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-gain-label' tabindex='0'>Points earned</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-gain' tabindex='0'>0</span>
                     </td>
                 </tr>
 
@@ -546,6 +564,10 @@
             let winMistakes = document.getElementById('grid-win-mistakes');
             /** @type {HTMLSpanElement} */
             let winBonuses = document.getElementById('grid-win-bonuses');
+            /** @type {HTMLSpanElement} */
+            let winLost = document.getElementById('grid-win-loss');
+            /** @type {HTMLSpanElement} */
+            let winEarned = document.getElementById('grid-win-gain');
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('grid');
             /** @type {HTMLInputElement} */
@@ -713,6 +735,10 @@
             /** @type {number} */
             let bonusesCount;
             /** @type {number} */
+            let pointsLost;
+            /** @type {number} */
+            let pointsEarned;
+            /** @type {number} */
             let timerStart;
             /** @type {number} */
             let timerEnd;
@@ -773,6 +799,8 @@
                 timerStart = Date.now();
                 mistakesCount = 0;
                 bonusesCount = 0;
+                pointsLost = 0;
+                pointsEarned = 0;
 
                 while (grid.hasChildNodes()) {
                     grid.lastChild.remove();
@@ -934,6 +962,8 @@
                     }`;
                     winMistakes.textContent = mistakesCount;
                     winBonuses.textContent = bonusesCount;
+                    winLost.textContent = pointsLost;
+                    winEarned.textContent = pointsEarned;
 
                     win.focus();
                 }
@@ -943,6 +973,16 @@
              * @param {number} change
             */
             function changeScore(change) {
+                if (change === 0) {
+                    return;
+                }
+
+                if (change > 0) {
+                    pointsEarned += change;
+                } else {
+                    pointsLost += change * -1;
+                }
+
                 score = score + change < 0
                     ? 0
                     : score + change > 100
