@@ -283,8 +283,8 @@
                 position: relative;
             }
             
-            .tooltipParent:hover > .tooltip,
-            .tooltipParent:focus > .tooltip {
+            .tooltipParent:focus > .tooltip,
+            .tooltipParent:hover > .tooltip {
                 display: flex;
                 animation: tooltipFadeIn 0.7s ease;
             }
@@ -491,6 +491,36 @@
                 color: rgb(230, 230, 230);
             }
 
+            .hint-card {
+                position: relative;
+            }
+
+            .hint-card:focus > .hint,
+            .hint-card:hover > .hint {
+                display: flex;
+            }
+
+            .hint {
+                display: none;
+                position: absolute;
+                bottom: -20%;
+                align-items: center;
+                justify-content: center;
+                cursor: help;
+                background-color: #dddddd;
+                color: #1e00ff;
+                box-shadow: 0px 0px 4px #000000;
+                border: 4px outset #ffffff;
+                border-radius: 2px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: calc(var(--card-font) * 0.75);
+                font-weight: 900;
+                padding: 2px;
+                height: calc(var(--card-font) * 0.9);
+                width: calc(var(--card-font) * 0.9);
+                min-width: fit-content;
+            }
+
             #cards {
                 border-radius: 0px 0px 0px 7px;
                 width: 100%;
@@ -571,6 +601,9 @@
                 border-radius: 4px;
                 font-weight: 600;
                 padding-inline: 6px;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
             }
 
             .bonus:focus,
@@ -836,6 +869,19 @@
                         Optimist
                         <span class='tooltip'>
                             Turn all special cards into type +.
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
+                        id='bonus-minesweeper'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-minesweeper")'
+                    >
+                        Minesweeper
+                        <span class='tooltip'>
+                            Random ordinary cards show the distance to their pairs on hover.
                         </span>
                     </button>
                 </li>
@@ -1365,9 +1411,42 @@
                 },
                 {
                     name: 'bonus-optimist',
-                    cost: 30,
+                    cost: 25,
                     func: function () {
                         replaceSpecialCards('plus');
+                    }
+                },
+                {
+                    name: 'bonus-minesweeper',
+                    cost: 30,
+                    func: function () {
+                        /** @type {HTMLDivElement[]} */
+                        let cards = Array.from(grid.children);
+
+                        for (let i = 0; i < cards.length; i++) {
+                            /** @type {number} */
+                            let random = Math.floor(Math.random() * 2.5);
+
+                            if (random === 0
+                                && !cards[i].classList.contains('special')
+                                && !cards[i].classList.contains('open')
+                            ) {
+                                for (let j = 0; j < cards.length; j++) {
+                                    if (cards[j].dataset.icon === cards[i].dataset.icon
+                                        && cards[j] !== cards[i]
+                                    ) {
+                                        cards[i].classList.add('hint-card');
+
+                                        let hint = cards[i].appendChild(
+                                            document.createElement('div')
+                                        );
+                                        hint.classList.add('hint');
+                                        hint.textContent = Math.abs(j - i);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             ];
@@ -1480,6 +1559,7 @@
                     );
 
                     card.classList.add('card', 'open');
+                    card.dataset.icon = tempArray[i];
                     card.textContent = tempArray[i];
 
                     setTimeout(() => {
@@ -1498,12 +1578,15 @@
                             switchXRay();
                         }
                         
+                        this.classList.remove('hint-card');
                         this.classList.add('open');
                         timerEnd = Date.now();
 
                         setTimeout(() => {
                             if (lastOpenCard) {
-                                if (lastOpenCard.textContent !== this.textContent) {
+                                this.blur();
+
+                                if (lastOpenCard.dataset.icon !== this.dataset.icon) {
                                     // Mistake
                                     lastOpenCard.classList.remove('open');
                                     this.classList.remove('open');
