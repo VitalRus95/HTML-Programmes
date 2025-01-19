@@ -372,12 +372,17 @@
                 transition: all var(--card-anim-speed) ease-out;
             }
 
+            .x-ray {
+                background-color: var(--accent1);
+                border-color: var(--accent2);
+            }
+
             .x-ray:focus,
             .x-ray:hover {
                 background-color: rgb(10, 10, 10);
                 color: rgb(240, 240, 240);
                 border-color: rgb(90, 90, 90);
-                opacity: 0.8;
+                opacity: 0.85;
             }
 
             .open {
@@ -420,6 +425,10 @@
             .open:focus::before,
             .open:hover::before {
                 color: var(--secondary-colour);
+            }
+
+            .x-ray::before {
+                color: var(--primary-colour);
             }
 
             .special::after {
@@ -506,7 +515,6 @@
                 bottom: -20%;
                 align-items: center;
                 justify-content: center;
-                cursor: help;
                 background-color: #dddddd;
                 color: #1e00ff;
                 box-shadow: 0px 0px 4px #000000;
@@ -849,13 +857,26 @@
 
                 <li>
                     <button
+                        id='bonus-random-x-ray'
+                        class='bonus tooltipParent'
+                        onclick='buyBonus("bonus-random-x-ray")'
+                    >
+                        Random X-ray
+                        <span class='tooltip'>
+                            From time to time a random ordinary card receives X-ray effect for 3 seconds: reveal it on hovering.
+                        </span>
+                    </button>
+                </li>
+
+                <li>
+                    <button
                         id='bonus-x-ray'
                         class='bonus tooltipParent'
                         onclick='buyBonus("bonus-x-ray")'
                     >
-                        X-ray
+                        Full X-ray
                         <span class='tooltip'>
-                            X-ray mode: reveal the card on hovering. Disables after choosing a card.
+                            X-ray mode: reveal any card on hovering. Disables after choosing a card.
                         </span>
                     </button>
                 </li>
@@ -881,7 +902,7 @@
                     >
                         Minesweeper
                         <span class='tooltip'>
-                            Random ordinary cards show the distance to their pairs on hover.
+                            Random ordinary cards show horizontal distance to their pairs on hover.
                         </span>
                     </button>
                 </li>
@@ -1286,6 +1307,32 @@
             /** @type {HTMLDetailsElement} */
             let shop = document.getElementById('bonuses-shop');
 
+            // Other variables
+            /** @type {HTMLDivElement} */
+            let lastOpenCard = undefined;
+            /** @type {boolean} */
+            let isGameInProcess = false;
+            /** @type {boolean} */
+            let xRay = false;
+            /** @type {number} */
+            let hideSpeed;
+            /** @type {number} */
+            let mistakesCount;
+            /** @type {number} */
+            let bonusesCount;
+            /** @type {number} */
+            let pointsLost;
+            /** @type {number} */
+            let pointsEarned;
+            /** @type {number} */
+            let timerStart;
+            /** @type {number} */
+            let timerEnd;
+            /** @type {number} */
+            let randomXRayInterval;
+            /** @type {number} */
+            let score = parseInt(localStorage.getItem('score')) || 0;
+
             // Special cards
             /**
              * @typedef {Object} SpecialCard
@@ -1396,14 +1443,40 @@
                 },
                 {
                     name: 'bonus-experimenter',
-                    cost: 15,
+                    cost: 14,
                     func: function () {
                         replaceSpecialCards('greater-than');
                     }
                 },
                 {
+                    name: 'bonus-random-x-ray',
+                    cost: 18,
+                    func: function () {
+                        randomXRayInterval = setInterval(() => {
+                            if (!isGameInProcess) return;
+                            
+                            /** @type {HTMLDivElement[]} */
+                            let cards = Array.from(grid.children).filter(c => 
+                                !c.classList.contains('open')
+                                && !c.classList.contains('x-ray')
+                                && !c.classList.contains('special')
+                            );
+
+                            if (cards.length === 0) return;
+
+                            /** @type {number} */
+                            let random = Math.floor(Math.random() * cards.length);
+
+                            cards[random].classList.add('x-ray');
+                            setTimeout(() => {
+                                cards[random].classList.remove('x-ray')
+                            }, 3000);
+                        }, 7000);
+                    }
+                },
+                {
                     name: 'bonus-x-ray',
-                    cost: 20,
+                    cost: 23,
                     func: function () {
                         xRay = true;
                         switchXRay();
@@ -1411,21 +1484,21 @@
                 },
                 {
                     name: 'bonus-optimist',
-                    cost: 25,
+                    cost: 27,
                     func: function () {
                         replaceSpecialCards('plus');
                     }
                 },
                 {
                     name: 'bonus-minesweeper',
-                    cost: 30,
+                    cost: 32,
                     func: function () {
                         /** @type {HTMLDivElement[]} */
                         let cards = Array.from(grid.children);
 
                         for (let i = 0; i < cards.length; i++) {
                             /** @type {number} */
-                            let random = Math.floor(Math.random() * 2.5);
+                            let random = Math.floor(Math.random() * 3);
 
                             if (random === 0
                                 && !cards[i].classList.contains('special')
@@ -1460,30 +1533,6 @@
                     button.firstChild.textContent += ` [${bonus.cost}]`;
                 }
             }
-
-            // Other variables
-            /** @type {HTMLDivElement} */
-            let lastOpenCard = undefined;
-            /** @type {boolean} */
-            let isGameInProcess = false;
-            /** @type {boolean} */
-            let xRay = false;
-            /** @type {number} */
-            let hideSpeed;
-            /** @type {number} */
-            let mistakesCount;
-            /** @type {number} */
-            let bonusesCount;
-            /** @type {number} */
-            let pointsLost;
-            /** @type {number} */
-            let pointsEarned;
-            /** @type {number} */
-            let timerStart;
-            /** @type {number} */
-            let timerEnd;
-            /** @type {number} */
-            let score = parseInt(localStorage.getItem('score')) || 0;
 
             // Restore saved data
             cardsInput.value = localStorage.getItem('cards') ?? '';
@@ -1532,11 +1581,11 @@
                 if (cards.length < 2) return;
 
                 // Clean up before the new game
+                clearInterval(randomXRayInterval);
                 hideSpeed = cards.length * 1000;
                 win.style.display = 'none';
                 lastOpenCard = undefined;
                 isGameInProcess = false;
-                timerStart = Date.now();
                 mistakesCount = 0;
                 bonusesCount = 0;
                 pointsLost = 0;
@@ -1564,6 +1613,7 @@
 
                     setTimeout(() => {
                         card.classList.remove('open');
+                        timerStart = Date.now();
                         isGameInProcess = true;
                     }, hideSpeed);
 
