@@ -951,7 +951,6 @@
             });
             
             let fullscreenTooltip = document.createElement('span');
-            fullscreenTooltip.id = 'fscrn_tip';
             fullscreenTooltip.className = 'tooltip';
             fullscreenTooltip.textContent = 'Fullscreen';
             
@@ -1159,7 +1158,9 @@
             /**
              * @typedef {Object} LangElement
              * @property {string} id
-             * @property {Object} props
+             * @property {string} textContent
+             * @property {string} placeholder
+             * @property {string[]} childNodesTexts
              */
             function exportTranslationTemplate() {
                 /** @type {LangElement[]} */
@@ -1168,22 +1169,38 @@
                 document.querySelectorAll('body *').forEach((e) => {
                     if (e.tagName !== 'DIV'
                         && e.tagName !== 'DETAILS'
+                        && e.tagName !== 'TABLE'
                         && e.id
-                        && e.id !== 'lang'
                     ) {
                         /** @type {LangElement} */
                         let newEl = {};
             
                         newEl.id = e.id;
             
-                        ['innerHTML', 'placeholder'].forEach((p) => {
-                            if (e[p]) {
-                                if (!newEl.props) newEl.props = {};
-                                newEl.props[p] = e[p].trim();
-                            }
-                        });
+                        if (e.childNodes) {
+                            newEl.childNodesTexts = [];
             
-                        if (newEl.props) elements.push(newEl);
+                            for (let n of e.childNodes) {
+                                if (n.textContent && n.textContent.trim() !== '') {
+                                    newEl.childNodesTexts.push(n.textContent);
+                                }
+                            }
+                        } else {
+                            if (e.textContent) {
+                                newEl.textContent = e.textContent;
+                            }
+                        }
+            
+                        if (e.placeholder) {
+                            newEl.placeholder = e.placeholder;
+                        }
+            
+                        if (newEl.textContent
+                            || newEl.placeholder
+                            || newEl?.childNodesTexts.length > 0
+                        ) {
+                            elements.push(newEl);
+                        }
                     }
                 });
             
@@ -1226,6 +1243,121 @@
                 let font = localStorage.getItem('pageFont');
                 document.getElementById('fontInput').value = font;
                 document.documentElement.style.fontFamily = font;
+            }
+            
+            /**
+             * @typedef {Object} Translation
+             * @property {string} name
+             * @property {string[]} langTags
+             * @property {LangElement[]} elements
+             */
+            /**
+             * @param {Translation[]} languages
+             */
+            function generateLanguagesList(languages) {
+                /** @type {HTMLSelectElement} */
+                let list = document.body.insertBefore(
+                    document.createElement('select'), settings
+                );
+                list.id = 'lang';
+                list.style.borderRadius = '7px 0px 0px 7px';
+                list.addEventListener('change', function (event) {
+                    selectLanguage(languages, true);
+                });
+            
+                for (let l of languages) {
+                    /** @type {HTMLOptionElement} */
+                    let option = list.appendChild(
+                        document.createElement('option')
+                    );
+                    option.value = l.name;
+                    option.textContent = l.name;
+                }
+            
+                selectLanguage(languages, false);
+            }
+            
+            /**
+             * @param {Translation[]} languages
+             * @param {boolean} fromMenu
+             */
+            function selectLanguage(languages, fromMenu) {
+                /** @type {HTMLSelectElement} */
+                let menu = document.getElementById('lang');
+                /** @type {string} */
+                let selection = undefined;
+            
+                if (fromMenu === false) {
+                    if (localStorage.getItem('lang')) {
+                        selection = localStorage.getItem('lang');
+                        menu.value = selection;
+                    } else if (navigator.language) {
+                        // Iterate over translations
+                        for (const l of languages) {
+                            // If the valid option is finally found, exit
+                            if (selection) {
+                                break;
+                            } else if (l.langTags) {
+                                // Otherwise iterate over the tags and
+                                // compare them to the browser language
+                                for (const t of l.langTags) {
+                                    if (navigator.language === t) {
+                                        menu.value = l.name;
+                                        selection = l.name;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    selection = menu.value;
+                }
+            
+                if (selection) {
+                    /** @type {Translation} */
+                    let translation = {};
+            
+                    for (const l of languages) {
+                        if (l.name === selection) {
+                            translation = l;
+                            break;
+                        }
+                    }
+            
+                    if (translation) {
+                        localStorage.setItem('lang', selection);
+            
+                        for (const e of translation.elements) {
+                            let target = document.getElementById(e.id);
+            
+                            if (target) {
+                                if (e.textContent) {
+                                    target.textContent = e.textContent;
+                                }
+            
+                                if (e.placeholder) {
+                                    target.placeholder = e.placeholder;
+                                }
+            
+                                if (e.childNodesTexts) {
+                                    /** @type {number} */
+                                    let index = 0;
+            
+                                    for (const c of target.childNodes) {
+                                        if (c.textContent
+                                            && c.textContent.trim() !== ''
+                                            && e.childNodesTexts[index]
+                                        ) {
+                                            c.textContent = e.childNodesTexts[index];
+                                            index ++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             
             loadFont();

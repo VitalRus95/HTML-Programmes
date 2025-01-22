@@ -352,7 +352,7 @@
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Settings</summary>
+            <summary id='settings-summary'>Settings</summary>
         </details>
 
         <!-- Page main body -->
@@ -789,7 +789,7 @@
                 },
                 {
                     name: 'bonus-random-x-ray',
-                    cost: 18,
+                    cost: 16,
                     func: function () {
                         randomXRayInterval = setInterval(() => {
                             if (!isGameInProcess) return;
@@ -815,7 +815,7 @@
                 },
                 {
                     name: 'bonus-x-ray',
-                    cost: 23,
+                    cost: 20,
                     func: function () {
                         xRay = true;
                         switchXRay();
@@ -823,14 +823,14 @@
                 },
                 {
                     name: 'bonus-optimist',
-                    cost: 27,
+                    cost: 25,
                     func: function () {
                         replaceSpecialCards('plus');
                     }
                 },
                 {
                     name: 'bonus-minesweeper',
-                    cost: 32,
+                    cost: 30,
                     func: function () {
                         /** @type {HTMLDivElement[]} */
                         let cards = Array.from(grid.children);
@@ -1082,6 +1082,7 @@
 
                     isGameInProcess = false;
                     win.style.display = 'flex';
+                    clearInterval(randomXRayInterval);
                     localStorage.setItem('score', score);
 
                     let date = new Date(timerEnd - timerStart);
@@ -1229,6 +1230,511 @@
 
             fillSpecialCardsList();
             createSpecialCards();
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Pairs"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "loadPackButton",
+                            "childNodesTexts": [
+                                "📁 Load",
+                                "Load pack from .txt file"
+                            ]
+                        },
+                        {
+                            "id": "savePackButton",
+                            "childNodesTexts": [
+                                "💾 Save",
+                                "Save pack to .txt file"
+                            ]
+                        },
+                        {
+                            "id": "cards",
+                            "childNodesTexts": [],
+                            "placeholder": "Cards' symbols (separated by space)"
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Start"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Victory!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Statistics"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Time (min:sec)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Mistakes"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-loss-label",
+                            "childNodesTexts": [
+                                "Points lost"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-gain-label",
+                            "childNodesTexts": [
+                                "Points earned"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-bonuses-label",
+                            "childNodesTexts": [
+                                "Bonuses used"
+                            ]
+                        },
+                        {
+                            "id": "score-count-label",
+                            "childNodesTexts": [
+                                "Score:"
+                            ]
+                        },
+                        {
+                            "id": "bonuses-shop-summary",
+                            "childNodesTexts": [
+                                "Bonuses shop"
+                            ]
+                        },
+                        {
+                            "id": "bonus-remove-special",
+                            "childNodesTexts": [
+                                "Nothing extra\n                         [8]",
+                                "Remove all special effects from cards."
+                            ]
+                        },
+                        {
+                            "id": "bonus-indifference",
+                            "childNodesTexts": [
+                                "Indifference\n                         [10]",
+                                "Turn all special cards into type =."
+                            ]
+                        },
+                        {
+                            "id": "bonus-chance",
+                            "childNodesTexts": [
+                                "Power of chance\n                         [12]",
+                                "Remove all special effects from cards and pick new ones randomly."
+                            ]
+                        },
+                        {
+                            "id": "bonus-experimenter",
+                            "childNodesTexts": [
+                                "Experimenter\n                         [14]",
+                                "Turn all special cards into type >."
+                            ]
+                        },
+                        {
+                            "id": "bonus-random-x-ray",
+                            "childNodesTexts": [
+                                "Random X-ray\n                         [16]",
+                                "From time to time a random ordinary card receives X-ray effect for 3 seconds: reveal it on hovering."
+                            ]
+                        },
+                        {
+                            "id": "bonus-x-ray",
+                            "childNodesTexts": [
+                                "Full X-ray\n                         [20]",
+                                "X-ray mode: reveal any card on hovering. Disables after choosing a card."
+                            ]
+                        },
+                        {
+                            "id": "bonus-optimist",
+                            "childNodesTexts": [
+                                "Optimist\n                         [25]",
+                                "Turn all special cards into type +."
+                            ]
+                        },
+                        {
+                            "id": "bonus-minesweeper",
+                            "childNodesTexts": [
+                                "Minesweeper\n                         [30]",
+                                "Random ordinary cards show horizontal distance to their pairs on hover."
+                            ]
+                        },
+                        {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Rules"
+                            ]
+                        },
+                        {
+                            "id": "rules-general",
+                            "childNodesTexts": [
+                                "Find pairs of cards by trying to memorise as many as you can in the beginning of the game and by careful guessing. A right guess gives you a reward (",
+                                "2 ",
+                                "points), while a wrong one results in a penalty (",
+                                "-1 ",
+                                "point). Use points to buy ",
+                                "bonuses ",
+                                "that make the game a bit easier. And pay attention to ",
+                                "special cards",
+                                ", they have some additional effects (see below)."
+                            ]
+                        },
+                        {
+                            "id": "rules-special-cards",
+                            "childNodesTexts": [
+                                "Special cards"
+                            ]
+                        },
+                        {
+                            "id": "special-help-header",
+                            "childNodesTexts": [
+                                "Card | Reward | Penalty"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Пары"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "loadPackButton",
+                            "childNodesTexts": [
+                                "📁 Загрузить",
+                                "Загрузить колоду из файла .txt"
+                            ]
+                        },
+                        {
+                            "id": "savePackButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить",
+                                "Сохранить колоду в файл .txt"
+                            ]
+                        },
+                        {
+                            "id": "cards",
+                            "childNodesTexts": [],
+                            "placeholder": "Символы карт (разделённые пробелом)"
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Начать"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Победа!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Статистика"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Время (мин:сек)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Ошибок"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-loss-label",
+                            "childNodesTexts": [
+                                "Баллов потеряно"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-gain-label",
+                            "childNodesTexts": [
+                                "Баллов заработано"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-bonuses-label",
+                            "childNodesTexts": [
+                                "Бонусов использовано"
+                            ]
+                        },
+                        {
+                            "id": "score-count-label",
+                            "childNodesTexts": [
+                                "Счёт:"
+                            ]
+                        },
+                        {
+                            "id": "bonuses-shop-summary",
+                            "childNodesTexts": [
+                                "Магазин бонусов"
+                            ]
+                        },
+                        {
+                            "id": "bonus-remove-special",
+                            "childNodesTexts": [
+                                "Ничего лишнего\n                         [8]",
+                                "Убрать все особые эффекты карт."
+                            ]
+                        },
+                        {
+                            "id": "bonus-indifference",
+                            "childNodesTexts": [
+                                "Безразличие\n                         [10]",
+                                "Преобразовать все особые карты в тип =."
+                            ]
+                        },
+                        {
+                            "id": "bonus-chance",
+                            "childNodesTexts": [
+                                "Воля случая\n                         [12]",
+                                "Убрать все особые эффекты карт и случайным образом выбрать новые."
+                            ]
+                        },
+                        {
+                            "id": "bonus-experimenter",
+                            "childNodesTexts": [
+                                "Экспериментатор\n                         [14]",
+                                "Преобразовать все особые карты в тип >."
+                            ]
+                        },
+                        {
+                            "id": "bonus-random-x-ray",
+                            "childNodesTexts": [
+                                "Случайный рентген\n                         [16]",
+                                "Время от времени у случайной обычной карты на 3 секунды включается рентген: наведите на неё, чтобы увидеть её символ."
+                            ]
+                        },
+                        {
+                            "id": "bonus-x-ray",
+                            "childNodesTexts": [
+                                "Полный рентген\n                         [20]",
+                                "Режим рентгена: наведите на любую карту, чтобы увидеть её символ. Отключается после выбора карты."
+                            ]
+                        },
+                        {
+                            "id": "bonus-optimist",
+                            "childNodesTexts": [
+                                "Оптимист\n                         [25]",
+                                "Преобразовать все особые карты в тип +."
+                            ]
+                        },
+                        {
+                            "id": "bonus-minesweeper",
+                            "childNodesTexts": [
+                                "Сапёр\n                         [30]",
+                                "У случайных обычных карт при наведении показывается горизонтальное расстояние до их пары."
+                            ]
+                        },
+                        {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Правила"
+                            ]
+                        },
+                        {
+                            "id": "rules-general",
+                            "childNodesTexts": [
+                                "Находите пары карт, пытаясь как можно больше запоминать в начале игры и в процессе неё. За верную догадку Вы получаете награду (",
+                                "2 ",
+                                "очка), а за неверную — штраф (",
+                                "-1 ",
+                                "очко). Используйте очки для покупки ",
+                                "бонусов",
+                                ", немного упрощающих игру. Также обращайте внимание на ",
+                                "особые карты",
+                                ", у них есть дополнительные эффекты (см. ниже)."
+                            ]
+                        },
+                        {
+                            "id": "rules-special-cards",
+                            "childNodesTexts": [
+                                "Особые карты"
+                            ]
+                        },
+                        {
+                            "id": "special-help-header",
+                            "childNodesTexts": [
+                                "Карта | Награда | Штраф"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
         </script>
     </body>
 </html>

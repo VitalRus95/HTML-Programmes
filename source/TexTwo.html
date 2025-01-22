@@ -494,8 +494,6 @@
                 }
             });
 
-            lang.value = localStorage.getItem('lang') ?? 'eng';
-            if (lang.value !== 'eng') setLanguage();
             updateCounters();
 
             document.body.addEventListener('keydown', function (event) {
