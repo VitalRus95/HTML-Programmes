@@ -10,30 +10,11 @@
         <style></style>
     </head>
     <body>
-        <h1>Template</h1>
+        <h1 id='page-title'>Template</h1>
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Settings</summary>
-
-            <div style='display: flex;
-                flex-wrap: wrap;
-                align-items: baseline;
-                column-gap: 2px;
-                overflow: auto;'
-            >
-                <label id='langLabel' for='lang'>Language</label>
-
-                <select
-                    name='language'
-                    id='lang'
-                    onchange='setLanguage()'
-                    style='flex-grow: 1;'
-                >
-                    <option value='eng'>English [Vitaly Ulyanov]</option>
-                    <option value='rus'>Русский [Виталий Ульянов]</option>
-                </select>
-            </div>
+            <summary id='settings-summary'>Settings</summary>
         </details>
 
         <!-- Page main body -->
@@ -46,45 +27,177 @@
         <script src='../resources/VitalLogic.js'></script>
         <script>
             // Elements
-            /** @type {HTMLSelectElement} */
-            let lang = document.getElementById('lang');
 
-            lang.value = localStorage.getItem('lang') ?? 'eng';
-            if (lang.value !== 'eng') setLanguage();
-
-            function setLanguage() {
-                /** @type {{
-                    id: string,
-                    props: {}[]
-                }[]} */
-                let elements = [];
-
-                localStorage.setItem('lang', lang.value);
-
-                switch (lang.value) {
-                    case 'eng':
-                        elements = [];
-                        break;
-                    case 'rus':
-                        elements = [];
-                        break;
-                    default:
-                        break;
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Template"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Шаблон"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
                 }
-
-                elements.forEach((e) => {
-                    const el = document.getElementById(e.id);
-
-                    if (!el) {
-                        console.log(`Translation error: element with ID '${e.id}' not found!`);
-                        return;
-                    }
-
-                    for (const prop in e.props) {
-                        el[prop] = e.props[prop];
-                    }
-                });
-            }
+            ]);
         </script>
     </body>
 </html>

@@ -283,6 +283,7 @@ function exportTranslationTemplate() {
             && e.tagName !== 'DETAILS'
             && e.tagName !== 'TABLE'
             && e.id
+            && e.id !== 'lang'
         ) {
             /** @type {LangElement} */
             let newEl = {};
@@ -294,7 +295,7 @@ function exportTranslationTemplate() {
 
                 for (let n of e.childNodes) {
                     if (n.textContent && n.textContent.trim() !== '') {
-                        newEl.childNodesTexts.push(n.textContent);
+                        newEl.childNodesTexts.push(n.textContent.trim());
                     }
                 }
             } else {

@@ -3,7 +3,7 @@
     <head>
         <meta charset='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <title>Letter Field</title>
+        <title>Array</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='stylesheet' href='../resources/VitalStyle.css' />
 
@@ -259,15 +259,15 @@
         </style>
     </head>
     <body>
-        <h1>Letter Field</h1>
+        <h1 id='game-name'>Array</h1>
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Settings</summary>
+            <summary id='settings-summary'>Settings</summary>
 
             <div style='display: flex; align-items: baseline;'>
                 <input type='checkbox' id='hideCells'>
-                <label for='hideCells'>Hide inactive cells completely</label>
+                <label for='hideCells' id='hideCells-label'>Hide inactive cells completely</label>
             </div>
 
             <hr>
@@ -275,7 +275,7 @@
 
         <!-- Words list textarea -->
         <details>
-            <summary>Words (answers)</summary>
+            <summary id='words-summary'>Words (answers)</summary>
             <textarea
                 id='words'
                 autocomplete='off'
@@ -321,6 +321,7 @@
 
         <!-- Start button -->
         <button
+            id='startButton'
             tabindex='1'
             onclick='fillGrid()'
             style='font-weight: 600; border-radius: 0px 0px 7px 7px;'
@@ -389,10 +390,10 @@
                 <div id='grid-stats' class='tooltipParent'>
                     <span id='grid-words-count' tabindex='1'>0</span>
                     <span class='tooltip'>
-                        <div style='margin: 0;'>
+                        <span id='words-count-descr' style='margin: 0;'>
                             Words on grid counter. Letters count:
                             <span id='letters-count'></span>
-                        </div>
+                        </span>
                     </span>
                 </div>
 
@@ -829,6 +830,373 @@
                     }
                 }
             }
+        
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Array"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "hideCells-label",
+                            "childNodesTexts": [
+                                "Hide inactive cells completely"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "words-summary",
+                            "childNodesTexts": [
+                                "Words (answers)"
+                            ]
+                        },
+                        {
+                            "id": "words",
+                            "childNodesTexts": [],
+                            "placeholder": "The list of words to guess"
+                        },
+                        {
+                            "id": "loadWordsButton",
+                            "childNodesTexts": [
+                                "📁 Load",
+                                "Load words list from .txt file"
+                            ]
+                        },
+                        {
+                            "id": "saveWordsButton",
+                            "childNodesTexts": [
+                                "💾 Save",
+                                "Save words list to .txt file"
+                            ]
+                        },
+                        {
+                            "id": "startButton",
+                            "childNodesTexts": [
+                                "Start"
+                            ]
+                        },
+                        {
+                            "id": "grid-score-label",
+                            "childNodesTexts": [
+                                "Score:"
+                            ]
+                        },
+                        {
+                            "id": "undo-mistake",
+                            "childNodesTexts": [
+                                "<",
+                                "Undo the last mistake"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Victory!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Statistics"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Time (min:sec)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Mistakes"
+                            ]
+                        },
+                        {
+                            "id": "words-count-descr",
+                            "childNodesTexts": [
+                                "Words on grid counter. Letters count: "
+                            ]
+                        },
+                        {
+                            "id": "wordInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type your guess"
+                        },
+                        {
+                            "id": "backspace",
+                            "childNodesTexts": [
+                                "<",
+                                "Delete the last letter"
+                            ]
+                        },
+                        {
+                            "id": "guessedWordsLabel",
+                            "childNodesTexts": [
+                                "Guessed words"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Массив"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "hideCells-label",
+                            "childNodesTexts": [
+                                "Полностью скрывать неактивные клетки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "words-summary",
+                            "childNodesTexts": [
+                                "Слова (ответы)"
+                            ]
+                        },
+                        {
+                            "id": "words",
+                            "childNodesTexts": [],
+                            "placeholder": "Список слов для отгадывания"
+                        },
+                        {
+                            "id": "loadWordsButton",
+                            "childNodesTexts": [
+                                "📁 Загрузить",
+                                "Загрузить слова из файла .txt"
+                            ]
+                        },
+                        {
+                            "id": "saveWordsButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить",
+                                "Сохранить слова в файл .txt"
+                            ]
+                        },
+                        {
+                            "id": "startButton",
+                            "childNodesTexts": [
+                                "Начать"
+                            ]
+                        },
+                        {
+                            "id": "grid-score-label",
+                            "childNodesTexts": [
+                                "Счёт:"
+                            ]
+                        },
+                        {
+                            "id": "undo-mistake",
+                            "childNodesTexts": [
+                                "<",
+                                "Отменить последнюю ошибку"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Победа!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Статистика"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Время (мин:сек)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Ошибок"
+                            ]
+                        },
+                        {
+                            "id": "words-count-descr",
+                            "childNodesTexts": [
+                                "Счётчик слов на сетке. Число букв в них: "
+                            ]
+                        },
+                        {
+                            "id": "wordInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите догадку"
+                        },
+                        {
+                            "id": "backspace",
+                            "childNodesTexts": [
+                                "<",
+                                "Стереть последнюю букву"
+                            ]
+                        },
+                        {
+                            "id": "guessedWordsLabel",
+                            "childNodesTexts": [
+                                "Отгаданные слова"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
         </script>
     </body>
 </html>

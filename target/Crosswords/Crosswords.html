@@ -741,19 +741,19 @@
         </style>
     </head>
     <body>
-        <h1>Crosswords</h1>
+        <h1 id='game-name'>Crosswords</h1>
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Settings</summary>
+            <summary id='settings-summary'>Settings</summary>
 
             <div class='setting'>
                 <input type='checkbox' id='editor' autocomplete='off'>
-                <label for='editor'>Answers/Editor</label>
+                <label for='editor' id='editor-label'>Answers/Editor</label>
             </div>
 
             <div class='setting'>
-                <label for='roundness'>Cell roundness</label>
+                <label for='roundness' id='roundness-label'>Cell roundness</label>
                 <input type='range' id='roundness' min='0' max='50'>
                 <span id='roundness-value'>%</span>
             </div>
@@ -1171,6 +1171,7 @@
                         && e.tagName !== 'DETAILS'
                         && e.tagName !== 'TABLE'
                         && e.id
+                        && e.id !== 'lang'
                     ) {
                         /** @type {LangElement} */
                         let newEl = {};
@@ -1182,7 +1183,7 @@
             
                             for (let n of e.childNodes) {
                                 if (n.textContent && n.textContent.trim() !== '') {
-                                    newEl.childNodesTexts.push(n.textContent);
+                                    newEl.childNodesTexts.push(n.textContent.trim());
                                 }
                             }
                         } else {
@@ -2060,6 +2061,425 @@
             }
 
             fillGrid();
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Crosswords"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "editor-label",
+                            "childNodesTexts": [
+                                "Answers/Editor"
+                            ]
+                        },
+                        {
+                            "id": "roundness-label",
+                            "childNodesTexts": [
+                                "Cell roundness"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "load-button-label",
+                            "childNodesTexts": [
+                                "📁 Open crossword"
+                            ]
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Start"
+                            ]
+                        },
+                        {
+                            "id": "questions-summary",
+                            "childNodesTexts": [
+                                "Questions"
+                            ]
+                        },
+                        {
+                            "id": "questions-ver-name",
+                            "childNodesTexts": [
+                                "Vertical"
+                            ]
+                        },
+                        {
+                            "id": "questions-hor-name",
+                            "childNodesTexts": [
+                                "Horizontal"
+                            ]
+                        },
+                        {
+                            "id": "save-button",
+                            "childNodesTexts": [
+                                "💾 Save crossword"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Victory!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Statistics"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Time (min:sec)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Mistakes"
+                            ]
+                        },
+                        {
+                            "id": "shift-left",
+                            "childNodesTexts": [
+                                "←",
+                                "Shift all words left"
+                            ]
+                        },
+                        {
+                            "id": "shift-right",
+                            "childNodesTexts": [
+                                "→",
+                                "Shift all words right"
+                            ]
+                        },
+                        {
+                            "id": "shift-up",
+                            "childNodesTexts": [
+                                "↑",
+                                "Shift all words up"
+                            ]
+                        },
+                        {
+                            "id": "shift-down",
+                            "childNodesTexts": [
+                                "↓",
+                                "Shift all words down"
+                            ]
+                        },
+                        {
+                            "id": "editor-ok",
+                            "childNodesTexts": [
+                                "OK",
+                                "Apply all changes and rebuild the crossword"
+                            ]
+                        },
+                        {
+                            "id": "editor-word",
+                            "childNodesTexts": [],
+                            "placeholder": "Word"
+                        },
+                        {
+                            "id": "editor-description",
+                            "childNodesTexts": [],
+                            "placeholder": "Description"
+                        },
+                        {
+                            "id": "editor-delete",
+                            "childNodesTexts": [
+                                "X",
+                                "Remove current word"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Кроссворды"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "editor-label",
+                            "childNodesTexts": [
+                                "Ответы/Конструктор"
+                            ]
+                        },
+                        {
+                            "id": "roundness-label",
+                            "childNodesTexts": [
+                                "Закругление клеток"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "load-button-label",
+                            "childNodesTexts": [
+                                "📁 Открыть кроссворд"
+                            ]
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Начать"
+                            ]
+                        },
+                        {
+                            "id": "questions-summary",
+                            "childNodesTexts": [
+                                "Вопросы"
+                            ]
+                        },
+                        {
+                            "id": "questions-ver-name",
+                            "childNodesTexts": [
+                                "По вертикали"
+                            ]
+                        },
+                        {
+                            "id": "questions-hor-name",
+                            "childNodesTexts": [
+                                "По горизонтали"
+                            ]
+                        },
+                        {
+                            "id": "save-button",
+                            "childNodesTexts": [
+                                "💾 Сохранить кроссворд"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Победа!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Статистика"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Время (мин:сек)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Ошибок"
+                            ]
+                        },
+                        {
+                            "id": "shift-left",
+                            "childNodesTexts": [
+                                "←",
+                                "Сдвинуть все слова влево"
+                            ]
+                        },
+                        {
+                            "id": "shift-right",
+                            "childNodesTexts": [
+                                "→",
+                                "Сдвинуть все слова вправо"
+                            ]
+                        },
+                        {
+                            "id": "shift-up",
+                            "childNodesTexts": [
+                                "↑",
+                                "Сдвинуть все слова вверх"
+                            ]
+                        },
+                        {
+                            "id": "shift-down",
+                            "childNodesTexts": [
+                                "↓",
+                                "Сдвинуть все слова вниз"
+                            ]
+                        },
+                        {
+                            "id": "editor-ok",
+                            "childNodesTexts": [
+                                "OK",
+                                "Принять все изменения и перестроить кроссворд"
+                            ]
+                        },
+                        {
+                            "id": "editor-word",
+                            "childNodesTexts": [],
+                            "placeholder": "Слово"
+                        },
+                        {
+                            "id": "editor-description",
+                            "childNodesTexts": [],
+                            "placeholder": "Описание"
+                        },
+                        {
+                            "id": "editor-delete",
+                            "childNodesTexts": [
+                                "X",
+                                "Удалить текущее слово"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
         </script>
     </body>
 </html>
