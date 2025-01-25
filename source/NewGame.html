@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>New Game</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            :root {
+                --cell-size: calc(32px + 3vw);
+                --cell-border: calc(var(--cell-size) * 0.05);
+                --font-size: calc(var(--cell-size) * 0.65);
+                --row-sum-font-size: calc(var(--font-size) * 0.7);
+            }
+
+            #container {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            #grid {
+                display: flex;
+                flex-direction: column;
+                row-gap: 2px;
+                overflow-x: auto;
+                overflow-y: hidden;
+            }
+
+            @keyframes win-blink {
+                0% {
+                    box-shadow: inset 0px 0px 25px var(--accent1);
+                }
+                50% {
+                    box-shadow: none;
+                }
+                100% {
+                    box-shadow: inset 0px 0px 25px var(--secondary-colour);
+                }
+            }
+
+            #grid-victory {
+                align-self: center;
+                text-align: center;
+                font-size: 1.5em;
+                font-weight: 600;
+                background-image: linear-gradient(315deg, var(--accent1), transparent 15% 85%, var(--accent1));
+                border: 2px solid var(--accent1);
+                border-radius: 7px 7px 0px 0px;
+                padding: 2px;
+                width: 100%;
+                animation: win-blink 6s ease alternate infinite;
+            }
+
+            #grid-win {
+                display: none;
+                flex-direction: column;
+            }
+
+            .row {
+                display: flex;
+                column-gap: 2px;
+                width: fit-content;
+                margin: 0;
+            }
+
+            .cell {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: transparent;
+                border: var(--cell-border) inset var(--accent1);
+                border-radius: 4px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: var(--font-size);
+                font-weight: 900;
+                text-align: center;
+                width: var(--cell-size);
+                height: var(--cell-size);
+                padding: 2px;
+                margin: 0;
+                cursor: pointer;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                outline-style: none;
+                transition: all 1s ease;
+            }
+
+            .cell::selection {
+                background-color: transparent;
+            }
+
+            .cell:focus,
+            .cell:hover {
+                background-color: transparent;
+                color: var(--secondary-colour);
+                border-color: var(--accent2);
+                box-shadow: inset 0px 0px 10px var(--accent1);
+                transition:
+                    all 0s ease,
+                    transform 0.3s ease;
+            }
+
+            .locked,
+            .cell:valid {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+
+            .cell:valid {
+                border-color: var(--secondary-colour);
+            }
+
+            .cell:valid:focus,
+            .cell:valid:hover {
+                background-color: transparent;
+            }
+
+            .sum {
+                background-image: linear-gradient(20deg, var(--accent2), transparent 10% 90%, var(--accent2));
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-style: double;
+            }
+
+            .sum:focus,
+            .sum:hover {
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border-color: var(--accent1);
+                box-shadow: none;
+                transform: scale(1.3);
+            }
+
+            .row-sum {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-top: 2px solid var(--accent1);
+                border-bottom: 2px solid var(--secondary-colour);
+                border-radius: 7px;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: var(--row-sum-font-size);
+                font-weight: 600;
+                cursor: cell;
+                width: var(--cell-size);
+                margin-right: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id='game-name'>New Game</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary id='settings-summary'>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+        <button id='start' onclick='fillGrid()'>Start</button>
+
+        <!-- Victory text -->
+        <div id='grid-win' tabindex='0'>
+            <span id='grid-victory' tabindex='0'>Victory!</span>
+            
+            <!-- End stats -->
+            <table id='grid-win-stats'>
+                <th id='grid-win-stats-label' colspan='2' tabindex='0'>
+                    Statistics
+                </th>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-time-label' tabindex='0'>Time (min:sec)</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-time' tabindex='0'>00:00</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-mistakes-label' tabindex='0'>Mistakes</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-mistakes' tabindex='0'>0</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Grid -->
+        <div id='container'>
+            <div id='grid'></div>
+        </div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLDivElement} */
+            let grid = document.getElementById('grid');
+            /** @type {HTMLSpanElement} */
+            let win = document.getElementById('grid-win');
+            /** {HTMLSpanElement} */
+            let time = document.getElementById('grid-win-time');
+            /** {HTMLSpanElement} */
+            let mistakes = document.getElementById('grid-win-mistakes');
+
+            // Variables
+            /** @type {number} */
+            let mistakesCount;
+            /** @type {number} */
+            let blanks;
+            /** @type {number} */
+            let timerStart;
+            /** @type {number} */
+            let timerEnd;
+
+            function fillGrid() {
+                // Clean up before starting new game
+                while (grid.hasChildNodes()) {
+                    grid.lastChild.remove();
+                }
+
+                win.style.display = 'none';
+                timerStart = Date.now();
+                mistakesCount = 0;
+                blanks = 0;
+
+                // Create cells
+                for (let y = 0; y < 7; y++) {
+                    /** @type {HTMLDivElement} */
+                    let row = grid.appendChild(
+                        document.createElement('div')
+                    );
+                    row.classList.add('row');
+
+                    let rowSumHint = row.appendChild(
+                        document.createElement('span')
+                    );
+
+                    /** @type {number} */
+                    let rowSum = 0;
+
+                    for (let x = 0; x < 7; x++) {
+                        /** @type {number} */
+                        let random = Math.floor(Math.random() * 10);
+
+                        /** @type {HTMLInputElement} */
+                        let cell = row.appendChild(
+                            document.createElement('input')
+                        );
+                        if (x % 2 === 0 || y % 2 === 0) {
+                            cell.classList.add('cell');
+                            cell.required = true;
+                            cell.pattern = random;
+                            cell.maxLength = 1;
+                            rowSum += random;
+                        } else {
+                            cell.classList.add('cell', 'sum');
+                            cell.readOnly = true;
+                        }
+                        cell.id = `${x};${y}`;
+                        cell.dataset.x = x;
+                        cell.dataset.y = y;
+
+                        // Cell events
+                        cell.addEventListener('input', function (event) {
+                            this.select();
+
+                            if (this.value !== this.pattern) {
+                                mistakesCount ++;
+                            } else {
+                                checkWin();
+                            }
+                        });
+
+                        cell.addEventListener('click', function (event) {
+                            this.select();
+                        });
+
+                        cell.addEventListener('keydown', function (event) {
+                            if (event.key !== 'ArrowDown'
+                                && event.key !== 'ArrowUp'
+                                && event.key !== 'ArrowLeft'
+                                && event.key !== 'ArrowRight'
+                            ) {
+                                return;
+                            }
+                            
+                            event.preventDefault();
+
+                            /** @type {HTMLInputElement} */
+                            let nextCell;
+
+                            switch (event.key) {
+                                case 'ArrowDown':
+                                    nextCell = getCell(x, y + 1);
+                                    break;
+                                case 'ArrowUp':
+                                    nextCell = getCell(x, y - 1);
+                                    break;
+                                case 'ArrowLeft':
+                                    nextCell = getCell(x - 1, y);
+                                    break;
+                                case 'ArrowRight':
+                                    nextCell = getCell(x + 1, y);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            if (nextCell) {
+                                nextCell.select();
+                            }
+                        });
+                    }
+
+                    rowSumHint.classList.add('row-sum');
+                    rowSumHint.textContent = rowSum;
+                }
+
+                // Count sums of nearby cells
+                for (let s of grid.getElementsByClassName('sum')) {
+                    /** @type {number} */
+                    let sum = 0;
+
+                    for (let y = -1; y < 2; y++) {
+                        for (let x = -1; x < 2; x++) {
+                            /** @type {HTMLInputElement} */
+                            let cell = getCell(
+                                +s.dataset.x + x,
+                                +s.dataset.y + y
+                            );
+
+                            if (cell && !cell.classList.contains('sum')) {
+                                sum += +cell.pattern;
+                            }
+                        }
+                    }
+
+                    s.value = sum;
+                }
+
+                // Show random ordinary cells with revealed numbers
+                /** @type {HTMLInputElement[]} */
+                let cells = Array.from(grid.getElementsByClassName('cell')).filter(
+                    (c) => !c.classList.contains('sum')
+                );
+
+                blanks = cells.length;
+
+                for (const c of cells) {
+                    if (Math.random() > 0.3) {
+                        c.classList.add('locked');
+                        c.value = c.pattern;
+                        c.readOnly = true;
+                        blanks --;
+                    }
+                }
+            }
+
+            /**
+             * @param {string | number} x
+             * @param {string | number} y
+            */
+            function getCell(x, y) {
+                return document.getElementById(`${x};${y}`);
+            }
+
+            function checkWin() {
+                /** @type {boolean} */
+                let allCorrect = true;
+                /** @type {HTMLInputElement[]} */
+                let inputs = grid.getElementsByClassName('cell');
+                
+                for (let i of inputs) {
+                    if (i.readOnly === false && !i.checkValidity()) {
+                        allCorrect = false;
+                        return;
+                    }
+                }
+
+                if (allCorrect) {
+                    if (win.style.display === 'flex') return;
+
+                    win.style.display = 'flex';
+                    timerEnd = Date.now();
+
+                    let date = new Date(timerEnd - timerStart);
+                    let min = date.getMinutes();
+                    let sec = date.getSeconds();
+
+                    time.textContent = `${
+                        min > 9 ? min : `0${min}`
+                    }:${
+                        sec > 9 ? sec : `0${sec}`
+                    }`;
+                    mistakes.textContent = mistakesCount;
+
+                    win.focus();
+                }
+            }
+
+            fillGrid();
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Template"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Шаблон"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
+        </script>
+    </body>
+</html>
