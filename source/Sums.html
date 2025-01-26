@@ -3,15 +3,17 @@
     <head>
         <meta charset='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <title>New Game</title>
+        <title>Sums</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='stylesheet' href='../resources/VitalStyle.css' />
 
         <style>
             :root {
-                --cell-size: calc(32px + 3vw);
+                --cell-size: calc(24px + 3.5vw);
                 --cell-border: calc(var(--cell-size) * 0.05);
                 --font-size: calc(var(--cell-size) * 0.65);
+                --sum-font-size: calc(var(--font-size) * 0.9);
+                --row-sum-size: calc(var(--cell-size) * 0.8);
                 --row-sum-font-size: calc(var(--font-size) * 0.7);
             }
 
@@ -71,7 +73,8 @@
                 align-items: center;
                 justify-content: center;
                 background-color: transparent;
-                border: var(--cell-border) inset var(--accent1);
+                color: var(--secondary-colour);
+                border: var(--cell-border) ridge var(--accent1);
                 border-radius: 4px;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: var(--font-size);
@@ -95,35 +98,23 @@
 
             .cell:focus,
             .cell:hover {
-                background-color: transparent;
-                color: var(--secondary-colour);
-                border-color: var(--accent2);
-                box-shadow: inset 0px 0px 10px var(--accent1);
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
                 transition:
                     all 0s ease,
                     transform 0.3s ease;
             }
 
-            .locked,
-            .cell:valid {
+            .cell:valid,
+            .locked {
                 background-color: var(--accent2);
-                color: var(--secondary-colour);
-            }
-
-            .cell:valid {
-                border-color: var(--secondary-colour);
-            }
-
-            .cell:valid:focus,
-            .cell:valid:hover {
-                background-color: transparent;
             }
 
             .sum {
-                background-image: linear-gradient(20deg, var(--accent2), transparent 10% 90%, var(--accent2));
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-                border-style: double;
+                background-color: transparent;
+                color: var(--secondary-colour);
+                border-style: none;
+                font-size: var(--sum-font-size);
             }
 
             .sum:focus,
@@ -131,8 +122,8 @@
                 background-color: var(--primary-colour);
                 color: var(--secondary-colour);
                 border-color: var(--accent1);
-                box-shadow: none;
-                transform: scale(1.3);
+                border-style: inset;
+                transform: scale(1.35);
             }
 
             .row-sum {
@@ -140,19 +131,30 @@
                 align-items: center;
                 justify-content: center;
                 border-top: 2px solid var(--accent1);
-                border-bottom: 2px solid var(--secondary-colour);
-                border-radius: 7px;
+                border-left: 2px solid var(--secondary-colour);
+                border-bottom: 2px solid var(--accent1);
+                border-radius: 4px;
+                border-top-left-radius: 40%;
+                border-bottom-left-radius: 40%;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: var(--row-sum-font-size);
                 font-weight: 600;
                 cursor: cell;
-                width: var(--cell-size);
+                width: var(--row-sum-size);
                 margin-right: 4px;
+                opacity: 0.8;
+                transition: all 0.5s ease;
+            }
+
+            .row-sum:hover {
+                opacity: 1;
+                transform: translateX(4px);
+                transition: all 0.5s ease;
             }
         </style>
     </head>
     <body>
-        <h1 id='game-name'>New Game</h1>
+        <h1 id='game-name'>Sums</h1>
 
         <!-- Settings -->
         <details id='settings'>
@@ -160,6 +162,31 @@
         </details>
 
         <!-- Page main body -->
+        <!-- Difficulty settings -->
+        <details>
+            <summary id='difficulty-summary'>Difficulty settings</summary>
+
+            <ul id='difficulty-settings'>
+                <li>
+                    <label for='difficulty-level' id='difficulty-level-label'>Difficulty level</label>
+                    <input id='difficulty-level' type='number' min='1' max='9' value='3'>
+                </li>
+
+                <li>
+                    <label for='difficulty-digits' id='difficulty-digits-label'>Number of digits</label>
+                    <input id='difficulty-digits' type='number' min='2' max='10' value='10'>
+                </li>
+
+                <li class='tooltipParent'>
+                    <input id='difficulty-compare' type='checkbox'>
+                    <label for='difficulty-compare' id='difficulty-compare-label'>Cell value hint</label>
+                    <span id='difficulty-compare-tooltip' class='tooltip'>
+                        Mark cells whose value is more than digits number divided by 2 (only when digits number > 3).
+                    </span>
+                </li>
+            </ul>
+        </details>
+
         <button id='start' onclick='fillGrid()'>Start</button>
 
         <!-- Victory text -->
@@ -189,6 +216,33 @@
                         <span id='grid-win-mistakes' tabindex='0'>0</span>
                     </td>
                 </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-blanks-label' tabindex='0'>Cells filled</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-blanks' tabindex='0'>0</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-digits-label' tabindex='0'>Digits number</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-digits' tabindex='0'>10</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <span id='grid-win-hints-label' tabindex='0'>Value hints</span>
+                    </td>
+                    <td>
+                        <span id='grid-win-hints' tabindex='0'>-</span>
+                    </td>
+                </tr>
             </table>
         </div>
 
@@ -205,20 +259,55 @@
         <script src='../resources/VitalLogic.js'></script>
         <script>
             // Elements
+            /** @type {HTMLInputElement} */
+            let difficultyLevel = document.getElementById('difficulty-level');
+            /** @type {HTMLInputElement} */
+            let difficultyDigits = document.getElementById('difficulty-digits');
+            /** @type {HTMLInputElement} */
+            let difficultyCompare = document.getElementById('difficulty-compare');
             /** @type {HTMLDivElement} */
             let grid = document.getElementById('grid');
             /** @type {HTMLSpanElement} */
             let win = document.getElementById('grid-win');
-            /** {HTMLSpanElement} */
+            /** @type {HTMLSpanElement} */
             let time = document.getElementById('grid-win-time');
-            /** {HTMLSpanElement} */
+            /** @type {HTMLSpanElement} */
             let mistakes = document.getElementById('grid-win-mistakes');
+            /** @type {HTMLSpanElement} */
+            let blanks = document.getElementById('grid-win-blanks');
+            /** @type {HTMLSpanElement} */
+            let digits = document.getElementById('grid-win-digits');
+            /** @type {HTMLSpanElement} */
+            let hints = document.getElementById('grid-win-hints');
+
+            difficultyLevel.value = localStorage.getItem('difficulty') || 3;
+            difficultyDigits.value = localStorage.getItem('digits') || 10;
+            difficultyCompare.checked = localStorage.getItem('compare') === 'true';
+
+            difficultyLevel.addEventListener('change', function (event) {
+                localStorage.setItem('difficulty', this.value);
+                fillGrid();
+            });
+
+            difficultyDigits.addEventListener('change', function (event) {
+                localStorage.setItem('digits', this.value);
+                fillGrid();
+            });
+
+            difficultyCompare.addEventListener('change', function (event) {
+                localStorage.setItem('compare', this.checked);
+                fillGrid();
+            });
 
             // Variables
             /** @type {number} */
             let mistakesCount;
             /** @type {number} */
-            let blanks;
+            let blanksCount;
+            /** @type {number} */
+            let digitsCount;
+            /** @type {number} */
+            let difficulty;
             /** @type {number} */
             let timerStart;
             /** @type {number} */
@@ -230,10 +319,12 @@
                     grid.lastChild.remove();
                 }
 
+                difficulty = clamp(1, +difficultyLevel.value, 9) / 10;
+                digitsCount = clamp(2, +difficultyDigits.value, 10);
                 win.style.display = 'none';
                 timerStart = Date.now();
                 mistakesCount = 0;
-                blanks = 0;
+                blanksCount = 0;
 
                 // Create cells
                 for (let y = 0; y < 7; y++) {
@@ -252,7 +343,7 @@
 
                     for (let x = 0; x < 7; x++) {
                         /** @type {number} */
-                        let random = Math.floor(Math.random() * 10);
+                        let random = Math.floor(Math.random() * digitsCount);
 
                         /** @type {HTMLInputElement} */
                         let cell = row.appendChild(
@@ -276,10 +367,29 @@
                         cell.addEventListener('input', function (event) {
                             this.select();
 
-                            if (this.value !== this.pattern) {
-                                mistakesCount ++;
+                            if (this.value === this.pattern) {
+                                this.classList.add('locked');
+                                this.readOnly = true;
+                                this.blur();
+                                
+                                // Switch to the 'next' cell
+                                if (checkWin() === false) {
+                                    /** @type {{x: number, y: number}[]} */
+                                    let neighbours = [
+                                        {x: x + 1, y: y},
+                                        {x: 0, y: y + 1},
+                                        {x: 0, y: 0}
+                                    ];
+
+                                    for (let n of neighbours) {
+                                        if (getCell(n.x, n.y)) {
+                                            getCell(n.x, n.y).focus();
+                                            break;
+                                        }
+                                    }
+                                }
                             } else {
-                                checkWin();
+                                mistakesCount ++;
                             }
                         });
 
@@ -324,7 +434,7 @@
                         });
                     }
 
-                    rowSumHint.classList.add('row-sum');
+                    rowSumHint.classList.add('row-sum', 'tooltipParent');
                     rowSumHint.textContent = rowSum;
                 }
 
@@ -356,16 +466,34 @@
                     (c) => !c.classList.contains('sum')
                 );
 
-                blanks = cells.length;
+                blanksCount = cells.length;
 
                 for (const c of cells) {
-                    if (Math.random() > 0.3) {
+                    if (Math.random() > difficulty) {
                         c.classList.add('locked');
                         c.value = c.pattern;
                         c.readOnly = true;
-                        blanks --;
+                        blanksCount --;
+                    } else if (difficultyCompare.checked
+                        && digitsCount > 3
+                        && +c.pattern > digitsCount / 2
+                    ) {
+                        c.placeholder = '>';
                     }
                 }
+            }
+
+            /**
+             * @param {number} min
+             * @param {number} value
+             * @param {number} max
+            */
+            function clamp(min, value, max) {
+                return value > max
+                    ? max
+                    : value < min
+                        ? min
+                        : value;
             }
 
             /**
@@ -383,14 +511,16 @@
                 let inputs = grid.getElementsByClassName('cell');
                 
                 for (let i of inputs) {
-                    if (i.readOnly === false && !i.checkValidity()) {
+                    if (i.readOnly === false
+                        && i.value !== i.pattern
+                ) {
                         allCorrect = false;
-                        return;
+                        return false;
                     }
                 }
 
                 if (allCorrect) {
-                    if (win.style.display === 'flex') return;
+                    if (win.style.display === 'flex') return true;
 
                     win.style.display = 'flex';
                     timerEnd = Date.now();
@@ -405,12 +535,17 @@
                         sec > 9 ? sec : `0${sec}`
                     }`;
                     mistakes.textContent = mistakesCount;
+                    blanks.textContent = blanksCount;
+                    digits.textContent = digitsCount;
+                    hints.textContent = (difficultyCompare.checked && digitsCount > 3)
+                        ? '+'
+                        : '-';
 
                     win.focus();
                 }
-            }
 
-            fillGrid();
+                return allCorrect;
+            }
 
             generateLanguagesList([
                 {
@@ -418,9 +553,9 @@
                     langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
                     elements: [
                         {
-                            "id": "page-title",
+                            "id": "game-name",
                             "childNodesTexts": [
-                                "Template"
+                                "Sums"
                             ]
                         },
                         {
@@ -483,6 +618,84 @@
                             ]
                         },
                         {
+                            "id": "difficulty-summary",
+                            "childNodesTexts": [
+                                "Difficulty settings"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-level-label",
+                            "childNodesTexts": [
+                                "Difficulty level"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-digits-label",
+                            "childNodesTexts": [
+                                "Number of digits"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-label",
+                            "childNodesTexts": [
+                                "Cell value hint"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-tooltip",
+                            "childNodesTexts": [
+                                "Mark cells whose value is more than digits number divided by 2 (only when digits number > 3)."
+                            ]
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Start"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Victory!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Statistics"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Time (min:sec)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Mistakes"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-blanks-label",
+                            "childNodesTexts": [
+                                "Cells filled"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-digits-label",
+                            "childNodesTexts": [
+                                "Digits number"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-hints-label",
+                            "childNodesTexts": [
+                                "Value hints"
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
                                 "Made by Vitaly Pavlovich Ulyanov."
@@ -502,9 +715,9 @@
                     langTags: ['ru', 'ru-RU'],
                     elements: [
                         {
-                            "id": "page-title",
+                            "id": "game-name",
                             "childNodesTexts": [
-                                "Шаблон"
+                                "Суммы"
                             ]
                         },
                         {
@@ -564,6 +777,84 @@
                             "id": "exportLang",
                             "childNodesTexts": [
                                 "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-summary",
+                            "childNodesTexts": [
+                                "Настройки сложности"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-level-label",
+                            "childNodesTexts": [
+                                "Уровень сложности"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-digits-label",
+                            "childNodesTexts": [
+                                "Количество цифр"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-label",
+                            "childNodesTexts": [
+                                "Подсказки значений клеток"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-tooltip",
+                            "childNodesTexts": [
+                                "Помечать клетки со значением больше, чем количество цифр, делённое на 2 (только если оно > 3)."
+                            ]
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Начать"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Победа!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Статистика"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Время (мин:сек)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Ошибок"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-blanks-label",
+                            "childNodesTexts": [
+                                "Клеток заполнено"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-digits-label",
+                            "childNodesTexts": [
+                                "Количество цифр"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-hints-label",
+                            "childNodesTexts": [
+                                "Подсказки значений"
                             ]
                         },
                         {
