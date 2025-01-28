@@ -9,12 +9,18 @@
 
         <style>
             :root {
-                --cell-size: calc(26px + 2.8vw);
+                --cell-size: calc(32px + 2.3vw);
                 --cell-border: calc(var(--cell-size) * 0.05);
                 --font-size: calc(var(--cell-size) * 0.65);
                 --sum-font-size: calc(var(--font-size) * 0.9);
                 --row-sum-size: calc(var(--cell-size) * 0.8);
                 --row-sum-font-size: calc(var(--font-size) * 0.75);
+            }
+
+            @media (max-width: 410px) {
+                :root {
+                    --cell-size: calc(28px + 2.6vw);
+                }
             }
 
             #container {
@@ -78,30 +84,31 @@
                 align-items: center;
                 justify-content: center;
                 background-color: transparent;
-                margin: 0;
-                width: var(--cell-size);
-                height: var(--cell-size);
-            }
-
-            .cell {
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
-                border: var(--cell-border) ridge var(--accent1);
                 border-radius: 4px;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: var(--font-size);
                 font-weight: 900;
                 text-align: center;
                 padding: 2px;
-                cursor: pointer;
+                margin: 0;
+                outline-style: none;
+                width: var(--cell-size);
+                height: var(--cell-size);
                 user-select: none;
                 -moz-user-select: none;
                 -webkit-user-select: none;
-                outline-style: none;
+            }
+
+            .cell {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+                border: var(--cell-border) ridge var(--accent1);
+                cursor: pointer;
                 transition: all 1s ease;
             }
 
             .cell::selection,
+            .sum::selection,
             .cell:invalid {
                 background-color: transparent;
             }
@@ -109,12 +116,12 @@
             .cell:focus,
             .cell:hover,
             .cell:invalid:focus,
-            .cell:invalid:hover {
+            .cell:invalid:hover,
+            .highlight,
+            .highlight:invalid {
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
-                transition:
-                    all 0s ease,
-                    transform 0.3s ease;
+                transition: none;
             }
 
             .cell:read-only:focus {
@@ -128,8 +135,11 @@
             .sum {
                 background-color: transparent;
                 color: var(--secondary-colour);
-                border-style: none;
+                border-color: var(--secondary-colour);
+                border-style: solid;
+                border-radius: 50%;
                 font-size: var(--sum-font-size);
+                cursor: cell;
             }
 
             .sum:focus,
@@ -137,8 +147,9 @@
                 background-color: var(--primary-colour);
                 color: var(--secondary-colour);
                 border-color: var(--accent1);
-                border-style: inset;
+                border-radius: 4px;
                 transform: scale(1.4);
+                transition: all 0.3s ease;
             }
 
             .column-sum,
@@ -180,7 +191,8 @@
             .row-sum:focus,
             .row-sum:hover {
                 opacity: 1;
-                border-color: var(--accent1);
+                background-color: var(--accent1);
+                color: var(--primary-colour);
             }
         </style>
     </head>
@@ -282,6 +294,11 @@
             <div id='grid'></div>
         </div>
 
+        <!-- Invisible texts for sums' titles -->
+        <p style='display: none;' id='row-sum-title'>Sum of cells in this row</p>
+        <p style='display: none;' id='col-sum-title'>Sum of cells in this column</p>
+        <p style='display: none;' id='sqr-sum-title'>Sum of cells in this square</p>
+
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
         </p>
@@ -310,6 +327,12 @@
             let digits = document.getElementById('grid-win-digits');
             /** @type {HTMLSpanElement} */
             let hints = document.getElementById('grid-win-hints');
+            /** @type {HTMLParagraphElement} */
+            let rowSumTitle = document.getElementById('row-sum-title');
+            /** @type {HTMLParagraphElement} */
+            let colSumTitle = document.getElementById('col-sum-title');
+            /** @type {HTMLParagraphElement} */
+            let sqrSumTitle = document.getElementById('sqr-sum-title');
 
             difficultyLevel.value = localStorage.getItem('difficulty') || 3;
             difficultyDigits.value = localStorage.getItem('digits') || 10;
@@ -346,8 +369,6 @@
             /** @type {number} */
             let timerEnd;
 
-            fillGrid();
-
             function fillGrid() {
                 // Clean up before starting new game
                 while (grid.hasChildNodes()) {
@@ -374,10 +395,19 @@
                         let cell;
 
                         if (x > 0 && y > 0) {
-                            cell = row.appendChild(
-                                document.createElement('input')
-                            );
-                            cell.classList.add('cell-container', 'cell');
+                            // Input or sum
+                            if (x % 2 !== 0 || y % 2 !== 0) {
+                                cell = row.appendChild(
+                                    document.createElement('input')
+                                );
+                                cell.classList.add('cell-container', 'cell');
+                            } else {
+                                cell = row.appendChild(
+                                    document.createElement('span')
+                                );
+                                cell.classList.add('cell-container', 'sum');
+                                cell.title = sqrSumTitle.textContent;
+                            }
                         } else {
                             cell = row.appendChild(
                                 document.createElement('span')
@@ -385,8 +415,54 @@
 
                             if (x === 0 && y > 0) {
                                 cell.classList.add('cell-container', 'row-sum');
+                                cell.title = rowSumTitle.textContent;
+                                cell.addEventListener('mouseenter', function (event) { this.focus(); });
+                                cell.addEventListener('mouseleave', function (event) { this.blur(); });
+                                cell.addEventListener('focusin', function (event) {
+                                    for (let i = 1; i < 8; i++) {
+                                        /** @type {HTMLInputElement} */
+                                        let c = getCell(i, y);
+
+                                        if (c && !c.classList.contains('sum')) {
+                                            c.classList.add('highlight');
+                                        }
+                                    }
+                                });
+                                cell.addEventListener('focusout', function (event) {
+                                    for (let i = 1; i < 8; i++) {
+                                        /** @type {HTMLInputElement} */
+                                        let c = getCell(i, y);
+
+                                        if (c && !c.classList.contains('sum')) {
+                                            c.classList.remove('highlight');
+                                        }
+                                    }
+                                });
                             } else if (x > 0 && y === 0) {
                                 cell.classList.add('cell-container', 'column-sum');
+                                cell.title = colSumTitle.textContent;
+                                cell.addEventListener('mouseenter', function (event) { this.focus(); });
+                                cell.addEventListener('mouseleave', function (event) { this.blur(); });
+                                cell.addEventListener('focusin', function (event) {
+                                    for (let i = 1; i < 8; i++) {
+                                        /** @type {HTMLInputElement} */
+                                        let c = getCell(x, i);
+
+                                        if (c && !c.classList.contains('sum')) {
+                                            c.classList.add('highlight');
+                                        }
+                                    }
+                                });
+                                cell.addEventListener('focusout', function (event) {
+                                    for (let i = 1; i < 8; i++) {
+                                        /** @type {HTMLInputElement} */
+                                        let c = getCell(x, i);
+
+                                        if (c && !c.classList.contains('sum')) {
+                                            c.classList.remove('highlight');
+                                        }
+                                    }
+                                });
                             } else {
                                 cell.classList.add('corner');
                             }
@@ -425,18 +501,15 @@
                             cell.addEventListener('click', function (event) {
                                 this.select();
                             });
-
                             cell.addEventListener('keyup', function (event) {
                                 if (this.value !== this.pattern) {
                                     this.readOnly = false;
                                 }
                             });
-
                             cell.addEventListener('input', function (event) {
                                 this.readOnly = true;
 
                                 if (this.value === this.pattern) {
-                                    // this.blur();
                                     checkWin();
                                 } else {
                                     mistakesCount++;
@@ -444,8 +517,32 @@
                                 }
                             });
                         } else {
-                            cell.classList.add('sum');
-                            cell.readOnly = true;
+                            cell.addEventListener('mouseenter', function (event) { this.focus(); });
+                                cell.addEventListener('mouseleave', function (event) { this.blur(); });
+                            cell.addEventListener('focusin', function (event) {
+                                for (let dy = -1; dy < 2; dy++) {
+                                    for (let dx = -1; dx < 2; dx++) {
+                                        /** @type {HTMLInputElement} */
+                                        let c = getCell(x + dx, y + dy);
+
+                                        if (c) {
+                                            c.classList.add('highlight');
+                                        }
+                                    }
+                                }
+                            });
+                            cell.addEventListener('focusout', function (event) {
+                                for (let dy = -1; dy < 2; dy++) {
+                                    for (let dx = -1; dx < 2; dx++) {
+                                        /** @type {HTMLInputElement} */
+                                        let c = getCell(x + dx, y + dy);
+
+                                        if (c) {
+                                            c.classList.remove('highlight');
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                 }
@@ -470,7 +567,7 @@
                         }
                     }
 
-                    s.value = sum;
+                    s.textContent = sum;
                 }
                 //#endregion
 
@@ -482,7 +579,7 @@
 
                 blanksCount = cells.length;
 
-                for (const c of cells) {
+                for (let c of cells) {
                     if (Math.random() > difficulty) {
                         c.value = c.pattern;
                         c.readOnly = true;
@@ -539,6 +636,12 @@
                     }
                 }
                 //#endregion
+                
+                /** @type {HTMLInputElement} */
+                let centre = getCell(4, 4);
+                if (centre) {
+                    centre.focus();
+                }
             }
 
             /**
@@ -790,6 +893,24 @@
                             ]
                         },
                         {
+                            "id": "row-sum-title",
+                            "childNodesTexts": [
+                                "Sum of cells in this row"
+                            ]
+                        },
+                        {
+                            "id": "col-sum-title",
+                            "childNodesTexts": [
+                                "Sum of cells in this column"
+                            ]
+                        },
+                        {
+                            "id": "sqr-sum-title",
+                            "childNodesTexts": [
+                                "Sum of cells in this square"
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
                                 "Made by Vitaly Pavlovich Ulyanov."
@@ -894,7 +1015,7 @@
                         {
                             "id": "difficulty-compare-label",
                             "childNodesTexts": [
-                                "Подсказки значений клеток"
+                                "Подсказки по значениям клеток"
                             ]
                         },
                         {
@@ -948,7 +1069,25 @@
                         {
                             "id": "grid-win-hints-label",
                             "childNodesTexts": [
-                                "Подсказки значений"
+                                "Подсказки по значениям"
+                            ]
+                        },
+                        {
+                            "id": "row-sum-title",
+                            "childNodesTexts": [
+                                "Сумма клеток в строке"
+                            ]
+                        },
+                        {
+                            "id": "col-sum-title",
+                            "childNodesTexts": [
+                                "Сумма клеток в столбце"
+                            ]
+                        },
+                        {
+                            "id": "sqr-sum-title",
+                            "childNodesTexts": [
+                                "Сумма клеток в квадрате"
                             ]
                         },
                         {
