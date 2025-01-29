@@ -231,14 +231,14 @@
             }
 
             @keyframes win-blink {
-                0% {
-                    box-shadow: inset 0px 0px 25px var(--accent1);
+                25% {
+                    box-shadow: inset 0px 0px 15px var(--accent1);
                 }
                 50% {
                     box-shadow: none;
                 }
-                100% {
-                    box-shadow: inset 0px 0px 25px var(--secondary-colour);
+                75% {
+                    box-shadow: inset 0px 0px 15px var(--secondary-colour);
                 }
             }
 
@@ -252,7 +252,7 @@
                 border-radius: 7px 7px 0px 0px;
                 padding: 2px;
                 width: 100%;
-                animation: win-blink 6s ease alternate infinite;
+                animation: win-blink 12s ease alternate infinite;
             }
 
             #grid-win {

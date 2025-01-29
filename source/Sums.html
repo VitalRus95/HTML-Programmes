@@ -17,9 +17,9 @@
                 --row-sum-font-size: calc(var(--font-size) * 0.75);
             }
 
-            @media (max-width: 410px) {
+            @media (max-width: 390px) {
                 :root {
-                    --cell-size: calc(28px + 2.6vw);
+                    --cell-size: calc(26px + 3vw);
                 }
             }
 
@@ -38,14 +38,14 @@
             }
 
             @keyframes win-blink {
-                0% {
-                    box-shadow: inset 0px 0px 25px var(--accent1);
+                25% {
+                    box-shadow: inset 0px 0px 15px var(--accent1);
                 }
                 50% {
                     box-shadow: none;
                 }
-                100% {
-                    box-shadow: inset 0px 0px 25px var(--secondary-colour);
+                75% {
+                    box-shadow: inset 0px 0px 15px var(--secondary-colour);
                 }
             }
 
@@ -59,12 +59,39 @@
                 border-radius: 7px 7px 0px 0px;
                 padding: 2px;
                 width: 100%;
-                animation: win-blink 6s ease alternate infinite;
+                animation: win-blink 12s ease alternate infinite;
             }
 
             #grid-win {
                 display: none;
                 flex-direction: column;
+            }
+
+            #rules {
+                text-indent: 16px;
+            }
+
+            #rules-sums {
+                display: flex;
+                flex-direction: column;
+                row-gap: 4px;
+            }
+
+            #rules-sums > li > span,
+            #rules-keyboard-list > li > span {
+                display: flex;
+                flex-direction: row;
+                align-items: baseline;
+                column-gap: 8px;
+            }
+
+            #rules-sums > li > span > .sum,
+            #rules-sums > li > span > .row-sum,
+            #rules-sums > li > span > .column-sum {
+                align-self: baseline;
+                width: calc(var(--row-sum-size) * 0.9);
+                height: calc(var(--row-sum-size) * 0.9);
+                font-size: calc(var(--row-sum-font-size) * 0.8);
             }
 
             .row {
@@ -140,6 +167,7 @@
                 border-radius: 50%;
                 font-size: var(--sum-font-size);
                 cursor: cell;
+                transition: all 0.3s ease;
             }
 
             .sum:focus,
@@ -149,7 +177,6 @@
                 border-color: var(--accent1);
                 border-radius: 4px;
                 transform: scale(1.4);
-                transition: all 0.3s ease;
             }
 
             .column-sum,
@@ -160,7 +187,7 @@
                 justify-content: center;
                 font-family: 'Courier New', Courier, monospace;
                 font-size: var(--row-sum-font-size);
-                font-weight: 600;
+                font-weight: 900;
                 cursor: cell;
                 opacity: 0.75;
                 outline-style: none;
@@ -230,6 +257,70 @@
             </ul>
         </details>
 
+        <!-- Rules -->
+        <details>
+            <summary id='rules-summary'>Rules</summary>
+
+            <h3 id='rules-general'>General</h3>
+            <p id='rules' tabindex='0'>
+                   You have a 7 by 7 grid, the goal is to fill blank cells with digits (the number of digits can be configured in difficulty settings) taking into account the sum cells:
+            </p>
+            <ul id='rules-sums'>
+                <li tabindex='0'>
+                    <span>
+                        <span class='cell-container sum'>33</span>
+                        <p id='rules-sqr-sum'>Square sum: located inside the grid and shows the sum of the cells around it.</p>
+                    </span>
+                </li>
+                <li tabindex='0'>
+                    <span>
+                        <span class='cell-container row-sum'>26</span>
+                        <p id='rules-row-sum'>Row sum: located to the left of the grid and shows the sum of the cells in its row (except square sums).</p>
+                    </span>
+                </li>
+                <li tabindex='0'>
+                    <span>
+                        <span class='cell-container column-sum'>11</span>
+                        <p id='rules-col-sum'>Column sum: located above the grid and shows the sum of the cells in its column (except square sums).</p>
+                    </span>
+                </li>
+           </ul>
+
+            <h3 id='rules-keyboard'>Keyboard controls</h3>
+            <ul id='rules-keyboard-list'>
+                <li>
+                    <span id='rules-keyboard-arrow'>
+                        <kbd>Arrow buttons</kbd>
+                        <p> - move one cell left, right, up, and down</p>
+                    </span>
+                </li>
+                <li>
+                    <span id='rules-keyboard-home'>
+                        <kbd>Home</kbd>
+                        <p> - move to the first cell in the current row</p>
+                    </span>
+                </li>
+                <li>
+                    <span id='rules-keyboard-end'>
+                        <kbd>End</kbd>
+                        <p> - move to the last cell in the current row</p>
+                    </span>
+                </li>
+                <li>
+                    <span id='rules-keyboard-page-up'>
+                        <kbd>Page Up</kbd>
+                        <p> - move the the first cell in the current column</p>
+                    </span>
+                </li>
+                <li>
+                    <span id='rules-keyboard-page-down'>
+                        <kbd>Page Down</kbd>
+                        <p> - move to the last cell in the current column</p>
+                    </span>
+                </li>
+            </ul>
+        </details>
+
         <button id='start' onclick='fillGrid()'>Start</button>
 
         <!-- Victory text -->
@@ -294,11 +385,6 @@
             <div id='grid'></div>
         </div>
 
-        <!-- Invisible texts for sums' titles -->
-        <p style='display: none;' id='row-sum-title'>Sum of cells in this row</p>
-        <p style='display: none;' id='col-sum-title'>Sum of cells in this column</p>
-        <p style='display: none;' id='sqr-sum-title'>Sum of cells in this square</p>
-
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
         </p>
@@ -327,12 +413,6 @@
             let digits = document.getElementById('grid-win-digits');
             /** @type {HTMLSpanElement} */
             let hints = document.getElementById('grid-win-hints');
-            /** @type {HTMLParagraphElement} */
-            let rowSumTitle = document.getElementById('row-sum-title');
-            /** @type {HTMLParagraphElement} */
-            let colSumTitle = document.getElementById('col-sum-title');
-            /** @type {HTMLParagraphElement} */
-            let sqrSumTitle = document.getElementById('sqr-sum-title');
 
             difficultyLevel.value = localStorage.getItem('difficulty') || 3;
             difficultyDigits.value = localStorage.getItem('digits') || 10;
@@ -406,7 +486,6 @@
                                     document.createElement('span')
                                 );
                                 cell.classList.add('cell-container', 'sum');
-                                cell.title = sqrSumTitle.textContent;
                             }
                         } else {
                             cell = row.appendChild(
@@ -415,7 +494,6 @@
 
                             if (x === 0 && y > 0) {
                                 cell.classList.add('cell-container', 'row-sum');
-                                cell.title = rowSumTitle.textContent;
                                 cell.addEventListener('mouseenter', function (event) { this.focus(); });
                                 cell.addEventListener('mouseleave', function (event) { this.blur(); });
                                 cell.addEventListener('focusin', function (event) {
@@ -440,7 +518,6 @@
                                 });
                             } else if (x > 0 && y === 0) {
                                 cell.classList.add('cell-container', 'column-sum');
-                                cell.title = colSumTitle.textContent;
                                 cell.addEventListener('mouseenter', function (event) { this.focus(); });
                                 cell.addEventListener('mouseleave', function (event) { this.blur(); });
                                 cell.addEventListener('focusin', function (event) {
@@ -473,7 +550,6 @@
                             cell.dataset.x = x;
                             cell.dataset.y = y;
                             cell.tabIndex = 0;
-
                             cell.addEventListener('keydown', function (event) {
                                 processControls(event, x, y);
                             });
@@ -497,6 +573,7 @@
                             cell.required = true;
                             cell.pattern = random;
                             cell.maxLength = 1;
+                            cell.title = '';
 
                             cell.addEventListener('click', function (event) {
                                 this.select();
@@ -512,13 +589,15 @@
                                 if (this.value === this.pattern) {
                                     checkWin();
                                 } else {
-                                    mistakesCount++;
-                                    this.select();
+                                    if (this.value !== '') {
+                                        mistakesCount++;
+                                        this.select();
+                                    }
                                 }
                             });
                         } else {
                             cell.addEventListener('mouseenter', function (event) { this.focus(); });
-                                cell.addEventListener('mouseleave', function (event) { this.blur(); });
+                            cell.addEventListener('mouseleave', function (event) { this.blur(); });
                             cell.addEventListener('focusin', function (event) {
                                 for (let dy = -1; dy < 2; dy++) {
                                     for (let dx = -1; dx < 2; dx++) {
@@ -845,6 +924,83 @@
                             ]
                         },
                         {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Rules"
+                            ]
+                        },
+                        {
+                            "id": "rules-general",
+                            "childNodesTexts": [
+                                "General"
+                            ]
+                        },
+                        {
+                            "id": "rules",
+                            "childNodesTexts": [
+                                "You have a 7 by 7 grid, the goal is to fill blank cells with digits (the number of digits can be configured in difficulty settings) taking into account the sum cells:"
+                            ]
+                        },
+                        {
+                            "id": "rules-sqr-sum",
+                            "childNodesTexts": [
+                                "Square sum: located inside the grid and shows the sum of the cells around it."
+                            ]
+                        },
+                        {
+                            "id": "rules-row-sum",
+                            "childNodesTexts": [
+                                "Row sum: located to the left of the grid and shows the sum of the cells in its row (except square sums)."
+                            ]
+                        },
+                        {
+                            "id": "rules-col-sum",
+                            "childNodesTexts": [
+                                "Column sum: located above the grid and shows the sum of the cells in its column (except square sums)."
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard",
+                            "childNodesTexts": [
+                                "Keyboard controls"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-arrow",
+                            "childNodesTexts": [
+                                "Arrow buttons",
+                                "- move one cell left, right, up, and down"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-home",
+                            "childNodesTexts": [
+                                "Home",
+                                "- move to the first cell in the current row"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-end",
+                            "childNodesTexts": [
+                                "End",
+                                "- move to the last cell in the current row"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-up",
+                            "childNodesTexts": [
+                                "Page Up",
+                                "- move the the first cell in the current column"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-down",
+                            "childNodesTexts": [
+                                "Page Down",
+                                "- move to the last cell in the current column"
+                            ]
+                        },
+                        {
                             "id": "start",
                             "childNodesTexts": [
                                 "Start"
@@ -908,6 +1064,36 @@
                             "id": "sqr-sum-title",
                             "childNodesTexts": [
                                 "Sum of cells in this square"
+                            ]
+                        },
+                        {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Rules"
+                            ]
+                        },
+                        {
+                            "id": "rules",
+                            "childNodesTexts": [
+                                "You have a 7 by 7 grid, the goal is to fill blank cells with digits (the number of digits can be configured in difficulty settings) taking into account the sum cells:"
+                            ]
+                        },
+                        {
+                            "id": "rules-sqr-sum",
+                            "childNodesTexts": [
+                                "Square sum: located inside the grid and shows the sum of the cells around it."
+                            ]
+                        },
+                        {
+                            "id": "rules-row-sum",
+                            "childNodesTexts": [
+                                "Row sum: located to the left of the grid and shows the sum of the cells in its row (except square sums)."
+                            ]
+                        },
+                        {
+                            "id": "rules-col-sum",
+                            "childNodesTexts": [
+                                "Column sum: located above the grid and shows the sum of the cells in its column (except square sums)."
                             ]
                         },
                         {
@@ -1025,6 +1211,83 @@
                             ]
                         },
                         {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Правила"
+                            ]
+                        },
+                        {
+                            "id": "rules-general",
+                            "childNodesTexts": [
+                                "Общее"
+                            ]
+                        },
+                        {
+                            "id": "rules",
+                            "childNodesTexts": [
+                                "Перед Вами сетка 7 на 7, цель — заполнить пустые клетки цифрами (количество цифр можно задать в настройках сложности), учитывая значения в клетках сумм:"
+                            ]
+                        },
+                        {
+                            "id": "rules-sqr-sum",
+                            "childNodesTexts": [
+                                "Сумма квадрата: находится внутри сетки и показывает сумму клеток вокруг неё."
+                            ]
+                        },
+                        {
+                            "id": "rules-row-sum",
+                            "childNodesTexts": [
+                                "Сумма строки: находится слева от сетки и показывает сумму клеток в своей строке (кроме сумм квадратов)."
+                            ]
+                        },
+                        {
+                            "id": "rules-col-sum",
+                            "childNodesTexts": [
+                                "Сумма столбца: находится над сеткой и показывает сумму клеток в своём столбце (кроме сумм квадратов)."
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard",
+                            "childNodesTexts": [
+                                "Управление с помощью клавиатуры"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-arrow",
+                            "childNodesTexts": [
+                                "Кнопки со стрелками",
+                                "- движение на одну клетку влево, вправо, вверх и вниз"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-home",
+                            "childNodesTexts": [
+                                "Home",
+                                "- переход к первой клетке в текущей строке"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-end",
+                            "childNodesTexts": [
+                                "End",
+                                "- переход к последней клетке в текущей строке"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-up",
+                            "childNodesTexts": [
+                                "Page Up",
+                                "- переход к первой клетке в текущем столбце"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-down",
+                            "childNodesTexts": [
+                                "Page Down",
+                                "- переход к последней клетке в текущем столбце"
+                            ]
+                        },
+                        {
                             "id": "start",
                             "childNodesTexts": [
                                 "Начать"
@@ -1070,24 +1333,6 @@
                             "id": "grid-win-hints-label",
                             "childNodesTexts": [
                                 "Подсказки по значениям"
-                            ]
-                        },
-                        {
-                            "id": "row-sum-title",
-                            "childNodesTexts": [
-                                "Сумма клеток в строке"
-                            ]
-                        },
-                        {
-                            "id": "col-sum-title",
-                            "childNodesTexts": [
-                                "Сумма клеток в столбце"
-                            ]
-                        },
-                        {
-                            "id": "sqr-sum-title",
-                            "childNodesTexts": [
-                                "Сумма клеток в квадрате"
                             ]
                         },
                         {
