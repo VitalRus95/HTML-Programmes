@@ -404,9 +404,24 @@
             #rules-sums > li > span > .row-sum,
             #rules-sums > li > span > .column-sum {
                 align-self: baseline;
+            }
+
+            #rules-sums > li > span > .sum {
+                height: calc(var(--cell-size) * 0.7);
+                width: calc(var(--cell-size) * 0.7);
+                font-size: calc(var(--sum-font-size) * 0.7);
+            }
+
+            #rules-sums > li > span > .row-sum {
+                height: calc(var(--cell-size) * 0.9);
                 width: calc(var(--row-sum-size) * 0.9);
+                font-size: calc(var(--row-sum-font-size) * 0.9);
+            }
+
+            #rules-sums > li > span > .column-sum {
                 height: calc(var(--row-sum-size) * 0.9);
-                font-size: calc(var(--row-sum-font-size) * 0.8);
+                width: calc(var(--cell-size) * 0.9);
+                font-size: calc(var(--row-sum-font-size) * 0.9);
             }
 
             .row {
@@ -563,10 +578,10 @@
                 </li>
 
                 <li class='tooltipParent'>
-                    <label for='difficulty-compare' id='difficulty-compare-label'>Cell value hint</label>
+                    <label for='difficulty-compare' id='difficulty-compare-label'>Compare cells</label>
                     <input id='difficulty-compare' type='checkbox'>
                     <span id='difficulty-compare-tooltip' class='tooltip'>
-                        Mark cells whose value is greater than digits number divided by 2 (only when digits number > 3).
+                        Compare selected cell's neighbours' values with its value (only when digits number > 3).
                     </span>
                 </li>
             </ul>
@@ -1388,6 +1403,54 @@
                                     }
                                 }
                             });
+                            cell.addEventListener('focusin', function (event) {
+                                    if (difficultyCompare.checked && digitsCount > 3) {
+                                        for (let dy = -1; dy < 2; dy++) {
+                                            for (let dx = -1; dx < 2; dx++) {
+                                                if (dy === 0 && dx === 0) continue;
+
+                                                /** @type {HTMLInputElement} */
+                                                let neighbour = getCell(x + dx, y + dy);
+
+                                                if (neighbour
+                                                    && !neighbour.classList.contains('sum')
+                                                    && !neighbour.classList.contains('row-sum')
+                                                    && !neighbour.classList.contains('column-sum')
+                                                ) {
+                                                    /** @type {number} */
+                                                    let c = +this.pattern;
+                                                    /** @type {number} */
+                                                    let n = +neighbour.pattern;
+
+                                                    neighbour.placeholder =
+                                                        n > c ? '>' :
+                                                            n < c ? '<' :
+                                                                '=';
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            cell.addEventListener('focusout', function (event) {
+                                if (difficultyCompare.checked && digitsCount > 3) {
+                                    for (let dy = -1; dy < 2; dy++) {
+                                        for (let dx = -1; dx < 2; dx++) {
+                                            if (dy === 0 && dx === 0) continue;
+                                            
+                                            /** @type {HTMLInputElement} */
+                                            let neighbour = getCell(x + dx, y + dy);
+
+                                            if (neighbour
+                                                && !neighbour.classList.contains('sum')
+                                                && !neighbour.classList.contains('row-sum')
+                                                && !neighbour.classList.contains('column-sum')
+                                            ) {
+                                                neighbour.placeholder = '';
+                                            }
+                                        }
+                                    }
+                                }
+                            });
                         } else {
                             cell.addEventListener('mouseenter', function (event) { this.focus(); });
                             cell.addEventListener('mouseleave', function (event) { this.blur(); });
@@ -1448,20 +1511,28 @@
                 let cells = Array.from(grid.getElementsByClassName('cell')).filter(
                     (c) => !c.classList.contains('sum')
                 );
-
+                
+                /** @type {number} */
+                let minRevealed = cells.length - 5;
                 blanksCount = cells.length;
 
-                for (let c of cells) {
+                cells.forEach((c, i) => {
                     if (Math.random() > difficulty) {
                         c.value = c.pattern;
                         c.readOnly = true;
-                        blanksCount --;
-                    } else if (difficultyCompare.checked
-                        && digitsCount > 3
-                        && +c.pattern > digitsCount / 2
-                    ) {
-                        c.placeholder = '>';
+                        cells.splice(i, 1);
+                        blanksCount--;
                     }
+                });
+
+                // Let the minimum number of revealed cells be 5
+                while (blanksCount > minRevealed) {
+                    /** @type {number} */
+                    let random = Math.floor(Math.random() * cells.length);
+                    cells[random].value = cells[random].pattern;
+                    cells[random].readOnly = true;
+                    cells.splice(random, 1);
+                    blanksCount--;
                 }
                 //#endregion
 
@@ -1707,13 +1778,13 @@
                         {
                             "id": "difficulty-compare-label",
                             "childNodesTexts": [
-                                "Cell value hint"
+                                "Compare cells"
                             ]
                         },
                         {
                             "id": "difficulty-compare-tooltip",
                             "childNodesTexts": [
-                                "Mark cells whose value is greater than digits number divided by 2 (only when digits number > 3)."
+                                "Compare selected cell's neighbours' values with its value (only when digits number > 3)."
                             ]
                         },
                         {
@@ -1994,13 +2065,13 @@
                         {
                             "id": "difficulty-compare-label",
                             "childNodesTexts": [
-                                "Подсказки по значениям клеток"
+                                "Сравнивать клетки"
                             ]
                         },
                         {
                             "id": "difficulty-compare-tooltip",
                             "childNodesTexts": [
-                                "Помечать клетки со значением больше, чем количество цифр, делённое на 2 (только если оно > 3)."
+                                "Сравнивать значения соседей выделенной клетки с её значением (только при количестве цифр > 3)."
                             ]
                         },
                         {
