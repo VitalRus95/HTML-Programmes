@@ -51,6 +51,7 @@ fullscreen.style.fontWeight = 600;
 fullscreen.style.borderWidth = 0;
 fullscreen.style.opacity = '0.9';
 fullscreen.style.position = 'fixed';
+fullscreen.style.paddingInline = '2px';
 fullscreen.style.top = '5px';
 fullscreen.style.right = '5px';
 fullscreen.addEventListener('click', function () {

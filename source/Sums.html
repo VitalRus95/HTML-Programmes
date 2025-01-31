@@ -336,7 +336,24 @@
             </ul>
         </details>
 
-        <button id='start' onclick='fillGrid()'>Start</button>
+        <!-- Start button -->
+        <button id='start'>Start</button>
+
+        <!-- Restart window -->
+        <div id='restart' class='modalWindow'>
+            <p id='restart-question' class='modalText' tabindex='0'>
+                Do you want to restart the game?
+            </p>
+
+            <div id='restart-buttons' class='modalButtonContainer'>
+                <button id='restart-yes' class='modalButton'>
+                    Yes
+                </button>
+                <button id='restart-cancel' class='modalButton'>
+                    Cancel
+                </button>
+            </div>
+        </div>
 
         <!-- Victory text -->
         <div id='grid-win' tabindex='0'>
@@ -386,7 +403,7 @@
 
                 <tr>
                     <td>
-                        <span id='grid-win-hints-label' tabindex='0'>Value hints</span>
+                        <span id='grid-win-hints-label' tabindex='0'>Cells comparison</span>
                     </td>
                     <td>
                         <span id='grid-win-hints' tabindex='0'>-</span>
@@ -408,6 +425,14 @@
         <script src='../resources/VitalLogic.js'></script>
         <script>
             // Elements
+            /** @type {HTMLButtonElement} */
+            let startButton = document.getElementById('start');
+            /** @type {HTMLDivElement} */
+            let restartWindow = document.getElementById('restart');
+            /** @type {HTMLButtonElement} */
+            let restartYes = document.getElementById('restart-yes');
+            /** @type {HTMLButtonElement} */
+            let restartCancel = document.getElementById('restart-cancel');
             /** @type {HTMLInputElement} */
             let difficultyLevel = document.getElementById('difficulty-level');
             /** @type {HTMLInputElement} */
@@ -433,6 +458,24 @@
             difficultyDigits.value = localStorage.getItem('digits') || 10;
             difficultyCompare.checked = localStorage.getItem('compare') === 'true';
 
+            startButton.addEventListener('click', function (event) {
+                if (gameInProcess) {
+                    restartWindow.style.display = 'flex';
+                    restartWindow.focus();
+                } else {
+                    fillGrid();
+                }
+            });
+
+            restartYes.addEventListener('click', function (event) {
+                restartWindow.style.display = 'none';
+                fillGrid();
+            });
+
+            restartCancel.addEventListener('click', function (event) {
+                restartWindow.style.display = 'none';
+            });
+
             difficultyLevel.addEventListener('change', function (event) {
                 this.value = clamp(1, +this.value, 9);
                 localStorage.setItem('difficulty', this.value);
@@ -442,6 +485,7 @@
             difficultyDigits.addEventListener('change', function (event) {
                 this.value = clamp(2, +this.value, 10);
                 localStorage.setItem('digits', this.value);
+                difficultyCompare.disabled = this.value < 4;
                 fillGrid();
             });
 
@@ -451,6 +495,8 @@
             });
 
             // Variables
+            /** @type {boolean} */
+            let gameInProcess = false;
             /** @type {number} */
             let mistakesCount;
             /** @type {number} */
@@ -472,6 +518,7 @@
 
                 difficulty = +difficultyLevel.value / 10;
                 digitsCount = +difficultyDigits.value;
+                restartWindow.style.display = 'none';
                 win.style.display = 'none';
                 timerStart = Date.now();
                 mistakesCount = 0;
@@ -720,26 +767,30 @@
                 );
                 
                 /** @type {number} */
-                let minRevealed = cells.length - 5;
+                let maxBlanks = cells.length - 6;
                 blanksCount = cells.length;
 
                 cells.forEach((c, i) => {
+                    if (blanksCount < 6) return;
+
                     if (Math.random() > difficulty) {
                         c.value = c.pattern;
                         c.readOnly = true;
-                        cells.splice(i, 1);
                         blanksCount--;
                     }
                 });
 
                 // Let the minimum number of revealed cells be 5
-                while (blanksCount > minRevealed) {
+                while (blanksCount > maxBlanks) {
                     /** @type {number} */
                     let random = Math.floor(Math.random() * cells.length);
-                    cells[random].value = cells[random].pattern;
-                    cells[random].readOnly = true;
-                    cells.splice(random, 1);
-                    blanksCount--;
+
+                    if (cells[random].readOnly === false) {
+                        cells[random].value = cells[random].pattern;
+                        cells[random].readOnly = true;
+                        cells.splice(random, 1);
+                        blanksCount--;
+                    }
                 }
                 //#endregion
 
@@ -792,6 +843,8 @@
                 if (centre) {
                     centre.focus();
                 }
+
+                gameInProcess = true;
             }
 
             /**
@@ -871,6 +924,7 @@
 
                     win.style.display = 'flex';
                     timerEnd = Date.now();
+                    gameInProcess = false;
 
                     let date = new Date(timerEnd - timerStart);
                     let min = date.getMinutes();
@@ -1078,6 +1132,24 @@
                             ]
                         },
                         {
+                            "id": "restart-question",
+                            "childNodesTexts": [
+                                "Do you want to restart the game?"
+                            ]
+                        },
+                        {
+                            "id": "restart-yes",
+                            "childNodesTexts": [
+                                "Yes"
+                            ]
+                        },
+                        {
+                            "id": "restart-cancel",
+                            "childNodesTexts": [
+                                "Cancel"
+                            ]
+                        },
+                        {
                             "id": "grid-victory",
                             "childNodesTexts": [
                                 "Victory!"
@@ -1116,55 +1188,7 @@
                         {
                             "id": "grid-win-hints-label",
                             "childNodesTexts": [
-                                "Value hints"
-                            ]
-                        },
-                        {
-                            "id": "row-sum-title",
-                            "childNodesTexts": [
-                                "Sum of cells in this row"
-                            ]
-                        },
-                        {
-                            "id": "col-sum-title",
-                            "childNodesTexts": [
-                                "Sum of cells in this column"
-                            ]
-                        },
-                        {
-                            "id": "sqr-sum-title",
-                            "childNodesTexts": [
-                                "Sum of cells in this square"
-                            ]
-                        },
-                        {
-                            "id": "rules-summary",
-                            "childNodesTexts": [
-                                "Rules"
-                            ]
-                        },
-                        {
-                            "id": "rules",
-                            "childNodesTexts": [
-                                "You have a 7 by 7 grid, the goal is to fill blank cells with digits (the number of digits can be configured in difficulty settings) taking into account the sum cells:"
-                            ]
-                        },
-                        {
-                            "id": "rules-sqr-sum",
-                            "childNodesTexts": [
-                                "Square sum: located inside the grid and shows the sum of the cells around it."
-                            ]
-                        },
-                        {
-                            "id": "rules-row-sum",
-                            "childNodesTexts": [
-                                "Row sum: located to the left of the grid and shows the sum of the cells in its row (except square sums)."
-                            ]
-                        },
-                        {
-                            "id": "rules-col-sum",
-                            "childNodesTexts": [
-                                "Column sum: located above the grid and shows the sum of the cells in its column (except square sums)."
+                                "Cells comparison"
                             ]
                         },
                         {
@@ -1365,6 +1389,24 @@
                             ]
                         },
                         {
+                            "id": "restart-question",
+                            "childNodesTexts": [
+                                "Вы хотите перезапустить игру?"
+                            ]
+                        },
+                        {
+                            "id": "restart-yes",
+                            "childNodesTexts": [
+                                "Да"
+                            ]
+                        },
+                        {
+                            "id": "restart-cancel",
+                            "childNodesTexts": [
+                                "Отмена"
+                            ]
+                        },
+                        {
                             "id": "grid-victory",
                             "childNodesTexts": [
                                 "Победа!"
@@ -1403,7 +1445,7 @@
                         {
                             "id": "grid-win-hints-label",
                             "childNodesTexts": [
-                                "Подсказки по значениям"
+                                "Сравнение клеток"
                             ]
                         },
                         {
