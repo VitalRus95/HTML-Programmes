@@ -185,13 +185,13 @@
             }
             
             kbd {
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-                border: 1px outset var(--secondary-colour);
+                background-color: var(--primary-colour);
+                color: var(--secondary-colour);
+                border: 1px solid var(--accent1);
                 border-radius: 3px;
-                box-shadow: 1px 1px 1px var(--secondary-colour);
+                border-bottom-width: 2px;
                 font-weight: 600;
-                padding: 0px 2px;
+                padding: 1px 2px;
             }
             
             option:checked {
@@ -2097,6 +2097,269 @@
                     ]
                 },
                 {
+                    name: 'Français [Vitaly Oulianov, Ilya Novikov]',
+                    langTags: ['fr', 'fr-BE', 'fr-CA', 'fr-CH', 'fr-FR', 'fr-LU', 'fr-MC'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Sommes"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Options"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Fonte"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Tapez le nom d'une fonte et appuyez sur l'Entrée"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Couleur du fond"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Couleur du texte"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Couleur d'accent 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Couleur d'accent 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Charger les couleurs"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Sauvegarder les couleurs"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Exporter les textes pour traduction"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-summary",
+                            "childNodesTexts": [
+                                "Configuration de difficulté"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-level-label",
+                            "childNodesTexts": [
+                                "Niveau de difficulté"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-digits-label",
+                            "childNodesTexts": [
+                                "Nombre de chiffres"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-label",
+                            "childNodesTexts": [
+                                "Comparer les cellules"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-tooltip",
+                            "childNodesTexts": [
+                                "Comparer les valeurs des voisins de la cellule choisie avec sa valeur (quand le nombre de chiffres est supérieur à 3)."
+                            ]
+                        },
+                        {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Règles"
+                            ]
+                        },
+                        {
+                            "id": "rules-general",
+                            "childNodesTexts": [
+                                "Générales"
+                            ]
+                        },
+                        {
+                            "id": "rules",
+                            "childNodesTexts": [
+                                "Vous avez une grille 7 par 7, le but du jeu est de remplir les cellules vides avec des chiffres (dont le nombre peut être configuré dans la configuration de difficulté) en tenant compte des cellules des sommes :"
+                            ]
+                        },
+                        {
+                            "id": "rules-sqr-sum",
+                            "childNodesTexts": [
+                                "Somme de carré : se trouve dans la grille et montre la somme des cellules autour d'elle."
+                            ]
+                        },
+                        {
+                            "id": "rules-row-sum",
+                            "childNodesTexts": [
+                                "Somme de ligne : se trouve à gauche de la grille et montre la somme des cellules dans sa ligne (sauf les sommes de carré)."
+                            ]
+                        },
+                        {
+                            "id": "rules-col-sum",
+                            "childNodesTexts": [
+                                "Somme de colonne : se trouve au-dessus de la grille et montre la somme des cellules dans sa colonne (sauf les sommes de carré)."
+                            ]
+                        },
+                        {
+                            "id": "rules-diag-sum",
+                            "childNodesTexts": [
+                                "Somme de diagonale : se trouve en haut à gauche de la grille et montre la somme des cellules de sa diagonale (sauf les sommes de carré)."
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard",
+                            "childNodesTexts": [
+                                "Commandes du clavier"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-arrow",
+                            "childNodesTexts": [
+                                "Touches directionnelles",
+                                "- se déplacer par une cellule à gauche, à droite, en haut et en bas"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-home",
+                            "childNodesTexts": [
+                                "Début",
+                                "- passer à la première cellule dans la ligne courante"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-end",
+                            "childNodesTexts": [
+                                "Fin",
+                                "- passer à la dernière cellule dans la ligne courante"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-up",
+                            "childNodesTexts": [
+                                "Page Up",
+                                "- passer à la première cellule dans la colonne courante"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-down",
+                            "childNodesTexts": [
+                                "Page Down",
+                                "- passer à la dernière cellule dans ls colonne courante"
+                            ]
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Commencer"
+                            ]
+                        },
+                        {
+                            "id": "restart-question",
+                            "childNodesTexts": [
+                                "Voulez-vous redémarrer le jeu ?"
+                            ]
+                        },
+                        {
+                            "id": "restart-yes",
+                            "childNodesTexts": [
+                                "Oui"
+                            ]
+                        },
+                        {
+                            "id": "restart-cancel",
+                            "childNodesTexts": [
+                                "Annuler"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Victoire !"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Statistique"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Temps (min:sec)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Fautes"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-blanks-label",
+                            "childNodesTexts": [
+                                "Cellules remplies"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-digits-label",
+                            "childNodesTexts": [
+                                "Nombre de chiffres"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-hints-label",
+                            "childNodesTexts": [
+                                "Comparaison des cellules"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Créé par Vitaly Pavlovitch Oulianov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Plein écran"
+                            ]
+                        }
+                    ]
+                },
+                {
                     name: 'Русский [Виталий Ульянов]',
                     langTags: ['ru', 'ru-RU'],
                     elements: [
@@ -2355,6 +2618,269 @@
                             "childNodesTexts": [
                                 "▲",
                                 "Полный экран"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Українська [Олександр Ставицький]',
+                    langTags: ['uk', 'uk-UA'],
+                    elements: [
+                        {
+                            "id": "game-name",
+                            "childNodesTexts": [
+                                "Суми"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Налаштування"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введіть назву шрифту та натисніть Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Колір тла"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Колір тексту"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентний колір 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентний колір 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Завантажити кольори"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Зберегти кольори"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Експортувати тексти для перекладу"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-summary",
+                            "childNodesTexts": [
+                                "Налаштування складності"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-level-label",
+                            "childNodesTexts": [
+                                "Рівень складності"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-digits-label",
+                            "childNodesTexts": [
+                                "Кількість цифр"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-label",
+                            "childNodesTexts": [
+                                "Порівнювати клітинки"
+                            ]
+                        },
+                        {
+                            "id": "difficulty-compare-tooltip",
+                            "childNodesTexts": [
+                                "Порівнювати значення сусідів виділеної клітинки з її значенням (тільки за кількості цифр > 3)."
+                            ]
+                        },
+                        {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Правила"
+                            ]
+                        },
+                        {
+                            "id": "rules-general",
+                            "childNodesTexts": [
+                                "Загальне"
+                            ]
+                        },
+                        {
+                            "id": "rules",
+                            "childNodesTexts": [
+                                "Перед Вами сітка 7 на 7, мета - заповнити порожні клітинки цифрами (кількість цифр можна задати в налаштуваннях складності), враховуючи значення у клітинках сум:"
+                            ]
+                        },
+                        {
+                            "id": "rules-sqr-sum",
+                            "childNodesTexts": [
+                                "Сума квадрата: знаходиться всередині сітки та показує суму клітин навколо неї."
+                            ]
+                        },
+                        {
+                            "id": "rules-row-sum",
+                            "childNodesTexts": [
+                                "Сума рядка: знаходиться ліворуч від сітки і показує суму клітинок у своєму рядку (крім сум квадратів)."
+                            ]
+                        },
+                        {
+                            "id": "rules-col-sum",
+                            "childNodesTexts": [
+                                "Сума стовпця: знаходиться над сіткою і показує суму клітинок у своєму стовпці (крім сум квадратів)."
+                            ]
+                        },
+                        {
+                            "id": "rules-diag-sum",
+                            "childNodesTexts": [
+                                "Сума діагоналі: знаходиться у верхньому лівому кутку сітки і показує суму клітинок у своїй діагоналі (крім сум квадратів)."
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard",
+                            "childNodesTexts": [
+                                "Керування за допомогою клавіатури"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-arrow",
+                            "childNodesTexts": [
+                                "Кнопки зі стрілками",
+                                "- рух на одну клітинку вліво, вправо, вгору та вниз"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-home",
+                            "childNodesTexts": [
+                                "Home",
+                                "- перехід до першої клітинки у поточному рядку"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-end",
+                            "childNodesTexts": [
+                                "End",
+                                "- перехід до останньої клітинки у поточному рядку"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-up",
+                            "childNodesTexts": [
+                                "Page Up",
+                                "- перехід до першої клітинки у поточному стовпці"
+                            ]
+                        },
+                        {
+                            "id": "rules-keyboard-page-down",
+                            "childNodesTexts": [
+                                "Page Down",
+                                "- перехід до останньої клітинки у поточному стовпці"
+                            ]
+                        },
+                        {
+                            "id": "start",
+                            "childNodesTexts": [
+                                "Почати"
+                            ]
+                        },
+                        {
+                            "id": "restart-question",
+                            "childNodesTexts": [
+                                "Ви бажаєте почати гру заново?"
+                            ]
+                        },
+                        {
+                            "id": "restart-yes",
+                            "childNodesTexts": [
+                                "Так"
+                            ]
+                        },
+                        {
+                            "id": "restart-cancel",
+                            "childNodesTexts": [
+                                "Скасувати"
+                            ]
+                        },
+                        {
+                            "id": "grid-victory",
+                            "childNodesTexts": [
+                                "Перемога!"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-stats-label",
+                            "childNodesTexts": [
+                                "Статистика"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-time-label",
+                            "childNodesTexts": [
+                                "Час (хв:сек)"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-mistakes-label",
+                            "childNodesTexts": [
+                                "Помилок"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-blanks-label",
+                            "childNodesTexts": [
+                                "Клітинок заповнено"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-digits-label",
+                            "childNodesTexts": [
+                                "Кількість цифр"
+                            ]
+                        },
+                        {
+                            "id": "grid-win-hints-label",
+                            "childNodesTexts": [
+                                "Порівняння клітинок"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Віталій Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Повний екран"
                             ]
                         }
                     ]
