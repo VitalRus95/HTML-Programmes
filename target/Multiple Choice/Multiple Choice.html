@@ -416,11 +416,11 @@
         </style>
     </head>
     <body>
-        <h1>Multiple choice</h1>
+        <h1 id='title'>Multiple choice</h1>
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Settings</summary>
+            <summary id='settings-summary'>Settings</summary>
         </details>
 
         <!-- Page main body -->
@@ -441,15 +441,17 @@
             class='box'
             style='display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;'
             ><label
+                id='loadTestLabel'
                 for='loadTest'
                 style='flex-grow: 1; cursor: pointer;'
             >
-                &#128193; Load test
+                &#128193; Load test(s)
             </label>
             <input
                 id='loadTest'
                 type='file'
                 accept='.txt'
+                multiple='true'
                 style='cursor: pointer; max-width: 100%;'>
         </div>
 
@@ -457,9 +459,9 @@
 
         <div id='testBody' style='position: relative;'></div>
 
-        <div class='box' style='font-style: italic'>
+        <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
-        </div>
+        </p>
         <!-- Автор — Виталий Павлович Ульянов. -->
 
         <script>
@@ -945,6 +947,8 @@
         <script>
             // Elements
             /** @type {string[][]} */
+            let pairs = [];
+            /** @type {string[][]} */
             let test = [];
             /** @type {number} */
             let score = 0;
@@ -963,28 +967,39 @@
             numQuestionsInput.disabled = true;
             numVariantsInput.disabled = true;
 
-            numQuestionsInput.addEventListener('input', limitInput);
-            numVariantsInput.addEventListener('input', limitInput);
+            numQuestionsInput.addEventListener('input', limitInput(numQuestionsInput));
+            numVariantsInput.addEventListener('input', limitInput(numVariantsInput));
+
             loadTest.addEventListener('change', async function () {
-                await this.files[0].text().then((content) => {
-                    try {
-                        /** @type {string[][]} */
-                        let data = content.split('\n').map(s => s.split('\t'));
-                        if (data && data.length > 0) {
-                            test = data;
-                            startTest.disabled = false;
-                            numQuestionsInput.disabled = false;
-                            numVariantsInput.disabled = false;
-                            numQuestionsInput.max = test.length;
-                            numVariantsInput.max = test.length;
+                pairs = [];
+                test = [];
+
+                for (let file of this.files) {
+                    await file.text().then((content) => {
+                        try {
+                            /** @type {string[][]} */
+                            let data = content.split('\n').map(s => s.split('\t'));
+                            if (data && data.length > 0) {
+                                for (let pair of data) {
+                                    pairs.push(pair);
+                                    test.push(pair);
+                                }
+                            }
+                        } catch (error) {
+                            console.log(`Ошибка при чтении файла теста: ${error}`);
                         }
-                    } catch (error) {
-                        alert(
-                            `Ошибка при чтении файла теста: ${error}`
-                        );
-                    }
-                });
+                    });
+                }
+
+                startTest.disabled = false;
+                numQuestionsInput.disabled = false;
+                numVariantsInput.disabled = false;
+                numQuestionsInput.max = test.length;
+                numVariantsInput.max = test.length;
+                limitInput(numQuestionsInput);
+                limitInput(numVariantsInput);
             });
+
             startTest.addEventListener('click', function () {
                 score = 0;
                 while (testBody.hasChildNodes()) testBody.lastChild.remove();
@@ -993,7 +1008,6 @@
                 resultDiv.className = 'score';
 
                 let resultText = resultDiv.appendChild(document.createElement('p'));
-                resultText.innerText = 'Результат: ';
                 resultText.style.marginRight = '4px';
                 resultText.style.fontSize = 'inherit';
 
@@ -1003,13 +1017,18 @@
                 scoreText.innerText = `0/${numQuestionsInput.value}`;
                 scoreText.style.fontSize = 'inherit';
 
-                let questions = [];
-                let copyQuestions = test.map((e) => e);
+                if (test.length < +numQuestionsInput.value) {
+                    test = pairs.map(e => e);
+                }
 
-                while (questions.length < numQuestionsInput.value) {
-                    let randomIndex = getRandomIndex(copyQuestions);
-                    questions.push(copyQuestions[randomIndex]);
-                    copyQuestions.splice(randomIndex, 1);
+                let questions = [];
+
+                while (questions.length < +numQuestionsInput.value) {
+                    let randomIndex = getRandomIndex(test);
+                    if (!doesContainItem(questions, test[randomIndex])) {
+                        questions.push(test[randomIndex]);
+                        test.splice(randomIndex, 1);
+                    }
                 }
 
                 questions.forEach((q, qi) => {
@@ -1024,9 +1043,9 @@
                     questionHeader.style.cursor = 'help';
 
                     let options = [];
-                    let copyOptions = test.map((e) => e[1]);
+                    let copyOptions = pairs.map(e => e[1]);
 
-                    while (options.length < numVariantsInput.value) {
+                    while (options.length < +numVariantsInput.value) {
                         let randomIndex = getRandomIndex(copyOptions);
                         options.push(copyOptions[randomIndex]);
                         copyOptions.splice(randomIndex, 1);
@@ -1049,14 +1068,12 @@
             });
 
             /**
-             * @param {InputEvent} event
+             * @param {HTMLInputElement} element
             */
-            function limitInput(event) {
-                /** @type {HTMLInputElement} */
-                let input = event.target;
-                let min = parseInt(input.min);
-                let max = parseInt(input.max);
-                let val = parseInt(input.value) || min;
+            function limitInput(input) {
+                let min = +input.min;
+                let max = +input.max;
+                let val = +input.value || min;
                 input.value =
                     val > max ? max :
                     val < min ? min : val;
@@ -1067,7 +1084,7 @@
              * @param {any} item
             */
             function doesContainItem(array, item) {
-                for (const i of array) {
+                for (let i of array) {
                     if (i === item) return true;
                 }
                 return false;
@@ -1104,6 +1121,225 @@
                 let scoreText = document.getElementById('scoreText');
                 if (scoreText) scoreText.innerText = `${score}/${numQuestionsInput.value}`;
             }
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "title",
+                            "childNodesTexts": [
+                                "Multiple choice"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "numQuestionsLabel",
+                            "childNodesTexts": [
+                                "Questions count:"
+                            ]
+                        },
+                        {
+                            "id": "numVariantsLabel",
+                            "childNodesTexts": [
+                                "Answers count:"
+                            ]
+                        },
+                        {
+                            "id": "loadTestLabel",
+                            "childNodesTexts": [
+                                "📁 Load test(s)"
+                            ]
+                        },
+                        {
+                            "id": "startTest",
+                            "childNodesTexts": [
+                                "Begin test"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "title",
+                            "childNodesTexts": [
+                                "Выбирайка"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "numQuestionsLabel",
+                            "childNodesTexts": [
+                                "Число вопросов:"
+                            ]
+                        },
+                        {
+                            "id": "numVariantsLabel",
+                            "childNodesTexts": [
+                                "Число вариантов:"
+                            ]
+                        },
+                        {
+                            "id": "loadTestLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить тест(ы)"
+                            ]
+                        },
+                        {
+                            "id": "startTest",
+                            "childNodesTexts": [
+                                "Начать тест"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
         </script>
     </body>
 </html>
