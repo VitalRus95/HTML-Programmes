@@ -1,0 +1,114 @@
+[
+  {
+    "word": "cacophonous",
+    "description": "неблагозвучный, шумный",
+    "vertical": true,
+    "x": 2,
+    "y": 0
+  },
+  {
+    "word": "disjointed",
+    "description": "раздробленный",
+    "vertical": true,
+    "x": 14,
+    "y": 0
+  },
+  {
+    "word": "chick",
+    "description": "птенец",
+    "vertical": false,
+    "x": 1,
+    "y": 3
+  },
+  {
+    "word": "snooze",
+    "description": "короткий сон",
+    "vertical": true,
+    "x": 6,
+    "y": 4
+  },
+  {
+    "word": "breeding",
+    "description": "размножение",
+    "vertical": true,
+    "x": 9,
+    "y": 5
+  },
+  {
+    "word": "oodles",
+    "description": "множество",
+    "vertical": false,
+    "x": 4,
+    "y": 8
+  },
+  {
+    "word": "unprecedented",
+    "description": "беспрецедентный",
+    "vertical": false,
+    "x": 1,
+    "y": 10
+  },
+  {
+    "word": "predator",
+    "description": "хищник",
+    "vertical": true,
+    "x": 11,
+    "y": 11
+  },
+  {
+    "word": "nap",
+    "description": "дрёма",
+    "vertical": false,
+    "x": 8,
+    "y": 12
+  },
+  {
+    "word": "offspring",
+    "description": "потомство",
+    "vertical": false,
+    "x": 0,
+    "y": 13
+  },
+  {
+    "word": "hemisphere",
+    "description": "полушарие",
+    "vertical": true,
+    "x": 9,
+    "y": 15
+  },
+  {
+    "word": "nesting",
+    "description": "гнездящийся",
+    "vertical": true,
+    "x": 5,
+    "y": 16
+  },
+  {
+    "word": "unrelenting",
+    "description": "непрекращающийся",
+    "vertical": false,
+    "x": 3,
+    "y": 17
+  },
+  {
+    "word": "logger",
+    "description": "регистратор",
+    "vertical": true,
+    "x": 15,
+    "y": 17
+  },
+  {
+    "word": "avian",
+    "description": "птичий",
+    "vertical": false,
+    "x": 2,
+    "y": 21
+  },
+  {
+    "word": "shut-eye",
+    "description": "сон",
+    "vertical": false,
+    "x": 7,
+    "y": 22
+  }
+]

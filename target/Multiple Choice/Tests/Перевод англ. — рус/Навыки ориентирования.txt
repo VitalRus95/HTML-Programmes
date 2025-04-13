@@ -1,0 +1,6 @@
+Spatial	Пространственный
+Urbanite	Горожанин
+Handle	Управлять
+Glean	Тщательно собирать
+Meandering	Извилистый
+Slip	Ускользать

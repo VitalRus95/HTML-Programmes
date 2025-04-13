@@ -1,0 +1,9 @@
+Clue	Ключ, подсказка
+Tot	Малыш
+Soak up	Впитывать
+Departure	Отклонение
+Underlie	Быть основой
+Sliver	Обрывок
+Align	Выравнивать
+Iterative	Повторяющийся
+Yield	Давать (плоды и т.п.)

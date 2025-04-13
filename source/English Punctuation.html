@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>English Punctutation</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            em {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                border-radius: 2px;
+                padding-inline: 2px;
+                font-weight: 700;
+            }
+
+            span {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                border-radius: 4px;
+                font-weight: 900;
+                padding-inline: 8px;
+            }
+
+            td, th {
+                width: 50%;
+            }
+
+            ul {
+                text-align: start;
+            }
+
+            .mark {
+                font-style: italic;
+                background-image: linear-gradient(130deg, var(--accent1), transparent 10% 90%, var(--accent1));
+            }
+
+            #table-container {
+                overflow-x: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id='page-title'>English Punctutation</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary id='settings-summary'>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+        <div id='table-container'><table>
+            <tr>
+                <th id='func'>Function</th>
+                <th id='exps'>Examples</th>
+            </tr>
+
+            <!-- #region Apostrophe -->
+            <tr>
+                <td id='apostrophe' class='mark' colspan='2'>Apostrophe <span>’</span></td>
+            </tr>
+            <tr>
+                <td id='posesstion'>Possession (with living beings)</td>
+                <td><ul>
+                    <li>Hannah<em>’</em>s book</li>
+                    <li>children<em>’</em>s games</li>
+                    <li>workers<em>’</em> rights</li>
+                    <li>James<em>’</em>s car</li>
+                    <li>each other<em>’</em>s names</li>
+                    <li>It’s nobody<em>’</em>s fault but mine.</li>
+                    <li>My next-door neighbour<em>’</em>s dog</li>
+                    <li>at the hairdresser<em>’</em>s [<i>workplace</i>]</li>
+                    <li>I’m going over to Harry<em>’</em>s for tea tonight. [<i>home</i>]</li>
+                </ul></td>
+            </tr>
+            <tr>
+                <td id='year'>Year/Decade</td>
+                <td><ul>
+                    <li>French students rioted in <em>’</em>68. [<i>1968</i>]</li>
+                    <li>during the <em>’</em>90s [<i>1990s</i>]</li>
+                </ul></td>
+            </tr>
+            <tr>
+                <td id='plurals'>Plurals of letters and numbers (for readability)</td>
+                <td><ul>
+                    <li>Mind your p<em>’</em>s and q<em>’</em>s.</li>
+                    <li>His 2<em>’</em>s look a bit like 7<em>’</em>s.</li>
+                    <li>She got straight A<em>’</em>s in her exams.</li>
+                </ul></td>
+            </tr>
+            <tr>
+                <td id='contractions'>Contracted forms</td>
+                <td><ul>
+                    <li>I’m [<i>am</i>]</li>
+                    <li>they’re [<i>are</i>]</li>
+                    <li>He/she’s [<i>is/has</i>]</li>
+                    <li>you’d [<i>had/would</i>]</li>
+                    <li>it isn’t [<i>is not</i>]</li>
+                </ul></td>
+            </tr>
+            <!-- #endregion -->
+        </table></div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "English Punctutation"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Английская пунктуация"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
+        </script>
+    </body>
+</html>

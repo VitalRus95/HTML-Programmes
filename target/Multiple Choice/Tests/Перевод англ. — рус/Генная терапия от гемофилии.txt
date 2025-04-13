@@ -1,0 +1,7 @@
+Boost	Повышать
+Clot	Сгусток
+Hinder	Препятствовать
+Infusion	Вливание
+Fare	Поживать
+Joint	Сустав
+Enzyme	Фермент
