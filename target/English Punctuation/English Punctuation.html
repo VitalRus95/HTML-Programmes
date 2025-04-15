@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang='ru'>
+<html lang='en'>
     <head>
         <meta charset='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <title>Баллабол</title>
+        <title>English Punctutation</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         
 
@@ -358,374 +358,198 @@
                 display: block;
             }
 
-            @keyframes scaling {
-                from {
-                    transform: scale(1);
-                }
-                to {
-                    transform: scale(1.5);
-                }
-            }
-
-            input:checked {
-                animation: scaling 0.5s ease forwards;
-            }
-
-            input[type='text'] {
-                border-radius: 7px 0px 0px 7px;
-            }
-
-            td {
-                width: 50%;
-            }
-
-            .mistakeClassification td {
-                text-align: left;
-            }
-
-            .mistakeClassification td:hover {
-                background-color: var(--secondary-colour);
+            em {
+                background-color: var(--accent1);
                 color: var(--primary-colour);
+                border-radius: 2px;
+                padding-inline: 2px;
+                font-style: normal;
+                font-weight: 700;
             }
 
-            .roundedButton {
-                border-radius: 7px;
-                cursor: pointer;
-                font-family: monospace;
-                font-size: 14pt;
-                font-weight: 600;
-                width: 28px;
-                height: 28px;
-                margin-right: 3px;
-                padding-inline: 4px;
+            span {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                border-radius: 4px;
+                font-weight: 700;
+                padding-inline: 8px;
             }
 
-            .smaller {
-                font-size: 12pt;
-                width: 24px;
-                height: 24px;
-            }
-
-            #copyMark,
-            #copyAll {
+            td, th {
                 width: 50%;
             }
 
-            #reset,
-            #copyAll,
-            #copyMark,
-            #resultLabel,
-            #mistakesLabel {
-                font-weight: 600;
+            ul {
+                text-align: start;
+            }
+
+            .mark {
+                background-color: transparent;
+                background-image: linear-gradient(135deg, var(--accent2), transparent 10% 90%, var(--accent2));
+                font-style: italic;
+                margin-block: 0;
+                border-top: none;
+                border-left: 2px outset var(--accent1);
+                border-right: 2px inset var(--accent1);
+                border-radius: 0px;
+                text-align: center;
+                cursor: cell;
+            }
+
+            .table-container {
+                overflow-x: auto;
             }
         </style>
     </head>
-
     <body>
-        <h1 title='Подсчёт баллов за письменный перевод'>Баллабол</h1>
+        <h1 id='page-title'>English Punctutation</h1>
+
         <!-- Settings -->
         <details id='settings'>
-            <summary>Настройки</summary>
+            <summary id='settings-summary'>Settings</summary>
         </details>
 
-        <!-- Clear button -->
-        <button id='reset' onclick='resetValues()'>Сброс</button>
+        <!-- Page main body -->
+        <!-- Header -->
+        <table>
+            <tr>
+                <th id='func'>Function</th>
+                <th id='exps'>Examples</th>
+            </tr>
+        </table>
 
-        <!-- #region Mistakes -->
-        <details open>
-            <summary>Добавить ошибку</summary>
-
-            <div
-                style='
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                '
-            >
-                <button
-                    id='addButton'
-                    class='roundedButton'
-                    onclick='addMistake()'
-                    disabled
-                >
-                    +
-                </button>
-                <input
-                    type='text'
-                    id='description'
-                    oninput='mAdd()'
-                    placeholder='Текст ошибки'
-                    style='width: 100%'
-                    ondragenter='this.value = ""'
-                    onmouseover='select()'
-                    title='Скопируйте сюда часть проверяемого текста, содержащую ошибку'
-                />
-            </div>
-
-            <table class='mistakeClassification'>
-                <!-- Mistake type -->
+        <!-- Punctutation marks -->
+        <details class='table-container'> <!-- Apostrophe -->
+            <summary id='apostrophe' class='mark' colspan='2'>Apostrophe <span>’</span></summary>
+            <table>
                 <tr>
-                    <td style='text-align: center'>
-                        <label for='mType'>Вид ошибки</label>
-                    </td>
-
-                    <td>
-                        <div>
-                            <label for='grammar'
-                                ><input
-                                    type='radio'
-                                    name='mType'
-                                    id='grammar'
-                                    style='vertical-align: middle'
-                                    checked
-                                />
-                                грамматическая
-                            </label>
-                        </div>
-
-                        <div>
-                            <label for='vocabulary'
-                                ><input
-                                    type='radio'
-                                    name='mType'
-                                    id='vocabulary'
-                                    style='vertical-align: middle'
-                                />
-                                лексическая
-                            </label>
-                        </div>
-
-                        <div>
-                            <label for='orthography'
-                                ><input
-                                    type='radio'
-                                    name='mType'
-                                    id='orthography'
-                                    style='vertical-align: middle'
-                                />
-                                орфографическая
-                            </label>
-                        </div>
-
-                        <div>
-                            <label for='punctuation'
-                                ><input
-                                    type='radio'
-                                    name='mType'
-                                    id='punctuation'
-                                    style='vertical-align: middle'
-                                />
-                                пунктуационная
-                            </label>
-                        </div>
-
-                        <div>
-                            <label for='complex'
-                                ><input
-                                    type='radio'
-                                    name='mType'
-                                    id='complex'
-                                    style='vertical-align: middle'
-                                />
-                                комплексная
-                            </label>
-                        </div>
-                    </td>
+                    <td id='posesstion'>Possession (with living beings)</td>
+                    <td><ul>
+                        <li>Hannah<em>’</em>s book</li>
+                        <li>children<em>’</em>s games</li>
+                        <li>workers<em>’</em> rights</li>
+                        <li>James<em>’</em>s car</li>
+                        <li>each other<em>’</em>s names</li>
+                        <li>It’s nobody<em>’</em>s fault but mine.</li>
+                        <li>My next-door neighbour<em>’</em>s dog</li>
+                        <li>at the hairdresser<em>’</em>s [<i>workplace</i>]</li>
+                        <li>I’m going over to Harry<em>’</em>s for tea tonight. [<i>home</i>]</li>
+                    </ul></td>
                 </tr>
-
-                <!-- Mistake subtype -->
                 <tr>
-                    <td style='text-align: center'>
-                        <label for='mSubtype'>Подвид ошибки</label>
-                    </td>
-
-                    <td>
-                        <div>
-                            <label for='deletion'
-                                ><input
-                                    type='radio'
-                                    name='mSubtype'
-                                    id='deletion'
-                                    style='vertical-align: middle'
-                                />
-                                опущение
-                            </label>
-                        </div>
-                        <div>
-                            <label for='modification'
-                                ><input
-                                    type='radio'
-                                    name='mSubtype'
-                                    id='modification'
-                                    style='vertical-align: middle'
-                                    checked
-                                />
-                                изменение
-                            </label>
-                        </div>
-                        <div>
-                            <label for='addition'
-                                ><input
-                                    type='radio'
-                                    name='mSubtype'
-                                    id='addition'
-                                    style='vertical-align: middle'
-                                />
-                                добавление
-                            </label>
-                        </div>
-                    </td>
+                    <td id='year'>Year/Decade</td>
+                    <td><ul>
+                        <li>French students rioted in <em>’</em>68. [<i>1968</i>]</li>
+                        <li>during the <em>’</em>90s [<i>1990s</i>]</li>
+                    </ul></td>
                 </tr>
-
-                <!-- Meaning clearness -->
                 <tr>
-                    <td style='text-align: center'>
-                        <label for='mMeaning'>Понимание текста</label>
-                    </td>
-
-                    <td>
-                        <div>
-                            <label for='retained'
-                                ><input
-                                    type='radio'
-                                    name='mMeaning'
-                                    id='retained'
-                                    style='vertical-align: middle'
-                                    checked
-                                />
-                                не затруднено
-                            </label>
-                        </div>
-                        <div>
-                            <label for='obscured'
-                                ><input
-                                    type='radio'
-                                    name='mMeaning'
-                                    id='obscured'
-                                    style='vertical-align: middle'
-                                />
-                                затруднено
-                            </label>
-                        </div>
-                        <div>
-                            <label for='lost'
-                                ><input
-                                    type='radio'
-                                    name='mMeaning'
-                                    id='lost'
-                                    style='vertical-align: middle'
-                                />
-                                невозможно
-                            </label>
-                        </div>
-                    </td>
+                    <td id='plurals'>Plurals of letters and numbers (for readability)</td>
+                    <td><ul>
+                        <li>Mind your p<em>’</em>s and q<em>’</em>s.</li>
+                        <li>His 2<em>’</em>s look a bit like 7<em>’</em>s.</li>
+                        <li>She got straight A<em>’</em>s in her exams.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='contractions'>Contracted forms</td>
+                    <td><ul>
+                        <li>I<em>’</em>m [<i>am</i>]</li>
+                        <li>they<em>’</em>re [<i>are</i>]</li>
+                        <li>He/she<em>’</em>s [<i>is/has</i>]</li>
+                        <li>you<em>’</em>d [<i>had/would</i>]</li>
+                        <li>it isn<em>’</em>t [<i>is not</i>]</li>
+                    </ul></td>
                 </tr>
             </table>
         </details>
-        <!-- #endregion -->
 
-        <div style='display: flex; align-items: center'>
-            <label id='resultLabel' for='resultingMark'>Итоги:</label>
-            <p id='resultingMark' style='padding-left: 5px'></p>
-        </div>
-
-        <!-- #region Results -->
-        <div style='display: flex; column-gap: 4px;'>
-            <button
-                id='copyMark'
-                style='border-radius: 7px 0px 0px 0px;'
-                onclick='copy(false)'
-            >
-                Копировать балл
-            </button>
-            <button
-                id='copyAll' 
-                style='border-radius: 0px 7px 0px 0px;'
-                onclick='copy(true)'
-            >
-                Копировать отчёт
-            </button>
-        </div>
-        <!-- #endregion -->
-
-        <hr />
-
-        <!-- #region Mistakes list -->
-        <label id='mistakesLabel' for='mistakesList'>Обнаруженные ошибки:</label>
-        <ol id='mistakesList'></ol>
-        <!-- #endregion -->
-
-        <div class='box' style='font-style: italic'>
-            Автор — Виталий Павлович Ульянов. Помогали: Максим Чинкин,
-            wmysterio, Seemann.
-        </div>
-
-        <!-- #region Help -->
-        <details>
-            <summary>Справка по программе</summary>
-            <ol>
-                <li><b>Вид ошибки:</b></li>
-                <ul>
-                    <li>
-                        <b>Грамматическая</b> — ошибка в передаче значения
-                        грамматической формы (неверное время,
-                        склонение,спряжение, артикль и т.п.).
-                    </li>
-                    <li>
-                        <b>Лексическая</b> — ошибка в передаче значения слова
-                        (неверное слово, сочетаемость, стиль и т.п.).
-                    </li>
-                    <li><b>Орфографическая</b> — ошибка в написании слова.</li>
-                    <li>
-                        <b>Пунктуационная</b> — ошибка в расстановке знаков
-                        препинания.
-                    </li>
-                    <li>
-                        <b>Комплексная</b> — грубая ошибка или сочетание ошибок
-                        при переводе большей, чем знак или слово, единицы текста
-                        (словосочетания, предложения).
-                    </li>
-                </ul>
-
-                <li><b>Подвид ошибки:</b></li>
-                <ul>
-                    <li><b>Опущение</b> — удаление нужного элемента.</li>
-                    <li>
-                        <b>Изменение</b> — замена правильного элемента
-                        неправильным.
-                    </li>
-                    <li><b>Добавление</b> — привнесение лишнего элемента.</li>
-                </ul>
-
-                <li><b>Понимание текста:</b></li>
-                <ul>
-                    <li>
-                        <b>Не затруднено</b> — ошибка не искажает смысл текста и
-                        не мешает его считывать.
-                    </li>
-                    <li>
-                        <b>Затруднено</b> — ошибка усложняет считывание смысла,
-                        заставляет обращаться к ближайшему контексту.
-                    </li>
-                    <li>
-                        <b>Невозможно</b> — ошибка сильно искажает смысл,
-                        восстановить его по ближайшему контексту нельзя.
-                    </li>
-                </ul>
-            </ol>
-            <hr />
-            <ul>
-                <h3>Примечания:</h3>
-                <li><b>Повторяющаяся ошибка</b> считается за одну ошибку.</li>
-                <li>
-                    <b>Ближайшим контекстом</b> для удобства можно считать
-                    <i>весь текст до</i> разбираемого фрагмента,
-                    <i>сам этот фрагмент</i> и
-                    <i>одно предложение после</i> него.
-                </li>
-            </ul>
+        <details class='table-container'> <!-- Comma -->
+            <summary class='mark'>Comma <span>,</span></summary>
+            <table>
+                <tr>
+                    <td id='sepMain'>Separating main clauses (with different subjects)</td>
+                    <td><ul>
+                        <li>It was cold outside, but we decided to go out for a walk anyway.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='subFromMain'>Separating subordinate clauses from main clauses</td>
+                    <td><ul>
+                        <li>If you have any problems, just call me. (But: <i>Just call me if you have any problems.</i>)</li>
+                        <li>We should be able to finish the work by the end of the week, if nothing unexpected turns up between now and then. (<i>the clauses are particularly long</i>)</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='relFromMain'>Separating non-defining relative clauses from main clauses</td>
+                    <td><ul>
+                        <li>My next-door neighbour, who works from home, is keeping an eye on the house while we’re away.</li>
+                        <li>She moved to Los Angeles, where she was immediately signed as a singer songwriter.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='sepListItems'>Separating items in a list</td>
+                    <td><ul>
+                        <li>She got out bread, butter, and jam.</li>
+                        <li>They breed dogs, cats, rabbits and hamsters.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='sepAdj'>Separating adjectives</td>
+                    <td><ul>
+                        <li>It was a hot, dry and dusty road.</li>
+                        <li>It’s wet, cold and windy outside.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='adverbials'>With adverbials</td>
+                    <td><ul>
+                        <li>However, police would not confirm this rumour.</li>
+                        <li>Therefore, I try to avoid using the car as much as possible.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='quesTags'>With question tags and short responses</td>
+                    <td><ul>
+                        <li>It’s quite cold today, isn’t it?</li>
+                        <li>Are you the mother of these children? – Yes, I am.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='vocatives'>With vocatives</td>
+                    <td><ul>
+                        <li>And now, ladies and gentlemen, please raise your glasses in a toast to the happy couple.</li>
+                        <li>Come on, Olivia, be reasonable.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='discMarkers'>With discourse markers</td>
+                    <td><ul>
+                        <li>Well, believe it or not, I actually passed!</li>
+                        <li>Actually, I quite enjoyed it.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='repSpeech'>In reported speech (if there is no <em>?</em> or <em>!</em> after the quotation)</td>
+                    <td><ul>
+                        <li>‘I don’t understand this question,’ said Peter.</li>
+                        <li>Peter said, ‘I don’t understand this question.’</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='sepDayYear'>In dates (between the day and the year)</td>
+                    <td><ul>
+                        <li>March 31, 2011</li>
+                    </ul></td>
+                </tr>
+                <tr></tr>
+            </table>
         </details>
-        <!-- #endregion -->
+
+        <p id='author' class='box' style='font-style: italic'>
+            Programme made by Vitaly Pavlovich Ulyanov. Theory and examples from <a href='https://grammar.collinsdictionary.com/easy-learning'>Collins English Dictionary</a>
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
 
         <script>
             /**
@@ -1208,177 +1032,266 @@
 
         </script>
         <script>
-            // Elements and variables
-            let mistakesList = document.getElementById('mistakesList');
-            let resultingMark = document.getElementById('resultingMark');
-            let addButton = document.getElementById('addButton');
-            /** @type {HTMLInputElement} */
-            let mDescription = document.getElementById('description');
-            let mType = document.getElementsByName('mType');
-            let mSubtype = document.getElementsByName('mSubtype');
-            let mAffectsMeaning = document.getElementsByName('mMeaning');
+            // Elements
 
-            let mistakes = [];
-            let totalWeight = 0;
-            let mark = 100;
-            let letter = 'A';
-
-            function mAdd() {
-                if (mDescription.value != '') {
-                    if (addButton.disabled) {
-                        addButton.disabled = false;
-                        addButton.title = 'Добавить ошибку';
-                    }
-                } else {
-                    addButton.disabled = true;
-                    addButton.title =
-                        'Для добавления ошибки введите её в поле справа';
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "English Punctutation"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "apostrophe",
+                            "childNodesTexts": [
+                                "Apostrophe ",
+                                "’"
+                            ]
+                        },
+                        {
+                            "id": "func",
+                            "childNodesTexts": [
+                                "Function"
+                            ]
+                        },
+                        {
+                            "id": "exps",
+                            "childNodesTexts": [
+                                "Examples"
+                            ]
+                        },
+                        {
+                            "id": "posesstion",
+                            "childNodesTexts": [
+                                "Possession (with living beings)"
+                            ]
+                        },
+                        {
+                            "id": "year",
+                            "childNodesTexts": [
+                                "Year/Decade"
+                            ]
+                        },
+                        {
+                            "id": "plurals",
+                            "childNodesTexts": [
+                                "Plurals of letters and numbers (for readability)"
+                            ]
+                        },
+                        {
+                            "id": "contractions",
+                            "childNodesTexts": [
+                                "Contracted forms"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Programme made by Vitaly Pavlovich Ulyanov. Theory and examples from ",
+                                "Collins English Dictionary"
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Английская пунктуация"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "apostrophe",
+                            "childNodesTexts": [
+                                "Апостроф ",
+                                "’"
+                            ]
+                        },
+                        {
+                            "id": "func",
+                            "childNodesTexts": [
+                                "Функция"
+                            ]
+                        },
+                        {
+                            "id": "exps",
+                            "childNodesTexts": [
+                                "Примеры"
+                            ]
+                        },
+                        {
+                            "id": "posesstion",
+                            "childNodesTexts": [
+                                "Принадлежность (у живых существ)"
+                            ]
+                        },
+                        {
+                            "id": "year",
+                            "childNodesTexts": [
+                                "Год/Десятилетие"
+                            ]
+                        },
+                        {
+                            "id": "plurals",
+                            "childNodesTexts": [
+                                "Множественное число букв и чисел (для удобочитаемости)"
+                            ]
+                        },
+                        {
+                            "id": "contractions",
+                            "childNodesTexts": [
+                                "Сокращённые формы"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор программы — Виталий Павлович Ульянов. Теория и примеры из ",
+                                "Collins English Dictionary"
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
                 }
-            }
-
-            function addMistake() {
-                let weight = 0;
-
-                let type = 'Тип ошибки';
-                switch (document.querySelector('[name="mType"]:checked').id) {
-                    case 'grammar':
-                        type = 'грамматическая';
-                        weight = 4.25;
-                        break;
-                    case 'vocabulary':
-                        type = 'лексическая';
-                        weight = 3.5;
-                        break;
-                    case 'orthography':
-                        type = 'орфографическая';
-                        weight = 3.25;
-                        break;
-                    case 'punctuation':
-                        type = 'пунктуационная';
-                        weight = 3;
-                        break;
-                    case 'complex':
-                        type = 'комплексная';
-                        weight = 7;
-                    default:
-                        break;
-                }
-
-                let subtype = 'Подтип ошибки';
-                switch (
-                    document.querySelector('[name="mSubtype"]:checked').id
-                ) {
-                    case 'deletion':
-                        subtype = 'опущение';
-                        break;
-                    case 'modification':
-                        subtype = 'изменение';
-                        break;
-                    case 'addition':
-                        subtype = 'добавление';
-                    default:
-                        break;
-                }
-
-                let affectsMeaning = '';
-                switch (
-                    document.querySelector('[name="mMeaning"]:checked').id
-                ) {
-                    case 'obscured':
-                        affectsMeaning = 'понимание затруднено';
-                        weight *= 1.5;
-                        break;
-                    case 'lost':
-                        affectsMeaning = 'серьёзное искажение';
-                        weight *= 2;
-                    default:
-                        break;
-                }
-
-                mistakes.push({
-                    type: `«${mDescription.value.trim()}»: ${type} [${subtype}${
-                        affectsMeaning ? `; ${affectsMeaning}` : ''
-                    }]`,
-                    weight: weight,
-                });
-
-                mDescription.value = '';
-                addButton.disabled = true;
-                updateList();
-            }
-
-            function deleteMistake(index) {
-                mistakes.splice(index, 1);
-                updateList();
-            }
-
-            function resetValues() {
-                mistakes = [];
-                updateList();
-            }
-
-            function updateList() {
-                let content = '';
-                totalWeight = 0;
-
-                for (var i = 0; i < mistakes.length; i++) {
-                    content += `<li><button class='roundedButton smaller' onclick='deleteMistake(${i})'>✖</button>${
-                        mistakes[i].type
-                    } [<b>${mistakes[i].weight
-                        .toFixed(2)
-                        .replace('.', ',')}</b>]</li>`;
-                    totalWeight += mistakes[i].weight;
-                }
-
-                mistakesList.innerHTML = content;
-
-                mark = Math.round(100 - totalWeight);
-
-                if (mark > 94) letter = 'A';
-                else if (mark > 82) letter = 'B';
-                else if (mark > 67) letter = 'C';
-                else if (mark > 55) letter = 'D';
-                else if (mark > 49) letter = 'E';
-                else if (mark > 19) letter = 'FX';
-                else letter = 'F';
-
-                resultingMark.innerHTML = `число ошибок — <b>${
-                    mistakes.length
-                }</b>; вес ошибок — <b>${totalWeight
-                    .toFixed(2)
-                    .replace('.', ',')}</b>; оценка — <b>${
-                    mark > 0 ? mark : 0
-                }</b> (${letter}).`;
-            }
-
-            function copy(copyAll) {
-                if (copyAll) {
-                    let data = `Число ошибок — ${
-                        mistakes.length
-                    }; вес ошибок — ${totalWeight
-                        .toFixed(2)
-                        .replace('.', ',')}; оценка — ${
-                        mark > 0 ? mark : 0
-                    } (${letter}).`;
-
-                    data += '\n\nНайденные ошибки:';
-                    for (var i = 0; i < mistakes.length; i++) {
-                        data += `\n${i + 1}. ${mistakes[i].type} → –${mistakes[
-                            i
-                        ].weight
-                            .toFixed(2)
-                            .replace('.', ',')}.`;
-                    }
-                    data +=
-                        '\n\nПроверено с помощью программы «Баллабол». Автор — Виталий Павлович Ульянов. Помогали: Максим Чинкин, wmysterio, Seemann.';
-                    navigator.clipboard.writeText(data);
-                } else {
-                    navigator.clipboard.writeText(mark);
-                }
-            }
-
-            mAdd();
-            updateList();
+            ]);
         </script>
     </body>
 </html>

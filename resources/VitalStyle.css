@@ -98,7 +98,7 @@ details > summary:hover {
 }
 
 details[open] > summary {
-    border-radius: 0px 0px 7px 0px;
+    border-top-left-radius: 0px;
     font-size: 1.05em;
     font-weight: 600;
     padding-bottom: 2px;
@@ -204,7 +204,6 @@ table {
 
 td,
 th {
-    border-color: var(--secondary-colour);
     border-style: inset;
     border-width: 2px;
     padding: 1px;
@@ -212,6 +211,7 @@ th {
 }
 
 td {
+    border-color: var(--secondary-colour);
     font-weight: 600;
 }
 
@@ -245,7 +245,7 @@ textarea::placeholder {
 
 .box {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     border-color: var(--accent1);
     border-radius: 7px 0px;
     border-style: outset;
@@ -342,4 +342,8 @@ textarea::placeholder {
     padding-inline: 0.5em;
     font-style: italic;
     font-weight: 600;
+}
+
+#author {
+    display: block;
 }

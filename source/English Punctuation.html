@@ -13,6 +13,7 @@
                 color: var(--primary-colour);
                 border-radius: 2px;
                 padding-inline: 2px;
+                font-style: normal;
                 font-weight: 700;
             }
 
@@ -20,7 +21,7 @@
                 background-color: var(--accent1);
                 color: var(--primary-colour);
                 border-radius: 4px;
-                font-weight: 900;
+                font-weight: 700;
                 padding-inline: 8px;
             }
 
@@ -33,11 +34,19 @@
             }
 
             .mark {
+                background-color: transparent;
+                background-image: linear-gradient(135deg, var(--accent2), transparent 10% 90%, var(--accent2));
                 font-style: italic;
-                background-image: linear-gradient(130deg, var(--accent1), transparent 10% 90%, var(--accent1));
+                margin-block: 0;
+                border-top: none;
+                border-left: 2px outset var(--accent1);
+                border-right: 2px inset var(--accent1);
+                border-radius: 0px;
+                text-align: center;
+                cursor: cell;
             }
 
-            #table-container {
+            .table-container {
                 overflow-x: auto;
             }
         </style>
@@ -51,60 +60,144 @@
         </details>
 
         <!-- Page main body -->
-        <div id='table-container'><table>
+        <!-- Header -->
+        <table>
             <tr>
                 <th id='func'>Function</th>
                 <th id='exps'>Examples</th>
             </tr>
+        </table>
 
-            <!-- #region Apostrophe -->
-            <tr>
-                <td id='apostrophe' class='mark' colspan='2'>Apostrophe <span>’</span></td>
-            </tr>
-            <tr>
-                <td id='posesstion'>Possession (with living beings)</td>
-                <td><ul>
-                    <li>Hannah<em>’</em>s book</li>
-                    <li>children<em>’</em>s games</li>
-                    <li>workers<em>’</em> rights</li>
-                    <li>James<em>’</em>s car</li>
-                    <li>each other<em>’</em>s names</li>
-                    <li>It’s nobody<em>’</em>s fault but mine.</li>
-                    <li>My next-door neighbour<em>’</em>s dog</li>
-                    <li>at the hairdresser<em>’</em>s [<i>workplace</i>]</li>
-                    <li>I’m going over to Harry<em>’</em>s for tea tonight. [<i>home</i>]</li>
-                </ul></td>
-            </tr>
-            <tr>
-                <td id='year'>Year/Decade</td>
-                <td><ul>
-                    <li>French students rioted in <em>’</em>68. [<i>1968</i>]</li>
-                    <li>during the <em>’</em>90s [<i>1990s</i>]</li>
-                </ul></td>
-            </tr>
-            <tr>
-                <td id='plurals'>Plurals of letters and numbers (for readability)</td>
-                <td><ul>
-                    <li>Mind your p<em>’</em>s and q<em>’</em>s.</li>
-                    <li>His 2<em>’</em>s look a bit like 7<em>’</em>s.</li>
-                    <li>She got straight A<em>’</em>s in her exams.</li>
-                </ul></td>
-            </tr>
-            <tr>
-                <td id='contractions'>Contracted forms</td>
-                <td><ul>
-                    <li>I’m [<i>am</i>]</li>
-                    <li>they’re [<i>are</i>]</li>
-                    <li>He/she’s [<i>is/has</i>]</li>
-                    <li>you’d [<i>had/would</i>]</li>
-                    <li>it isn’t [<i>is not</i>]</li>
-                </ul></td>
-            </tr>
-            <!-- #endregion -->
-        </table></div>
+        <!-- Punctutation marks -->
+        <details class='table-container'> <!-- Apostrophe -->
+            <summary id='apostrophe' class='mark' colspan='2'>Apostrophe <span>’</span></summary>
+            <table>
+                <tr>
+                    <td id='posesstion'>Possession (with living beings)</td>
+                    <td><ul>
+                        <li>Hannah<em>’</em>s book</li>
+                        <li>children<em>’</em>s games</li>
+                        <li>workers<em>’</em> rights</li>
+                        <li>James<em>’</em>s car</li>
+                        <li>each other<em>’</em>s names</li>
+                        <li>It’s nobody<em>’</em>s fault but mine.</li>
+                        <li>My next-door neighbour<em>’</em>s dog</li>
+                        <li>at the hairdresser<em>’</em>s [<i>workplace</i>]</li>
+                        <li>I’m going over to Harry<em>’</em>s for tea tonight. [<i>home</i>]</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='year'>Year/Decade</td>
+                    <td><ul>
+                        <li>French students rioted in <em>’</em>68. [<i>1968</i>]</li>
+                        <li>during the <em>’</em>90s [<i>1990s</i>]</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='plurals'>Plurals of letters and numbers (for readability)</td>
+                    <td><ul>
+                        <li>Mind your p<em>’</em>s and q<em>’</em>s.</li>
+                        <li>His 2<em>’</em>s look a bit like 7<em>’</em>s.</li>
+                        <li>She got straight A<em>’</em>s in her exams.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='contractions'>Contracted forms</td>
+                    <td><ul>
+                        <li>I<em>’</em>m [<i>am</i>]</li>
+                        <li>they<em>’</em>re [<i>are</i>]</li>
+                        <li>He/she<em>’</em>s [<i>is/has</i>]</li>
+                        <li>you<em>’</em>d [<i>had/would</i>]</li>
+                        <li>it isn<em>’</em>t [<i>is not</i>]</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Comma -->
+            <summary class='mark'>Comma <span>,</span></summary>
+            <table>
+                <tr>
+                    <td id='sepMain'>Separating main clauses (with different subjects)</td>
+                    <td><ul>
+                        <li>It was cold outside, but we decided to go out for a walk anyway.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='subFromMain'>Separating subordinate clauses from main clauses</td>
+                    <td><ul>
+                        <li>If you have any problems, just call me. (But: <i>Just call me if you have any problems.</i>)</li>
+                        <li>We should be able to finish the work by the end of the week, if nothing unexpected turns up between now and then. (<i>the clauses are particularly long</i>)</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='relFromMain'>Separating non-defining relative clauses from main clauses</td>
+                    <td><ul>
+                        <li>My next-door neighbour, who works from home, is keeping an eye on the house while we’re away.</li>
+                        <li>She moved to Los Angeles, where she was immediately signed as a singer songwriter.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='sepListItems'>Separating items in a list</td>
+                    <td><ul>
+                        <li>She got out bread, butter, and jam.</li>
+                        <li>They breed dogs, cats, rabbits and hamsters.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='sepAdj'>Separating adjectives</td>
+                    <td><ul>
+                        <li>It was a hot, dry and dusty road.</li>
+                        <li>It’s wet, cold and windy outside.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='adverbials'>With adverbials</td>
+                    <td><ul>
+                        <li>However, police would not confirm this rumour.</li>
+                        <li>Therefore, I try to avoid using the car as much as possible.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='quesTags'>With question tags and short responses</td>
+                    <td><ul>
+                        <li>It’s quite cold today, isn’t it?</li>
+                        <li>Are you the mother of these children? – Yes, I am.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='vocatives'>With vocatives</td>
+                    <td><ul>
+                        <li>And now, ladies and gentlemen, please raise your glasses in a toast to the happy couple.</li>
+                        <li>Come on, Olivia, be reasonable.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='discMarkers'>With discourse markers</td>
+                    <td><ul>
+                        <li>Well, believe it or not, I actually passed!</li>
+                        <li>Actually, I quite enjoyed it.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='repSpeech'>In reported speech (if there is no <em>?</em> or <em>!</em> after the quotation)</td>
+                    <td><ul>
+                        <li>‘I don’t understand this question,’ said Peter.</li>
+                        <li>Peter said, ‘I don’t understand this question.’</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='sepDayYear'>In dates (between the day and the year)</td>
+                    <td><ul>
+                        <li>March 31, 2011</li>
+                    </ul></td>
+                </tr>
+                <tr></tr>
+            </table>
+        </details>
 
         <p id='author' class='box' style='font-style: italic'>
-            Made by Vitaly Pavlovich Ulyanov.
+            Programme made by Vitaly Pavlovich Ulyanov. Theory and examples from <a href='https://grammar.collinsdictionary.com/easy-learning'>Collins English Dictionary</a>
         </p>
         <!-- Автор — Виталий Павлович Ульянов. -->
 
@@ -183,9 +276,53 @@
                             ]
                         },
                         {
+                            "id": "apostrophe",
+                            "childNodesTexts": [
+                                "Apostrophe ",
+                                "’"
+                            ]
+                        },
+                        {
+                            "id": "func",
+                            "childNodesTexts": [
+                                "Function"
+                            ]
+                        },
+                        {
+                            "id": "exps",
+                            "childNodesTexts": [
+                                "Examples"
+                            ]
+                        },
+                        {
+                            "id": "posesstion",
+                            "childNodesTexts": [
+                                "Possession (with living beings)"
+                            ]
+                        },
+                        {
+                            "id": "year",
+                            "childNodesTexts": [
+                                "Year/Decade"
+                            ]
+                        },
+                        {
+                            "id": "plurals",
+                            "childNodesTexts": [
+                                "Plurals of letters and numbers (for readability)"
+                            ]
+                        },
+                        {
+                            "id": "contractions",
+                            "childNodesTexts": [
+                                "Contracted forms"
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
-                                "Made by Vitaly Pavlovich Ulyanov."
+                                "Programme made by Vitaly Pavlovich Ulyanov. Theory and examples from ",
+                                "Collins English Dictionary"
                             ]
                         },
                         {
@@ -267,9 +404,53 @@
                             ]
                         },
                         {
+                            "id": "apostrophe",
+                            "childNodesTexts": [
+                                "Апостроф ",
+                                "’"
+                            ]
+                        },
+                        {
+                            "id": "func",
+                            "childNodesTexts": [
+                                "Функция"
+                            ]
+                        },
+                        {
+                            "id": "exps",
+                            "childNodesTexts": [
+                                "Примеры"
+                            ]
+                        },
+                        {
+                            "id": "posesstion",
+                            "childNodesTexts": [
+                                "Принадлежность (у живых существ)"
+                            ]
+                        },
+                        {
+                            "id": "year",
+                            "childNodesTexts": [
+                                "Год/Десятилетие"
+                            ]
+                        },
+                        {
+                            "id": "plurals",
+                            "childNodesTexts": [
+                                "Множественное число букв и чисел (для удобочитаемости)"
+                            ]
+                        },
+                        {
+                            "id": "contractions",
+                            "childNodesTexts": [
+                                "Сокращённые формы"
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
-                                "Автор — Виталий Павлович Ульянов."
+                                "Автор программы — Виталий Павлович Ульянов. Теория и примеры из ",
+                                "Collins English Dictionary"
                             ]
                         },
                         {
