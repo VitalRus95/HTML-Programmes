@@ -384,8 +384,8 @@
             }
 
             .mark {
-                background-color: transparent;
-                background-image: linear-gradient(135deg, var(--accent2), transparent 10% 90%, var(--accent2));
+                background-color: var(--primary-colour);
+                background-image: linear-gradient(135deg, var(--accent2), transparent 25% 75%, var(--accent2));
                 font-style: italic;
                 margin-block: 0;
                 border-top: none;
@@ -396,8 +396,9 @@
                 cursor: cell;
             }
 
-            .table-container {
-                overflow-x: auto;
+            .mark:focus,
+            .mark:hover {
+                background-color: var(--secondary-colour);
             }
         </style>
     </head>
@@ -456,7 +457,7 @@
                     <td><ul>
                         <li>I<em>’</em>m [<i>am</i>]</li>
                         <li>they<em>’</em>re [<i>are</i>]</li>
-                        <li>He/she<em>’</em>s [<i>is/has</i>]</li>
+                        <li>he/she<em>’</em>s [<i>is/has</i>]</li>
                         <li>you<em>’</em>d [<i>had/would</i>]</li>
                         <li>it isn<em>’</em>t [<i>is not</i>]</li>
                     </ul></td>
@@ -470,81 +471,112 @@
                 <tr>
                     <td id='sepMain'>Separating main clauses (with different subjects)</td>
                     <td><ul>
-                        <li>It was cold outside, but we decided to go out for a walk anyway.</li>
+                        <li>It was cold outside<em>,</em> but we decided to go out for a walk anyway.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='subFromMain'>Separating subordinate clauses from main clauses</td>
                     <td><ul>
-                        <li>If you have any problems, just call me. (But: <i>Just call me if you have any problems.</i>)</li>
-                        <li>We should be able to finish the work by the end of the week, if nothing unexpected turns up between now and then. (<i>the clauses are particularly long</i>)</li>
+                        <li>If you have any problems<em>,</em> just call me. [But: <i>Just call me if you have any problems.</i>]</li>
+                        <li>We should be able to finish the work by the end of the week<em>,</em> if nothing unexpected turns up between now and then. [<i>the clauses are particularly long</i>]</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='relFromMain'>Separating non-defining relative clauses from main clauses</td>
                     <td><ul>
-                        <li>My next-door neighbour, who works from home, is keeping an eye on the house while we’re away.</li>
-                        <li>She moved to Los Angeles, where she was immediately signed as a singer songwriter.</li>
+                        <li>My next-door neighbour<em>,</em> who works from home<em>,</em> is keeping an eye on the house while we’re away.</li>
+                        <li>She moved to Los Angeles<em>,</em> where she was immediately signed as a singer songwriter.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='sepListItems'>Separating items in a list</td>
                     <td><ul>
-                        <li>She got out bread, butter, and jam.</li>
-                        <li>They breed dogs, cats, rabbits and hamsters.</li>
+                        <li>She got out bread<em>,</em> butter<em>,</em> and jam.</li>
+                        <li>They breed dogs<em>,</em> cats<em>,</em> rabbits and hamsters.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='sepAdj'>Separating adjectives</td>
                     <td><ul>
-                        <li>It was a hot, dry and dusty road.</li>
-                        <li>It’s wet, cold and windy outside.</li>
+                        <li>It was a hot<em>,</em> dry and dusty road.</li>
+                        <li>It’s wet<em>,</em> cold and windy outside.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='adverbials'>With adverbials</td>
                     <td><ul>
-                        <li>However, police would not confirm this rumour.</li>
-                        <li>Therefore, I try to avoid using the car as much as possible.</li>
+                        <li>However<em>,</em> police would not confirm this rumour.</li>
+                        <li>Therefore<em>,</em> I try to avoid using the car as much as possible.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='quesTags'>With question tags and short responses</td>
                     <td><ul>
-                        <li>It’s quite cold today, isn’t it?</li>
-                        <li>Are you the mother of these children? – Yes, I am.</li>
+                        <li>It’s quite cold today<em>,</em> isn’t it?</li>
+                        <li>Are you the mother of these children? – Yes<em>,</em> I am.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='vocatives'>With vocatives</td>
                     <td><ul>
-                        <li>And now, ladies and gentlemen, please raise your glasses in a toast to the happy couple.</li>
-                        <li>Come on, Olivia, be reasonable.</li>
+                        <li>And now<em>,</em> ladies and gentlemen<em>,</em> please raise your glasses in a toast to the happy couple.</li>
+                        <li>Come on<em>,</em> Olivia<em>,</em> be reasonable.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='discMarkers'>With discourse markers</td>
                     <td><ul>
-                        <li>Well, believe it or not, I actually passed!</li>
-                        <li>Actually, I quite enjoyed it.</li>
+                        <li>Well<em>,</em> believe it or not<em>,</em> I actually passed!</li>
+                        <li>Actually<em>,</em> I quite enjoyed it.</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='repSpeech'>In reported speech (if there is no <em>?</em> or <em>!</em> after the quotation)</td>
                     <td><ul>
-                        <li>‘I don’t understand this question,’ said Peter.</li>
-                        <li>Peter said, ‘I don’t understand this question.’</li>
+                        <li>‘I don’t understand this question<em>,</em>’ said Peter.</li>
+                        <li>Peter said<em>,</em> ‘I don’t understand this question.’</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='sepDayYear'>In dates (between the day and the year)</td>
                     <td><ul>
-                        <li>March 31, 2011</li>
+                        <li>March 31<em>,</em> 2011</li>
                     </ul></td>
                 </tr>
-                <tr></tr>
             </table>
         </details>
+
+        <details class='table-container'>
+            <summary class='mark'>Quotation marks <span>‘ ’</span>/<span>“ ”</span></summary>
+            <table>
+                <tr>
+                    <td id='dirSpeech'>Direct speech</td>
+                    <td><ul>
+                        <li><em>‘</em>Have you been to the new shopping precinct yet?<em>’</em> enquired Shona.</li>
+                        <li><em>“</em>I’ve already seen it,<em>”</em> John replied.</li>
+                        <li><em>‘</em>There is<em>’</em>, Monica said, <em>‘</em>nothing we can do about it.<em>’</em></li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='attention'>Drawing attention to a word</td>
+                    <td><ul>
+                        <li>The word <em>‘</em>book<em>’</em> can be used as a noun or a verb.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='unusual'>Indicating an unusual use of a word</td>
+                    <td><ul>
+                        <li>She pointed out that websites used for internet voting could be <em>‘</em>spoofed<em>’</em>.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='distancing'>Distancing oneself from a word</td>
+                    <td><ul>
+                        <li>I don’t agree with this <em>‘</em>mercy killing<em>’</em> business.</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details> <!-- Quotation marks  -->
 
         <p id='author' class='box' style='font-style: italic'>
             Programme made by Vitaly Pavlovich Ulyanov. Theory and examples from <a href='https://grammar.collinsdictionary.com/easy-learning'>Collins English Dictionary</a>
