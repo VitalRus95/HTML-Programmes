@@ -21,6 +21,7 @@
                 background-color: var(--accent1);
                 color: var(--primary-colour);
                 border-radius: 4px;
+                font-style: normal;
                 font-weight: 700;
                 padding-inline: 8px;
             }
@@ -116,7 +117,7 @@
         </details>
 
         <details class='table-container'> <!-- Comma -->
-            <summary class='mark'>Comma <span>,</span></summary>
+            <summary id='comma' class='mark'>Comma <span>,</span></summary>
             <table>
                 <tr>
                     <td id='sepMain'>Separating main clauses (with different subjects)</td>
@@ -197,7 +198,7 @@
         </details>
 
         <details class='table-container'> <!-- Quotation marks  -->
-            <summary class='mark'>Quotation marks <span>‘ ’</span>/<span>“ ”</span></summary>
+            <summary id='quotMarks' class='mark'>Quotation marks <span>‘ ’</span>/<span>“ ”</span></summary>
             <table>
                 <tr>
                     <td id='dirSpeech'>Direct speech</td>
@@ -229,7 +230,7 @@
         </details>
 
         <details class='table-container'> <!-- Capital letters -->
-            <summary class='mark'>Capital letters <span>A</span></summary>
+            <summary id='capitals' class='mark'>Capital letters <span>A</span></summary>
             <table>
                 <tr>
                     <td id='sentBegin'>The beginning of a sentence</td>
@@ -313,7 +314,7 @@
         </details>
 
         <details class='table-container'> <!-- Full stop -->
-            <summary class='mark'>Full stop <span>.</span></summary>
+            <summary id='fullStop' class='mark'>Full stop <span>.</span></summary>
             <table>
                 <tr>
                     <td id='sentEnd'>The end of a sentence</td>
@@ -356,6 +357,137 @@
                         <li>He asked if the bus had left<em>.</em></li>
                         <li>Will you open your books on page 14<em>.</em></li>
                         <li>I wonder what’s happened<em>.</em></li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Question mark -->
+            <summary id='quesMark' class='mark'>Question mark <span>?</span></summary>
+            <table>
+                <tr>
+                    <td id='quesEnd'>The end of a question</td>
+                    <td><ul>
+                        <li>When will we be arriving<em>?</em></li>
+                        <li>Does any of this matter<em>?</em></li>
+                        <li>He’s certain to be elected, isn’t he<em>?</em></li>
+                        <li>The lady said, ‘Where are you going<em>?</em>’</li>
+                        <li>You know he doesn’t live here any longer<em>?</em> [<i>even if the words are not in the normal order, or some words are omitted</i>]</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Exclamation mark -->
+            <summary id='exclamMark' class='mark'>Exclamation mark <span>!</span></summary>
+            <table>
+                <tr>
+                    <td id='exclam'>After exclamations and emphatic expressions (use <em>.</em> to express mild excitement or humour)</td>
+                    <td><ul>
+                        <li>I can’t believe it<em>!</em></li>
+                        <li>Oh, no<em>!</em> Look at this mess<em>!</em></li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Colon -->
+            <summary id='colon' class='mark'>Colon <span>:</span></summary>
+            <table>
+                <tr>
+                    <td id='listFront'>In front of a list</td>
+                    <td><ul>
+                        <li>I used three colours<em>:</em> green, blue and pink.</li>
+                        <li>Make sure you wear clothes made from natural fibres<em>:</em> cotton, silk and wool.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='explReason'>In front of an explanation or a reason</td>
+                    <td><ul>
+                        <li>Nevertheless, the main problem remained<em>:</em> what should be done with the two men?</li>
+                        <li>I decided against going away this weekend<em>:</em> the weather forecast was dreadful.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='intro'>After introductory headings</td>
+                    <td><ul>
+                        <li>Cooking time<em>:</em> about five minutes.</li>
+                        <li>Start time<em>:</em> 10 o’clock.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='connMain'>Between two main clauses that are connected [formal]</td>
+                    <td><ul>
+                        <li>It made me feel claustrophobic<em>:</em> what, I wonder, would happen to someone who was really unable to tolerate being locked into such a tiny space?</li>
+                        <li>Be patient<em>:</em> the next book in the series has not yet been published.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='titleSecPart'>In front of the second part of a book title</td>
+                    <td><ul>
+                        <li>Farming and wildlife<em>:</em> a study in compromise</li>
+                        <li>Beyond single words<em>:</em> the most frequent collocations in spoken English</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='dirSpIntro'>To introduce direct speech, especially in American English, or when the quotation is particularly long</td>
+                    <td><ul>
+                        <li>He said<em>:</em> ‘You owe me three dollars and twenty-five cents.’</li>
+                        <li>The Health Minister said<em>:</em> ‘The NHS I.T. programme will mean that patients will get access to more comprehensive information to help them make choices.’</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Semicolon -->
+            <summary id='semicolon' class='mark'>Semicolon <span>;</span></summary>
+            <table>
+                <tr>
+                    <td id='breakTwoCl'>To mark a break between two main clauses when there is a balance or a contrast between the clauses</td>
+                    <td><ul>
+                        <li>The engine roared into life<em>;</em> the propellers began to turn<em>;</em> the plane taxied down the runway ready for takeoff.</li>
+                        <li>I’m not that interested in jazz<em>;</em> I prefer classical music.</li>
+                        <li>He knew everything about me<em>;</em> I had never even heard of him.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='sepLongItems'>To separate items in a list, especially if the listed items are phrases or clauses</td>
+                    <td><ul>
+                        <li>The holiday was a disaster: the flight was four hours late<em>;</em> the hotel, which was described as ‘luxury’, was dirty<em>;</em> and it rained for the whole fortnight.</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Brackets -->
+            <summary id='brackets' class='mark'>Brackets/Parentheses <span>( )</span></summary>
+            <table>
+                <tr>
+                    <td id='enclose'>To enclose a word or words which can be left out and still leave a meaningful sentence</td>
+                    <td><ul>
+                        <li>The wooded area <em>(</em>see map below<em>)</em> is approximately 4,000 hectares.</li>
+                        <li>This is a process which Hayek <em>(</em>a writer who came to rather different conclusions<em>)</em> also observed.</li>
+                        <li>I haven’t yet spoken to John <em>(</em>I mean John Maple, my boss<em>)</em>, but I have a meeting with him on Friday.</li>
+                        <li>He’s very handsome <em>(</em>positively gorgeous in fact!<em>)</em> and still single.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='alternatives'>To show alternatives or options</td>
+                    <td><ul>
+                        <li>Any student<em>(</em>s<em>)</em> interested in taking part should email me.</li>
+                        <li>A goat should give from three to six pints <em>(</em>1.7 to 3.4 litres<em>)</em> of milk a day.</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Square brackets -->
+            <summary id='sqrBr' class='mark'>Square brackets <span>[ ]</span></summary>
+            <table>
+                <tr>
+                    <td id='clearerQuot'>To supply words that make a quotation clearer or that comment on it but were not originally said or written</td>
+                    <td><ul>
+                        <li>Mr Runcie concluded: ‘The novel is at its strongest when describing the dignity of Cambridge <em>[</em>a slave<em>]</em> and the education of Emily <em>[</em>the daughter of an absentee landlord<em>]</em>.’</li>
                     </ul></td>
                 </tr>
             </table>
