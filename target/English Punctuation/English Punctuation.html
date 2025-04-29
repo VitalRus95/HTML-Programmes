@@ -216,7 +216,7 @@
             th {
                 border-style: inset;
                 border-width: 2px;
-                padding: 1px;
+                padding-inline: 4px;
                 text-align: center;
             }
             
@@ -358,6 +358,10 @@
                 display: block;
             }
 
+            details[open] > .mark {
+                opacity: 0.95;
+            }
+
             em {
                 background-color: var(--accent1);
                 color: var(--primary-colour);
@@ -378,6 +382,7 @@
 
             td, th {
                 width: 50%;
+                overflow-wrap: anywhere;
             }
 
             ul {
@@ -434,15 +439,15 @@
                         <li>each other<em>’</em>s names</li>
                         <li>It’s nobody<em>’</em>s fault but mine.</li>
                         <li>My next-door neighbour<em>’</em>s dog</li>
-                        <li>at the hairdresser<em>’</em>s [<i>workplace</i>]</li>
-                        <li>I’m going over to Harry<em>’</em>s for tea tonight. [<i>home</i>]</li>
+                        <li id='ap1'>at the hairdresser<em>’</em>s [<i>workplace</i>]</li>
+                        <li id='ap2'>I’m going over to Harry<em>’</em>s for tea tonight. [<i>home</i>]</li>
                     </ul></td>
                 </tr>
                 <tr>
                     <td id='year'>Year/Decade</td>
                     <td><ul>
                         <li>French students rioted in <em>’</em>68. [<i>1968</i>]</li>
-                        <li>during the <em>’</em>90s [<i>1990s</i>]</li>
+                        <li id='ap3'>during the <em>’</em>90s [<i>1990s</i>]</li>
                     </ul></td>
                 </tr>
                 <tr>
@@ -478,8 +483,8 @@
                 <tr>
                     <td id='subFromMain'>Separating subordinate clauses from main clauses</td>
                     <td><ul>
-                        <li>If you have any problems<em>,</em> just call me. [But: <i>Just call me if you have any problems.</i>]</li>
-                        <li>We should be able to finish the work by the end of the week<em>,</em> if nothing unexpected turns up between now and then. [<i>the clauses are particularly long</i>]</li>
+                        <li id='com1'>If you have any problems<em>,</em> just call me. [But: <i>Just call me if you have any problems.</i>]</li>
+                        <li id='com2'>We should be able to finish the work by the end of the week<em>,</em> if nothing unexpected turns up between now and then. [<i>the clauses are particularly long</i>]</li>
                     </ul></td>
                 </tr>
                 <tr>
@@ -722,7 +727,7 @@
                         <li>Does any of this matter<em>?</em></li>
                         <li>He’s certain to be elected, isn’t he<em>?</em></li>
                         <li>The lady said, ‘Where are you going<em>?</em>’</li>
-                        <li>You know he doesn’t live here any longer<em>?</em> [<i>even if the words are not in the normal order, or some words are omitted</i>]</li>
+                        <li id='qm1'>You know he doesn’t live here any longer<em>?</em> [<i>even if the words are not in the normal order, or some words are omitted</i>]</li>
                     </ul></td>
                 </tr>
             </table>
@@ -838,6 +843,148 @@
                     <td id='clearerQuot'>To supply words that make a quotation clearer or that comment on it but were not originally said or written</td>
                     <td><ul>
                         <li>Mr Runcie concluded: ‘The novel is at its strongest when describing the dignity of Cambridge <em>[</em>a slave<em>]</em> and the education of Emily <em>[</em>the daughter of an absentee landlord<em>]</em>.’</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Hyphen -->
+            <summary id='hyphen' class='mark'>Hyphen <span>-</span></summary>
+            <table>
+                <tr>
+                    <td id='split'>At the ends of lines where a word has been split</td>
+                    <td><ul>
+                        <li>inter<em>-</em>national</li>
+                        <li>listen<em>-</em>ing</li>
+                        <li>compli<em>-</em>mentary</li>
+                        <li>infor<em>-</em>mation</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='prefCap'>With prefixes in front of a word beginning with a capital letter</td>
+                    <td><ul>
+                        <li>a wave of anti<em>-</em>British feeling</li>
+                        <li>a neo<em>-</em>Byzantine cathedral</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='joinAdj'>Joining two or more words to form an adjective (before the noun it describes)</td>
+                    <td><ul>
+                        <li>an up<em>-</em>to<em>-</em>date account</li>
+                        <li>a last<em>-</em>minute rush</li>
+                        <li>a six<em>-</em>year<em>-</em>old boy</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='compNouns'>With some common compound nouns</td>
+                    <td><ul>
+                        <li>mother<em>-</em>in<em>-</em>law</li>
+                        <li>great<em>-</em>grandmother</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='prefAnotherWord'>Splitting words formed by adding a prefix to another word (to avoid an awkward combination of letters or confusion with another word)</td>
+                    <td><ul>
+                        <li>re<em>-</em>elect</li>
+                        <li>re<em>-</em>covering furniture</li>
+                        <li>re<em>-</em>creation</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Dash -->
+            <summary id='dash' class='mark'>Dash <span>–</span></summary>
+            <table>
+                <tr>
+                    <td id='comment'>A comment that interrupts the flow of a sentence</td>
+                    <td><ul>
+                        <li>Now children <em>–</em> Kenneth, stop that immediately! <em>–</em> open your books on page 20.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='extraInfo'>To separate off extra information</td>
+                    <td><ul>
+                        <li>Boots and shoes <em>–</em> all shapes, sizes and colours <em>–</em> tumbled out.</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='range'>To indicate a range</td>
+                    <td><ul>
+                        <li>pages 26<em>–</em>42</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='twoEntities'>Between two adjectives/noun modifiers to indicate that two countries or groups are involved in something or that someone has two roles/aspects</td>
+                    <td><ul>
+                        <li>Swedish<em>–</em>Norwegian relations</li>
+                        <li>the United States<em>–</em>Canada free trade pact</li>
+                        <li>a mathematician<em>–</em>philosopher</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='travelPath'>To indicate that something such as a plane or a train goes between two places</td>
+                    <td><ul>
+                        <li>the Anguilla<em>–</em>St Kitts flight</li>
+                        <li>the New York<em>–</em>Montreal train</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Slash -->
+            <summary id='slash' class='mark'>Slash <span>/</span></summary>
+            <table>
+                <tr>
+                    <td id='altRatRang'>Alternatives, ratios, ranges, in website addresses</td>
+                    <td><ul>
+                        <li>he<em>/</em>she<em>/</em>it</li>
+                        <li>200 km<em>/</em>hr</li>
+                        <li>the 2001<em>/</em>02 accounting year</li>
+                        <li>https:<em>/</em><em>/</em>grammar.collinsdictionary.com</li>
+                    </ul></td>
+                </tr>
+            </table>
+        </details>
+
+        <details class='table-container'> <!-- Numbers -->
+            <summary id='nums' class='mark'>Numbers</summary>
+            <table>
+                <tr>
+                    <td id='nDates'>Dates</td>
+                    <td><ul>
+                        <li>12<em>.</em>3<em>.</em>09</li>
+                        <li>3<em>/</em>12<em>/</em>09 [American English]</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='nSciAbbr'>Scientific abbreviations (no full stops)</td>
+                    <td><ul>
+                        <li>12 kg</li>
+                        <li>50 cm</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='nTimes'>Times</td>
+                    <td><ul>
+                        <li>4<em>.</em>15 p.m.</li>
+                        <li>3<em>:</em>30 a.m.</li>
+                        <li>21<em>.</em>15</li>
+                        <li>20<em>:</em>30</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='nLong'>Long numbers (units of thousands and millions)</td>
+                    <td><ul>
+                        <li>1<em>,</em>359</li>
+                        <li>2<em>,</em>543<em>,</em>678</li>
+                    </ul></td>
+                </tr>
+                <tr>
+                    <td id='nDec'>Decimals</td>
+                    <td><ul>
+                        <li>1<em>.</em>5</li>
+                        <li>25<em>.</em>08</li>
                     </ul></td>
                 </tr>
             </table>
@@ -1402,13 +1549,6 @@
                             ]
                         },
                         {
-                            "id": "apostrophe",
-                            "childNodesTexts": [
-                                "Apostrophe ",
-                                "’"
-                            ]
-                        },
-                        {
                             "id": "func",
                             "childNodesTexts": [
                                 "Function"
@@ -1421,15 +1561,52 @@
                             ]
                         },
                         {
+                            "id": "apostrophe",
+                            "childNodesTexts": [
+                                "Apostrophe ",
+                                "’"
+                            ]
+                        },
+                        {
                             "id": "posesstion",
                             "childNodesTexts": [
                                 "Possession (with living beings)"
                             ]
                         },
                         {
+                            "id": "ap1",
+                            "childNodesTexts": [
+                                "at the hairdresser",
+                                "’",
+                                "s [",
+                                "workplace",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "ap2",
+                            "childNodesTexts": [
+                                "I’m going over to Harry",
+                                "’",
+                                "s for tea tonight. [",
+                                "home",
+                                "]"
+                            ]
+                        },
+                        {
                             "id": "year",
                             "childNodesTexts": [
                                 "Year/Decade"
+                            ]
+                        },
+                        {
+                            "id": "ap3",
+                            "childNodesTexts": [
+                                "during the",
+                                "’",
+                                "90s [",
+                                "1990s",
+                                "]"
                             ]
                         },
                         {
@@ -1442,6 +1619,507 @@
                             "id": "contractions",
                             "childNodesTexts": [
                                 "Contracted forms"
+                            ]
+                        },
+                        {
+                            "id": "comma",
+                            "childNodesTexts": [
+                                "Comma ",
+                                ","
+                            ]
+                        },
+                        {
+                            "id": "sepMain",
+                            "childNodesTexts": [
+                                "Separating main clauses (with different subjects)"
+                            ]
+                        },
+                        {
+                            "id": "subFromMain",
+                            "childNodesTexts": [
+                                "Separating subordinate clauses from main clauses"
+                            ]
+                        },
+                        {
+                            "id": "com1",
+                            "childNodesTexts": [
+                                "If you have any problems",
+                                ",",
+                                " just call me. [But: ",
+                                "Just call me if you have any problems.",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "com2",
+                            "childNodesTexts": [
+                                "We should be able to finish the work by the end of the week",
+                                ",",
+                                " if nothing unexpected turns up between now and then. [",
+                                "the clauses are particularly long",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "relFromMain",
+                            "childNodesTexts": [
+                                "Separating non-defining relative clauses from main clauses"
+                            ]
+                        },
+                        {
+                            "id": "sepListItems",
+                            "childNodesTexts": [
+                                "Separating items in a list"
+                            ]
+                        },
+                        {
+                            "id": "sepAdj",
+                            "childNodesTexts": [
+                                "Separating adjectives"
+                            ]
+                        },
+                        {
+                            "id": "adverbials",
+                            "childNodesTexts": [
+                                "With adverbials"
+                            ]
+                        },
+                        {
+                            "id": "quesTags",
+                            "childNodesTexts": [
+                                "With question tags and short responses"
+                            ]
+                        },
+                        {
+                            "id": "vocatives",
+                            "childNodesTexts": [
+                                "With vocatives"
+                            ]
+                        },
+                        {
+                            "id": "discMarkers",
+                            "childNodesTexts": [
+                                "With discourse markers"
+                            ]
+                        },
+                        {
+                            "id": "repSpeech",
+                            "childNodesTexts": [
+                                "In reported speech (if there is no ",
+                                "?",
+                                " or ",
+                                "!",
+                                " after the quotation)"
+                            ]
+                        },
+                        {
+                            "id": "sepDayYear",
+                            "childNodesTexts": [
+                                "In dates (between the day and the year)"
+                            ]
+                        },
+                        {
+                            "id": "quotMarks",
+                            "childNodesTexts": [
+                                "Quotation marks ",
+                                "‘ ’",
+                                "/",
+                                "“ ”"
+                            ]
+                        },
+                        {
+                            "id": "dirSpeech",
+                            "childNodesTexts": [
+                                "Direct speech"
+                            ]
+                        },
+                        {
+                            "id": "attention",
+                            "childNodesTexts": [
+                                "Drawing attention to a word"
+                            ]
+                        },
+                        {
+                            "id": "unusual",
+                            "childNodesTexts": [
+                                "Indicating an unusual use of a word"
+                            ]
+                        },
+                        {
+                            "id": "distancing",
+                            "childNodesTexts": [
+                                "Distancing oneself from a word"
+                            ]
+                        },
+                        {
+                            "id": "capitals",
+                            "childNodesTexts": [
+                                "Capital letters ",
+                                "A"
+                            ]
+                        },
+                        {
+                            "id": "sentBegin",
+                            "childNodesTexts": [
+                                "The beginning of a sentence"
+                            ]
+                        },
+                        {
+                            "id": "names",
+                            "childNodesTexts": [
+                                "People’s names"
+                            ]
+                        },
+                        {
+                            "id": "weekdays",
+                            "childNodesTexts": [
+                                "Days of the week"
+                            ]
+                        },
+                        {
+                            "id": "months",
+                            "childNodesTexts": [
+                                "Months of the year"
+                            ]
+                        },
+                        {
+                            "id": "holidays",
+                            "childNodesTexts": [
+                                "Public holidays"
+                            ]
+                        },
+                        {
+                            "id": "nationalities",
+                            "childNodesTexts": [
+                                "Nationalities"
+                            ]
+                        },
+                        {
+                            "id": "langs",
+                            "childNodesTexts": [
+                                "Languages"
+                            ]
+                        },
+                        {
+                            "id": "locations",
+                            "childNodesTexts": [
+                                "Geographical locations"
+                            ]
+                        },
+                        {
+                            "id": "companies",
+                            "childNodesTexts": [
+                                "Company names"
+                            ]
+                        },
+                        {
+                            "id": "religions",
+                            "childNodesTexts": [
+                                "Religions"
+                            ]
+                        },
+                        {
+                            "id": "titles",
+                            "childNodesTexts": [
+                                "The first letter in titles (all the main content words, i.e. not the prepositions or the determiners)"
+                            ]
+                        },
+                        {
+                            "id": "fullStop",
+                            "childNodesTexts": [
+                                "Full stop ",
+                                "."
+                            ]
+                        },
+                        {
+                            "id": "sentEnd",
+                            "childNodesTexts": [
+                                "The end of a sentence"
+                            ]
+                        },
+                        {
+                            "id": "segmEnd",
+                            "childNodesTexts": [
+                                "The end of a sentence fragment"
+                            ]
+                        },
+                        {
+                            "id": "initials",
+                            "childNodesTexts": [
+                                "In initials for people’s names (less frequent)"
+                            ]
+                        },
+                        {
+                            "id": "abbrev",
+                            "childNodesTexts": [
+                                "After abbreviations (less frequent)"
+                            ]
+                        },
+                        {
+                            "id": "shortened",
+                            "childNodesTexts": [
+                                "When an abbreviation consists of a shortened word (without the last letter)"
+                            ]
+                        },
+                        {
+                            "id": "indirQuest",
+                            "childNodesTexts": [
+                                "After an indirect question or a polite request"
+                            ]
+                        },
+                        {
+                            "id": "quesMark",
+                            "childNodesTexts": [
+                                "Question mark ",
+                                "?"
+                            ]
+                        },
+                        {
+                            "id": "quesEnd",
+                            "childNodesTexts": [
+                                "The end of a question"
+                            ]
+                        },
+                        {
+                            "id": "qm1",
+                            "childNodesTexts": [
+                                "You know he doesn’t live here any longer",
+                                "?",
+                                " [",
+                                "even if the words are not in the normal order, or some words are omitted",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "exclamMark",
+                            "childNodesTexts": [
+                                "Exclamation mark ",
+                                "!"
+                            ]
+                        },
+                        {
+                            "id": "exclam",
+                            "childNodesTexts": [
+                                "After exclamations and emphatic expressions (use ",
+                                ".",
+                                " to express mild excitement or humour)"
+                            ]
+                        },
+                        {
+                            "id": "colon",
+                            "childNodesTexts": [
+                                "Colon ",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "listFront",
+                            "childNodesTexts": [
+                                "In front of a list"
+                            ]
+                        },
+                        {
+                            "id": "explReason",
+                            "childNodesTexts": [
+                                "In front of an explanation or a reason"
+                            ]
+                        },
+                        {
+                            "id": "intro",
+                            "childNodesTexts": [
+                                "After introductory headings"
+                            ]
+                        },
+                        {
+                            "id": "connMain",
+                            "childNodesTexts": [
+                                "Between two main clauses that are connected [formal]"
+                            ]
+                        },
+                        {
+                            "id": "titleSecPart",
+                            "childNodesTexts": [
+                                "In front of the second part of a book title"
+                            ]
+                        },
+                        {
+                            "id": "dirSpIntro",
+                            "childNodesTexts": [
+                                "To introduce direct speech, especially in American English, or when the quotation is particularly long"
+                            ]
+                        },
+                        {
+                            "id": "semicolon",
+                            "childNodesTexts": [
+                                "Semicolon ",
+                                ";"
+                            ]
+                        },
+                        {
+                            "id": "breakTwoCl",
+                            "childNodesTexts": [
+                                "To mark a break between two main clauses when there is a balance or a contrast between the clauses"
+                            ]
+                        },
+                        {
+                            "id": "sepLongItems",
+                            "childNodesTexts": [
+                                "To separate items in a list, especially if the listed items are phrases or clauses"
+                            ]
+                        },
+                        {
+                            "id": "brackets",
+                            "childNodesTexts": [
+                                "Brackets/Parentheses ",
+                                "( )"
+                            ]
+                        },
+                        {
+                            "id": "enclose",
+                            "childNodesTexts": [
+                                "To enclose a word or words which can be left out and still leave a meaningful sentence"
+                            ]
+                        },
+                        {
+                            "id": "alternatives",
+                            "childNodesTexts": [
+                                "To show alternatives or options"
+                            ]
+                        },
+                        {
+                            "id": "sqrBr",
+                            "childNodesTexts": [
+                                "Square brackets ",
+                                "[ ]"
+                            ]
+                        },
+                        {
+                            "id": "clearerQuot",
+                            "childNodesTexts": [
+                                "To supply words that make a quotation clearer or that comment on it but were not originally said or written"
+                            ]
+                        },
+                        {
+                            "id": "hyphen",
+                            "childNodesTexts": [
+                                "Hyphen ",
+                                "-"
+                            ]
+                        },
+                        {
+                            "id": "split",
+                            "childNodesTexts": [
+                                "At the ends of lines where a word has been split"
+                            ]
+                        },
+                        {
+                            "id": "prefCap",
+                            "childNodesTexts": [
+                                "With prefixes in front of a word beginning with a capital letter"
+                            ]
+                        },
+                        {
+                            "id": "joinAdj",
+                            "childNodesTexts": [
+                                "Joining two or more words to form an adjective (before the noun it describes)"
+                            ]
+                        },
+                        {
+                            "id": "compNouns",
+                            "childNodesTexts": [
+                                "With some common compound nouns"
+                            ]
+                        },
+                        {
+                            "id": "prefAnotherWord",
+                            "childNodesTexts": [
+                                "Splitting words formed by adding a prefix to another word (to avoid an awkward combination of letters or confusion with another word)"
+                            ]
+                        },
+                        {
+                            "id": "dash",
+                            "childNodesTexts": [
+                                "Dash ",
+                                "–"
+                            ]
+                        },
+                        {
+                            "id": "comment",
+                            "childNodesTexts": [
+                                "A comment that interrupts the flow of a sentence"
+                            ]
+                        },
+                        {
+                            "id": "extraInfo",
+                            "childNodesTexts": [
+                                "To separate off extra information"
+                            ]
+                        },
+                        {
+                            "id": "range",
+                            "childNodesTexts": [
+                                "To indicate a range"
+                            ]
+                        },
+                        {
+                            "id": "twoEntities",
+                            "childNodesTexts": [
+                                "Between two adjectives/noun modifiers to indicate that two countries or groups are involved in something or that someone has two roles/aspects"
+                            ]
+                        },
+                        {
+                            "id": "travelPath",
+                            "childNodesTexts": [
+                                "To indicate that something such as a plane or a train goes between two places"
+                            ]
+                        },
+                        {
+                            "id": "slash",
+                            "childNodesTexts": [
+                                "Slash ",
+                                "/"
+                            ]
+                        },
+                        {
+                            "id": "altRatRang",
+                            "childNodesTexts": [
+                                "Alternatives, ratios, ranges, in website addresses"
+                            ]
+                        },
+                        {
+                            "id": "nums",
+                            "childNodesTexts": [
+                                "Numbers"
+                            ]
+                        },
+                        {
+                            "id": "nDates",
+                            "childNodesTexts": [
+                                "Dates"
+                            ]
+                        },
+                        {
+                            "id": "nSciAbbr",
+                            "childNodesTexts": [
+                                "Scientific abbreviations (no full stops)"
+                            ]
+                        },
+                        {
+                            "id": "nTimes",
+                            "childNodesTexts": [
+                                "Times"
+                            ]
+                        },
+                        {
+                            "id": "nLong",
+                            "childNodesTexts": [
+                                "Long numbers (units of thousands and millions)"
+                            ]
+                        },
+                        {
+                            "id": "nDec",
+                            "childNodesTexts": [
+                                "Decimals"
                             ]
                         },
                         {
@@ -1530,13 +2208,6 @@
                             ]
                         },
                         {
-                            "id": "apostrophe",
-                            "childNodesTexts": [
-                                "Апостроф ",
-                                "’"
-                            ]
-                        },
-                        {
                             "id": "func",
                             "childNodesTexts": [
                                 "Функция"
@@ -1549,15 +2220,52 @@
                             ]
                         },
                         {
+                            "id": "apostrophe",
+                            "childNodesTexts": [
+                                "Апостроф ",
+                                "’"
+                            ]
+                        },
+                        {
                             "id": "posesstion",
                             "childNodesTexts": [
                                 "Принадлежность (у живых существ)"
                             ]
                         },
                         {
+                            "id": "ap1",
+                            "childNodesTexts": [
+                                "at the hairdresser",
+                                "’",
+                                "s [",
+                                "рабочее место",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "ap2",
+                            "childNodesTexts": [
+                                "I’m going over to Harry",
+                                "’",
+                                "s for tea tonight. [",
+                                "дом",
+                                "]"
+                            ]
+                        },
+                        {
                             "id": "year",
                             "childNodesTexts": [
                                 "Год/Десятилетие"
+                            ]
+                        },
+                        {
+                            "id": "ap3",
+                            "childNodesTexts": [
+                                "during the",
+                                "’",
+                                "90s [",
+                                "1990-е",
+                                "]"
                             ]
                         },
                         {
@@ -1570,6 +2278,507 @@
                             "id": "contractions",
                             "childNodesTexts": [
                                 "Сокращённые формы"
+                            ]
+                        },
+                        {
+                            "id": "comma",
+                            "childNodesTexts": [
+                                "Запятая ",
+                                ","
+                            ]
+                        },
+                        {
+                            "id": "sepMain",
+                            "childNodesTexts": [
+                                "Разделение главных предложений (с разными подлежащими)"
+                            ]
+                        },
+                        {
+                            "id": "subFromMain",
+                            "childNodesTexts": [
+                                "Отделение придаточного предложения от главного"
+                            ]
+                        },
+                        {
+                            "id": "com1",
+                            "childNodesTexts": [
+                                "If you have any problems",
+                                ",",
+                                " just call me. [Но: ",
+                                "Just call me if you have any problems.",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "com2",
+                            "childNodesTexts": [
+                                "We should be able to finish the work by the end of the week",
+                                ",",
+                                " if nothing unexpected turns up between now and then. [",
+                                "предложения особенно длинные",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "relFromMain",
+                            "childNodesTexts": [
+                                "Отделение распространительного придаточного определительного от главного предложения"
+                            ]
+                        },
+                        {
+                            "id": "sepListItems",
+                            "childNodesTexts": [
+                                "Разделение элементов списка"
+                            ]
+                        },
+                        {
+                            "id": "sepAdj",
+                            "childNodesTexts": [
+                                "Разделение прилагательных"
+                            ]
+                        },
+                        {
+                            "id": "adverbials",
+                            "childNodesTexts": [
+                                "С обстоятельствами"
+                            ]
+                        },
+                        {
+                            "id": "quesTags",
+                            "childNodesTexts": [
+                                "С кратким общим вопросом/ответом"
+                            ]
+                        },
+                        {
+                            "id": "vocatives",
+                            "childNodesTexts": [
+                                "С обращением"
+                            ]
+                        },
+                        {
+                            "id": "discMarkers",
+                            "childNodesTexts": [
+                                "С дискурсивными маркерами"
+                            ]
+                        },
+                        {
+                            "id": "repSpeech",
+                            "childNodesTexts": [
+                                "В прямой речи (если после неё нет ",
+                                "?",
+                                " или ",
+                                "!",
+                                ")"
+                            ]
+                        },
+                        {
+                            "id": "sepDayYear",
+                            "childNodesTexts": [
+                                "В датах (между днём и годом)"
+                            ]
+                        },
+                        {
+                            "id": "quotMarks",
+                            "childNodesTexts": [
+                                "Кавычки ",
+                                "‘ ’",
+                                "/",
+                                "“ ”"
+                            ]
+                        },
+                        {
+                            "id": "dirSpeech",
+                            "childNodesTexts": [
+                                "Прямая речь"
+                            ]
+                        },
+                        {
+                            "id": "attention",
+                            "childNodesTexts": [
+                                "Привлечение внимания к слову"
+                            ]
+                        },
+                        {
+                            "id": "unusual",
+                            "childNodesTexts": [
+                                "Необычное употребление слова"
+                            ]
+                        },
+                        {
+                            "id": "distancing",
+                            "childNodesTexts": [
+                                "Дистанцирование от слова"
+                            ]
+                        },
+                        {
+                            "id": "capitals",
+                            "childNodesTexts": [
+                                "Прописная (заглавная) буква ",
+                                "A"
+                            ]
+                        },
+                        {
+                            "id": "sentBegin",
+                            "childNodesTexts": [
+                                "Начало предложения"
+                            ]
+                        },
+                        {
+                            "id": "names",
+                            "childNodesTexts": [
+                                "Имена собственные"
+                            ]
+                        },
+                        {
+                            "id": "weekdays",
+                            "childNodesTexts": [
+                                "Дни недели"
+                            ]
+                        },
+                        {
+                            "id": "months",
+                            "childNodesTexts": [
+                                "Месяцы"
+                            ]
+                        },
+                        {
+                            "id": "holidays",
+                            "childNodesTexts": [
+                                "Государственные праздники"
+                            ]
+                        },
+                        {
+                            "id": "nationalities",
+                            "childNodesTexts": [
+                                "Национальности"
+                            ]
+                        },
+                        {
+                            "id": "langs",
+                            "childNodesTexts": [
+                                "Языки"
+                            ]
+                        },
+                        {
+                            "id": "locations",
+                            "childNodesTexts": [
+                                "Географические объекты"
+                            ]
+                        },
+                        {
+                            "id": "companies",
+                            "childNodesTexts": [
+                                "Названия компаний"
+                            ]
+                        },
+                        {
+                            "id": "religions",
+                            "childNodesTexts": [
+                                "Религии"
+                            ]
+                        },
+                        {
+                            "id": "titles",
+                            "childNodesTexts": [
+                                "Первые буквы в заголовках (у всех ключевых слов, т.е. не предлогов или определителей)"
+                            ]
+                        },
+                        {
+                            "id": "fullStop",
+                            "childNodesTexts": [
+                                "Точка ",
+                                "."
+                            ]
+                        },
+                        {
+                            "id": "sentEnd",
+                            "childNodesTexts": [
+                                "Конец предложения"
+                            ]
+                        },
+                        {
+                            "id": "segmEnd",
+                            "childNodesTexts": [
+                                "Конец неполного предложения"
+                            ]
+                        },
+                        {
+                            "id": "initials",
+                            "childNodesTexts": [
+                                "В инициалах имён (частотность снизилась)"
+                            ]
+                        },
+                        {
+                            "id": "abbrev",
+                            "childNodesTexts": [
+                                "После аббревиатур (частотность снизилась)"
+                            ]
+                        },
+                        {
+                            "id": "shortened",
+                            "childNodesTexts": [
+                                "В сокращённых словах (без последней буквы)"
+                            ]
+                        },
+                        {
+                            "id": "indirQuest",
+                            "childNodesTexts": [
+                                "После непрямого вопроса или просьбы"
+                            ]
+                        },
+                        {
+                            "id": "quesMark",
+                            "childNodesTexts": [
+                                "Вопросительный знак ",
+                                "?"
+                            ]
+                        },
+                        {
+                            "id": "quesEnd",
+                            "childNodesTexts": [
+                                "В конце вопроса"
+                            ]
+                        },
+                        {
+                            "id": "qm1",
+                            "childNodesTexts": [
+                                "You know he doesn’t live here any longer",
+                                "?",
+                                " [",
+                                "даже при неверном порядке слов или опущении некоторых слов",
+                                "]"
+                            ]
+                        },
+                        {
+                            "id": "exclamMark",
+                            "childNodesTexts": [
+                                "Восклицательный знак ",
+                                "!"
+                            ]
+                        },
+                        {
+                            "id": "exclam",
+                            "childNodesTexts": [
+                                "После восклицаний и эмфатических выражений (для передачи небольшого волнения или юмора — ",
+                                ".",
+                                ")"
+                            ]
+                        },
+                        {
+                            "id": "colon",
+                            "childNodesTexts": [
+                                "Двоеточие ",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "listFront",
+                            "childNodesTexts": [
+                                "Перед перечнем"
+                            ]
+                        },
+                        {
+                            "id": "explReason",
+                            "childNodesTexts": [
+                                "Перед объяснением или причиной"
+                            ]
+                        },
+                        {
+                            "id": "intro",
+                            "childNodesTexts": [
+                                "После вводных заголовков"
+                            ]
+                        },
+                        {
+                            "id": "connMain",
+                            "childNodesTexts": [
+                                "Между двумя связанными главными предложениями [офиц.]"
+                            ]
+                        },
+                        {
+                            "id": "titleSecPart",
+                            "childNodesTexts": [
+                                "Перед второй частью заглавия книги"
+                            ]
+                        },
+                        {
+                            "id": "dirSpIntro",
+                            "childNodesTexts": [
+                                "Перед прямой речью, особенно в американском английском или если цитата особенно длинная"
+                            ]
+                        },
+                        {
+                            "id": "semicolon",
+                            "childNodesTexts": [
+                                "Точка с запятой ",
+                                ";"
+                            ]
+                        },
+                        {
+                            "id": "breakTwoCl",
+                            "childNodesTexts": [
+                                "Разрыв между двумя главными предложениями, если они уравновешены или противопоставлены"
+                            ]
+                        },
+                        {
+                            "id": "sepLongItems",
+                            "childNodesTexts": [
+                                "Разделение пунктов перечня, особенно если это словосочетания или предложения"
+                            ]
+                        },
+                        {
+                            "id": "brackets",
+                            "childNodesTexts": [
+                                "Скобки ",
+                                "( )"
+                            ]
+                        },
+                        {
+                            "id": "enclose",
+                            "childNodesTexts": [
+                                "Обрамление слов, которые можно опустить без потери смысла предложения"
+                            ]
+                        },
+                        {
+                            "id": "alternatives",
+                            "childNodesTexts": [
+                                "Варианты"
+                            ]
+                        },
+                        {
+                            "id": "sqrBr",
+                            "childNodesTexts": [
+                                "Квадратные скобки ",
+                                "[ ]"
+                            ]
+                        },
+                        {
+                            "id": "clearerQuot",
+                            "childNodesTexts": [
+                                "Обрамление слов, служащих уточнением или замечанием к цитате, но изначально не сказанных"
+                            ]
+                        },
+                        {
+                            "id": "hyphen",
+                            "childNodesTexts": [
+                                "Дефис ",
+                                "-"
+                            ]
+                        },
+                        {
+                            "id": "split",
+                            "childNodesTexts": [
+                                "При переносе слов в конце строки"
+                            ]
+                        },
+                        {
+                            "id": "prefCap",
+                            "childNodesTexts": [
+                                "С приставками перед словом, начинающимся с прописной буквы"
+                            ]
+                        },
+                        {
+                            "id": "joinAdj",
+                            "childNodesTexts": [
+                                "Объединение двух и более слов в прилагательное (перед определяемым существительным)"
+                            ]
+                        },
+                        {
+                            "id": "compNouns",
+                            "childNodesTexts": [
+                                "В некоторых сложных существительных"
+                            ]
+                        },
+                        {
+                            "id": "prefAnotherWord",
+                            "childNodesTexts": [
+                                "Разделитель в словах, образованных приставкой и другим словом (во избежание неудобных сочетаний букв или путаницы с иными словами)"
+                            ]
+                        },
+                        {
+                            "id": "dash",
+                            "childNodesTexts": [
+                                "Тире ",
+                                "–"
+                            ]
+                        },
+                        {
+                            "id": "comment",
+                            "childNodesTexts": [
+                                "Комментарий, прерывающий предложение"
+                            ]
+                        },
+                        {
+                            "id": "extraInfo",
+                            "childNodesTexts": [
+                                "Отделение дополнительной информации"
+                            ]
+                        },
+                        {
+                            "id": "range",
+                            "childNodesTexts": [
+                                "Диапазон"
+                            ]
+                        },
+                        {
+                            "id": "twoEntities",
+                            "childNodesTexts": [
+                                "Между двумя прилагательными/атрибутивными существительными для обозначения взаимодействия двух стран/групп или функций лица"
+                            ]
+                        },
+                        {
+                            "id": "travelPath",
+                            "childNodesTexts": [
+                                "Точки маршрута транспорта (самолёта, поезда и др.)"
+                            ]
+                        },
+                        {
+                            "id": "slash",
+                            "childNodesTexts": [
+                                "Косая черта ",
+                                "/"
+                            ]
+                        },
+                        {
+                            "id": "altRatRang",
+                            "childNodesTexts": [
+                                "Варианты, соотношения, диапазоны; в адресах сайтов"
+                            ]
+                        },
+                        {
+                            "id": "nums",
+                            "childNodesTexts": [
+                                "Числа"
+                            ]
+                        },
+                        {
+                            "id": "nDates",
+                            "childNodesTexts": [
+                                "Даты"
+                            ]
+                        },
+                        {
+                            "id": "nSciAbbr",
+                            "childNodesTexts": [
+                                "Научные аббревиатуры (без точек)"
+                            ]
+                        },
+                        {
+                            "id": "nTimes",
+                            "childNodesTexts": [
+                                "Время"
+                            ]
+                        },
+                        {
+                            "id": "nLong",
+                            "childNodesTexts": [
+                                "В больших числах (отделяет тысячи и миллионы)"
+                            ]
+                        },
+                        {
+                            "id": "nDec",
+                            "childNodesTexts": [
+                                "В десятичных дробях (отделяет дробную часть)"
                             ]
                         },
                         {
