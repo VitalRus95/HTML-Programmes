@@ -526,6 +526,7 @@
                 flex-wrap: wrap;
                 column-gap: 2px;
                 padding: 2px;
+                padding-inline: 5vw;
                 background-color: transparent;
             }
 
@@ -553,35 +554,54 @@
                 bottom: 0px;
                 z-index: 1;
                 margin: 0;
-                height: 2.1em;
+                height: 2em;
                 opacity: 0.9;
             }
 
-            #grid-stats {
+            #grid-words-count {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                cursor: help;
                 background-color: var(--accent2);
                 border: 2px outset var(--accent1);
+                border-bottom: none;
                 border-radius: 7px 0px 0px 0px;
                 font-weight: 600;
-            }
-
-            #grid-words-count {
-                background-color: transparent;
                 text-align: center;
                 min-width: 3em;
+                margin-bottom: 0;
             }
 
             #wordInput {
                 width: 100%;
+                margin-bottom: 0;
+                border-left: none;
+                border-right: none;
+                border-bottom-color: var(--accent1);
             }
 
             #backspace {
                 border-radius: 0px 7px 0px 0px;
                 font-weight: 700;
                 min-width: 3em;
+                margin-bottom: 0;
+                border-bottom: none;
+                border-left-style: inset;
+                border-right-style: inset;
+                box-shadow: none;
+            }
+
+            #letters-count-descr {
+                background-color: var(--accent2);
+                border-left: 2px outset var(--accent1);
+                border-right: 2px inset var(--accent1);
+                font-weight: 600;
+                padding: 4px;
+                margin: 0;
+            }
+
+            #letters-count {
+                text-shadow: 1px 1px var(--primary-colour);
             }
 
             #guessedWordsLabel {
@@ -628,7 +648,6 @@
             <button
                 id='loadWordsButton'
                 class='menuButton tooltipParent'
-                tabindex='1'
                 onclick='document.getElementById("loadWordsInput").click()'
                 style='border-radius: 7px 0px 0px 0px;'
             >
@@ -649,7 +668,6 @@
                 id='saveWordsButton'
                 href=''
                 class='menuButton tooltipParent'
-                tabindex='1'
                 onclick='saveWords()'
                 style='border-radius: 0px 7px 0px 0px;'
             >
@@ -661,7 +679,6 @@
         <!-- Start button -->
         <button
             id='startButton'
-            tabindex='1'
             onclick='fillGrid()'
             style='border-radius: 0px 0px 7px 7px;'
         >
@@ -671,18 +688,17 @@
         <!-- Game grid -->
         <div id='grid-container'>
             <!-- Header -->
-            <span id='grid-header' tabindex='1'>...</span>
+            <span id='grid-header' tabindex='0'>...</span>
 
             <!-- Score -->
             <div id='grid-score-container'>
-                <div id='grid-score' tabindex='1'>
+                <div id='grid-score' tabindex='0'>
                     <span id='grid-score-label'>Score:</span>
                     <span id='grid-score-value'>0%</span>
                 </div>
                 <button
                     id='undo-mistake'
                     class='tooltipParent'
-                    tabindex='1'
                     disabled
                 >
                     &#60;
@@ -691,7 +707,7 @@
             </div>
 
             <!-- Letters -->
-            <div id='grid-letters'></div>
+            <div id='grid-letters' tabindex='1'></div>
 
             <!-- Victory text -->
             <div id='grid-win' tabindex='0'>
@@ -725,42 +741,40 @@
 
             <!-- Input -->
             <div id='grid-input'>
-                <!-- Stats -->
-                <div id='grid-stats' class='tooltipParent'>
-                    <span id='grid-words-count' tabindex='1'>0</span>
-                    <span class='tooltip'>
-                        <span id='words-count-descr' style='margin: 0;'>
-                            Words on grid counter. Letters count:
-                            <span id='letters-count'></span>
-                        </span>
-                    </span>
-                </div>
+                <!-- Words counter -->
+                <span id='grid-words-count' tabindex='0'>0</span>
 
+                <!-- Guess input -->
                 <input
                     type='text'
                     id='wordInput'
-                    tabindex='1'
                     autocomplete='off'
                     oninput='checkInput()'
                     placeholder='Type your guess'
                 >
 
+                <!-- Delete last letter -->
                 <button
                     id='backspace'
                     class='tooltipParent'
-                    tabindex='1'
                 >
                     &#60;
                     <span class='tooltip'>Delete the last letter</span>
                 </button>
             </div>
 
+            <!-- Letters counter -->
+            <span id='letters-count-descr' tabindex='0'>
+                Letters count:
+                <span id='letters-count'></span>
+            </span>
+
             <!-- Guessed words list -->
-            <div>
-                <span id='guessedWordsLabel' tabindex='1'>
+            <div style='margin-top: 0;'>
+                <span id='guessedWordsLabel' tabindex='0'>
                     Guessed words
                 </span>
-                <ul id='guessedList'></ul>
+                <ul id='guessedList' tabindex='0'></ul>
             </div>
         </div>
 
@@ -1794,9 +1808,9 @@
                             ]
                         },
                         {
-                            "id": "words-count-descr",
+                            "id": "letters-count-descr",
                             "childNodesTexts": [
-                                "Words on grid counter. Letters count: "
+                                "Letters count: "
                             ]
                         },
                         {
@@ -1976,9 +1990,9 @@
                             ]
                         },
                         {
-                            "id": "words-count-descr",
+                            "id": "letters-count-descr",
                             "childNodesTexts": [
-                                "Счётчик слов на сетке. Число букв в них: "
+                                "Число букв: "
                             ]
                         },
                         {
