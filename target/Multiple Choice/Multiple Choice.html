@@ -1005,6 +1005,8 @@
             });
 
             startTest.addEventListener('click', function () {
+                limitInput(numQuestionsInput);
+                limitInput(numVariantsInput);
                 score = 0;
                 while (testBody.hasChildNodes()) testBody.lastChild.remove();
 

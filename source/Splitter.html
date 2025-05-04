@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Splitter</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            @keyframes letter-spawn {
+                from {
+                    opacity: 0;
+                    transform: scaleY(0);
+                }
+                to {
+                    opacity: 1;
+                    transform: scaleY(1);
+                }
+            }
+
+            @keyframes space-spawn {
+                from {
+                    transform: scaleX(0);
+                }
+                to {
+                    transform: scaleX(1);
+                }
+            }
+
+            @keyframes answer-spawn {
+                from {
+                    opacity: 0;
+                    transform: scaleX(0%);
+                }
+                to {
+                    opacity: 1;
+                    transform: scaleX(100%);
+                }
+            }
+
+            #wordsList {
+                border-radius: 0px 7px;
+                width: 100%;
+                resize: vertical;
+                min-height: 6em;
+            }
+
+            #grid {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 2px;
+                align-self: center;
+            }
+
+            #check {
+                border-radius: 7px 0px 0px 0px;
+                margin-bottom: 0;
+            }
+
+            #resultDiv {
+                display: none;
+                flex-direction: column;
+                margin: 0;
+                animation: answer-spawn 1s ease;
+            }
+
+            #answerDiv {
+                border: 2px outset var(--accent1);
+                border-top: none;
+                border-bottom: none;
+                padding: 4px;
+                width: 100%;
+                margin: 0;
+            }
+
+            #answer {
+                color: var(--accent1);
+                text-shadow: 1px 1px var(--accent2);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.2em;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            #continue {
+                border-radius: 0px 0px 0px 7px;
+                width: 100%;
+                margin-top: 0;
+            }
+
+            .letter {
+                opacity: 0;
+                color: var(--secondary-colour);
+                background-color: transparent;
+                border-radius: 3px;
+                border: none;
+                box-shadow: none;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.7em;
+                font-weight: 600;
+                padding-inline: 2px;
+                cursor: pointer;
+                user-select: none;
+                -moz-user-select: none;
+                outline-style: none;
+                animation: letter-spawn 0.5s ease forwards;
+            }
+
+            .letter:focus,
+            .letter:hover {
+                color: var(--accent1);
+                background-color: transparent;
+            }
+
+            .splittable {
+                border-left: 3px solid transparent;
+            }
+
+            .splittable:focus,
+            .splittable:hover {
+                border-left-color: var(--accent1);
+            }
+
+            .space {
+                color: transparent;
+                border-radius: 2px;
+                background-color: var(--accent2);
+                box-shadow: none;
+                opacity: 0.8;
+                font-weight: 700;
+                padding-inline: 2px;
+                outline-style: none;
+                animation: space-spawn 1s ease forwards;
+            }
+
+            .space:focus,
+            .space:hover {
+                color: var(--primary-colour);
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id='page-title'>Splitter</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary id='settings-summary'>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+        <!-- Words list textarea -->
+        <details>
+            <summary id='words-summary'>Words (answers)</summary>
+            <textarea
+                id='wordsList'
+                autocomplete='off'
+                placeholder='The list of words to split. Each word should be on a separate line, with morphemes separated by space, for example ‘re make’.'
+            ></textarea>
+        </details>
+
+        <!-- Save & Load buttons -->
+        <div style='display: flex; column-gap: 4px;'>
+            <!-- Load button -->
+            <button
+                id='loadWordsButton'
+                class='menuButton tooltipParent'
+                onclick='document.getElementById("loadWordsInput").click()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load words list from .txt file</span>
+            </button>
+            <input
+                id='loadWordsInput'
+                type='file'
+                accept='.txt'
+                onchange='loadWords()'
+                style='display: none;'
+            >
+            </input>
+
+            <!-- Save button -->
+            <a
+                id='saveWordsButton'
+                href=''
+                class='menuButton tooltipParent'
+                onclick='saveWords()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save words list to .txt file</span>
+            </a>
+        </div>
+        
+        <!-- Grid -->
+        <div id='grid'></div>
+
+        <!-- Check button -->
+        <button id='check'>Check</button>
+
+        <!-- Result -->
+        <div id='resultDiv'>
+            <div id='answerDiv' tabindex='0'>
+                <span>Answer:</span>
+                <span id='answer'></span>
+            </div>
+            <button id='continue'>Continue</button>
+        </div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLButtonElement} */
+            let loadWordsButton = document.getElementById('loadWordsButton');
+            /** @type {HTMLInputElement} */
+            let loadWordsInput = document.getElementById('loadWordsInput');
+            /** @type {HTMLAnchorElement} */
+            let saveWordsButton = document.getElementById('saveWordsButton');
+            /** @type {HTMLTextAreaElement} */
+            let wordsList = document.getElementById('wordsList');
+            /** @type {HTMLDivElement} */
+            let grid = document.getElementById('grid');
+            /** @type {HTMLButtonElement} */
+            let check = document.getElementById('check');
+            /** @type {HTMLDivElement} */
+            let resultDiv = document.getElementById('resultDiv');
+            /** @type {HTMLSpanElement} */
+            let answer = document.getElementById('answer');
+            /** @type {HTMLButtonElement} */
+            let cont = document.getElementById('continue');
+
+            // Variables
+            /** @type {string[]} */
+            let list = [];
+            /** @type {string[]} */
+            let words = [];
+            /** @type {string} */
+            let currentWord;
+
+            wordsList.addEventListener('input', function (event) {
+                list = wordsList.value.split('\n');
+                resetWords();
+                fillGrid();
+            });
+
+            grid.addEventListener('keydown', function (event) {
+                switch (event.key) {
+                    case 'ArrowLeft':
+                        document?.activeElement?.previousElementSibling?.focus();
+                        break;
+                    case 'ArrowRight':
+                    document?.activeElement?.nextElementSibling?.focus();
+                        break;
+                    case 'Home':
+                        grid?.firstChild?.focus();
+                        break;
+                    case 'End':
+                        grid?.lastChild?.focus();
+                        break;
+                    case 'ArrowDown':
+                    case 'Escape':
+                        check.focus();
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            check.addEventListener('click', function (event) {
+                answer.textContent = currentWord.replace(/\s+/g, ' + ');
+                resultDiv.style.display = 'flex';
+                cont.focus();
+            });
+
+            check.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape'
+                    || event.key == 'ArrowUp'
+                ) {
+                    grid?.firstChild?.focus();
+                }
+            });
+
+            cont.addEventListener('click', function () {
+                resultDiv.style.display = 'none';
+                fillGrid();
+            });
+
+            function fillGrid() {
+                // Exit if there are no words to work with
+                if (list.length === 0) return;
+
+                // Empty the grid first
+                while (grid.hasChildNodes()) {
+                    grid.lastChild.remove();
+                }
+
+                // Refill the array if it's empty
+                if (words.length === 0) words = list.map(w => w);
+                
+                // Grab a random word, its morphemes and letters
+                let index = Math.floor(Math.random() * words.length);
+                currentWord = words[index].trim().toUpperCase();
+
+                let morphemes = currentWord.split(/\s+/g);
+                let letters = currentWord.replace(/\s+/g, '').split('');
+
+                // Remove the current word to improve randomisation
+                words.splice(index, 1);
+
+                // Add individual letters to the grid
+                letters.forEach((l, i) => {
+                    let letter = grid.appendChild(
+                        document.createElement('button')
+                    );
+                    letter.style.animationDelay = `${0.05 * i}s`;
+                    letter.classList.add('letter');
+                    letter.textContent = l;
+
+                    // Make this letter splittable and handle splitting
+                    if (letter !== grid.firstChild) {
+                        letter.classList.add('splittable');
+                        letter.addEventListener('click', function (event) {
+                            if (!letter.classList.contains('splittable')) return;
+
+                            let space = document.createElement('button');
+                            space.textContent = 'X';
+                            space.classList.add('space');
+                            space.addEventListener('click', function (event) {
+                                space.remove();
+                                letter.focus();
+                                letter.classList.add('splittable');
+                            });
+
+                            grid.insertBefore(space, letter);
+                            letter.classList.remove('splittable');
+                        });
+                    }
+                });
+                
+                grid.firstChild.focus();
+            }
+
+            async function loadWords() {
+                await loadWordsInput.files[0].text().then(content => {
+                    try {
+                        list = content.split('\n');
+                        wordsList.value = content;
+                        resetWords();
+                        fillGrid();
+                    } catch (error) {
+                        alert(`Error while reading words file: ${error}`);
+                    }
+                });
+            }
+
+            function saveWords() {
+                let data = encodeURIComponent(wordsList.value);
+                saveWordsButton.download = 'Words.txt';
+                saveWordsButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            function resetWords() {
+                words = [];
+            }
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Splitter"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "words-summary",
+                            "childNodesTexts": [
+                                "Words (answers)"
+                            ]
+                        },
+                        {
+                            "id": "wordsList",
+                            "childNodesTexts": [],
+                            "placeholder": "The list of words to split. Each word should be on a separate line, with morphemes separated by space, for example ‘re make’."
+                        },
+                        {
+                            "id": "loadWordsButton",
+                            "childNodesTexts": [
+                                "📁 Load",
+                                "Load words list from .txt file"
+                            ]
+                        },
+                        {
+                            "id": "saveWordsButton",
+                            "childNodesTexts": [
+                                "💾 Save",
+                                "Save words list to .txt file"
+                            ]
+                        },
+                        {
+                            "id": "check",
+                            "childNodesTexts": [
+                                "Check"
+                            ]
+                        },
+                        {
+                            "id": "continue",
+                            "childNodesTexts": [
+                                "Continue"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Разделитель"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "words-summary",
+                            "childNodesTexts": [
+                                "Слова (ответы)"
+                            ]
+                        },
+                        {
+                            "id": "wordsList",
+                            "childNodesTexts": [],
+                            "placeholder": "Слова для разбивки. Каждое слово должно быть на отдельной строчке, а морфемы — разделены пробелом, например «снег о пад»."
+                        },
+                        {
+                            "id": "loadWordsButton",
+                            "childNodesTexts": [
+                                "📁 Загрузить",
+                                "Загрузить слова из файла .txt"
+                            ]
+                        },
+                        {
+                            "id": "saveWordsButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить",
+                                "Сохранить слова в файл .txt"
+                            ]
+                        },
+                        {
+                            "id": "check",
+                            "childNodesTexts": [
+                                "Проверить"
+                            ]
+                        },
+                        {
+                            "id": "continue",
+                            "childNodesTexts": [
+                                "Продолжить"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
+        </script>
+    </body>
+</html>
