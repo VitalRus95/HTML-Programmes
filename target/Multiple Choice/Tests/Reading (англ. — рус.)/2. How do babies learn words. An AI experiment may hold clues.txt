@@ -1,0 +1,14 @@
+Clue	Подсказка
+Tot	Малыш
+Feat	Подвиг
+Soak up	Впитывать
+Departure	Отклонение
+Underlie	Лежать в основе
+Pool	Массив
+Computational	Вычислительный
+Sliver	Обрывок
+Iteratively	Многократно
+Crib	Кроватка
+Yield	Производить, давать
+Tricky	Сложный, мудрёный
+Tangle up	Запутывать
