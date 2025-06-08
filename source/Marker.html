@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Marker</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            /* Elements */
+            #menu,
+            #source {
+                margin: 0;
+            }
+
+            #menu[open] > #menu-summary,
+            #source[open] > #source-summary {
+                background-color: var(--accent2);
+                color: var(--secondary-colour);
+            }
+
+            #menu-summary,
+            #source-summary {
+                background-color: transparent;
+                color: var(--secondary-colour);
+                border: 2px outset var(--secondary-colour);
+                border-bottom-style: none;
+                border-radius: 0px;
+                margin: 0;
+            }
+
+            #menu-summary:focus,
+            #menu-summary:hover,
+            #source-summary:focus,
+            #source-summary:hover {
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+            }
+
+            #menu[open] > #menu-summary:focus,
+            #menu[open] > #menu-summary:hover,
+            #source[open] > #source-summary:focus,
+            #source[open] > #source-summary:hover {
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+            }
+
+            #add-mistake-0,
+            #add-mistake-1,
+            #add-mistake-2,
+            #add-mistake-3 {
+                display: flex;
+                margin: 0;
+            }
+
+            #add-mistake-1,
+            #add-mistake-2,
+            #add-mistake-3 {
+                display: none;
+                flex-wrap: wrap;
+            }
+
+            #clear-mistake-button {
+                border-radius: 0px;
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            #mistakeContent {
+                background-color: var(--accent2);
+                border-right-style: none;
+                border-left-style: none;
+                border-radius: 0px;
+                text-align: center;
+                margin: 0;
+                width: 100%;
+            }
+
+            #source-text,
+            #work {
+                display: block;
+                border-bottom-style: none;
+                border-top-style: none;
+                resize: vertical;
+                min-height: 25vh;
+                margin: 0;
+                width: 100%;
+            }
+
+            #studDiv {
+                display: flex;
+                margin: 0;
+            }
+
+            #prevStud,
+            #nextStud {
+                font-weight: 700;
+                margin: 0;
+            }
+
+            #prevStud {
+                border-radius: 0px 0px 0px 7px;
+            }
+
+            #nextStud {
+                border-radius: 0px 0px 7px 0px;
+            }
+
+            #student {
+                background-color: var(--accent2);
+                border-left-style: none;
+                border-right-style: none;
+                text-align: center;
+                font-weight: 600;
+                margin: 0;
+                width: 100%;
+            }
+
+            #student-count {
+                background-color: var(--accent2);
+                border-top: 2px outset var(--secondary-colour);
+                border-bottom: 2px outset var(--secondary-colour);
+                font-weight: 600;
+                margin: 0;
+                padding-inline: 4px;
+                width: fit-content;
+            }
+
+            /* CSS classes */
+            .menu-div {
+                display: flex;
+                column-gap: 4px;
+            }
+
+            .menu-button {
+                border-radius: 0px;
+                margin: 0;
+                padding: 0px;
+                width: 100%;
+            }
+
+            .add-mistake-button {
+                border-radius: 0px;
+                margin: 0;
+                width: fit-content;
+                min-width: 25%;
+            }
+
+            .mistake-category-button {
+                flex-grow: 1;
+                border-radius: 0px;
+                margin: 0;
+                padding: 0;
+                min-width: fit-content;
+                max-width: 100%;
+            }
+
+            .cancel-div {
+                display: flex;
+                width: 100%;
+                margin: 0;
+            }
+
+            .cancel-button {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+                font-weight: 600;
+                border-radius: 0px;
+                margin-bottom: 0;
+                margin-top: 4px;
+                width: 100%;
+            }
+
+            .mistake-container {
+                align-items: center;
+                display: flex;
+                column-gap: 4px;
+            }
+
+            .remove {
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: 600;
+                border-radius: 50%;
+                height: 1.3em;
+                width: 1.3em;
+            }
+
+            .mistake {
+                background-color: transparent;
+                border-radius: 0px;
+                text-align: left;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id='page-title'>Marker</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary id='settings-summary'>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+        
+        <!-- Menu -->
+        <details id='menu' open>
+            <summary id='menu-summary'>Menu</summary>
+
+            <!-- Save & load works -->
+            <div class='menu-div'>
+                <a
+                    id='saveWorksButton'
+                    href=''
+                    class='menuButton menu-button tooltipParent'
+                    onclick='saveWorksFile()'
+                >
+                    &#128190; Save
+                    <span class='tooltip'>Save works to .json file</span>
+                </a>
+
+                <button
+                    id='loadWorksButton'
+                    class='menu-button tooltipParent'
+                    onclick='document.getElementById("loadWorks").click()'
+                >
+                    &#128193; Load
+                    <span class='tooltip'>Load works from .json file</span>
+                </button>
+                <input
+                    id='loadWorks'
+                    type='file'
+                    accept='.json'
+                    onchange='loadWorksFile()'
+                    style='display: none;'
+                >
+                </input>
+            </div>
+
+            <!-- Add & remove student -->
+            <div class='menu-div'>
+                <button id='student-add-button' class='menu-button'>Add student</button>
+                <button id='student-remove-button' class='menu-button'>Remove student</button>
+            </div>
+        </details>
+
+        <!-- Source text -->
+        <details id='source'>
+            <summary id='source-summary'>Source text</summary>
+            <textarea id='source-text' placeholder='Text to translate'></textarea>
+        </details>
+
+        <!-- Add mistake -->
+        <div id='add-mistake-0'>
+            <button id='clear-mistake-button'>X</button>
+            <input type='text' id='mistakeContent' placeholder='Mistake' autocomplete='off'>
+            <button id='next' class='add-mistake-button' onclick='hideDiv(0, 1)'>Next</button>
+        </div>
+
+        <div id='add-mistake-1'>
+            <button id='type-gr' class='mistake-category-button' onclick='addType(TYPE_GRAMMAR)'>Grammar</button>
+            <button id='type-voc' class='mistake-category-button' onclick='addType(TYPE_VOCABULARY)'>Vocabulary</button>
+            <button id='type-orth' class='mistake-category-button' onclick='addType(TYPE_ORTHOGRAPHY)'>Orthography</button>
+            <button id='type-punc' class='mistake-category-button' onclick='addType(TYPE_PUNCTUATION)'>Punctuation</button>
+            <button id='type-comp' class='mistake-category-button' onclick='addType(TYPE_COMPLEX)'>Complex</button>
+            <button id='back-1' class='cancel-button' onclick='hideDiv(1, 0)'>Back</button>
+        </div>
+
+        <div id='add-mistake-2'>
+            <button id='subtype-add' class='mistake-category-button' onclick='addSubtype(SUBTYPE_ADDITION)'>Redundant element</button>
+            <button id='subtype-dis' class='mistake-category-button' onclick='addSubtype(SUBTYPE_DISTORTION)'>Incorrect element</button>
+            <button id='subtype-del' class='mistake-category-button' onclick='addSubtype(SUBTYPE_DELETION)'>Lack of element</button>
+            
+            <div class='cancel-div'>
+                <button id='back-2' class='cancel-button' onclick='hideDiv(2, 1)'>Back</button>
+                <button id='cancel-2' class='cancel-button' onclick='hideDiv(2, 0)'>Cancel</button>
+            </div>
+        </div>
+
+        <div id='add-mistake-3'>
+            <button id='meaning-ret' class='mistake-category-button' onclick='addMeaning(MEANING_RETAINED)'>Meaning retained</button>
+            <button id='meaning-obsc' class='mistake-category-button' onclick='addMeaning(MEANING_OBSCURED)'>Meaning obscured</button>
+            <button id='meaning-lost' class='mistake-category-button' onclick='addMeaning(MEANING_LOST)'>Meaning lost</button>
+            
+            <div class='cancel-div'>
+                <button id='back-3' class='cancel-button' onclick='hideDiv(3, 2)'>Back</button>
+                <button id='cancel-3' class='cancel-button' onclick='hideDiv(3, 0)'>Cancel</button>
+            </div>
+        </div>
+
+        <!-- Translation -->
+        <textarea id='work' placeholder="Student's translation" autocomplete='off'></textarea>
+
+        <!-- Students -->
+        <div id='studDiv'>
+            <button id='prevStud'>&lt;</button>
+            <input type='text' id='student' placeholder='Student' autocomplete='off'>
+            <span id='student-count' tabindex='0'>[1/1]</span>
+            <button id='nextStud'>&gt;</button>
+        </div>
+
+        <!-- Mistakes -->
+        <h3 id='mistakesHeader'>Mistakes:</h3>
+        <div id='mistakes'></div>
+
+        <!-- Results -->
+        <table>
+            <th id='results-header' colspan='2'>
+                Results
+            </th>
+
+            <tr>
+                <td id='res-mistakes-label'>Mistakes count</td>
+                <td id='res-mistakes'>0</td>
+            </tr>
+
+            <tr>
+                <td id='res-weight-label'>Mistakes weight</td>
+                <td id='res-weight'>0</td>
+            </tr>
+
+            <tr>
+                <td id='res-mark-label'>Mark</td>
+                <td id='res-mark'>100 (A)</td>
+            </tr>
+        </table>
+
+        <!-- Author -->
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLAnchorElement} */
+            let saveWorksButton = document.getElementById('saveWorksButton');
+            /** @type {HTMLInputElement} */
+            let loadWorksInput = document.getElementById('loadWorks');
+            /** @type {HTMLButtonElement} */
+            let addStudent = document.getElementById('student-add-button');
+            /** @type {HTMLButtonElement} */
+            let removeStudent = document.getElementById('student-remove-button');
+            /** @type {HTMLTextAreaElement} */
+            let sourceText = document.getElementById('source-text');
+            /** @type {HTMLButtonElement} */
+            let clearMistake = document.getElementById('clear-mistake-button');
+            /** @type {HTMLInputElement} */
+            let mistakeContent = document.getElementById('mistakeContent');
+            /** @type {HTMLButtonElement} */
+            let prevStud = document.getElementById('prevStud');
+            /** @type {HTMLButtonElement} */
+            let nextStud = document.getElementById('nextStud');
+            /** @type {HTMLInputElement} */
+            let studentName = document.getElementById('student');
+            /** @type {HTMLSpanElement} */
+            let studentCount = document.getElementById('student-count');
+            /** @type {HTMLTextAreaElement} */
+            let work = document.getElementById('work');
+            /** @type {HTMLDivElement} */
+            let mistakes = document.getElementById('mistakes');
+            /** @type {HTMLTableDataCellElement} */
+            let resultsMistakeCount = document.getElementById('res-mistakes');
+            /** @type {HTMLTableDataCellElement} */
+            let resultsMistakeWeight = document.getElementById('res-weight');
+            /** @type {HTMLTableDataCellElement} */
+            let resultsMark = document.getElementById('res-mark');
+
+            // Constants
+            const TYPE_GRAMMAR = 0
+            const TYPE_VOCABULARY = 1
+            const TYPE_ORTHOGRAPHY = 2
+            const TYPE_PUNCTUATION = 3
+            const TYPE_COMPLEX = 4
+
+            const SUBTYPE_DELETION = 0
+            const SUBTYPE_DISTORTION = 1
+            const SUBTYPE_ADDITION = 2
+
+            const MEANING_RETAINED = 0
+            const MEANING_OBSCURED = 1
+            const MEANING_LOST = 2
+
+            // Types
+            /** @typedef Mistake
+             * @property content {string}
+             * @property selection {[number, number]}
+             * @property type {number}
+             * @property subtype {number}
+             * @property meaning {number}
+            */
+            /** @typedef Work
+             * @property student {string}
+             * @property text {string}
+             * @property selection {[number, number]}
+             * @property mistakes {Mistake[]}
+             */
+
+            // Variables
+            /** @type {number} */
+            let studentIndex = 0;
+            /** @type {Mistake} */
+            let mistakeTemplate = {
+                content: undefined,
+                selection: [0, 0],
+                type: TYPE_PUNCTUATION,
+                subtype: SUBTYPE_DISTORTION,
+                meaning: MEANING_RETAINED
+            };
+            /** @type {Work[]} */
+            let works = [ {} ];
+
+            addStudent.addEventListener('click', function (event) {
+                /** @type {Work} */
+                let newStudent = {};
+                works.push(newStudent);
+                studentIndex = works.length - 1;
+                updateStudent();
+            });
+
+            removeStudent.addEventListener('click', function (event) {
+                if (works.length === 0) return;
+
+                works.splice(studentIndex, 1);
+                if (works.length > 0) {
+                    studentIndex = clamp(0, studentIndex, works.length - 1);
+                } else {
+                    /** @type {Work} */
+                    let newStudent = {};
+                    works.push(newStudent);
+                    studentIndex = 0;
+                }
+                updateStudent();
+            });
+
+            clearMistake.addEventListener('click', function (event) {
+                mistakeContent.value = '';
+                mistakeContent.focus();
+                this.focus();
+            });
+
+            mistakeContent.addEventListener('input', function (event) {
+                mistakeTemplate.content = this.value;
+            });
+
+            prevStud.addEventListener('click', function (event) {
+                studentIndex = clamp(0, studentIndex - 1, works.length - 1);
+                updateStudent();
+            });
+
+            nextStud.addEventListener('click', function (event) {
+                studentIndex = clamp(0, studentIndex + 1, works.length - 1);
+                updateStudent();
+            });
+
+            work.addEventListener('select', function (event) {
+                let content = work.value.slice(
+                    work.selectionStart, work.selectionEnd
+                ).trim();
+                mistakeContent.value = content;
+                mistakeTemplate.content = content;
+                mistakeTemplate.selection = [work.selectionStart, work.selectionEnd];
+                works[studentIndex].selection = [work.selectionStart, work.selectionEnd];
+            });
+
+            work.addEventListener('input', function (event) {
+                works[studentIndex].text = this.value;
+            });
+
+            studentName.addEventListener('input', function (event) {
+                works[studentIndex].student = this.value;
+            });
+
+            function saveWorksFile() {
+                let file = {
+                    source: sourceText.value,
+                    translations: works
+                };
+                let data = encodeURIComponent(JSON.stringify(file, undefined, 2));
+                saveWorksButton.download = 'Works.json';
+                saveWorksButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            async function loadWorksFile() {
+                await loadWorksInput.files[0].text().then(content => {
+                    try {
+                        /** @type {
+                            {
+                                source: string,
+                                translations: Works[]
+                            }
+                        }*/
+                        let file = JSON.parse(content);
+                        sourceText.value = file.source;
+                        works = file.translations;
+                        studentIndex = 0;
+                        updateStudent();
+                    } catch (error) {
+                        alert(`Error while reading works file: ${error}`);
+                    }
+                });
+            }
+
+            function updateStudent() {
+                if (works.length === 0) {
+                    studentName.value = '';
+                    studentCount.textContent = '[0/0]';
+                    work.value = '';
+                    updateMistakes();
+                    return;
+                };
+
+                let w = works[studentIndex];
+                work.value = w.text || '';
+                studentName.value = w.student || '';
+                studentCount.textContent = `[${studentIndex + 1}/${works.length}]`;
+
+                updateMistakes();
+            }
+
+            function updateMistakes() {
+                while (mistakes.hasChildNodes()) mistakes.lastChild.remove();
+
+                /** @type {Work} */
+                let w = works[studentIndex];
+
+                if (!w || !w.mistakes || w.mistakes.length == 0) {
+                    work.readOnly = false;
+                    resultsMistakeCount.textContent = 0;
+                    resultsMistakeWeight.textContent = 0;
+                    resultsMark.textContent = '100 (A)';
+                    return;
+                } else {
+                    work.readOnly = true;
+                }
+
+                /** @type {number} */
+                let totalWeight = 0;
+                /** @type {number} */
+                let mark;
+                /** @type {string} */
+                let letter;
+
+                w.mistakes.forEach((m, i) => {
+                    // Manage mistake's weight
+                    /** @type {number} */
+                    let weight = 0;
+                    /** @type {string} */
+                    let typeSymbol;
+                    /** @type {string} */
+                    let subtypeSymbol;
+                    /** @type {string} */
+                    let meaningSymbol;
+
+                    switch (m.type) {
+                        case TYPE_GRAMMAR:
+                            weight = 4.25;
+                            typeSymbol = document.getElementById(
+                                'type-gr'
+                            ).outerText.toLowerCase();
+                            break;
+                        case TYPE_VOCABULARY:
+                            weight = 3.5;
+                            typeSymbol = document.getElementById(
+                                'type-voc'
+                            ).outerText.toLowerCase();
+                            break;
+                        case TYPE_ORTHOGRAPHY:
+                            weight = 3.25;
+                            typeSymbol = document.getElementById(
+                                'type-orth'
+                            ).outerText.toLowerCase();
+                            break;
+                        case TYPE_PUNCTUATION:
+                            weight = 3;
+                            typeSymbol = document.getElementById(
+                                'type-punc'
+                            ).outerText.toLowerCase();
+                            break;
+                        case TYPE_COMPLEX:
+                            weight = 7;
+                            typeSymbol = document.getElementById(
+                                'type-comp'
+                            ).outerText.toLowerCase();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    switch (m.subtype) {
+                        case SUBTYPE_ADDITION:
+                            subtypeSymbol = document.getElementById(
+                                'subtype-add'
+                            ).outerText.toLowerCase();
+                            break;
+                        case SUBTYPE_DISTORTION:
+                            subtypeSymbol = document.getElementById(
+                                'subtype-dis'
+                            ).outerText.toLowerCase();
+                            break;
+                        case SUBTYPE_DELETION:
+                            subtypeSymbol = document.getElementById(
+                                'subtype-del'
+                            ).outerText.toLowerCase();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    switch (m.meaning) {
+                        case MEANING_RETAINED:
+                            meaningSymbol = '';
+                            break;
+                        case MEANING_OBSCURED:
+                            weight *= 1.5
+                            meaningSymbol = document.getElementById(
+                                'meaning-obsc'
+                            ).outerText.toLowerCase();
+                            break;
+                        case MEANING_LOST:
+                            weight *= 2;
+                            meaningSymbol = document.getElementById(
+                                'meaning-lost'
+                            ).outerText.toLowerCase();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    totalWeight -= weight;
+
+                    // Create elements
+                    /** @type {HTMLDivElement} */
+                    let container = mistakes.appendChild(
+                        document.createElement('div')
+                    );
+                    container.classList.add('mistake-container');
+
+                    /** @type {HTMLButtonElement} */
+                    let remove = container.appendChild(
+                        document.createElement('button')
+                    );
+                    remove.classList.add('remove');
+                    remove.textContent = 'X';
+                    remove.addEventListener('click', function (event) {
+                        work.setSelectionRange(0, 0);
+                        work.focus();
+                        w.mistakes.splice(i, 1);
+                        updateMistakes();
+                    });
+
+                    /** @type {HTMLButtonElement} */
+                    let mistake = container.appendChild(
+                        document.createElement('button')
+                    );
+                    mistake.style.display = 'block';
+                    mistake.classList.add('mistake');
+                    mistake.textContent = m.content;
+                    mistake.addEventListener('click', function (event) {
+                        work.setSelectionRange(m.selection[0], m.selection[1]);
+                        work.focus();
+                    });
+
+                    let details = mistake.appendChild(
+                        document.createElement('b')
+                    );
+                    details.style.marginLeft = '4px';
+                    details.style.paddingLeft = '4px';
+                    details.style.overflowWrap = 'anywhere';
+                    details.style.borderLeft = '2px solid var(--accent1)';
+                    details.textContent = `${
+                        typeSymbol
+                    }, ${
+                        subtypeSymbol
+                    }${
+                        meaningSymbol ? `, ${meaningSymbol}` : ''
+                    }; -${weight}`;
+                });
+
+                mark = Math.round(clamp(0, 100 + totalWeight, 100));
+
+                if (mark > 94) letter = 'A';
+                else if (mark > 82) letter = 'B';
+                else if (mark > 67) letter = 'C';
+                else if (mark > 55) letter = 'D';
+                else if (mark > 49) letter = 'E';
+                else if (mark > 19) letter = 'FX';
+                else letter = 'F';
+
+                resultsMistakeCount.textContent = w.mistakes.length;
+                resultsMistakeWeight.textContent = (totalWeight * -1).toFixed(2);
+                resultsMark.textContent = `${mark} (${letter})`;
+            }
+
+            /**
+             * @param {number} hiding
+             * @param {number} showing
+            */
+            function hideDiv(hiding, showing) {
+                if (mistakeContent.value === '') return;
+
+                document.getElementById(
+                    `add-mistake-${hiding}`
+                ).style.display = 'none';
+
+                document.getElementById(
+                    `add-mistake-${showing}`
+                ).style.display = 'flex';
+            }
+
+            function addType(mistakeType) {
+                mistakeTemplate.type = mistakeType;
+                hideDiv(1, 2);
+            }
+
+            function addSubtype(mistakeSubtype) {
+                mistakeTemplate.subtype = mistakeSubtype;
+                hideDiv(2, 3);
+            }
+
+            function addMeaning(mistakeMeaning) {
+                mistakeTemplate.meaning = mistakeMeaning;
+
+                /** @type {Mistake} */
+                let newMistake = {
+                    content: mistakeTemplate.content,
+                    selection: mistakeTemplate.selection,
+                    type: mistakeTemplate.type,
+                    subtype: mistakeTemplate.subtype,
+                    meaning: mistakeTemplate.meaning
+                };
+
+                /** @type {Work} */
+                let w = works[studentIndex];
+
+                if (!w.mistakes) w.mistakes = [];
+                w.mistakes.push(newMistake);
+                updateMistakes();
+                hideDiv(3, 0);
+            }
+
+            /**
+             * @param {number} min
+             * @param {number} value
+             * @param {number} max
+            */
+            function clamp(min, value, max) {
+                return value < min
+                    ? min
+                    : value > max
+                        ? max
+                        : value;
+            }
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Marker"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Баллбес"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
+        </script>
+    </body>
+</html>
