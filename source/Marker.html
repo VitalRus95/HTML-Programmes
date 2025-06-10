@@ -84,8 +84,9 @@
                 border-bottom-style: none;
                 border-top-style: none;
                 resize: vertical;
-                min-height: 25vh;
+                min-height: 27vh;
                 margin: 0;
+                padding-inline: 2vw;
                 width: 100%;
             }
 
@@ -131,14 +132,18 @@
             /* CSS classes */
             .menu-div {
                 display: flex;
-                column-gap: 4px;
+                flex-wrap: wrap;
+                margin: 0;
             }
 
             .menu-button {
+                flex-grow: 1;
                 border-radius: 0px;
+                font-weight: 600;
                 margin: 0;
-                padding: 0px;
-                width: 100%;
+                padding: 2px;
+                min-width: fit-content;
+                max-width: 100%;
             }
 
             .add-mistake-button {
@@ -151,8 +156,10 @@
             .mistake-category-button {
                 flex-grow: 1;
                 border-radius: 0px;
+                font-style: italic;
                 margin: 0;
-                padding: 0;
+                padding-inline: 0;
+                padding-block: 4px;
                 min-width: fit-content;
                 max-width: 100%;
             }
@@ -208,15 +215,15 @@
         <details id='menu' open>
             <summary id='menu-summary'>Menu</summary>
 
-            <!-- Save & load works -->
             <div class='menu-div'>
+                <!-- Save & load works -->
                 <a
                     id='saveWorksButton'
                     href=''
                     class='menuButton menu-button tooltipParent'
                     onclick='saveWorksFile()'
                 >
-                    &#128190; Save
+                    Save
                     <span class='tooltip'>Save works to .json file</span>
                 </a>
 
@@ -225,7 +232,7 @@
                     class='menu-button tooltipParent'
                     onclick='document.getElementById("loadWorks").click()'
                 >
-                    &#128193; Load
+                    Load
                     <span class='tooltip'>Load works from .json file</span>
                 </button>
                 <input
@@ -236,19 +243,28 @@
                     style='display: none;'
                 >
                 </input>
-            </div>
 
-            <!-- Add & remove student -->
-            <div class='menu-div'>
+                <!-- Save results -->
+                <a
+                    id='saveResultsButton'
+                    href=''
+                    class='menuButton menu-button tooltipParent'
+                    onclick='saveResultsFile()'
+                >
+                    Save results
+                    <span class='tooltip'>Save results to .txt file</span>
+                </a>
+
+                <!-- Add & remove student -->
                 <button id='student-add-button' class='menu-button'>Add student</button>
                 <button id='student-remove-button' class='menu-button'>Remove student</button>
             </div>
         </details>
 
         <!-- Source text -->
-        <details id='source'>
+        <details id='source' open>
             <summary id='source-summary'>Source text</summary>
-            <textarea id='source-text' placeholder='Text to translate'></textarea>
+            <textarea id='source-text' placeholder='Text to translate' autocomplete='off'></textarea>
         </details>
 
         <!-- Add mistake -->
@@ -337,6 +353,8 @@
             // Elements
             /** @type {HTMLAnchorElement} */
             let saveWorksButton = document.getElementById('saveWorksButton');
+            /** @type {HTMLAnchorElement} */
+            let saveResultsButton = document.getElementById('saveResultsButton');
             /** @type {HTMLInputElement} */
             let loadWorksInput = document.getElementById('loadWorks');
             /** @type {HTMLButtonElement} */
@@ -387,6 +405,7 @@
             /** @typedef Mistake
              * @property content {string}
              * @property selection {[number, number]}
+             * @property pos {number}
              * @property type {number}
              * @property subtype {number}
              * @property meaning {number}
@@ -394,7 +413,7 @@
             /** @typedef Work
              * @property student {string}
              * @property text {string}
-             * @property selection {[number, number]}
+             * @property pos {number}
              * @property mistakes {Mistake[]}
              */
 
@@ -403,8 +422,9 @@
             let studentIndex = 0;
             /** @type {Mistake} */
             let mistakeTemplate = {
-                content: undefined,
+                content: '',
                 selection: [0, 0],
+                pos: 0,
                 type: TYPE_PUNCTUATION,
                 subtype: SUBTYPE_DISTORTION,
                 meaning: MEANING_RETAINED
@@ -446,11 +466,13 @@
             });
 
             prevStud.addEventListener('click', function (event) {
+                works[studentIndex].pos = work.scrollTop;
                 studentIndex = clamp(0, studentIndex - 1, works.length - 1);
                 updateStudent();
             });
 
             nextStud.addEventListener('click', function (event) {
+                works[studentIndex].pos = work.scrollTop;
                 studentIndex = clamp(0, studentIndex + 1, works.length - 1);
                 updateStudent();
             });
@@ -461,8 +483,8 @@
                 ).trim();
                 mistakeContent.value = content;
                 mistakeTemplate.content = content;
+                mistakeTemplate.pos = work.scrollTop;
                 mistakeTemplate.selection = [work.selectionStart, work.selectionEnd];
-                works[studentIndex].selection = [work.selectionStart, work.selectionEnd];
             });
 
             work.addEventListener('input', function (event) {
@@ -481,6 +503,57 @@
                 let data = encodeURIComponent(JSON.stringify(file, undefined, 2));
                 saveWorksButton.download = 'Works.json';
                 saveWorksButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            function saveResultsFile() {
+                let lastIndex = studentIndex;
+                let results = `${
+                    document.getElementById('page-title').textContent
+                }\n${
+                    document.getElementById('author').textContent
+                }`;
+
+                works.forEach((w, i) => {
+                    studentIndex = i;
+                    updateStudent();
+
+                    results += `\n\n${i + 1}. ${w.student}\n`;
+                    results += `${
+                        document.getElementById('res-mistakes-label').textContent
+                    }: ${
+                        resultsMistakeCount.textContent
+                    }. ${
+                        document.getElementById('res-weight-label').textContent
+                    }: ${
+                        resultsMistakeWeight.textContent
+                    }. ${
+                        document.getElementById('res-mark-label').textContent
+                    }: ${
+                        resultsMark.textContent
+                    }:`;
+
+                    let mIndex = 1;
+                    let mistakes = document.getElementById('mistakes').getElementsByClassName('mistake');
+                    for (let m of mistakes) {
+                        if (m.childNodes && m.childNodes.length === 2) {
+                            results += `\n  ${
+                                mIndex
+                            }) ${
+                                m.childNodes[0].textContent
+                            } [${
+                                m.childNodes[1].textContent
+                            }].`;
+                        }
+                        mIndex ++;
+                    }
+                });
+
+                results = encodeURIComponent(results);
+                saveResultsButton.download = 'Results.txt';
+                saveResultsButton.href = `data:text/plain;charset=utf-8,${results}`;
+
+                studentIndex = lastIndex;
+                updateStudent();
             }
 
             async function loadWorksFile() {
@@ -514,6 +587,7 @@
 
                 let w = works[studentIndex];
                 work.value = w.text || '';
+                work.scrollTop = w.pos || 0;
                 studentName.value = w.student || '';
                 studentCount.textContent = `[${studentIndex + 1}/${works.length}]`;
 
@@ -548,40 +622,40 @@
                     /** @type {number} */
                     let weight = 0;
                     /** @type {string} */
-                    let typeSymbol;
+                    let typeText;
                     /** @type {string} */
-                    let subtypeSymbol;
+                    let subtypeText;
                     /** @type {string} */
-                    let meaningSymbol;
+                    let meaningText;
 
                     switch (m.type) {
                         case TYPE_GRAMMAR:
                             weight = 4.25;
-                            typeSymbol = document.getElementById(
+                            typeText = document.getElementById(
                                 'type-gr'
                             ).outerText.toLowerCase();
                             break;
                         case TYPE_VOCABULARY:
                             weight = 3.5;
-                            typeSymbol = document.getElementById(
+                            typeText = document.getElementById(
                                 'type-voc'
                             ).outerText.toLowerCase();
                             break;
                         case TYPE_ORTHOGRAPHY:
                             weight = 3.25;
-                            typeSymbol = document.getElementById(
+                            typeText = document.getElementById(
                                 'type-orth'
                             ).outerText.toLowerCase();
                             break;
                         case TYPE_PUNCTUATION:
                             weight = 3;
-                            typeSymbol = document.getElementById(
+                            typeText = document.getElementById(
                                 'type-punc'
                             ).outerText.toLowerCase();
                             break;
                         case TYPE_COMPLEX:
                             weight = 7;
-                            typeSymbol = document.getElementById(
+                            typeText = document.getElementById(
                                 'type-comp'
                             ).outerText.toLowerCase();
                             break;
@@ -591,17 +665,17 @@
 
                     switch (m.subtype) {
                         case SUBTYPE_ADDITION:
-                            subtypeSymbol = document.getElementById(
+                            subtypeText = document.getElementById(
                                 'subtype-add'
                             ).outerText.toLowerCase();
                             break;
                         case SUBTYPE_DISTORTION:
-                            subtypeSymbol = document.getElementById(
+                            subtypeText = document.getElementById(
                                 'subtype-dis'
                             ).outerText.toLowerCase();
                             break;
                         case SUBTYPE_DELETION:
-                            subtypeSymbol = document.getElementById(
+                            subtypeText = document.getElementById(
                                 'subtype-del'
                             ).outerText.toLowerCase();
                             break;
@@ -611,17 +685,17 @@
 
                     switch (m.meaning) {
                         case MEANING_RETAINED:
-                            meaningSymbol = '';
+                            meaningText = '';
                             break;
                         case MEANING_OBSCURED:
                             weight *= 1.5
-                            meaningSymbol = document.getElementById(
+                            meaningText = document.getElementById(
                                 'meaning-obsc'
                             ).outerText.toLowerCase();
                             break;
                         case MEANING_LOST:
                             weight *= 2;
-                            meaningSymbol = document.getElementById(
+                            meaningText = document.getElementById(
                                 'meaning-lost'
                             ).outerText.toLowerCase();
                             break;
@@ -660,6 +734,7 @@
                     mistake.textContent = m.content;
                     mistake.addEventListener('click', function (event) {
                         work.setSelectionRange(m.selection[0], m.selection[1]);
+                        work.scrollTop = m.pos;
                         work.focus();
                     });
 
@@ -671,11 +746,11 @@
                     details.style.overflowWrap = 'anywhere';
                     details.style.borderLeft = '2px solid var(--accent1)';
                     details.textContent = `${
-                        typeSymbol
+                        typeText
                     }, ${
-                        subtypeSymbol
+                        subtypeText
                     }${
-                        meaningSymbol ? `, ${meaningSymbol}` : ''
+                        meaningText ? `, ${meaningText}` : ''
                     }; -${weight}`;
                 });
 
@@ -727,6 +802,7 @@
                 let newMistake = {
                     content: mistakeTemplate.content,
                     selection: mistakeTemplate.selection,
+                    pos: mistakeTemplate.pos,
                     type: mistakeTemplate.type,
                     subtype: mistakeTemplate.subtype,
                     meaning: mistakeTemplate.meaning
