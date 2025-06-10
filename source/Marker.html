@@ -84,7 +84,7 @@
                 border-bottom-style: none;
                 border-top-style: none;
                 resize: vertical;
-                min-height: 27vh;
+                min-height: 28vh;
                 margin: 0;
                 padding-inline: 2vw;
                 width: 100%;
@@ -95,17 +95,17 @@
                 margin: 0;
             }
 
-            #prevStud,
-            #nextStud {
+            #prev-stud,
+            #next-stud {
                 font-weight: 700;
                 margin: 0;
             }
 
-            #prevStud {
+            #prev-stud {
                 border-radius: 0px 0px 0px 7px;
             }
 
-            #nextStud {
+            #next-stud {
                 border-radius: 0px 0px 7px 0px;
             }
 
@@ -129,6 +129,25 @@
                 width: fit-content;
             }
 
+            #results-table {
+                margin-bottom: 0;
+            }
+
+            #res-mark {
+                background-color: var(--accent2);
+            }
+
+            #res-mark:focus,
+            #res-mark:hover {
+                background-color: var(--secondary-colour);
+            }
+
+            #copy-mark-button {
+                border-radius: 0px 0px 0px 7px;
+                border-top-style: none;
+                margin-top: 0;
+            }
+
             /* CSS classes */
             .menu-div {
                 display: flex;
@@ -137,6 +156,7 @@
             }
 
             .menu-button {
+                background-color: transparent;
                 flex-grow: 1;
                 border-radius: 0px;
                 font-weight: 600;
@@ -178,6 +198,15 @@
                 margin-bottom: 0;
                 margin-top: 4px;
                 width: 100%;
+            }
+
+            .student-button {
+                border-color: var(--secondary-colour);
+                border-radius: 0;
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: 600;
+                margin: 0;
+                width: 2em;
             }
 
             .mistake-container {
@@ -254,10 +283,6 @@
                     Save results
                     <span class='tooltip'>Save results to .txt file</span>
                 </a>
-
-                <!-- Add & remove student -->
-                <button id='student-add-button' class='menu-button'>Add student</button>
-                <button id='student-remove-button' class='menu-button'>Remove student</button>
             </div>
         </details>
 
@@ -269,7 +294,10 @@
 
         <!-- Add mistake -->
         <div id='add-mistake-0'>
-            <button id='clear-mistake-button'>X</button>
+            <button id='clear-mistake-button' class='tooltipParent'>
+                -
+                <span class='tooltip'>Clear mistake's description</span>
+            </button>
             <input type='text' id='mistakeContent' placeholder='Mistake' autocomplete='off'>
             <button id='next' class='add-mistake-button' onclick='hideDiv(0, 1)'>Next</button>
         </div>
@@ -310,37 +338,60 @@
 
         <!-- Students -->
         <div id='studDiv'>
-            <button id='prevStud'>&lt;</button>
+            <button id='prev-stud' class='tooltipParent'>
+                &lt;
+                <span class='tooltip'>Previous student</span>
+            </button>
+
             <input type='text' id='student' placeholder='Student' autocomplete='off'>
+
+            <!-- Add & remove student -->
+            <button id='student-add-button' class='student-button tooltipParent'>
+                +
+                <span class='tooltip'>Add student</span>
+            </button>
+
+            <button id='student-remove-button' class='student-button tooltipParent'>
+                -
+                <span class='tooltip'>Remove student</span>
+            </button>
+
             <span id='student-count' tabindex='0'>[1/1]</span>
-            <button id='nextStud'>&gt;</button>
+
+            <button id='next-stud' class='tooltipParent'>
+                &gt;
+                <span class='tooltip'>Next student</span>
+            </button>
         </div>
 
         <!-- Mistakes -->
         <h3 id='mistakesHeader'>Mistakes:</h3>
         <div id='mistakes'></div>
+        <span id='remove-mistake-tooltip' style='display: none;' hidden>Remove mistake</span>
 
         <!-- Results -->
-        <table>
-            <th id='results-header' colspan='2'>
+        <table id='results-table'>
+            <th id='results-header' colspan='2' tabindex='0'>
                 Results
             </th>
 
             <tr>
-                <td id='res-mistakes-label'>Mistakes count</td>
-                <td id='res-mistakes'>0</td>
+                <td id='res-mistakes-label' tabindex='0'>Mistakes count</td>
+                <td id='res-mistakes' tabindex='0'>0</td>
             </tr>
 
             <tr>
-                <td id='res-weight-label'>Mistakes weight</td>
-                <td id='res-weight'>0</td>
+                <td id='res-weight-label' tabindex='0'>Mistakes weight</td>
+                <td id='res-weight' tabindex='0'>0</td>
             </tr>
 
             <tr>
-                <td id='res-mark-label'>Mark</td>
-                <td id='res-mark'>100 (A)</td>
+                <td id='res-mark-label' tabindex='0'>Mark</td>
+                <td id='res-mark' tabindex='0'>100 (A)</td>
             </tr>
         </table>
+
+        <button id='copy-mark-button'>Copy mark</button>
 
         <!-- Author -->
         <p id='author' class='box' style='font-style: italic'>
@@ -368,9 +419,9 @@
             /** @type {HTMLInputElement} */
             let mistakeContent = document.getElementById('mistakeContent');
             /** @type {HTMLButtonElement} */
-            let prevStud = document.getElementById('prevStud');
+            let prevStud = document.getElementById('prev-stud');
             /** @type {HTMLButtonElement} */
-            let nextStud = document.getElementById('nextStud');
+            let nextStud = document.getElementById('next-stud');
             /** @type {HTMLInputElement} */
             let studentName = document.getElementById('student');
             /** @type {HTMLSpanElement} */
@@ -385,6 +436,8 @@
             let resultsMistakeWeight = document.getElementById('res-weight');
             /** @type {HTMLTableDataCellElement} */
             let resultsMark = document.getElementById('res-mark');
+            /** @type {HTMLButtonElement} */
+            let copyMark = document.getElementById('copy-mark-button');
 
             // Constants
             const TYPE_GRAMMAR = 0
@@ -420,6 +473,8 @@
             // Variables
             /** @type {number} */
             let studentIndex = 0;
+            /** @type {number} */
+            let currentMark = 100;
             /** @type {Mistake} */
             let mistakeTemplate = {
                 content: '',
@@ -493,6 +548,10 @@
 
             studentName.addEventListener('input', function (event) {
                 works[studentIndex].student = this.value;
+            });
+
+            copyMark.addEventListener('click', function (event) {
+                navigator.clipboard.writeText(currentMark);
             });
 
             function saveWorksFile() {
@@ -605,6 +664,7 @@
                     resultsMistakeCount.textContent = 0;
                     resultsMistakeWeight.textContent = 0;
                     resultsMark.textContent = '100 (A)';
+                    currentMark = 100;
                     return;
                 } else {
                     work.readOnly = true;
@@ -716,14 +776,22 @@
                     let remove = container.appendChild(
                         document.createElement('button')
                     );
-                    remove.classList.add('remove');
-                    remove.textContent = 'X';
+                    remove.classList.add('remove', 'tooltipParent');
+                    remove.textContent = '-';
                     remove.addEventListener('click', function (event) {
                         work.setSelectionRange(0, 0);
                         work.focus();
                         w.mistakes.splice(i, 1);
                         updateMistakes();
                     });
+
+                    let tooltip = remove.appendChild(
+                        document.createElement('span')
+                    );
+                    tooltip.classList.add('tooltip');
+                    tooltip.textContent = document.getElementById(
+                        'remove-mistake-tooltip'
+                    ).textContent;
 
                     /** @type {HTMLButtonElement} */
                     let mistake = container.appendChild(
@@ -733,9 +801,9 @@
                     mistake.classList.add('mistake');
                     mistake.textContent = m.content;
                     mistake.addEventListener('click', function (event) {
-                        work.setSelectionRange(m.selection[0], m.selection[1]);
-                        work.scrollTop = m.pos;
                         work.focus();
+                        work.scrollTop = m.pos;
+                        work.setSelectionRange(m.selection[0], m.selection[1]);
                     });
 
                     let details = mistake.appendChild(
@@ -755,6 +823,7 @@
                 });
 
                 mark = Math.round(clamp(0, 100 + totalWeight, 100));
+                currentMark = mark;
 
                 if (mark > 94) letter = 'A';
                 else if (mark > 82) letter = 'B';
@@ -766,7 +835,7 @@
 
                 resultsMistakeCount.textContent = w.mistakes.length;
                 resultsMistakeWeight.textContent = (totalWeight * -1).toFixed(2);
-                resultsMark.textContent = `${mark} (${letter})`;
+                resultsMark.childNodes[0].textContent = `${mark} (${letter})`;
             }
 
             /**
@@ -901,6 +970,238 @@
                             ]
                         },
                         {
+                            "id": "menu-summary",
+                            "childNodesTexts": [
+                                "Menu"
+                            ]
+                        },
+                        {
+                            "id": "saveWorksButton",
+                            "childNodesTexts": [
+                                "Save",
+                                "Save works to .json file"
+                            ]
+                        },
+                        {
+                            "id": "loadWorksButton",
+                            "childNodesTexts": [
+                                "Load",
+                                "Load works from .json file"
+                            ]
+                        },
+                        {
+                            "id": "saveResultsButton",
+                            "childNodesTexts": [
+                                "Save results",
+                                "Save results to .txt file"
+                            ]
+                        },
+                        {
+                            "id": "source-summary",
+                            "childNodesTexts": [
+                                "Source text"
+                            ]
+                        },
+                        {
+                            "id": "source-text",
+                            "childNodesTexts": [],
+                            "placeholder": "Text to translate"
+                        },
+                        {
+                            "id": "clear-mistake-button",
+                            "childNodesTexts": [
+                                "-",
+                                "Clear mistake's description"
+                            ]
+                        },
+                        {
+                            "id": "mistakeContent",
+                            "childNodesTexts": [],
+                            "placeholder": "Mistake"
+                        },
+                        {
+                            "id": "next",
+                            "childNodesTexts": [
+                                "Next"
+                            ]
+                        },
+                        {
+                            "id": "type-gr",
+                            "childNodesTexts": [
+                                "Grammar"
+                            ]
+                        },
+                        {
+                            "id": "type-voc",
+                            "childNodesTexts": [
+                                "Vocabulary"
+                            ]
+                        },
+                        {
+                            "id": "type-orth",
+                            "childNodesTexts": [
+                                "Orthography"
+                            ]
+                        },
+                        {
+                            "id": "type-punc",
+                            "childNodesTexts": [
+                                "Punctuation"
+                            ]
+                        },
+                        {
+                            "id": "type-comp",
+                            "childNodesTexts": [
+                                "Complex"
+                            ]
+                        },
+                        {
+                            "id": "back-1",
+                            "childNodesTexts": [
+                                "Back"
+                            ]
+                        },
+                        {
+                            "id": "subtype-add",
+                            "childNodesTexts": [
+                                "Redundant element"
+                            ]
+                        },
+                        {
+                            "id": "subtype-dis",
+                            "childNodesTexts": [
+                                "Incorrect element"
+                            ]
+                        },
+                        {
+                            "id": "subtype-del",
+                            "childNodesTexts": [
+                                "Lack of element"
+                            ]
+                        },
+                        {
+                            "id": "back-2",
+                            "childNodesTexts": [
+                                "Back"
+                            ]
+                        },
+                        {
+                            "id": "cancel-2",
+                            "childNodesTexts": [
+                                "Cancel"
+                            ]
+                        },
+                        {
+                            "id": "meaning-ret",
+                            "childNodesTexts": [
+                                "Meaning retained"
+                            ]
+                        },
+                        {
+                            "id": "meaning-obsc",
+                            "childNodesTexts": [
+                                "Meaning obscured"
+                            ]
+                        },
+                        {
+                            "id": "meaning-lost",
+                            "childNodesTexts": [
+                                "Meaning lost"
+                            ]
+                        },
+                        {
+                            "id": "back-3",
+                            "childNodesTexts": [
+                                "Back"
+                            ]
+                        },
+                        {
+                            "id": "cancel-3",
+                            "childNodesTexts": [
+                                "Cancel"
+                            ]
+                        },
+                        {
+                            "id": "work",
+                            "childNodesTexts": [],
+                            "placeholder": "Student's translation"
+                        },
+                        {
+                            "id": "prev-stud",
+                            "childNodesTexts": [
+                                "<",
+                                "Previous student"
+                            ]
+                        },
+                        {
+                            "id": "student",
+                            "childNodesTexts": [],
+                            "placeholder": "Student"
+                        },
+                        {
+                            "id": "student-add-button",
+                            "childNodesTexts": [
+                                "+",
+                                "Add student"
+                            ]
+                        },
+                        {
+                            "id": "student-remove-button",
+                            "childNodesTexts": [
+                                "-",
+                                "Remove student"
+                            ]
+                        },
+                        {
+                            "id": "next-stud",
+                            "childNodesTexts": [
+                                ">",
+                                "Next student"
+                            ]
+                        },
+                        {
+                            "id": "mistakesHeader",
+                            "childNodesTexts": [
+                                "Mistakes:"
+                            ]
+                        },
+                        {
+                            "id": "remove-mistake-tooltip",
+                            "childNodesTexts": [
+                                "Remove mistake"
+                            ]
+                        },
+                        {
+                            "id": "results-header",
+                            "childNodesTexts": [
+                                "Results"
+                            ]
+                        },
+                        {
+                            "id": "res-mistakes-label",
+                            "childNodesTexts": [
+                                "Mistakes count"
+                            ]
+                        },
+                        {
+                            "id": "res-weight-label",
+                            "childNodesTexts": [
+                                "Mistakes weight"
+                            ]
+                        },
+                        {
+                            "id": "res-mark-label",
+                            "childNodesTexts": [
+                                "Mark"
+                            ]
+                        },
+                        {
+                            "id": "copy-mark-button",
+                            "childNodesTexts": [
+                                "Copy mark"
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
                                 "Made by Vitaly Pavlovich Ulyanov."
@@ -982,6 +1283,238 @@
                             "id": "exportLang",
                             "childNodesTexts": [
                                 "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "menu-summary",
+                            "childNodesTexts": [
+                                "Меню"
+                            ]
+                        },
+                        {
+                            "id": "saveWorksButton",
+                            "childNodesTexts": [
+                                "Сохранить",
+                                "Сохранить работы в файл .json"
+                            ]
+                        },
+                        {
+                            "id": "loadWorksButton",
+                            "childNodesTexts": [
+                                "Загрузить",
+                                "Загрузить работы из файла .json"
+                            ]
+                        },
+                        {
+                            "id": "saveResultsButton",
+                            "childNodesTexts": [
+                                "Сохранить итоги",
+                                "Сохранить результаты в файл .txt"
+                            ]
+                        },
+                        {
+                            "id": "source-summary",
+                            "childNodesTexts": [
+                                "Исходный текст"
+                            ]
+                        },
+                        {
+                            "id": "source-text",
+                            "childNodesTexts": [],
+                            "placeholder": "Текст перевода"
+                        },
+                        {
+                            "id": "clear-mistake-button",
+                            "childNodesTexts": [
+                                "-",
+                                "Очистить описание ошибки"
+                            ]
+                        },
+                        {
+                            "id": "mistakeContent",
+                            "childNodesTexts": [],
+                            "placeholder": "Ошибка"
+                        },
+                        {
+                            "id": "next",
+                            "childNodesTexts": [
+                                "Далее"
+                            ]
+                        },
+                        {
+                            "id": "type-gr",
+                            "childNodesTexts": [
+                                "Грамматическая"
+                            ]
+                        },
+                        {
+                            "id": "type-voc",
+                            "childNodesTexts": [
+                                "Лексическая"
+                            ]
+                        },
+                        {
+                            "id": "type-orth",
+                            "childNodesTexts": [
+                                "Орфографическая"
+                            ]
+                        },
+                        {
+                            "id": "type-punc",
+                            "childNodesTexts": [
+                                "Пунктуационная"
+                            ]
+                        },
+                        {
+                            "id": "type-comp",
+                            "childNodesTexts": [
+                                "Комплексная"
+                            ]
+                        },
+                        {
+                            "id": "back-1",
+                            "childNodesTexts": [
+                                "Назад"
+                            ]
+                        },
+                        {
+                            "id": "subtype-add",
+                            "childNodesTexts": [
+                                "Лишний элемент"
+                            ]
+                        },
+                        {
+                            "id": "subtype-dis",
+                            "childNodesTexts": [
+                                "Неверный элемент"
+                            ]
+                        },
+                        {
+                            "id": "subtype-del",
+                            "childNodesTexts": [
+                                "Отсутствие элемента"
+                            ]
+                        },
+                        {
+                            "id": "back-2",
+                            "childNodesTexts": [
+                                "Назад"
+                            ]
+                        },
+                        {
+                            "id": "cancel-2",
+                            "childNodesTexts": [
+                                "Отмена"
+                            ]
+                        },
+                        {
+                            "id": "meaning-ret",
+                            "childNodesTexts": [
+                                "Понимание не затруднено"
+                            ]
+                        },
+                        {
+                            "id": "meaning-obsc",
+                            "childNodesTexts": [
+                                "Понимание затруднено"
+                            ]
+                        },
+                        {
+                            "id": "meaning-lost",
+                            "childNodesTexts": [
+                                "Понимание невозможно"
+                            ]
+                        },
+                        {
+                            "id": "back-3",
+                            "childNodesTexts": [
+                                "Назад"
+                            ]
+                        },
+                        {
+                            "id": "cancel-3",
+                            "childNodesTexts": [
+                                "Отмена"
+                            ]
+                        },
+                        {
+                            "id": "work",
+                            "childNodesTexts": [],
+                            "placeholder": "Перевод студента"
+                        },
+                        {
+                            "id": "prev-stud",
+                            "childNodesTexts": [
+                                "<",
+                                "Предыдущий студент"
+                            ]
+                        },
+                        {
+                            "id": "student",
+                            "childNodesTexts": [],
+                            "placeholder": "Студент"
+                        },
+                        {
+                            "id": "student-add-button",
+                            "childNodesTexts": [
+                                "+",
+                                "Добавить студента"
+                            ]
+                        },
+                        {
+                            "id": "student-remove-button",
+                            "childNodesTexts": [
+                                "-",
+                                "Удалить студента"
+                            ]
+                        },
+                        {
+                            "id": "next-stud",
+                            "childNodesTexts": [
+                                ">",
+                                "Следующий студент"
+                            ]
+                        },
+                        {
+                            "id": "mistakesHeader",
+                            "childNodesTexts": [
+                                "Ошибки:"
+                            ]
+                        },
+                        {
+                            "id": "remove-mistake-tooltip",
+                            "childNodesTexts": [
+                                "Удалить ошибку"
+                            ]
+                        },
+                        {
+                            "id": "results-header",
+                            "childNodesTexts": [
+                                "Результаты"
+                            ]
+                        },
+                        {
+                            "id": "res-mistakes-label",
+                            "childNodesTexts": [
+                                "Число ошибок"
+                            ]
+                        },
+                        {
+                            "id": "res-weight-label",
+                            "childNodesTexts": [
+                                "Вес ошибок"
+                            ]
+                        },
+                        {
+                            "id": "res-mark-label",
+                            "childNodesTexts": [
+                                "Оценка"
+                            ]
+                        },
+                        {
+                            "id": "copy-mark-button",
+                            "childNodesTexts": [
+                                "Копировать балл"
                             ]
                         },
                         {
