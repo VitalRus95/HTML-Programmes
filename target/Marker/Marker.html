@@ -414,7 +414,8 @@
             #clear-mistake-button {
                 border-radius: 0px;
                 font-family: 'Courier New', Courier, monospace;
-                font-weight: 600;
+                font-size: 1.2em;
+                font-weight: 900;
                 margin: 0;
             }
 
@@ -440,14 +441,15 @@
                 width: 100%;
             }
 
-            #studDiv {
+            #stud-div {
                 display: flex;
                 margin: 0;
             }
 
             #prev-stud,
             #next-stud {
-                font-weight: 700;
+                font-size: 1.1em;
+                font-weight: 900;
                 margin: 0;
             }
 
@@ -554,9 +556,10 @@
                 border-color: var(--secondary-colour);
                 border-radius: 0;
                 font-family: 'Courier New', Courier, monospace;
-                font-weight: 600;
+                font-size: 1.1em;
+                font-weight: 900;
                 margin: 0;
-                width: 2em;
+                width: 1.85em;
             }
 
             .mistake-container {
@@ -567,10 +570,11 @@
 
             .remove {
                 font-family: 'Courier New', Courier, monospace;
-                font-weight: 600;
+                font-size: 1.2em;
+                font-weight: 900;
                 border-radius: 50%;
-                height: 1.3em;
-                width: 1.3em;
+                height: 1em;
+                width: 1em;
             }
 
             .mistake {
@@ -595,7 +599,7 @@
             <summary id='menu-summary'>Menu</summary>
 
             <div class='menu-div'>
-                <!-- Save & load works -->
+                <!-- Save works -->
                 <a
                     id='saveWorksButton'
                     href=''
@@ -606,6 +610,7 @@
                     <span class='tooltip'>Save works to .json file</span>
                 </a>
 
+                <!-- Load works -->
                 <button
                     id='loadWorksButton'
                     class='menu-button tooltipParent'
@@ -622,6 +627,12 @@
                     style='display: none;'
                 >
                 </input>
+
+                <!-- Sort students alphabetically -->
+                <button id='sort-button' class='menu-button tooltipParent' onclick='sortStudents()'>
+                    Sort
+                    <span class='tooltip'>Sort students alphabetically</span>
+                </button>
 
                 <!-- Save results -->
                 <a
@@ -687,7 +698,7 @@
         <textarea id='work' placeholder="Student's translation" autocomplete='off'></textarea>
 
         <!-- Students -->
-        <div id='studDiv'>
+        <div id='stud-div'>
             <button id='prev-stud' class='tooltipParent'>
                 &lt;
                 <span class='tooltip'>Previous student</span>
@@ -1314,14 +1325,24 @@
                 meaning: MEANING_RETAINED
             };
             /** @type {Work[]} */
-            let works = [ {} ];
+            let works = [ {
+                student: '',
+                text: '',
+                pos: 0,
+                mistakes: []
+            } ];
 
             addStudent.addEventListener('click', function (event) {
                 /** @type {Work} */
-                let newStudent = {};
+                let newStudent = {
+                    student: '',
+                    text: '',
+                    pos: 0,
+                    mistakes: []
+                };
                 works.push(newStudent);
                 studentIndex = works.length - 1;
-                updateStudent();
+                updateStudent(studentIndex);
             });
 
             removeStudent.addEventListener('click', function (event) {
@@ -1332,11 +1353,16 @@
                     studentIndex = clamp(0, studentIndex, works.length - 1);
                 } else {
                     /** @type {Work} */
-                    let newStudent = {};
+                    let newStudent = {
+                        student: '',
+                        text: '',
+                        pos: 0,
+                        mistakes: []
+                    };
                     works.push(newStudent);
                     studentIndex = 0;
                 }
-                updateStudent();
+                updateStudent(studentIndex);
             });
 
             clearMistake.addEventListener('click', function (event) {
@@ -1352,13 +1378,13 @@
             prevStud.addEventListener('click', function (event) {
                 works[studentIndex].pos = work.scrollTop;
                 studentIndex = clamp(0, studentIndex - 1, works.length - 1);
-                updateStudent();
+                updateStudent(studentIndex);
             });
 
             nextStud.addEventListener('click', function (event) {
                 works[studentIndex].pos = work.scrollTop;
                 studentIndex = clamp(0, studentIndex + 1, works.length - 1);
-                updateStudent();
+                updateStudent(studentIndex);
             });
 
             work.addEventListener('select', function (event) {
@@ -1394,7 +1420,6 @@
             }
 
             function saveResultsFile() {
-                let lastIndex = studentIndex;
                 let results = `${
                     document.getElementById('page-title').textContent
                 }\n${
@@ -1402,8 +1427,7 @@
                 }`;
 
                 works.forEach((w, i) => {
-                    studentIndex = i;
-                    updateStudent();
+                    updateStudent(i);
 
                     results += `\n\n${i + 1}. ${w.student}\n`;
                     results += `${
@@ -1440,8 +1464,7 @@
                 saveResultsButton.download = 'Results.txt';
                 saveResultsButton.href = `data:text/plain;charset=utf-8,${results}`;
 
-                studentIndex = lastIndex;
-                updateStudent();
+                updateStudent(studentIndex);
             }
 
             async function loadWorksFile() {
@@ -1457,36 +1480,46 @@
                         sourceText.value = file.source;
                         works = file.translations;
                         studentIndex = 0;
-                        updateStudent();
+                        updateStudent(studentIndex);
                     } catch (error) {
                         alert(`Error while reading works file: ${error}`);
                     }
                 });
             }
 
-            function updateStudent() {
+            function sortStudents() {
+                try {
+                    works.sort((a, b) => a.student.localeCompare(b.student));
+                    studentIndex = 0;
+                    updateStudent(studentIndex);
+                } catch (error) {
+                    alert(`Error while sorting students: ${error}`);
+                }
+            }
+
+            function updateStudent(index) {
                 if (works.length === 0) {
                     studentName.value = '';
                     studentCount.textContent = '[0/0]';
                     work.value = '';
-                    updateMistakes();
+                    updateMistakes(0);
                     return;
                 };
 
-                let w = works[studentIndex];
+                let w = works[index];
                 work.value = w.text || '';
                 work.scrollTop = w.pos || 0;
                 studentName.value = w.student || '';
-                studentCount.textContent = `[${studentIndex + 1}/${works.length}]`;
+                studentCount.textContent = `[${index + 1}/${works.length}]`;
 
-                updateMistakes();
+                updateMistakes(index);
             }
 
-            function updateMistakes() {
+            function updateMistakes(index) {
                 while (mistakes.hasChildNodes()) mistakes.lastChild.remove();
 
                 /** @type {Work} */
-                let w = works[studentIndex];
+                let w = works[index];
 
                 if (!w || !w.mistakes || w.mistakes.length == 0) {
                     work.readOnly = false;
@@ -1611,7 +1644,7 @@
                         work.setSelectionRange(0, 0);
                         work.focus();
                         w.mistakes.splice(i, 1);
-                        updateMistakes();
+                        updateMistakes(studentIndex);
                     });
 
                     let tooltip = remove.appendChild(
@@ -1648,7 +1681,7 @@
                         subtypeText
                     }${
                         meaningText ? `, ${meaningText}` : ''
-                    }; -${weight}`;
+                    }; -${weight.toFixed(2)}`;
                 });
 
                 mark = Math.round(clamp(0, 100 + totalWeight, 100));
@@ -1711,7 +1744,7 @@
 
                 if (!w.mistakes) w.mistakes = [];
                 w.mistakes.push(newMistake);
-                updateMistakes();
+                updateMistakes(studentIndex);
                 hideDiv(3, 0);
             }
 
@@ -1816,6 +1849,13 @@
                             "childNodesTexts": [
                                 "Load",
                                 "Load works from .json file"
+                            ]
+                        },
+                        {
+                            "id": "sort-button",
+                            "childNodesTexts": [
+                                "Sort",
+                                "Sort students alphabetically"
                             ]
                         },
                         {
@@ -2132,6 +2172,13 @@
                             "childNodesTexts": [
                                 "Загрузить",
                                 "Загрузить работы из файла .json"
+                            ]
+                        },
+                        {
+                            "id": "sort-button",
+                            "childNodesTexts": [
+                                "Сортировать",
+                                "Отсортировать студентов по алфавиту"
                             ]
                         },
                         {
