@@ -85,9 +85,9 @@
                 border-bottom-style: none;
                 border-top-style: none;
                 resize: vertical;
-                min-height: 28vh;
                 margin: 0;
                 padding-inline: 2vw;
+                min-height: 28vh;
                 width: 100%;
             }
 
@@ -122,6 +122,7 @@
             }
 
             #student-count {
+                align-content: center;
                 background-color: var(--accent2);
                 border-top: 2px outset var(--secondary-colour);
                 border-bottom: 2px outset var(--secondary-colour);
@@ -496,12 +497,9 @@
                 meaning: MEANING_RETAINED
             };
             /** @type {Work[]} */
-            let works = [ {
-                student: '',
-                text: '',
-                pos: 0,
-                mistakes: []
-            } ];
+            let works = [];
+
+            updateStudent(0);
 
             addStudent.addEventListener('click', function (event) {
                 /** @type {Work} */
@@ -583,7 +581,8 @@
             function saveWorksFile() {
                 let file = {
                     source: sourceText.value,
-                    translations: works
+                    translations: works,
+                    index: studentIndex
                 };
                 let data = encodeURIComponent(JSON.stringify(file, undefined, 2));
                 saveWorksButton.download = 'Works.json';
@@ -644,13 +643,14 @@
                         /** @type {
                             {
                                 source: string,
-                                translations: Works[]
+                                translations: Works[],
+                                index: number
                             }
                         }*/
                         let file = JSON.parse(content);
-                        sourceText.value = file.source;
-                        works = file.translations;
-                        studentIndex = 0;
+                        sourceText.value = file.source || '';
+                        works = file.translations || [];
+                        studentIndex = clamp(0, file.index || 0, works.length - 1);
                         updateStudent(studentIndex);
                     } catch (error) {
                         alert(`Error while reading works file: ${error}`);
@@ -670,12 +670,19 @@
 
             function updateStudent(index) {
                 if (works.length === 0) {
-                    studentName.value = '';
-                    studentCount.textContent = '[0/0]';
-                    work.value = '';
-                    updateMistakes(0);
-                    return;
+                    /** @type {Work} */
+                    let newStudent = {
+                        student: '',
+                        text: '',
+                        pos: 0,
+                        mistakes: []
+                    };
+                    works.push(newStudent);
                 };
+
+                if (!works[index]) {
+                    index = works.length - 1;
+                }
 
                 let w = works[index];
                 work.value = w.text || '';
