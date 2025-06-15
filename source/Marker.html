@@ -405,6 +405,38 @@
 
         <button id='copy-mark-button'>Copy mark</button>
 
+        <!-- Mistakes classification -->
+        <details>
+            <summary id='help-summary'>Classification of mistakes</summary>
+
+            <ol>
+                <li id='help-type'><b>Type</b>:</li>
+                <ul>
+                    <li id='help-gr'><b>Grammar</b>: a mistake while conveying the meaning of a grammatical form (a wrong tense, article, declension, etc.).</li>
+                    <li id='help-voc'><b>Vocabulary</b>: a mistake while conveying the meaning of a word (a wrong word, collocation, style, etc.).</li>
+                    <li id='help-ort'><b>Orthography</b>: a wrong spelling of a word.</li>
+                    <li id='help-pun'><b>Punctuation</b>: an incorrect usage of punctuation marks.</li>
+                    <li id='help-com'><b>Complex</b>: a serious mistake or a combination of mistakes in a text unit larger than a character or a word (e.g., a phrase or a sentence).</li>
+                </ul>
+
+                <li id='help-subtype'><b>Subtype</b>:</li>
+                <ul>
+                    <li id='help-red'><b>Redundant element</b>: a wrong extra element is inserted.</li>
+                    <li id='help-inc'><b>Incorrect element</b>: a correct element is replaced with a wrong one.</li>
+                    <li id='help-lack'><b>Lack of element</b>: a correct element is absent.</li>
+                </ul>
+
+                <li id='help-meaning'><b>Text's meaning</b>:</li>
+                <ul>
+                    <li id='help-ret'><b>Retained</b>: the mistake does not make understanding the text harder.</li>
+                    <li id='help-obsc'><b>Obscured</b>: the text's meaning can be understood only with the help of the immediate context*.</li>
+                    <li id='help-lost'><b>Lost</b>: the text's meaning is severely distorted and cannot be understood even with the help of the immediate context*.</li>
+                </ul>
+            </ol>
+
+            <span id='help-context'>*<b>Immediate context</b> = <i>everything before</i> the analysed sentence + <i>this sentence</i> + <i>one sentence after</i> it.</span>
+        </details>
+
         <!-- Author -->
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
@@ -1249,6 +1281,124 @@
                             ]
                         },
                         {
+                            "id": "help-summary",
+                            "childNodesTexts": [
+                                "Classification of mistakes"
+                            ]
+                        },
+                        {
+                            "id": "help-type",
+                            "childNodesTexts": [
+                                "Type",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "help-gr",
+                            "childNodesTexts": [
+                                "Grammar",
+                                ": a mistake while conveying the meaning of a grammatical form (a wrong tense, article, declension, etc.)."
+                            ]
+                        },
+                        {
+                            "id": "help-voc",
+                            "childNodesTexts": [
+                                "Vocabulary",
+                                ": a mistake while conveying the meaning of a word (a wrong word, collocation, style, etc.)."
+                            ]
+                        },
+                        {
+                            "id": "help-ort",
+                            "childNodesTexts": [
+                                "Orthography",
+                                ": a wrong spelling of a word."
+                            ]
+                        },
+                        {
+                            "id": "help-pun",
+                            "childNodesTexts": [
+                                "Punctuation",
+                                ": an incorrect usage of punctuation marks."
+                            ]
+                        },
+                        {
+                            "id": "help-com",
+                            "childNodesTexts": [
+                                "Complex",
+                                ": a serious mistake or a combination of mistakes in a text unit larger than a character or a word (e.g., a phrase or a sentence)."
+                            ]
+                        },
+                        {
+                            "id": "help-subtype",
+                            "childNodesTexts": [
+                                "Subtype",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "help-red",
+                            "childNodesTexts": [
+                                "Redundant element",
+                                ": a wrong extra element is inserted."
+                            ]
+                        },
+                        {
+                            "id": "help-inc",
+                            "childNodesTexts": [
+                                "Incorrect element",
+                                ": a correct element is replaced with a wrong one."
+                            ]
+                        },
+                        {
+                            "id": "help-lack",
+                            "childNodesTexts": [
+                                "Lack of element",
+                                ": a correct element is absent."
+                            ]
+                        },
+                        {
+                            "id": "help-meaning",
+                            "childNodesTexts": [
+                                "Text's meaning",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "help-ret",
+                            "childNodesTexts": [
+                                "Retained",
+                                ": the mistake does not make understanding the text harder."
+                            ]
+                        },
+                        {
+                            "id": "help-obsc",
+                            "childNodesTexts": [
+                                "Obscured",
+                                ": the text's meaning can be understood only with the help of the immediate context*."
+                            ]
+                        },
+                        {
+                            "id": "help-lost",
+                            "childNodesTexts": [
+                                "Lost",
+                                ": the text's meaning is severely distorted and cannot be understood even with the help of the immediate context*."
+                            ]
+                        },
+                        {
+                            "id": "help-context",
+                            "childNodesTexts": [
+                                "*",
+                                "Immediate context ",
+                                "= ",
+                                "everything before ",
+                                "the analysed sentence + ",
+                                "this sentence ",
+                                "+ ",
+                                "one sentence after ",
+                                "it."
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
                                 "Made by Vitaly Pavlovich Ulyanov."
@@ -1569,6 +1719,124 @@
                             "id": "copy-mark-button",
                             "childNodesTexts": [
                                 "Копировать балл"
+                            ]
+                        },
+                        {
+                            "id": "help-summary",
+                            "childNodesTexts": [
+                                "Классификация ошибок"
+                            ]
+                        },
+                        {
+                            "id": "help-type",
+                            "childNodesTexts": [
+                                "Вид",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "help-gr",
+                            "childNodesTexts": [
+                                "Грамматическая",
+                                " — ошибка в передаче значения грамматической формы (неверное время, склонение, спряжение, артикль и т.п.)."
+                            ]
+                        },
+                        {
+                            "id": "help-voc",
+                            "childNodesTexts": [
+                                "Лексическая",
+                                " — ошибка в передаче значения слова (неверное слово, сочетаемость, стиль и т.п.)."
+                            ]
+                        },
+                        {
+                            "id": "help-ort",
+                            "childNodesTexts": [
+                                "Орфографическая",
+                                " — ошибка в написании слова."
+                            ]
+                        },
+                        {
+                            "id": "help-pun",
+                            "childNodesTexts": [
+                                "Пунктуационная",
+                                " — ошибка в расстановке знаков препинания."
+                            ]
+                        },
+                        {
+                            "id": "help-com",
+                            "childNodesTexts": [
+                                "Комплексная",
+                                " — грубая ошибка или сочетание ошибок при переводе большей, чем знак или слово, единицы текста (словосочетания, предложения)."
+                            ]
+                        },
+                        {
+                            "id": "help-subtype",
+                            "childNodesTexts": [
+                                "Подвид",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "help-red",
+                            "childNodesTexts": [
+                                "Лишний элемент",
+                                " — привнесение ненужного элемента."
+                            ]
+                        },
+                        {
+                            "id": "help-inc",
+                            "childNodesTexts": [
+                                "Неверный элемент",
+                                " — замена правильного элемента неправильным."
+                            ]
+                        },
+                        {
+                            "id": "help-lack",
+                            "childNodesTexts": [
+                                "Отсутствие элемента",
+                                " — недостаток нужного элемента."
+                            ]
+                        },
+                        {
+                            "id": "help-meaning",
+                            "childNodesTexts": [
+                                "Понимание текста",
+                                ":"
+                            ]
+                        },
+                        {
+                            "id": "help-ret",
+                            "childNodesTexts": [
+                                "Не затруднено",
+                                " — ошибка не усложняет понимание текста."
+                            ]
+                        },
+                        {
+                            "id": "help-obsc",
+                            "childNodesTexts": [
+                                "Затруднено",
+                                " — понимание текста возможно только при обращении к ближайшему контексту*."
+                            ]
+                        },
+                        {
+                            "id": "help-lost",
+                            "childNodesTexts": [
+                                "Невозможно",
+                                " — смысл сильно искажён, понимание текста невозможно даже при обращении к ближайшему контексту*."
+                            ]
+                        },
+                        {
+                            "id": "help-context",
+                            "childNodesTexts": [
+                                "*",
+                                "Ближайший контекст ",
+                                "= ",
+                                "всё до ",
+                                "анализируемого предложения + ",
+                                "это предложение ",
+                                "+ ",
+                                "одно предложение после ",
+                                "него."
                             ]
                         },
                         {
