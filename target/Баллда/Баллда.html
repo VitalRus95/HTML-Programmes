@@ -466,7 +466,7 @@
         <hr />
 
         <!-- #region Clear button -->
-        <button id='reset' onclick='resetValues()'><b>Сброс</b></button>
+        <button id='reset' onclick='resetValues()'>Сброс</button>
         <!-- #endregion -->
 
         <hr />
@@ -1029,6 +1029,9 @@
                 mistakesWeight = document.getElementById('mistakesWeight'),
                 resultingMark = document.getElementById('resultingMark');
 
+            // Constants
+            const FULL_MISTAKE_WEIGHT = 18
+            
             // Script variables
             let inputFields = [
                 meaning,
@@ -1061,13 +1064,13 @@
                     parseInt(style.value) +
                     parseInt(orthpunc.value);
 
-                totalMistakesWeight =
-                    parseInt(meaning.value) * 14 +
-                    parseInt(inaccuracy.value) * 5 +
-                    parseInt(grammar.value) * 4 +
-                    parseInt(vocabulary.value) * 3.66 +
-                    parseInt(style.value) * 3.33 +
-                    parseInt(orthpunc.value) * 2.5;
+                totalMistakesWeight = 
+                    parseInt(meaning.value) * FULL_MISTAKE_WEIGHT +
+                    parseInt(inaccuracy.value) * FULL_MISTAKE_WEIGHT * 0.333  +
+                    parseInt(grammar.value) * FULL_MISTAKE_WEIGHT * 0.333 +
+                    parseInt(vocabulary.value) * FULL_MISTAKE_WEIGHT * 0.333 +
+                    parseInt(style.value) * FULL_MISTAKE_WEIGHT * 0.25 +
+                    parseInt(orthpunc.value) * FULL_MISTAKE_WEIGHT * 0.2;
 
                 mistakesCount.innerHTML = totalMistakesNumber;
                 mistakesWeight.innerHTML = totalMistakesWeight
