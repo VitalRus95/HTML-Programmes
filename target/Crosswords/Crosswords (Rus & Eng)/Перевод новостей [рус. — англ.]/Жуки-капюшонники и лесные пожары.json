@@ -1,0 +1,121 @@
+[
+  {
+    "word": "individual",
+    "description": "Особь",
+    "vertical": true,
+    "x": 4,
+    "y": 0
+  },
+  {
+    "word": "pronotum",
+    "description": "Переднеспинка",
+    "vertical": true,
+    "x": 11,
+    "y": 1
+  },
+  {
+    "word": "wildfire",
+    "description": "Лесной пожар",
+    "vertical": true,
+    "x": 1,
+    "y": 2
+  },
+  {
+    "word": "cretaceous",
+    "description": "Меловой [геол.]",
+    "vertical": true,
+    "x": 7,
+    "y": 2
+  },
+  {
+    "word": "wood",
+    "description": "Древесина",
+    "vertical": false,
+    "x": 0,
+    "y": 3
+  },
+  {
+    "word": "larva",
+    "description": "Личинка",
+    "vertical": false,
+    "x": 0,
+    "y": 5
+  },
+  {
+    "word": "extinct",
+    "description": "Вымерший",
+    "vertical": false,
+    "x": 6,
+    "y": 5
+  },
+  {
+    "word": "devastating",
+    "description": "Разрушительный",
+    "vertical": false,
+    "x": 3,
+    "y": 7
+  },
+  {
+    "word": "amber",
+    "description": "Янтарь",
+    "vertical": false,
+    "x": 3,
+    "y": 9
+  },
+  {
+    "word": "resin",
+    "description": "Смола",
+    "vertical": true,
+    "x": 9,
+    "y": 10
+  },
+  {
+    "word": "seed",
+    "description": "Семя",
+    "vertical": false,
+    "x": 6,
+    "y": 12
+  },
+  {
+    "word": "charcoal",
+    "description": "Древесный уголь",
+    "vertical": true,
+    "x": 3,
+    "y": 14
+  },
+  {
+    "word": "bark",
+    "description": "Кора",
+    "vertical": true,
+    "x": 7,
+    "y": 14
+  },
+  {
+    "word": "fossil",
+    "description": "Ископаемый",
+    "vertical": true,
+    "x": 11,
+    "y": 14
+  },
+  {
+    "word": "benefit",
+    "description": "Извлекать пользу",
+    "vertical": false,
+    "x": 6,
+    "y": 15
+  },
+  {
+    "word": "auger",
+    "description": "Сверло, бурав",
+    "vertical": false,
+    "x": 2,
+    "y": 17
+  },
+  {
+    "word": "crop",
+    "description": "Сельскохозяйственная культура",
+    "vertical": false,
+    "x": 2,
+    "y": 19
+  }
+]
