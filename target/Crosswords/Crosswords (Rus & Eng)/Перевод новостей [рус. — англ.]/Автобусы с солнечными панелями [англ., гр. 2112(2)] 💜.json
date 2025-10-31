@@ -1,0 +1,72 @@
+[
+  {
+    "word": "competition",
+    "description": "🤼‍♂️🤼‍♀️",
+    "vertical": true,
+    "x": 4,
+    "y": 0
+  },
+  {
+    "word": "trailer",
+    "description": "🚛+🚃",
+    "vertical": true,
+    "x": 6,
+    "y": 1
+  },
+  {
+    "word": "route",
+    "description": "🛣",
+    "vertical": false,
+    "x": 2,
+    "y": 2
+  },
+  {
+    "word": "fuel",
+    "description": "🛢🔥",
+    "vertical": true,
+    "x": 2,
+    "y": 3
+  },
+  {
+    "word": "ventillation",
+    "description": "✇",
+    "vertical": false,
+    "x": 0,
+    "y": 6
+  },
+  {
+    "word": "roadbed",
+    "description": "🛣+🛏",
+    "vertical": true,
+    "x": 7,
+    "y": 9
+  },
+  {
+    "word": "hitch",
+    "description": "🔗🔗🔗",
+    "vertical": true,
+    "x": 9,
+    "y": 9
+  },
+  {
+    "word": "solar",
+    "description": "🌞",
+    "vertical": false,
+    "x": 2,
+    "y": 10
+  },
+  {
+    "word": "start-up",
+    "description": "▶+⬆",
+    "vertical": false,
+    "x": 4,
+    "y": 12
+  },
+  {
+    "word": "cab",
+    "description": "【🚿】",
+    "vertical": false,
+    "x": 4,
+    "y": 14
+  }
+]
