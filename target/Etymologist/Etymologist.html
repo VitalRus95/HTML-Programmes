@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang='ru'>
+<html lang='en'>
     <head>
         <meta charset='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <title>Транскриптор</title>
+        <title>Etymologist</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         
 
@@ -358,28 +358,59 @@
             #author {
                 display: block;
             }
-</style>
+
+            .alt-button {
+                background-color: var(--primary-colour);
+                box-shadow: none;
+            }
+
+            .alt-button:focus,
+            .alt-button:hover {
+                background-color: var(--secondary-colour);
+            }
+
+            #info-div {
+                margin: 0;
+            }
+
+            #morphemes-div, #words-div, #words-with {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 3px;
+            }
+        </style>
     </head>
     <body>
-        <h1>Транскриптор</h1>
+        <h1 id='page-title'>Etymologist</h1>
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Настройки</summary>
+            <summary id='settings-summary'>Settings</summary>
         </details>
 
+        <hr>
+
         <!-- Page main body -->
+        <details>
+            <summary id='morphemes-summary'>Morphemes</summary>
+            <div id='morphemes-div'></div>
+        </details>
+    
+        <details>
+            <summary id='words-summary'>Words</summary>
+            <div id='words-div'></div>
+        </details>
 
-        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
-            <label for='text' style='margin-right: 4px;'>Введите текст:</label>
-            <input type='text' id='text' style='flex-grow: 1;'>
+        <hr>
+
+        <div id='info-div'>
+            <p id='info-help'>Click on a morpheme or a word for details.</p>
         </div>
 
-        <ul id='transcription'></ul>
-
-        <div class='box' style='font-style: italic'>
-            Автор — Виталий Павлович Ульянов.
-        </div>
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
 
         <script>
             /**
@@ -863,83 +894,434 @@
         </script>
         <script>
             // Elements
-            /** @type {HTMLInputElement} */
-            let text = document.getElementById('text');
-            /** @type {HTMLUListElement} */
-            let transcription = document.getElementById('transcription');
+            /** @type {HTMLDivElement} */
+            let morphemesDiv = document.getElementById('morphemes-div');
+            /** @type {HTMLDivElement} */
+            let wordsDiv = document.getElementById('words-div');
+            /** @type {HTMLDivElement} */
+            let infoDiv = document.getElementById('info-div');
+    
+            // Types
             /**
-             * @typedef {Object} RuleSet
+             * @typedef Morpheme
              * @property {string} name
-             * @property {string[][]} map
-             * @property {string[][]} exceptions
+             * @property {string} repr
+             * @property {string} type
+             * @property {string} origin
+             * @property {string} meaning
             */
-            /** @type {RuleSet[]} */
-            let ruleSets = [
+    
+            /**
+             * @typedef Word
+             * @property {string} name
+             * @property {string[]} morphemes
+            */
+    
+            // Variables
+            /** @type {{[s: string]: Morpheme}} */
+            let morphemes = {};
+    
+            /** @type {Word[]} */
+            let words = [];
+    
+            // Functions
+            /**
+             * @param {string} name
+             * @param {string} origin
+             * @param {string} meaning
+            */
+            function addPrefix(name, origin, meaning) {
+                morphemes[name + '-'] = {
+                    name: name + '-',
+                    type: 'prefix',
+                    origin: origin,
+                    meaning: meaning
+                };
+            }
+    
+            /**
+             * @param {string} name
+             * @param {string} origin
+             * @param {string} meaning
+            */
+            function addRoot(name, origin, meaning) {
+                morphemes[name] = {
+                    name: name,
+                    type: 'root',
+                    origin: origin,
+                    meaning: meaning
+                };
+            }
+
+            /**
+             * @param {string} name
+             * @param {string} origin
+             * @param {string} meaning
+            */
+            function addSuffix(name, origin, meaning) {
+                morphemes['-' + name] = {
+                    name: '-' + name,
+                    type: 'suffix',
+                    origin: origin,
+                    meaning: meaning
+                };
+            }
+    
+            /**
+             * @param {string} name
+             * @param {string[]} morphemes
+            */
+            function addWord(name, morphemes) {
+                words.push(
+                    {
+                        name: name,
+                        morphemes: morphemes
+                    }
+                );
+            }
+    
+            function fillMorphemesList() {
+                // Clear morphemes div
+                clearDiv(morphemesDiv);
+    
+                // Fill list with morphemes
+                for (const key in morphemes) {
+                    const m = morphemes[key];
+    
+                    let morpheme = morphemesDiv.appendChild(
+                        document.createElement('button')
+                    );
+                    morpheme.classList = 'alt-button';
+                    morpheme.textContent = m.name;
+    
+                    morpheme.addEventListener('click', function (event) {
+                        // Clear info div
+                        clearDiv(infoDiv);
+    
+                        // Fill this morpheme's info
+                        addMorphemeInfo(m);
+                    });
+                }
+            }
+    
+            function fillWordsList() {
+                // Clear words div
+                clearDiv(wordsDiv);
+    
+                // Fill list with words
+                for (const w of words) {
+                    let word = wordsDiv.appendChild(
+                        document.createElement('button')
+                    );
+                    word.textContent = w.name;
+                    word.classList = 'alt-button';
+                    word.addEventListener('click', function () {
+                        // Clear info div
+                        clearDiv(infoDiv);
+
+                        // Fill this word's info
+                        addWordInfo(w);
+                    });
+                }
+            }
+
+            /**
+             * @param {Morpheme} morpheme
+            */
+            function addMorphemeInfo(morpheme) {
+                if (!morpheme) return;
+
+                // General information about the morpheme
+                let heading = infoDiv.appendChild(
+                    document.createElement('h3')
+                );
+                heading.textContent = morpheme.name;
+
+                let details = infoDiv.appendChild(
+                    document.createElement('p')
+                );
+                details.id = 'morpheme-info';
+
+                let type = details.appendChild(
+                    document.createElement('b')
+                );
+                type.textContent = morpheme.type.toUpperCase();
+
+                let preOrigin = details.appendChild(
+                    document.createElement('span')
+                );
+                preOrigin.textContent = ' [';
+
+                let origin = details.appendChild(
+                    document.createElement('i')
+                );
+                origin.textContent = `${morpheme.origin}`;
+
+                let meaning = details.appendChild(
+                    document.createElement('span')
+                );
+                meaning.textContent = `]: ${morpheme.meaning}.`;
+
+                // Words with this morpheme
+                let container = infoDiv.appendChild(
+                    document.createElement('details')
+                );
+
+                let summary = container.appendChild(
+                    document.createElement('summary')
+                );
+                summary.textContent = `Words with `;
+
+                let summaryMorpheme = summary.appendChild(
+                    document.createElement('b')
+                );
+                summaryMorpheme.textContent = morpheme.name;
+
+                let list = container.appendChild(
+                    document.createElement('div')
+                );
+                list.id = 'words-with';
+
+                for (const w of words) {
+                    if (w.morphemes.includes(morpheme.name)) {
+                        let word = list.appendChild(
+                            document.createElement('button')
+                        );
+                        word.textContent = w.name;
+                        word.classList = 'alt-button';
+                        word.addEventListener('click', function () {
+                            // Clear info div
+                            clearDiv(infoDiv);
+
+                            // Fill this word's info
+                            addWordInfo(w);
+                        });
+                    }
+                }
+            }
+
+            /**
+             * @param {Word} word
+            */
+            function addWordInfo(word) {
+                if (!word) return;
+
+                // Add heading
+                let heading = infoDiv.appendChild(
+                    document.createElement('h2')
+                );
+                heading.textContent = word.name.toUpperCase() + ':';
+
+                // Add info about each morpheme
+                word.morphemes.forEach(m => addMorphemeInfo(morphemes[m]));
+            }
+
+            /**
+             * @param {HTMLDivElement} div
+            */
+            function clearDiv(div) {
+                while (div.hasChildNodes()) div.lastChild.remove();
+            }
+    
+            // Prefixes
+            addPrefix('de', 'Latin', 'down, down from, from, off; concerning; totally');
+            addPrefix('in', 'Latin', '1) not; 2) in')
+            addPrefix('re', 'Latin', 'again; back; anew, against');
+            addPrefix('sub', 'Latin', 'under, beneath; behind; from under');
+    
+            // Roots
+            addRoot('caro', 'Latin', '[genitive carnis] flesh');
+            addRoot('herba', 'Latin', 'a plant');
+            addRoot('pendere', 'Latin', 'to hang, cause to hang; weigh');
+            addRoot('vorare', 'Latin', 'to devour, swallow');
+
+            // Suffixes
+            addSuffix('ion', 'Latin', '[also -tion, -ation] noun of state, condition, or action');
+            addSuffix('osus', 'Latin', 'nouns meaning ‘having, full of, having to do with, doing, inclined to’');
+    
+            // Words
+            addWord('carnivorous', ['caro', 'vorare', '-osus']);
+            addWord('depend', ['de-', 'pendere']);
+            addWord('herbivorous', ['herba', 'vorare', '-osus']);
+            addWord('pendulum', ['pendere']);
+            addWord('reincarnation', ['re-', 'in-', 'caro', '-ion']);
+            addWord('suspend', ['sub-', 'pendere']);
+    
+            // Generate lists
+            fillMorphemesList();
+            fillWordsList();
+
+            // Translations
+            generateLanguagesList([
                 {
-                    name: 'ГОСТ 7.79-2000',
-                    map: [
-                        ['А', 'A'],
-                        ['Б', 'B'],
-                        ['В', 'V'],
-                        ['Г', 'G'],
-                        ['Д', 'D'],
-                        ['Е', 'E'],
-                        ['Ё', 'Yo'],
-                        ['Ж', 'Zh'],
-                        ['З', 'Z'],
-                        ['И', 'I'],
-                        ['Й', 'J'],
-                        ['К', 'K'],
-                        ['Л', 'L'],
-                        ['М', 'M'],
-                        ['Н', 'N'],
-                        ['О', 'O'],
-                        ['П', 'P'],
-                        ['Р', 'R'],
-                        ['С', 'S'],
-                        ['Т', 'T'],
-                        ['У', 'U'],
-                        ['Ф', 'F'],
-                        ['Х', 'X'],
-                        ['Ц', 'C'],
-                        ['Ч', 'Ch'],
-                        ['Ш', 'Sh'],
-                        ['Щ', 'Shh'],
-                        ['Ъ', '``'],
-                        ['Ы', 'Y`'],
-                        ['Ь', '`'],
-                        ['Э', 'E`'],
-                        ['Ю', 'Yu'],
-                        ['Я', 'Ya'],
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Etymologist"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Этимолог"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
                     ]
                 }
-            ];
-
-            text.addEventListener('mouseenter', function () { this.select(); });
-            text.addEventListener('input', function () {
-                while (transcription.hasChildNodes()) transcription.lastChild.remove();
-
-                ruleSets.forEach(s => {
-                    let copy = text.value;
-                    s.map.forEach(c => {
-                        if (c.length === 2) {
-                            copy = copy
-                                .replace(new RegExp(c[0], 'g'), c[1])
-                                .replace(new RegExp(c[0].toLowerCase(), 'g'), c[1].toLowerCase());
-                        }
-                    });
-
-                    transcription.appendChild(
-                        document.createElement('li')
-                    ).appendChild(
-                        document.createElement('b')
-                    ).innerText = s.name;
-
-                    transcription.appendChild(
-                        document.createElement('p')
-                    ).innerText = copy;
-                });
-            });
+            ]);
         </script>
     </body>
 </html>
