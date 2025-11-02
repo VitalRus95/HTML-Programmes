@@ -101,6 +101,7 @@
             details > summary {
                 background-color: var(--primary-colour);
                 box-shadow: inset -1px 1px 4px var(--secondary-colour);
+                border-top: 2px inset var(--secondary-colour);
                 border-radius: 4px;
                 cursor: pointer;
                 padding: 2px 6px;
@@ -118,7 +119,6 @@
                 background-color: var(--accent2);
                 border-radius: 0px 0px 8px 4px;
                 font-size: 1.05em;
-                font-weight: 600;
                 padding-bottom: 2px;
                 position: sticky;
                 top: 0px;
@@ -137,7 +137,7 @@
             
             h2 {
                 box-shadow: 0px 0px 3px var(--secondary-colour);
-                border-left: 8px solid var(--secondary-colour);
+                border-left: 6px solid var(--secondary-colour);
                 border-radius: 4px;
                 margin: 4px 0px 4px 0px;
                 padding-left: 4px;
@@ -145,10 +145,10 @@
             }
             
             h3 {
-                box-shadow: 0px 0px 3px var(--accent1);
-                border-left: 12px solid var(--accent1);
+                box-shadow: 0px 0px 4px var(--accent1);
+                border-left: 6px solid var(--accent1);
                 border-radius: 4px;
-                margin: 4px 0px 4px 0px;
+                margin: 4px 0px 4px 6px;
                 padding-left: 4px;
                 font-size: 1.3em;
             }
@@ -367,6 +367,13 @@
             .alt-button:focus,
             .alt-button:hover {
                 background-color: var(--secondary-colour);
+            }
+
+            .morpheme-description {
+                margin: 4px 0px 12px 12px;
+                padding-left: 4px;
+                border-left: 6px solid var(--accent2);
+                border-radius: 4px;
             }
 
             #info-div {
@@ -1037,10 +1044,14 @@
                 );
                 heading.textContent = morpheme.name;
 
-                let details = infoDiv.appendChild(
+                let description = infoDiv.appendChild(
+                    document.createElement('div')
+                );
+                description.classList = 'morpheme-description';
+
+                let details = description.appendChild(
                     document.createElement('p')
                 );
-                details.id = 'morpheme-info';
 
                 let type = details.appendChild(
                     document.createElement('b')
@@ -1063,7 +1074,7 @@
                 meaning.textContent = `]: ${morpheme.meaning}.`;
 
                 // Words with this morpheme
-                let container = infoDiv.appendChild(
+                let container = description.appendChild(
                     document.createElement('details')
                 );
 
@@ -1125,7 +1136,7 @@
     
             // Prefixes
             addPrefix('de', 'Latin', 'down, down from, from, off; concerning; totally');
-            addPrefix('in', 'Latin', '1) not; 2) in')
+            addPrefix('in', 'Latin', '1) not; 2) in');
             addPrefix('re', 'Latin', 'again; back; anew, against');
             addPrefix('sub', 'Latin', 'under, beneath; behind; from under');
     
@@ -1133,6 +1144,7 @@
             addRoot('caro', 'Latin', '[genitive carnis] flesh');
             addRoot('herba', 'Latin', 'a plant');
             addRoot('pendere', 'Latin', 'to hang, cause to hang; weigh');
+            addRoot('scribere', 'Latin', 'to write');
             addRoot('vorare', 'Latin', 'to devour, swallow');
 
             // Suffixes
@@ -1145,6 +1157,7 @@
             addWord('herbivorous', ['herba', 'vorare', '-osus']);
             addWord('pendulum', ['pendere']);
             addWord('reincarnation', ['re-', 'in-', 'caro', '-ion']);
+            addWord('subscribe', ['sub-', 'scribere']);
             addWord('suspend', ['sub-', 'pendere']);
     
             // Generate lists

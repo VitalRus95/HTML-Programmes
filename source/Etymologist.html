@@ -18,6 +18,13 @@
                 background-color: var(--secondary-colour);
             }
 
+            .morpheme-description {
+                margin: 4px 0px 12px 12px;
+                padding-left: 4px;
+                border-left: 6px solid var(--accent2);
+                border-radius: 4px;
+            }
+
             #info-div {
                 margin: 0;
             }
@@ -207,10 +214,14 @@
                 );
                 heading.textContent = morpheme.name;
 
-                let details = infoDiv.appendChild(
+                let description = infoDiv.appendChild(
+                    document.createElement('div')
+                );
+                description.classList = 'morpheme-description';
+
+                let details = description.appendChild(
                     document.createElement('p')
                 );
-                details.id = 'morpheme-info';
 
                 let type = details.appendChild(
                     document.createElement('b')
@@ -233,7 +244,7 @@
                 meaning.textContent = `]: ${morpheme.meaning}.`;
 
                 // Words with this morpheme
-                let container = infoDiv.appendChild(
+                let container = description.appendChild(
                     document.createElement('details')
                 );
 
@@ -294,8 +305,9 @@
             }
     
             // Prefixes
+            addPrefix('[1] in', 'Latin', 'not');
+            addPrefix('[2] in', 'Latin', 'in');
             addPrefix('de', 'Latin', 'down, down from, from, off; concerning; totally');
-            addPrefix('in', 'Latin', '1) not; 2) in')
             addPrefix('re', 'Latin', 'again; back; anew, against');
             addPrefix('sub', 'Latin', 'under, beneath; behind; from under');
     
@@ -303,6 +315,7 @@
             addRoot('caro', 'Latin', '[genitive carnis] flesh');
             addRoot('herba', 'Latin', 'a plant');
             addRoot('pendere', 'Latin', 'to hang, cause to hang; weigh');
+            addRoot('scribere', 'Latin', 'to write');
             addRoot('vorare', 'Latin', 'to devour, swallow');
 
             // Suffixes
@@ -313,8 +326,10 @@
             addWord('carnivorous', ['caro', 'vorare', '-osus']);
             addWord('depend', ['de-', 'pendere']);
             addWord('herbivorous', ['herba', 'vorare', '-osus']);
+            addWord('inscribe', ['[2] in-', 'scribere']);
             addWord('pendulum', ['pendere']);
-            addWord('reincarnation', ['re-', 'in-', 'caro', '-ion']);
+            addWord('reincarnation', ['re-', '[2] in-', 'caro', '-ion']);
+            addWord('subscribe', ['sub-', 'scribere']);
             addWord('suspend', ['sub-', 'pendere']);
     
             // Generate lists
