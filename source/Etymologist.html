@@ -18,6 +18,12 @@
                 background-color: var(--secondary-colour);
             }
 
+            .buttons-div {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 3px;
+            }
+
             .morpheme-description {
                 margin: 4px 0px 12px 12px;
                 padding-left: 4px;
@@ -29,10 +35,8 @@
                 margin: 0;
             }
 
-            #morphemes-div, #words-div, #words-with {
-                display: flex;
-                flex-wrap: wrap;
-                column-gap: 3px;
+            #morphemes-categories {
+                margin-left: 20px;
             }
         </style>
     </head>
@@ -47,21 +51,40 @@
         <hr>
 
         <!-- Page main body -->
-        <details>
+        <details open>
             <summary id='morphemes-summary'>Morphemes</summary>
-            <div id='morphemes-div'></div>
+
+            <div id='morphemes-categories'>
+                <details>
+                    <summary id='prefixes'>Prefixes</summary>
+                    <div id='prefixes-div' class='buttons-div'></div>
+                </details>
+
+                <details>
+                    <summary id='roots'>Roots</summary>
+                    <div id='roots-div' class='buttons-div'></div>
+                </details>
+
+                <details>
+                    <summary id='suffixes'>Suffixes</summary>
+                    <div id='suffixes-div' class='buttons-div'></div>
+                </details>
+            </div>
         </details>
     
         <details>
             <summary id='words-summary'>Words</summary>
-            <div id='words-div'></div>
+            <div id='words-div' class='buttons-div'></div>
         </details>
 
         <hr>
+        
+        <p id='info-help'>Click on a morpheme or a word for details.</p>
 
-        <div id='info-div'>
-            <p id='info-help'>Click on a morpheme or a word for details.</p>
-        </div>
+        <hr>
+
+        <div id='info-div'></div>
+        <p id='words-with' style='display: none;'>Words with </p>
 
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
@@ -72,17 +95,22 @@
         <script>
             // Elements
             /** @type {HTMLDivElement} */
-            let morphemesDiv = document.getElementById('morphemes-div');
+            let prefixesDiv = document.getElementById('prefixes-div');
+            /** @type {HTMLDivElement} */
+            let rootsDiv = document.getElementById('roots-div');
+            /** @type {HTMLDivElement} */
+            let suffixesDiv = document.getElementById('suffixes-div');
             /** @type {HTMLDivElement} */
             let wordsDiv = document.getElementById('words-div');
             /** @type {HTMLDivElement} */
             let infoDiv = document.getElementById('info-div');
+            /** @type {HTMLParagraphElement} */
+            let wordsWith = document.getElementById('words-with');
     
             // Types
             /**
              * @typedef Morpheme
              * @property {string} name
-             * @property {string} repr
              * @property {string} type
              * @property {string} origin
              * @property {string} meaning
@@ -159,18 +187,39 @@
     
             function fillMorphemesList() {
                 // Clear morphemes div
-                clearDiv(morphemesDiv);
+                [prefixesDiv, rootsDiv, suffixesDiv].forEach(div => {
+                    clearDiv(div)
+                });
     
                 // Fill list with morphemes
                 for (const key in morphemes) {
                     const m = morphemes[key];
+
+                    /** @type {HTMLButtonElement} */
+                    let morpheme = undefined;
+
+                    switch (m.type) {
+                        case 'prefix':
+                            morpheme = prefixesDiv.appendChild(
+                                document.createElement('button')
+                            );
+                            break;
+                        case 'root':
+                            morpheme = rootsDiv.appendChild(
+                                document.createElement('button')
+                            );
+                            break;
+                        case 'suffix':
+                            morpheme = suffixesDiv.appendChild(
+                                document.createElement('button')
+                            );
+                            break;
+                        default:
+                            continue;
+                    }
     
-                    let morpheme = morphemesDiv.appendChild(
-                        document.createElement('button')
-                    );
                     morpheme.classList = 'alt-button';
                     morpheme.textContent = m.name;
-    
                     morpheme.addEventListener('click', function (event) {
                         // Clear info div
                         clearDiv(infoDiv);
@@ -251,7 +300,7 @@
                 let summary = container.appendChild(
                     document.createElement('summary')
                 );
-                summary.textContent = `Words with `;
+                summary.textContent = wordsWith.textContent;
 
                 let summaryMorpheme = summary.appendChild(
                     document.createElement('b')
@@ -261,7 +310,7 @@
                 let list = container.appendChild(
                     document.createElement('div')
                 );
-                list.id = 'words-with';
+                list.classList = 'buttons-div';
 
                 for (const w of words) {
                     if (w.morphemes.includes(morpheme.name)) {
@@ -307,30 +356,54 @@
             // Prefixes
             addPrefix('[1] in', 'Latin', 'not');
             addPrefix('[2] in', 'Latin', 'in');
+            addPrefix('ad', 'Latin', 'to, toward; with regard to, in relation to');
+            addPrefix('bio', 'Greek', '[from bios] life; pertaining to living organisms or their constituents');
             addPrefix('de', 'Latin', 'down, down from, from, off; concerning; totally');
+            addPrefix('micro', 'Greek', '[from mikros] small');
+            addPrefix('pre', 'Latin', 'before in time or place');
             addPrefix('re', 'Latin', 'again; back; anew, against');
             addPrefix('sub', 'Latin', 'under, beneath; behind; from under');
+            addPrefix('trans', 'Latin', 'across, beyond; over');
     
             // Roots
+            addRoot('agere', 'Latin', 'to set in motion, drive, drive forward; to do, perform');
+            addRoot('bios', 'Greek', 'life');
             addRoot('caro', 'Latin', '[genitive carnis] flesh');
+            addRoot('fluere', 'Latin', 'to flow');
             addRoot('herba', 'Latin', 'a plant');
+            addRoot('manus', 'Latin', 'hand');
+            addRoot('nihil', 'Latin', '[also nil] nothing');
             addRoot('pendere', 'Latin', 'to hang, cause to hang; weigh');
             addRoot('scribere', 'Latin', 'to write');
+            addRoot('vitrum', 'Latin', 'glass');
             addRoot('vorare', 'Latin', 'to devour, swallow');
 
             // Suffixes
+            addSuffix('ate', 'Latin', 'suffix forming nouns (from Latin words in -atus, -atum), adjectives (from Latin past participles in -atus, -ata), and verbs (from Latin verbs in -are)');
+            addSuffix('fy', 'Latin', 'suffix meaning ‘make, make into’; from Latin -ficare, combining form of facere ‘to make’');
             addSuffix('ion', 'Latin', '[also -tion, -ation] noun of state, condition, or action');
             addSuffix('osus', 'Latin', 'nouns meaning ‘having, full of, having to do with, doing, inclined to’');
     
             // Words
+            addWord('annihilate', ['ad-', 'nihil', '-ate']);
             addWord('carnivorous', ['caro', 'vorare', '-osus']);
             addWord('depend', ['de-', 'pendere']);
+            addWord('describe', ['de-', 'scribere']);
+            addWord('fluent', ['fluere']);
             addWord('herbivorous', ['herba', 'vorare', '-osus']);
+            addWord('influence', ['[2] in-', 'fluere']);
             addWord('inscribe', ['[2] in-', 'scribere']);
+            addWord('manuscript', ['manus', 'scribere']);
+            addWord('microbe', ['micro-', 'bios']);
             addWord('pendulum', ['pendere']);
+            addWord('prescribe', ['pre-', 'scribere']);
             addWord('reincarnation', ['re-', '[2] in-', 'caro', '-ion']);
+            addWord('script', ['scribere']);
             addWord('subscribe', ['sub-', 'scribere']);
             addWord('suspend', ['sub-', 'pendere']);
+            addWord('transaction', ['trans-', 'agere', '-ion']);
+            addWord('transcribe', ['trans-', 'scribere']);
+            addWord('vitrify', ['vitrum', '-fy']);
     
             // Generate lists
             fillMorphemesList();
@@ -405,6 +478,48 @@
                             "id": "exportLang",
                             "childNodesTexts": [
                                 "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "morphemes-summary",
+                            "childNodesTexts": [
+                                "Morphemes"
+                            ]
+                        },
+                        {
+                            "id": "prefixes",
+                            "childNodesTexts": [
+                                "Prefixes"
+                            ]
+                        },
+                        {
+                            "id": "roots",
+                            "childNodesTexts": [
+                                "Roots"
+                            ]
+                        },
+                        {
+                            "id": "suffixes",
+                            "childNodesTexts": [
+                                "Suffixes"
+                            ]
+                        },
+                        {
+                            "id": "words-summary",
+                            "childNodesTexts": [
+                                "Words"
+                            ]
+                        },
+                        {
+                            "id": "info-help",
+                            "childNodesTexts": [
+                                "Click on a morpheme or a word for details."
+                            ]
+                        },
+                        {
+                            "id": "words-with",
+                            "childNodesTexts": [
+                                "Words with "
                             ]
                         },
                         {
@@ -489,6 +604,48 @@
                             "id": "exportLang",
                             "childNodesTexts": [
                                 "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "morphemes-summary",
+                            "childNodesTexts": [
+                                "Морфемы"
+                            ]
+                        },
+                        {
+                            "id": "prefixes",
+                            "childNodesTexts": [
+                                "Приставки"
+                            ]
+                        },
+                        {
+                            "id": "roots",
+                            "childNodesTexts": [
+                                "Корни"
+                            ]
+                        },
+                        {
+                            "id": "suffixes",
+                            "childNodesTexts": [
+                                "Суффиксы"
+                            ]
+                        },
+                        {
+                            "id": "words-summary",
+                            "childNodesTexts": [
+                                "Слова"
+                            ]
+                        },
+                        {
+                            "id": "info-help",
+                            "childNodesTexts": [
+                                "Для информации щёлкните по морфеме или слову."
+                            ]
+                        },
+                        {
+                            "id": "words-with",
+                            "childNodesTexts": [
+                                "Слова с "
                             ]
                         },
                         {
