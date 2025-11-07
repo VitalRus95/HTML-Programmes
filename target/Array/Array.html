@@ -204,19 +204,21 @@
                 border-color: var(--accent1);
                 border-style: inset;
                 border-width: 2px;
+                border-radius: 4px;
                 color: var(--secondary-colour);
                 overflow: auto;
             }
             
             table {
                 width: 100%;
-                border-collapse: collapse;
+                border-collapse: separate;
             }
             
             td,
             th {
                 border-style: inset;
                 border-width: 2px;
+                border-radius: 2px;
                 padding-inline: 4px;
                 text-align: center;
             }
@@ -230,7 +232,7 @@
             td:hover,
             th:focus,
             th:hover {
-                border-color: var(--accent2);
+                border-color: var(--accent1);
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
                 border-style: solid;
@@ -244,10 +246,24 @@
                 font-weight: 600;
             }
             
+            tbody > tr:nth-of-type(even) > td {
+                background-color: var(--accent1);
+                color: var(--primary-colour);
+            }
+            
+            tbody > tr:nth-of-type(even) > td:focus,
+            tbody > tr:nth-of-type(even) > td:hover {
+                border-color: var(--accent1);
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+                border-style: solid;
+            }
+            
             textarea {
                 border-color: var(--secondary-colour);
                 border-style: outset;
                 border-width: 2px;
+                border-radius: 4px;
             }
             
             textarea::placeholder {

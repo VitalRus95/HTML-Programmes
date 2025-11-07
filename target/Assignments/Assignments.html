@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang='en'>
     <head>
-        <meta charset='UTF-8' />
+        <meta charset='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
-        <title>Полезное</title>
+        <title>Assignments</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
         
 
         <style>
@@ -375,254 +375,183 @@
                 display: block;
             }
 
-            li {
-                margin-block: 4px;
+            .menu-button {
+                background-color: transparent;
+                flex-grow: 1;
+                border-radius: 0px;
+                font-weight: 600;
+                margin: 0;
+                padding: 2px;
+                min-width: fit-content;
+                max-width: 100%;
             }
 
-            p {
-                text-indent: 12px;
+            .shifted-details {
+                margin-left: 20px;
+            }
+            
+            .text {
+                display: flex;
+                resize: vertical;
+                min-height: 10vh;
+                max-height: 30vh;
+                height: 15vh;
+                width: 100%;
             }
 
-            span {
-                border-radius: 3px;
-                box-shadow: 0px 1px 2px;
-                padding: 0px 2px;
+            .table-data {
+                text-align: left;
+                height: 100%;
+                width: 100%;
+            }
+
+            .table-input {
+                border-style: none;
+                height: 100%;
+                width: 100%;
+            }
+
+            #selects-div {
+                display: flex;
+                column-gap: 4px;
+            }
+
+            #group-select, #subject-select {
+                width: 100%;
             }
         </style>
     </head>
     <body>
-        <h1>Полезное</h1>
+        <h1 id='page-title'>Assignments</h1>
 
+        <!-- Settings -->
         <details id='settings'>
-            <summary>Настройки</summary>
+            <summary id='settings-summary'>Settings</summary>
         </details>
 
-        <!-- 📘 Словари, корпусы, уроки -->
+        <!-- Page main body -->
+
+        <!-- Save/Load buttons -->
+        <div style='display: flex; column-gap: 4px;'>
+            <!-- Load button -->
+            <button
+                id='loadInfoButton'
+                class='menuButton tooltipParent'
+                onclick='document.getElementById("loadInfoInput").click()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load assignments from .json file</span>
+            </button>
+            <input
+                id='loadInfoInput'
+                type='file'
+                accept='.json'
+                onchange='loadInfo()'
+                style='display: none;'
+            >
+            </input>
+
+            <!-- Save button -->
+            <a
+                id='saveInfoButton'
+                href=''
+                class='menuButton tooltipParent'
+                onclick='saveInfo()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save assignments to .json file</span>
+            </a>
+        </div>
+
+        <!-- Editor -->
         <details>
-            <summary>📘 Словари, корпусы, уроки</summary>
-            <ul>
-                <li>Многоязычные словари:</li>
-                <ul>
-                    <li><a href='https://lingvolive.com/ru-ru'>ABBYY Lingvo Live</a></li>
-                    <li><a href='https://thefreedictionary.com/'>The Free Dictionary</a></li>
-                    <li><a href='https://multitran.com/'>Мультитран</a></li>
-                </ul>
+            <summary id='editor'>Edit groups, subjects, and assignments</summary>
 
-                <li>Англоязычные словари:</li>
-                <ul>
-                    <li>
-                        <a href='https://collinsdictionary.com/'>Collins English Dictionary</a> с
-                        <a href='https://grammar.collinsdictionary.com/easy-learning'>грамматической справкой</a>
-                    </li>
-                    <li><a href='http://ozdic.com/'>English Collocations Dictionary</a></li>
-                    <li><a href='https://ldoceonline.com/'>Longman Dictionary of Contemporary English</a></li>
-                    <li><a href='https://etymonline.com/'>Online Etymology Dictionary</a></li>
-                    <li><a href='https://rhymezone.com/'>RhymeZone rhyming dictionary and thesaurus</a></li>
-                    <li><a href='https://dictionary.com/'>Dictionary.com</a></li>
-                </ul>
+            <div style='margin-left: 20px;'>
+                <!-- Groups -->
+                <details>
+                    <summary id='groups-summary'>Groups</summary>
+                    <textarea
+                        id='groups'
+                        placeholder='Groups (each on new line)'
+                        class='text'
+                        autocomplete='off'
+                    ></textarea>
+                </details>
 
-                <li>Русскоязычные словари:</li>
-                <ul>
-                    <li><a href='https://dic.academic.ru/'>Академик</a></li>
-                    <li><a href='http://gramota.ru/'>Грамота.ру</a></li>
-                    <li><a href='https://kartaslov.ru/'>Карта слов и выражений русского языка</a></li>
-                    <li><a href='https://ru.wiktionary.org/wiki/Приложение:Ложные_друзья_переводчика_(английский)'>Ложные друзья переводчика</a></li>
-                </ul>
+                <!-- Subjects -->
+                <details>
+                    <summary id='subjects-summary'>Subjects</summary>
+                    <textarea
+                        id='subjects'
+                        placeholder='Subjects (each on new line)'
+                        class='text'
+                        autocomplete='off'
+                    ></textarea>
+                </details>
 
-                <li>Корпусы текстов:</li>
-                <ul>
-                    <li><a href='https://english-corpora.org/'>English Corpora</a></li>
-                    <li><a href='https://context.reverso.net/перевод/'>Reverso Context</a></li>
-                    <li><a href='https://ruscorpora.ru/new/'>Национальный корпус русского языка</a></li>
-                </ul>
-
-                <li>Программы:</li>
-                <ul>
-                    <li>
-                        <a href='https://inkscape.org/'>Inkscape</a> — векторный графический редактор
-                    </li>
-                    <li>
-                        <a href='https://microsoft.com/en-us/download/details.aspx?id=102134'>Microsoft Keyboard Layout Creator</a> — редактор раскладок клавиатуры
-                    </li>
-                    <li>
-                        <a href='https://omegat.org/'>OmegaT</a> — средство автоматизированного перевода
-                    </li>
-                </ul>
-
-                <li>Уроки, примеры и прочее моего авторства:</li>
-                <ul>
-                    <li><a href='https://youtube.com/watch?v=10ZRVL7ukfo'>Видеоурок по основам OmegaT</a></li>
-                    <li><a href='https://disk.yandex.ru/d/e21Ho-aPMe9FPQ'>Две раскладки клавиатуры</a> (справка в PDF в комплекте)</li>
-                </ul>
-            </ul>
+                <!-- Assignments -->
+                <details>
+                    <summary id='assignments-summary'>Assignments</summary>
+                    <div id='generated'>
+                        <p id='assignment-hint' style='display: none;'>Assignments (each on new line)</p>
+                    </div>
+                </details>
+            </div>
         </details>
 
-        <!-- Закономерности англоязычных новостных заголовков -->
-        <details>
-            <summary>📰 Закономерности англоязычных новостных заголовков</summary>
-            <ul>
-                <li>все значимые слова — с большой буквы</li>
-                <li>числительные — цифрами</li>
-                <li>союзы → знаки препинания (напр., <span>and</span> → <span>,</span>)</li>
-                <li>вспомогательные глаголы — опускаются</li>
-                <li>артикли, кроме устойчивых и значимых по смыслу, — опускаются</li>
-                <li>часто встречаются аббревиатуры</li>
-                <li>использование препозиционных определений</li>
-                <li>
-                    замена некоторых слов со значением речи (напр., <span>say</span>, <span>comment</span>, <span>tell</span>, <span>argue</span>, <span>announce</span>, <span>shout</span>) на двоеточие (напр., <span>Mr Jones: “They’re not taking my house!”</span>)
-                </li>
-                <li>замена времён:</li>
-                <ul>
-                    <li>продолжительные (Continuous) и перфектные (Perfect) → простые (Simple)</li>
-                    <li>прошедшее → настоящее</li>
-                    <li>будущее → инфинитив</li>
-                </ul>
-            </ul>
+        <hr>
 
-            <h2>Что почитать по теме:</h2>
-            <ul>
-                <li>
-                    <a href='https://englishlessonsbrighton.co.uk/8-grammar-rules-writing-newspaper-headlines/'>
-                        English Lessons Brighton
-                    </a>
-                </li>
-                <li>
-                    <a href='https://www.englishpractice.com/improve/newspaper-headlines-grammar/'>
-                        English Practice
-                    </a>
-                </li>
-                <li>
-                    <a href='https://www.thoughtco.com/understanding-newspaper-headlines-p2-1211336'>
-                        ThoughtCo.
-                    </a>
-                </li>
-            </ul>
-        </details>
+        <h2 id='selects-heading'>View assignments</h2>
 
-        <!-- Ускоряем работу с текстами -->
-        <details>
-            <summary>⌨️ Ускоряем работу с текстами</summary>
-            <p>
-                Чем реже руки отвлекаются от набора текста на клавиатуре на действия с мышью, тем проще, быстрее и приятнее становится с текстом работать. Здесь я перечислю некоторые способы, как этого достичь:
-            </p>
+        <!-- Group selection -->
+        <div id='group-selection'>
+            <!-- Menus -->
+            <div id='selects-div'>
+                <!-- Group menu -->
+                <select id='group-select'>
+                    <option value=''>Group</option>
+                </select>
 
-            <ul>
-                <li>
-                    отдельные кнопки:
-                    <ul>
-                        <li><kbd>Home</kbd> — перемещение в начало строки</li>
-                        <li><kbd>End</kbd> — перемещение в конец строки</li>
-                        <li><kbd>Backspace</kbd> — удалить символ слева</li>
-                        <li><kbd>Delete</kbd> — удалить символ справа</li>
-                    </ul>
-                </li>
+                <!-- Subject menu -->
+                <select id='subject-select'>
+                    <option value=''>Subject</option>
+                </select>
+            </div>
 
-                <li>
-                    сочетания с <kbd>Ctrl</kbd>:
-                    <ul>
-                        <li><kbd>Home</kbd> — в начало текста</li>
-                        <li><kbd>End</kbd> — в конец текста</li>
-                        <li><kbd>Backspace</kbd> — удалить слово слева</li>
-                        <li><kbd>Delete</kbd> — удалить слово справа</li>
-                        <li>
-                            <kbd>←</kbd>/<kbd>→</kbd> — перемещение между словами
-                        </li>
-                        <li>
-                            <kbd>↑</kbd>/<kbd>↓</kbd> — перемещение между абзацами (курсор ставится на начало)
-                        </li>
-                        <li><kbd>A</kbd> — выделить всё</li>
-                        <li>
-                            <kbd>B</kbd>/<kbd>I</kbd>/<kbd>U</kbd> — полужирный/курсив/подчёркнутый
-                        </li>
-                        <li>
-                            <kbd>C</kbd>/<kbd>X</kbd>/<kbd>V</kbd> — копировать/вырезать/вставить
-                        </li>
-                        <li>
-                            <kbd>L</kbd>/<kbd>E</kbd>/<kbd>R</kbd>/<kbd>J</kbd> — выровнить по левому краю/центру/правому краю/ширине
-                        </li>
-                        <li><kbd>S</kbd> — сохранить</li>
-                        <li><kbd>колёсико мыши</kbd> — изменить масштаб</li>
-                    </ul>
-                </li>
+            <!-- Completed assignments -->
+            <details open>
+                <summary id='completed-summary'>Completed assignments</summary>
+                <table>
+                    <thead>
+                        <th id='th-assignment1'>Assignment</th>
+                        <th id='th-date1'>Date</th>
+                    </thead>
 
-                <li>
-                    сочетания с <kbd>Shift</kbd>:
-                    <ul>
-                        <li>
-                            <kbd>Home</kbd> — выделить от текущего символа до начала строки
-                        </li>
-                        <li>
-                            <kbd>End</kbd> — выделить от текущего символа до конца строки
-                        </li>
-                        <li>
-                            <kbd>←</kbd>/<kbd>→</kbd> — выделить символ слева/справа
-                        </li>
-                        <li>
-                            <kbd>↑</kbd>/<kbd>↓</kbd> — выделить строку выше/ниже
-                        </li>
-                        <li>
-                            <kbd>колёсико мыши</kbd> — горизонтальная прокрутка
-                        </li>
-                    </ul>
-                </li>
+                    <tbody id='completed-table'></tbody>
+                </table>
+            </details>
 
-                <li>
-                    сочетания с <kbd>Ctrl + Shift</kbd>:
-                    <ul>
-                        <li>
-                            <kbd>Home</kbd> — выделить от текущего символа до начала текста
-                        </li>
-                        <li>
-                            <kbd>End</kbd> — выделить от текущего символа до конца текста
-                        </li>
-                        <li>
-                            <kbd>←</kbd>/<kbd>→</kbd> — выделить слово слева/справа
-                        </li>
-                        <li>
-                            <kbd>↑</kbd>/<kbd>↓</kbd> — выделить абзац выше/ниже
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </details>
+            <!-- Available assignments -->
+            <details open>
+                <summary id='available-summary'>Available assignments</summary>
+                <table>
+                    <thead>
+                        <th id='th-assignment2'>Assignment</th>
+                        <th id='th-date2'>Date</th>
+                    </thead>
 
-        <!-- ✒️ Полезные функции Word -->
-        <details>
-            <summary>✒️ Полезные функции Word</summary>
-            <ul style='list-style: none;'>
-                <li>
-                    <details>
-                        <summary>Автоматическое оглавление</summary>
-                    </details>
-                </li>
+                    <tbody id='available-table'></tbody>
+                </table>
+            </details>
+        </div>
 
-                <li>
-                    <details>
-                        <summary>Автоматическая сортировка</summary>
-                    </details>
-                </li>
-
-                <li>
-                    <details>
-                        <summary>Вставка разрывов</summary>
-                    </details>
-                </li>
-
-                <li>
-                    <details>
-                        <summary>Вставка сноски</summary>
-                        <p>
-                            Чтобы добавить сноску, поставьте курсор в том месте, где нужно её создать, и нажмите <kbd>Ctrl + Alt + F</kbd> или кнопку «<span>Вставить сноску</span>» в разделе «<span>Сноски</span>» вкладки «<span>Ссылки</span>». Сноска должна появиться в нижней части страница или документа.
-                        </p>
-                        <p>
-                            Для изменения настроек сносок щёлкните <kbd>ПКМ</kbd> по области сносок внизу и в появившемся контекстном меню выберите «<span>Параметры заметки</span>». Откроется окошко, где можно задать различные свойства сносок: положение в тексте, деление на столбцы, внешний вид нумерации и её характер (продолжать по всему документу либо начинать заново в каждом разделе или на каждой странице). Внеся необходимые изменения, нажмите кнопку «<span>Применить</span>».
-                        </p>
-                    </details>
-                </li>
-            </ul>
-        </details>
-
-        <div class='box'>Автор — Виталий Павлович Ульянов</div>
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
 
         <script>
             /**
@@ -1103,6 +1032,393 @@
             
             loadFont();
 
+        </script>
+        <script>
+            // Elements
+            /** @type {HTMLAnchorElement} */
+            let saveInfoButton = document.getElementById('saveInfoButton');
+            /** @type {HTMLInputElement} */
+            let loadInfoInput = document.getElementById('loadInfoInput');
+            /** @type {HTMLTextAreaElement} */
+            let groups = document.getElementById('groups');
+            /** @type {HTMLTextAreaElement} */
+            let subjects = document.getElementById('subjects');
+            /** @type {HTMLDivElement} */
+            let generated = document.getElementById('generated');
+            /** @type {HTMLDivElement} */
+            let assignmentHint = document.getElementById('assignment-hint');
+            /** @type {HTMLSelectElement} */
+            let groupSelect = document.getElementById('group-select');
+            /** @type {HTMLSelectElement} */
+            let subjectSelect = document.getElementById('subject-select');
+            /** @type {HTMLTableSectionElement} */
+            let completedTable = document.getElementById('completed-table');
+            /** @type {HTMLTableSectionElement} */
+            let availableTable = document.getElementById('available-table');
+
+            // Variables
+            let info = {
+                /** @type {string[]} */
+                groups: [],
+                subjects: {}
+            };
+
+            // Process groups
+            groups.addEventListener('change', function () {
+                info.groups = groups.value.trim().split('\n').filter(g => g !== '\n');
+                updateGroupSelect();
+                updateAssignmentsTable();
+            });
+
+            // Process subjects
+            subjects.addEventListener('change', function () {
+                // Clean up div & subjects
+                while (generated.hasChildNodes()) generated.lastChild.remove();
+                // info.subjects = {};
+
+                if (subjects.value === '') return;
+                let list = subjects.value.split('\n').filter(s => s !== '\n');
+
+                list.forEach(s => {
+                    if (!info.subjects[s]) info.subjects[s] = {};
+                    addSubject(s);
+                });
+
+                updateSubjectSelect();
+                updateAssignmentsTable();
+            });
+
+            // Process menus
+            groupSelect.addEventListener('change', updateAssignmentsTable);
+            subjectSelect.addEventListener('change', updateAssignmentsTable);
+
+            async function loadInfo() {
+                await loadInfoInput.files[0].text().then(content => {
+                    try {
+                        info = JSON.parse(content);
+
+                        // Clean up text areas
+                        groups.value = '';
+                        subjects.value = '';
+                        while (generated.hasChildNodes()) generated.lastChild.remove();
+
+                        // Fill groups
+                        info.groups.forEach((g, i) => {
+                            groups.value += `${g}${
+                                i < info.groups.length - 1 ? '\n' : ''
+                            }`;
+                        });
+
+                        // Fill subjects & assignments
+                        Object.keys(info.subjects).forEach((s, i) => {
+                            const subject = info.subjects[s];
+                            subjects.value += `${s}${
+                                i < Object.keys(info.subjects).length - 1 ? '\n' : ''
+                            }`;
+
+                            addSubject(s);
+
+                            let textArea = document.getElementById(s);
+
+                            // Fill assignments
+                            Object.keys(subject).forEach((a, i) => {
+                                textArea.value += `${a}${
+                                    i < Object.keys(subject).length - 1 ? '\n' : ''
+                                }`;
+                            });
+                        });
+
+                        // Update menus & table
+                        updateGroupSelect();
+                        updateSubjectSelect();
+                        updateAssignmentsTable();
+                    } catch (error) {
+                        alert(`Error while reading assignments file: ${error}`);
+                    }
+                });
+            }
+
+            function saveInfo() {
+                let data = encodeURIComponent(
+                    JSON.stringify(info, undefined, 4)
+                );
+                saveInfoButton.download = 'Assignments.json';
+                saveInfoButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            /**
+             * @param {string} key
+            */
+            function addSubject(key) {
+                let details = generated.appendChild(
+                    document.createElement('details')
+                );
+
+                let summary = details.appendChild(
+                    document.createElement('summary')
+                );
+                summary.textContent = key;
+
+                let textArea = details.appendChild(
+                    document.createElement('textarea')
+                );
+                textArea.id = key;
+                textArea.classList = 'text';
+                textArea.autocomplete = 'off';
+                textArea.placeholder = assignmentHint.textContent;
+                textArea.addEventListener('change', function () {
+                    // Process assignments
+                    let assignments = textArea.value.split('\n').filter(a => a !== '\n');
+
+                    assignments.forEach(a => {
+                        // Blank assignment
+                        if (!info.subjects[key][a]) info.subjects[key][a] = {};
+                    });
+                    updateAssignmentsTable();
+                });
+            }
+
+            function updateGroupSelect() {
+                while (groupSelect.hasChildNodes()) groupSelect.lastChild.remove();
+
+                info.groups.forEach(g => {
+                    let option = groupSelect.appendChild(
+                        document.createElement('option')
+                    );
+                    option.value = g;
+                    option.textContent = g;
+                });
+            }
+
+            function updateSubjectSelect() {
+                while (subjectSelect.hasChildNodes()) subjectSelect.lastChild.remove();
+
+                for (const s in info.subjects) {
+                    const element = info.subjects[s];
+                    
+                    let option = subjectSelect.appendChild(
+                        document.createElement('option')
+                    );
+                    option.value = s;
+                    option.textContent = s;
+                }
+            }
+
+            function updateAssignmentsTable() {
+                while (completedTable.hasChildNodes()) completedTable.lastChild.remove();
+                while (availableTable.hasChildNodes()) availableTable.lastChild.remove();
+                if (!groupSelect.value) return;
+                if (!subjectSelect.value) return;
+
+                const g = groupSelect.value;
+                const s = subjectSelect.value;
+
+                for (const a in info.subjects[s]) {
+                    const assignment = info.subjects[s][a];
+                    const table = (assignment[g]) ? completedTable : availableTable;
+                    
+                    let row = table.appendChild(
+                        document.createElement('tr')
+                    );
+
+                    let nameColumn = row.appendChild(
+                        document.createElement('td')
+                    );
+                    nameColumn.classList = 'table-data';
+                    nameColumn.textContent = a;
+
+                    let dateColumn = row.appendChild(
+                        document.createElement('td')
+                    );
+                    dateColumn.classList = 'table-data';
+                    
+                    let dateInput = dateColumn.appendChild(
+                        document.createElement('input')
+                    );
+                    dateInput.type = 'date';
+                    dateInput.classList = 'table-input';
+                    dateInput.value = assignment[g] ?? '';
+                    dateInput.addEventListener('input', function () {
+                        if (this.value) {
+                            assignment[g] = this.value;
+                        } else {
+                            delete assignment[g];
+                        }
+                        updateAssignmentsTable();
+                    });
+                }
+            }
+            
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Assignments"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Задания"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
         </script>
     </body>
 </html>

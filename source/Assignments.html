@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <title>Assignments</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <link rel='stylesheet' href='../resources/VitalStyle.css' />
+
+        <style>
+            .menu-button {
+                background-color: transparent;
+                flex-grow: 1;
+                border-radius: 0px;
+                font-weight: 600;
+                margin: 0;
+                padding: 2px;
+                min-width: fit-content;
+                max-width: 100%;
+            }
+
+            .shifted-details {
+                margin-left: 20px;
+            }
+            
+            .text {
+                display: flex;
+                resize: vertical;
+                min-height: 10vh;
+                max-height: 30vh;
+                height: 15vh;
+                width: 100%;
+            }
+
+            .table-data {
+                text-align: left;
+                height: 100%;
+                width: 100%;
+            }
+
+            .table-input {
+                border-style: none;
+                height: 100%;
+                width: 100%;
+            }
+
+            #selects-div {
+                display: flex;
+                column-gap: 4px;
+            }
+
+            #group-select, #subject-select {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id='page-title'>Assignments</h1>
+
+        <!-- Settings -->
+        <details id='settings'>
+            <summary id='settings-summary'>Settings</summary>
+        </details>
+
+        <!-- Page main body -->
+
+        <!-- Save/Load buttons -->
+        <div style='display: flex; column-gap: 4px;'>
+            <!-- Load button -->
+            <button
+                id='loadInfoButton'
+                class='menuButton tooltipParent'
+                onclick='document.getElementById("loadInfoInput").click()'
+                style='border-radius: 7px 0px 0px 0px;'
+            >
+                &#128193; Load
+                <span class='tooltip'>Load assignments from .json file</span>
+            </button>
+            <input
+                id='loadInfoInput'
+                type='file'
+                accept='.json'
+                onchange='loadInfo()'
+                style='display: none;'
+            >
+            </input>
+
+            <!-- Save button -->
+            <a
+                id='saveInfoButton'
+                href=''
+                class='menuButton tooltipParent'
+                onclick='saveInfo()'
+                style='border-radius: 0px 7px 0px 0px;'
+            >
+                &#128190; Save
+                <span class='tooltip'>Save assignments to .json file</span>
+            </a>
+        </div>
+
+        <!-- Editor -->
+        <details>
+            <summary id='editor'>Edit groups, subjects, and assignments</summary>
+
+            <div style='margin-left: 20px;'>
+                <!-- Groups -->
+                <details>
+                    <summary id='groups-summary'>Groups</summary>
+                    <textarea
+                        id='groups'
+                        placeholder='Groups (each on new line)'
+                        class='text'
+                        autocomplete='off'
+                    ></textarea>
+                </details>
+
+                <!-- Subjects -->
+                <details>
+                    <summary id='subjects-summary'>Subjects</summary>
+                    <textarea
+                        id='subjects'
+                        placeholder='Subjects (each on new line)'
+                        class='text'
+                        autocomplete='off'
+                    ></textarea>
+                </details>
+
+                <!-- Assignments -->
+                <details>
+                    <summary id='assignments-summary'>Assignments</summary>
+                    <div id='generated'>
+                        <p id='assignment-hint' style='display: none;'>Assignments (each on new line)</p>
+                    </div>
+                </details>
+            </div>
+        </details>
+
+        <hr>
+
+        <h2 id='selects-heading'>View assignments</h2>
+
+        <!-- Group selection -->
+        <div id='group-selection'>
+            <!-- Menus -->
+            <div id='selects-div'>
+                <!-- Group menu -->
+                <select id='group-select'>
+                    <option value=''>Group</option>
+                </select>
+
+                <!-- Subject menu -->
+                <select id='subject-select'>
+                    <option value=''>Subject</option>
+                </select>
+            </div>
+
+            <!-- Completed assignments -->
+            <details open>
+                <summary id='completed-summary'>Completed assignments</summary>
+                <table>
+                    <thead>
+                        <th id='th-assignment1'>Assignment</th>
+                        <th id='th-date1'>Date</th>
+                    </thead>
+
+                    <tbody id='completed-table'></tbody>
+                </table>
+            </details>
+
+            <!-- Available assignments -->
+            <details open>
+                <summary id='available-summary'>Available assignments</summary>
+                <table>
+                    <thead>
+                        <th id='th-assignment2'>Assignment</th>
+                        <th id='th-date2'>Date</th>
+                    </thead>
+
+                    <tbody id='available-table'></tbody>
+                </table>
+            </details>
+        </div>
+
+        <p id='author' class='box' style='font-style: italic'>
+            Made by Vitaly Pavlovich Ulyanov.
+        </p>
+        <!-- Автор — Виталий Павлович Ульянов. -->
+
+        <script src='../resources/VitalLogic.js'></script>
+        <script>
+            // Elements
+            /** @type {HTMLAnchorElement} */
+            let saveInfoButton = document.getElementById('saveInfoButton');
+            /** @type {HTMLInputElement} */
+            let loadInfoInput = document.getElementById('loadInfoInput');
+            /** @type {HTMLTextAreaElement} */
+            let groups = document.getElementById('groups');
+            /** @type {HTMLTextAreaElement} */
+            let subjects = document.getElementById('subjects');
+            /** @type {HTMLDivElement} */
+            let generated = document.getElementById('generated');
+            /** @type {HTMLDivElement} */
+            let assignmentHint = document.getElementById('assignment-hint');
+            /** @type {HTMLSelectElement} */
+            let groupSelect = document.getElementById('group-select');
+            /** @type {HTMLSelectElement} */
+            let subjectSelect = document.getElementById('subject-select');
+            /** @type {HTMLTableSectionElement} */
+            let completedTable = document.getElementById('completed-table');
+            /** @type {HTMLTableSectionElement} */
+            let availableTable = document.getElementById('available-table');
+
+            // Variables
+            let info = {
+                /** @type {string[]} */
+                groups: [],
+                subjects: {}
+            };
+
+            // Process groups
+            groups.addEventListener('change', function () {
+                info.groups = groups.value.trim().split('\n').filter(g => g !== '\n');
+                updateGroupSelect();
+                updateAssignmentsTable();
+            });
+
+            // Process subjects
+            subjects.addEventListener('change', function () {
+                // Clean up div & subjects
+                while (generated.hasChildNodes()) generated.lastChild.remove();
+                // info.subjects = {};
+
+                if (subjects.value === '') return;
+                let list = subjects.value.split('\n').filter(s => s !== '\n');
+
+                list.forEach(s => {
+                    if (!info.subjects[s]) info.subjects[s] = {};
+                    addSubject(s);
+                });
+
+                updateSubjectSelect();
+                updateAssignmentsTable();
+            });
+
+            // Process menus
+            groupSelect.addEventListener('change', updateAssignmentsTable);
+            subjectSelect.addEventListener('change', updateAssignmentsTable);
+
+            async function loadInfo() {
+                await loadInfoInput.files[0].text().then(content => {
+                    try {
+                        info = JSON.parse(content);
+
+                        // Clean up text areas
+                        groups.value = '';
+                        subjects.value = '';
+                        while (generated.hasChildNodes()) generated.lastChild.remove();
+
+                        // Fill groups
+                        info.groups.forEach((g, i) => {
+                            groups.value += `${g}${
+                                i < info.groups.length - 1 ? '\n' : ''
+                            }`;
+                        });
+
+                        // Fill subjects & assignments
+                        Object.keys(info.subjects).forEach((s, i) => {
+                            const subject = info.subjects[s];
+                            subjects.value += `${s}${
+                                i < Object.keys(info.subjects).length - 1 ? '\n' : ''
+                            }`;
+
+                            addSubject(s);
+
+                            let textArea = document.getElementById(s);
+
+                            // Fill assignments
+                            Object.keys(subject).forEach((a, i) => {
+                                textArea.value += `${a}${
+                                    i < Object.keys(subject).length - 1 ? '\n' : ''
+                                }`;
+                            });
+                        });
+
+                        // Update menus & table
+                        updateGroupSelect();
+                        updateSubjectSelect();
+                        updateAssignmentsTable();
+                    } catch (error) {
+                        alert(`Error while reading assignments file: ${error}`);
+                    }
+                });
+            }
+
+            function saveInfo() {
+                let data = encodeURIComponent(
+                    JSON.stringify(info, undefined, 4)
+                );
+                saveInfoButton.download = 'Assignments.json';
+                saveInfoButton.href = `data:text/plain;charset=utf-8,${data}`;
+            }
+
+            /**
+             * @param {string} key
+            */
+            function addSubject(key) {
+                let details = generated.appendChild(
+                    document.createElement('details')
+                );
+
+                let summary = details.appendChild(
+                    document.createElement('summary')
+                );
+                summary.textContent = key;
+
+                let textArea = details.appendChild(
+                    document.createElement('textarea')
+                );
+                textArea.id = key;
+                textArea.classList = 'text';
+                textArea.autocomplete = 'off';
+                textArea.placeholder = assignmentHint.textContent;
+                textArea.addEventListener('change', function () {
+                    // Process assignments
+                    let assignments = textArea.value.split('\n').filter(a => a !== '\n');
+
+                    assignments.forEach(a => {
+                        // Blank assignment
+                        if (!info.subjects[key][a]) info.subjects[key][a] = {};
+                    });
+                    updateAssignmentsTable();
+                });
+            }
+
+            function updateGroupSelect() {
+                while (groupSelect.hasChildNodes()) groupSelect.lastChild.remove();
+
+                info.groups.forEach(g => {
+                    let option = groupSelect.appendChild(
+                        document.createElement('option')
+                    );
+                    option.value = g;
+                    option.textContent = g;
+                });
+            }
+
+            function updateSubjectSelect() {
+                while (subjectSelect.hasChildNodes()) subjectSelect.lastChild.remove();
+
+                for (const s in info.subjects) {
+                    const element = info.subjects[s];
+                    
+                    let option = subjectSelect.appendChild(
+                        document.createElement('option')
+                    );
+                    option.value = s;
+                    option.textContent = s;
+                }
+            }
+
+            function updateAssignmentsTable() {
+                while (completedTable.hasChildNodes()) completedTable.lastChild.remove();
+                while (availableTable.hasChildNodes()) availableTable.lastChild.remove();
+                if (!groupSelect.value) return;
+                if (!subjectSelect.value) return;
+
+                const g = groupSelect.value;
+                const s = subjectSelect.value;
+
+                for (const a in info.subjects[s]) {
+                    const assignment = info.subjects[s][a];
+                    const table = (assignment[g]) ? completedTable : availableTable;
+                    
+                    let row = table.appendChild(
+                        document.createElement('tr')
+                    );
+
+                    let nameColumn = row.appendChild(
+                        document.createElement('td')
+                    );
+                    nameColumn.classList = 'table-data';
+                    nameColumn.textContent = a;
+
+                    let dateColumn = row.appendChild(
+                        document.createElement('td')
+                    );
+                    dateColumn.classList = 'table-data';
+                    
+                    let dateInput = dateColumn.appendChild(
+                        document.createElement('input')
+                    );
+                    dateInput.type = 'date';
+                    dateInput.classList = 'table-input';
+                    dateInput.value = assignment[g] ?? '';
+                    dateInput.addEventListener('input', function () {
+                        if (this.value) {
+                            assignment[g] = this.value;
+                        } else {
+                            delete assignment[g];
+                        }
+                        updateAssignmentsTable();
+                    });
+                }
+            }
+            
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Assignments"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Made by Vitaly Pavlovich Ulyanov."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Задания"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "author",
+                            "childNodesTexts": [
+                                "Автор — Виталий Павлович Ульянов."
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
+        </script>
+    </body>
+</html>
