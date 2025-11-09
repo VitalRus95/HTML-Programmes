@@ -8,6 +8,15 @@
         <link rel='stylesheet' href='../resources/VitalStyle.css' />
 
         <style>
+            .equal-width-div {
+                display: flex;
+                column-gap: 4px;
+            }
+
+            .equal-width-div > button, div {
+                width: 100%;
+            }
+
             .menu-button {
                 background-color: transparent;
                 flex-grow: 1;
@@ -19,17 +28,8 @@
                 max-width: 100%;
             }
 
-            .shifted-details {
-                margin-left: 20px;
-            }
-            
-            .text {
-                display: flex;
-                resize: vertical;
-                min-height: 10vh;
-                max-height: 30vh;
-                height: 15vh;
-                width: 100%;
+            .table-head {
+                top: 32px;
             }
 
             .table-data {
@@ -40,8 +40,23 @@
 
             .table-input {
                 border-style: none;
+                margin: 0px;
                 height: 100%;
                 width: 100%;
+            }
+
+            .text {
+                display: flex;
+                resize: vertical;
+                min-height: 10vh;
+                max-height: 50vh;
+                height: 30vh;
+                width: 100%;
+            }
+
+            #editor {
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: 600;
             }
 
             #selects-div {
@@ -51,6 +66,12 @@
 
             #group-select, #subject-select {
                 width: 100%;
+            }
+
+            #ra-div {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 4px;
             }
         </style>
     </head>
@@ -100,38 +121,13 @@
 
         <!-- Editor -->
         <details>
-            <summary id='editor'>Edit groups, subjects, and assignments</summary>
+            <summary id='editor-summary'>Edit groups, subjects, and assignments</summary>
 
-            <div style='margin-left: 20px;'>
-                <!-- Groups -->
-                <details>
-                    <summary id='groups-summary'>Groups</summary>
-                    <textarea
-                        id='groups'
-                        placeholder='Groups (each on new line)'
-                        class='text'
-                        autocomplete='off'
-                    ></textarea>
-                </details>
+            <textarea id='editor' class='text' wrap='off'></textarea>
 
-                <!-- Subjects -->
-                <details>
-                    <summary id='subjects-summary'>Subjects</summary>
-                    <textarea
-                        id='subjects'
-                        placeholder='Subjects (each on new line)'
-                        class='text'
-                        autocomplete='off'
-                    ></textarea>
-                </details>
-
-                <!-- Assignments -->
-                <details>
-                    <summary id='assignments-summary'>Assignments</summary>
-                    <div id='generated'>
-                        <p id='assignment-hint' style='display: none;'>Assignments (each on new line)</p>
-                    </div>
-                </details>
+            <div class='equal-width-div'>
+                <button id='editor-reset'>Discard changes</button>
+                <button id='editor-apply'>Apply changes</button>
             </div>
         </details>
 
@@ -145,12 +141,12 @@
             <div id='selects-div'>
                 <!-- Group menu -->
                 <select id='group-select'>
-                    <option value=''>Group</option>
+                    <option value='' id='group-hint'>Group</option>
                 </select>
 
                 <!-- Subject menu -->
                 <select id='subject-select'>
-                    <option value=''>Subject</option>
+                    <option value='' id='subject-hint'>Subject</option>
                 </select>
             </div>
 
@@ -159,8 +155,14 @@
                 <summary id='completed-summary'>Completed assignments</summary>
                 <table>
                     <thead>
-                        <th id='th-assignment1'>Assignment</th>
-                        <th id='th-date1'>Date</th>
+                        <tr>
+                            <th id='th-assignment1' class='table-head' tabindex='0'>
+                                Assignment
+                            </th>
+                            <th id='th-date1' class='table-head' tabindex='0'>
+                                Date
+                            </th>
+                        </tr>
                     </thead>
 
                     <tbody id='completed-table'></tbody>
@@ -172,9 +174,27 @@
                 <summary id='available-summary'>Available assignments</summary>
                 <table>
                     <thead>
-                        <th id='th-assignment2'>Assignment</th>
-                        <th id='th-date2'>Date</th>
+                        <tr>
+                            <th id='th-assignment2' class='table-head' tabindex='0'>
+                                Assignment
+                            </th>
+                            <th id='th-date2' class='table-head' tabindex='0'>
+                                Date
+                            </th>
+                        </tr>
                     </thead>
+
+                    <div class='equal-width-div'>
+                        <div id='ra-div'>
+                            <button id='random-assignments'>
+                                Select
+                            </button>
+                            <input type='number' id='ra-num' min='1' autocomplete='off'>
+                            <label for='ra-num' id='ra-label'>random assignments</label>
+                        </div>
+
+                        <button id='table-reset'>Reset table</button>
+                    </div>
 
                     <tbody id='available-table'></tbody>
                 </table>
@@ -194,13 +214,11 @@
             /** @type {HTMLInputElement} */
             let loadInfoInput = document.getElementById('loadInfoInput');
             /** @type {HTMLTextAreaElement} */
-            let groups = document.getElementById('groups');
-            /** @type {HTMLTextAreaElement} */
-            let subjects = document.getElementById('subjects');
-            /** @type {HTMLDivElement} */
-            let generated = document.getElementById('generated');
-            /** @type {HTMLDivElement} */
-            let assignmentHint = document.getElementById('assignment-hint');
+            let editor = document.getElementById('editor');
+            /** @type {HTMLButtonElement} */
+            let editorReset = document.getElementById('editor-reset');
+            /** @type {HTMLButtonElement} */
+            let editorApply = document.getElementById('editor-apply');
             /** @type {HTMLSelectElement} */
             let groupSelect = document.getElementById('group-select');
             /** @type {HTMLSelectElement} */
@@ -209,6 +227,12 @@
             let completedTable = document.getElementById('completed-table');
             /** @type {HTMLTableSectionElement} */
             let availableTable = document.getElementById('available-table');
+            /** @type {HTMLButtonElement} */
+            let randomAssignments = document.getElementById('random-assignments');
+            /** @type {HTMLInputElement} */
+            let randomAssignmentsCount = document.getElementById('ra-num');
+            /** @type {HTMLButtonElement} */
+            let tableReset = document.getElementById('table-reset');
 
             // Variables
             let info = {
@@ -217,72 +241,126 @@
                 subjects: {}
             };
 
-            // Process groups
-            groups.addEventListener('change', function () {
-                info.groups = groups.value.trim().split('\n').filter(g => g !== '\n');
-                updateGroupSelect();
-                updateAssignmentsTable();
+            // Process editor
+            editor.addEventListener('input', function (/** @type {InputEvent} */ event) {
+                if (!event.data) return;
+                const cursor = this.selectionEnd;
+
+                // Replace ' with "
+                this.value = this.value.replace(/'/g, '"');
+                this.selectionEnd = cursor;
+
+                // Autocomplete
+                switch (event.data) {
+                    case '{':
+                        insertText(this, '},');
+                        break;
+                    case '(':
+                        insertText(this, ')');
+                        break;
+                    case '[':
+                        insertText(this, ']');
+                        break;
+                    case '\'':
+                    case '"':
+                        insertText(this, '"');
+                        break;
+                    case ' ':
+                        if (this.value[cursor - 2] !== '\n'
+                            && this.value[cursor - 2] !== ' '
+                        ) {
+                            break;
+                        };
+                        insertText(this, '   ', 3);
+                        break;
+                    default:
+                        break;
+                }
             });
 
-            // Process subjects
-            subjects.addEventListener('change', function () {
-                // Clean up div & subjects
-                while (generated.hasChildNodes()) generated.lastChild.remove();
-                // info.subjects = {};
+            // Process editor's buttons
+            editorReset.addEventListener('click', function () {
+                fillEditor();
+            });
 
-                if (subjects.value === '') return;
-                let list = subjects.value.split('\n').filter(s => s !== '\n');
+            editorApply.addEventListener('click', function () {
+                try {
+                    let newInfo = JSON.parse(editor.value);
 
-                list.forEach(s => {
-                    if (!info.subjects[s]) info.subjects[s] = {};
-                    addSubject(s);
-                });
+                    if (!newInfo.groups) newInfo.groups = [];
+                    if (!newInfo.subjects) newInfo.subject = {};
 
-                updateSubjectSelect();
-                updateAssignmentsTable();
+                    info = newInfo;
+                    fillEditor();
+                    updateGroupSelect();
+                    updateSubjectSelect();
+                    updateAssignmentsTable();
+                } catch (error) {
+                    alert(`Error while applying changes: ${error}`);
+                }
             });
 
             // Process menus
             groupSelect.addEventListener('change', updateAssignmentsTable);
             subjectSelect.addEventListener('change', updateAssignmentsTable);
 
+            // Process table buttons
+            randomAssignments.addEventListener('click', function () {
+                updateAssignmentsTable();
+
+                const max = clamp(
+                    +randomAssignmentsCount.min,
+                    +randomAssignmentsCount.value,
+                    +randomAssignmentsCount.max
+                );
+                randomAssignmentsCount.value = max;
+
+                while (availableTable.children.length > max) {
+                    availableTable.children[
+                        getRandomInt(0, availableTable.children.length)
+                    ].remove();
+                }
+            });
+
+            tableReset.addEventListener('click', function () {
+                updateAssignmentsTable();
+            });
+
+            /**
+             * @param {number} min
+             * @param {number} value
+             * @param {number} maxnumber
+            */
+            function clamp(min, value, max) {
+                return value > max
+                    ? max
+                    : value < min
+                        ? min
+                        : value;
+            }
+
+            /**
+             * @param {HTMLInputElement | HTMLTextAreaElement} textElement
+             * @param {string} insertedText
+             * @param {number} [shiftCursor=0]
+            */
+            function insertText(textElement, insertedText, shiftCursor = 0) {
+                const cursor = textElement.selectionEnd;
+
+                textElement.value = textElement.value.substring(0, cursor)
+                    + insertedText
+                    + textElement.value.substring(cursor);
+                
+                textElement.selectionEnd = cursor + shiftCursor;
+            }
+
             async function loadInfo() {
                 await loadInfoInput.files[0].text().then(content => {
                     try {
                         info = JSON.parse(content);
 
-                        // Clean up text areas
-                        groups.value = '';
-                        subjects.value = '';
-                        while (generated.hasChildNodes()) generated.lastChild.remove();
-
-                        // Fill groups
-                        info.groups.forEach((g, i) => {
-                            groups.value += `${g}${
-                                i < info.groups.length - 1 ? '\n' : ''
-                            }`;
-                        });
-
-                        // Fill subjects & assignments
-                        Object.keys(info.subjects).forEach((s, i) => {
-                            const subject = info.subjects[s];
-                            subjects.value += `${s}${
-                                i < Object.keys(info.subjects).length - 1 ? '\n' : ''
-                            }`;
-
-                            addSubject(s);
-
-                            let textArea = document.getElementById(s);
-
-                            // Fill assignments
-                            Object.keys(subject).forEach((a, i) => {
-                                textArea.value += `${a}${
-                                    i < Object.keys(subject).length - 1 ? '\n' : ''
-                                }`;
-                            });
-                        });
-
                         // Update menus & table
+                        fillEditor();
                         updateGroupSelect();
                         updateSubjectSelect();
                         updateAssignmentsTable();
@@ -301,35 +379,53 @@
             }
 
             /**
-             * @param {string} key
+             * @param {number} min
+             * @param {number} max
+             * @returns Random number in [min;max) range
             */
-            function addSubject(key) {
-                let details = generated.appendChild(
-                    document.createElement('details')
-                );
+            function getRandomInt(min, max) {
+                return Math.floor(
+                    Math.random() * (max - min)
+                ) + min;
+            }
 
-                let summary = details.appendChild(
-                    document.createElement('summary')
-                );
-                summary.textContent = key;
+            function generateInfoTemplate() {
+                const group = document.getElementById('group-hint').textContent;
+                const subject = document.getElementById('subject-hint').textContent;
+                const assignment = document.getElementById('th-assignment1').textContent;
 
-                let textArea = details.appendChild(
-                    document.createElement('textarea')
-                );
-                textArea.id = key;
-                textArea.classList = 'text';
-                textArea.autocomplete = 'off';
-                textArea.placeholder = assignmentHint.textContent;
-                textArea.addEventListener('change', function () {
-                    // Process assignments
-                    let assignments = textArea.value.split('\n').filter(a => a !== '\n');
+                // Fill template with randomised info
+                ['1', '2', '3'].forEach(i => {
+                    const g = `${group} ${i}`;
+                    const s = `${subject} ${i}`;
 
-                    assignments.forEach(a => {
-                        // Blank assignment
-                        if (!info.subjects[key][a]) info.subjects[key][a] = {};
+                    info.groups.push(g);
+                    info.subjects[s] = {};
+
+                    ['1', '2', '3'].forEach(j => {
+                        const a = `${assignment} ${j}`;
+
+                        info.subjects[s][a] = {};
+                        if (j === '3') return;
+
+                        for (let k = 1; k < getRandomInt(2, 5); k++) {
+                            info.subjects[s][a][`${group} ${k}`] = `${
+                                getRandomInt(2000, 2026)
+                            }-${
+                                getRandomInt(1, 13).toString().padStart(2, '0')
+                            }-${
+                                getRandomInt(1, 29).toString().padStart(2, '0')
+                            }`;
+                        }
                     });
-                    updateAssignmentsTable();
                 });
+
+                // Set placeholder
+                editor.placeholder = JSON.stringify(info, undefined, 4);
+            }
+
+            function fillEditor() {
+                editor.value = JSON.stringify(info, undefined, 4);
             }
 
             function updateGroupSelect() {
@@ -380,6 +476,7 @@
                     );
                     nameColumn.classList = 'table-data';
                     nameColumn.textContent = a;
+                    nameColumn.tabIndex = 0;
 
                     let dateColumn = row.appendChild(
                         document.createElement('td')
@@ -392,7 +489,8 @@
                     dateInput.type = 'date';
                     dateInput.classList = 'table-input';
                     dateInput.value = assignment[g] ?? '';
-                    dateInput.addEventListener('input', function () {
+                    dateInput.tabIndex = 0;
+                    dateInput.addEventListener('change', function () {
                         if (this.value) {
                             assignment[g] = this.value;
                         } else {
@@ -401,7 +499,12 @@
                         updateAssignmentsTable();
                     });
                 }
+
+                randomAssignmentsCount.max = availableTable.children.length - 1;
             }
+
+            generateInfoTemplate();
+            fillEditor();
             
             generateLanguagesList([
                 {
