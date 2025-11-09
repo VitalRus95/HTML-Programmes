@@ -121,7 +121,7 @@
 
         <!-- Editor -->
         <details>
-            <summary id='editor-summary'>Edit groups, subjects, and assignments</summary>
+            <summary id='editor-summary'>Edit assignments file</summary>
 
             <textarea id='editor' class='text' wrap='off'></textarea>
 
@@ -390,9 +390,9 @@
             }
 
             function generateInfoTemplate() {
-                const group = document.getElementById('group-hint').textContent;
-                const subject = document.getElementById('subject-hint').textContent;
-                const assignment = document.getElementById('th-assignment1').textContent;
+                const group = document.getElementById('group-hint').textContent.trim();
+                const subject = document.getElementById('subject-hint').textContent.trim();
+                const assignment = document.getElementById('th-assignment1').textContent.trim();
 
                 // Fill template with randomised info
                 ['1', '2', '3'].forEach(i => {
@@ -502,9 +502,6 @@
 
                 randomAssignmentsCount.max = availableTable.children.length - 1;
             }
-
-            generateInfoTemplate();
-            fillEditor();
             
             generateLanguagesList([
                 {
@@ -574,6 +571,122 @@
                             "id": "exportLang",
                             "childNodesTexts": [
                                 "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "loadInfoButton",
+                            "childNodesTexts": [
+                                "📁 Load",
+                                "Load assignments from .json file"
+                            ]
+                        },
+                        {
+                            "id": "saveInfoButton",
+                            "childNodesTexts": [
+                                "💾 Save",
+                                "Save assignments to .json file"
+                            ]
+                        },
+                        {
+                            "id": "editor-summary",
+                            "childNodesTexts": [
+                                "Edit assignments file"
+                            ]
+                        },
+                        {
+                            "id": "editor-reset",
+                            "childNodesTexts": [
+                                "Discard changes"
+                            ]
+                        },
+                        {
+                            "id": "editor-apply",
+                            "childNodesTexts": [
+                                "Apply changes"
+                            ]
+                        },
+                        {
+                            "id": "selects-heading",
+                            "childNodesTexts": [
+                                "View assignments"
+                            ]
+                        },
+                        {
+                            "id": "group-select",
+                            "childNodesTexts": [
+                                "Group"
+                            ]
+                        },
+                        {
+                            "id": "group-hint",
+                            "childNodesTexts": [
+                                "Group"
+                            ]
+                        },
+                        {
+                            "id": "subject-select",
+                            "childNodesTexts": [
+                                "Subject"
+                            ]
+                        },
+                        {
+                            "id": "subject-hint",
+                            "childNodesTexts": [
+                                "Subject"
+                            ]
+                        },
+                        {
+                            "id": "completed-summary",
+                            "childNodesTexts": [
+                                "Completed assignments"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment1",
+                            "childNodesTexts": [
+                                "Assignment"
+                            ]
+                        },
+                        {
+                            "id": "th-date1",
+                            "childNodesTexts": [
+                                "Date"
+                            ]
+                        },
+                        {
+                            "id": "available-summary",
+                            "childNodesTexts": [
+                                "Available assignments"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Select"
+                            ]
+                        },
+                        {
+                            "id": "ra-label",
+                            "childNodesTexts": [
+                                "random assignments"
+                            ]
+                        },
+                        {
+                            "id": "table-reset",
+                            "childNodesTexts": [
+                                "Reset table"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment2",
+                            "childNodesTexts": [
+                                "Assignment"
+                            ]
+                        },
+                        {
+                            "id": "th-date2",
+                            "childNodesTexts": [
+                                "Date"
                             ]
                         },
                         {
@@ -661,6 +774,122 @@
                             ]
                         },
                         {
+                            "id": "loadInfoButton",
+                            "childNodesTexts": [
+                                "📁 Загрузить",
+                                "Загрузить задания из файла .json"
+                            ]
+                        },
+                        {
+                            "id": "saveInfoButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить",
+                                "Сохранить задания в файл .json"
+                            ]
+                        },
+                        {
+                            "id": "editor-summary",
+                            "childNodesTexts": [
+                                "Править файл заданий"
+                            ]
+                        },
+                        {
+                            "id": "editor-reset",
+                            "childNodesTexts": [
+                                "Отменить правки"
+                            ]
+                        },
+                        {
+                            "id": "editor-apply",
+                            "childNodesTexts": [
+                                "Применить правки"
+                            ]
+                        },
+                        {
+                            "id": "selects-heading",
+                            "childNodesTexts": [
+                                "Показать задания"
+                            ]
+                        },
+                        {
+                            "id": "group-select",
+                            "childNodesTexts": [
+                                "Группа"
+                            ]
+                        },
+                        {
+                            "id": "group-hint",
+                            "childNodesTexts": [
+                                "Группа"
+                            ]
+                        },
+                        {
+                            "id": "subject-select",
+                            "childNodesTexts": [
+                                "Предмет"
+                            ]
+                        },
+                        {
+                            "id": "subject-hint",
+                            "childNodesTexts": [
+                                "Предмет"
+                            ]
+                        },
+                        {
+                            "id": "completed-summary",
+                            "childNodesTexts": [
+                                "Выполненные задания"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment1",
+                            "childNodesTexts": [
+                                "Задание"
+                            ]
+                        },
+                        {
+                            "id": "th-date1",
+                            "childNodesTexts": [
+                                "Дата"
+                            ]
+                        },
+                        {
+                            "id": "available-summary",
+                            "childNodesTexts": [
+                                "Доступные задания"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Выбрать"
+                            ]
+                        },
+                        {
+                            "id": "ra-label",
+                            "childNodesTexts": [
+                                "случайных заданий"
+                            ]
+                        },
+                        {
+                            "id": "table-reset",
+                            "childNodesTexts": [
+                                "Сброс таблицы"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment2",
+                            "childNodesTexts": [
+                                "Задание"
+                            ]
+                        },
+                        {
+                            "id": "th-date2",
+                            "childNodesTexts": [
+                                "Дата"
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
                                 "Автор — Виталий Павлович Ульянов."
@@ -676,6 +905,9 @@
                     ]
                 }
             ]);
+
+            generateInfoTemplate();
+            fillEditor();
         </script>
     </body>
 </html>
