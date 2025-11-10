@@ -10,6 +10,7 @@
         <style>
             .equal-width-div {
                 display: flex;
+                flex-wrap: wrap;
                 column-gap: 4px;
             }
 
@@ -72,6 +73,19 @@
                 display: flex;
                 flex-wrap: wrap;
                 column-gap: 4px;
+                margin: 0px;
+                position: sticky;
+                bottom: 0px;
+                opacity: 0.95;
+            }
+
+            #ra-num {
+                flex-grow: 1;
+                background-color: var(--primary-colour);
+            }
+
+            #table-reset, #random-assignments {
+                flex-grow: 1;
             }
         </style>
     </head>
@@ -173,6 +187,7 @@
             <details open>
                 <summary id='available-summary'>Available assignments</summary>
                 <table>
+                    <!-- Table heading -->
                     <thead>
                         <tr>
                             <th id='th-assignment2' class='table-head' tabindex='0'>
@@ -184,20 +199,27 @@
                         </tr>
                     </thead>
 
-                    <div class='equal-width-div'>
-                        <div id='ra-div'>
-                            <button id='random-assignments'>
-                                Select
-                            </button>
-                            <input type='number' id='ra-num' min='1' autocomplete='off'>
-                            <label for='ra-num' id='ra-label'>random assignments</label>
-                        </div>
-
-                        <button id='table-reset'>Reset table</button>
-                    </div>
-
+                    <!-- Generated table -->
                     <tbody id='available-table'></tbody>
                 </table>
+
+            <!-- Table buttons: reset & randomise -->
+                <div id='ra-div'>
+                    <button id='table-reset'>Reset</button>
+                    
+                    <button id='random-assignments'>
+                        Randomise
+                    </button>
+
+                    <input
+                        type='number'
+                        id='ra-num'
+                        min='1'
+                        max='300'
+                        value='1'
+                        autocomplete='off'
+                    >
+                </div>
             </details>
         </div>
 
@@ -463,9 +485,13 @@
                 const g = groupSelect.value;
                 const s = subjectSelect.value;
 
+                let completedCount = 0;
+                let availableCount = 0;
+
                 for (const a in info.subjects[s]) {
                     const assignment = info.subjects[s][a];
                     const table = (assignment[g]) ? completedTable : availableTable;
+                    const count = (assignment[g]) ? ++completedCount : ++availableCount;
                     
                     let row = table.appendChild(
                         document.createElement('tr')
@@ -475,7 +501,7 @@
                         document.createElement('td')
                     );
                     nameColumn.classList = 'table-data';
-                    nameColumn.textContent = a;
+                    nameColumn.textContent = count + '. ' + a;
                     nameColumn.tabIndex = 0;
 
                     let dateColumn = row.appendChild(
@@ -660,21 +686,15 @@
                             ]
                         },
                         {
-                            "id": "random-assignments",
-                            "childNodesTexts": [
-                                "Select"
-                            ]
-                        },
-                        {
-                            "id": "ra-label",
-                            "childNodesTexts": [
-                                "random assignments"
-                            ]
-                        },
-                        {
                             "id": "table-reset",
                             "childNodesTexts": [
-                                "Reset table"
+                                "Reset"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Randomise"
                             ]
                         },
                         {
@@ -860,21 +880,15 @@
                             ]
                         },
                         {
-                            "id": "random-assignments",
-                            "childNodesTexts": [
-                                "Выбрать"
-                            ]
-                        },
-                        {
-                            "id": "ra-label",
-                            "childNodesTexts": [
-                                "случайных заданий"
-                            ]
-                        },
-                        {
                             "id": "table-reset",
                             "childNodesTexts": [
-                                "Сброс таблицы"
+                                "Сброс"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Перемешать"
                             ]
                         },
                         {

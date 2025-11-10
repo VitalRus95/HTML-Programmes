@@ -381,6 +381,7 @@
 
             .equal-width-div {
                 display: flex;
+                flex-wrap: wrap;
                 column-gap: 4px;
             }
 
@@ -443,6 +444,19 @@
                 display: flex;
                 flex-wrap: wrap;
                 column-gap: 4px;
+                margin: 0px;
+                position: sticky;
+                bottom: 0px;
+                opacity: 0.95;
+            }
+
+            #ra-num {
+                flex-grow: 1;
+                background-color: var(--primary-colour);
+            }
+
+            #table-reset, #random-assignments {
+                flex-grow: 1;
             }
         </style>
     </head>
@@ -492,7 +506,7 @@
 
         <!-- Editor -->
         <details>
-            <summary id='editor-summary'>Edit groups, subjects, and assignments</summary>
+            <summary id='editor-summary'>Edit assignments file</summary>
 
             <textarea id='editor' class='text' wrap='off'></textarea>
 
@@ -544,6 +558,7 @@
             <details open>
                 <summary id='available-summary'>Available assignments</summary>
                 <table>
+                    <!-- Table heading -->
                     <thead>
                         <tr>
                             <th id='th-assignment2' class='table-head' tabindex='0'>
@@ -555,20 +570,27 @@
                         </tr>
                     </thead>
 
-                    <div class='equal-width-div'>
-                        <div id='ra-div'>
-                            <button id='random-assignments'>
-                                Select
-                            </button>
-                            <input type='number' id='ra-num' min='1' autocomplete='off'>
-                            <label for='ra-num' id='ra-label'>random assignments</label>
-                        </div>
-
-                        <button id='table-reset'>Reset table</button>
-                    </div>
-
+                    <!-- Generated table -->
                     <tbody id='available-table'></tbody>
                 </table>
+
+            <!-- Table buttons: reset & randomise -->
+                <div id='ra-div'>
+                    <button id='table-reset'>Reset</button>
+                    
+                    <button id='random-assignments'>
+                        Randomise
+                    </button>
+
+                    <input
+                        type='number'
+                        id='ra-num'
+                        min='1'
+                        max='300'
+                        value='1'
+                        autocomplete='off'
+                    >
+                </div>
             </details>
         </div>
 
@@ -1240,9 +1262,9 @@
             }
 
             function generateInfoTemplate() {
-                const group = document.getElementById('group-hint').textContent;
-                const subject = document.getElementById('subject-hint').textContent;
-                const assignment = document.getElementById('th-assignment1').textContent;
+                const group = document.getElementById('group-hint').textContent.trim();
+                const subject = document.getElementById('subject-hint').textContent.trim();
+                const assignment = document.getElementById('th-assignment1').textContent.trim();
 
                 // Fill template with randomised info
                 ['1', '2', '3'].forEach(i => {
@@ -1313,9 +1335,13 @@
                 const g = groupSelect.value;
                 const s = subjectSelect.value;
 
+                let completedCount = 0;
+                let availableCount = 0;
+
                 for (const a in info.subjects[s]) {
                     const assignment = info.subjects[s][a];
                     const table = (assignment[g]) ? completedTable : availableTable;
+                    const count = (assignment[g]) ? ++completedCount : ++availableCount;
                     
                     let row = table.appendChild(
                         document.createElement('tr')
@@ -1325,7 +1351,7 @@
                         document.createElement('td')
                     );
                     nameColumn.classList = 'table-data';
-                    nameColumn.textContent = a;
+                    nameColumn.textContent = count + '. ' + a;
                     nameColumn.tabIndex = 0;
 
                     let dateColumn = row.appendChild(
@@ -1352,9 +1378,6 @@
 
                 randomAssignmentsCount.max = availableTable.children.length - 1;
             }
-
-            generateInfoTemplate();
-            fillEditor();
             
             generateLanguagesList([
                 {
@@ -1424,6 +1447,116 @@
                             "id": "exportLang",
                             "childNodesTexts": [
                                 "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "loadInfoButton",
+                            "childNodesTexts": [
+                                "📁 Load",
+                                "Load assignments from .json file"
+                            ]
+                        },
+                        {
+                            "id": "saveInfoButton",
+                            "childNodesTexts": [
+                                "💾 Save",
+                                "Save assignments to .json file"
+                            ]
+                        },
+                        {
+                            "id": "editor-summary",
+                            "childNodesTexts": [
+                                "Edit assignments file"
+                            ]
+                        },
+                        {
+                            "id": "editor-reset",
+                            "childNodesTexts": [
+                                "Discard changes"
+                            ]
+                        },
+                        {
+                            "id": "editor-apply",
+                            "childNodesTexts": [
+                                "Apply changes"
+                            ]
+                        },
+                        {
+                            "id": "selects-heading",
+                            "childNodesTexts": [
+                                "View assignments"
+                            ]
+                        },
+                        {
+                            "id": "group-select",
+                            "childNodesTexts": [
+                                "Group"
+                            ]
+                        },
+                        {
+                            "id": "group-hint",
+                            "childNodesTexts": [
+                                "Group"
+                            ]
+                        },
+                        {
+                            "id": "subject-select",
+                            "childNodesTexts": [
+                                "Subject"
+                            ]
+                        },
+                        {
+                            "id": "subject-hint",
+                            "childNodesTexts": [
+                                "Subject"
+                            ]
+                        },
+                        {
+                            "id": "completed-summary",
+                            "childNodesTexts": [
+                                "Completed assignments"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment1",
+                            "childNodesTexts": [
+                                "Assignment"
+                            ]
+                        },
+                        {
+                            "id": "th-date1",
+                            "childNodesTexts": [
+                                "Date"
+                            ]
+                        },
+                        {
+                            "id": "available-summary",
+                            "childNodesTexts": [
+                                "Available assignments"
+                            ]
+                        },
+                        {
+                            "id": "table-reset",
+                            "childNodesTexts": [
+                                "Reset"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Randomise"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment2",
+                            "childNodesTexts": [
+                                "Assignment"
+                            ]
+                        },
+                        {
+                            "id": "th-date2",
+                            "childNodesTexts": [
+                                "Date"
                             ]
                         },
                         {
@@ -1511,6 +1644,116 @@
                             ]
                         },
                         {
+                            "id": "loadInfoButton",
+                            "childNodesTexts": [
+                                "📁 Загрузить",
+                                "Загрузить задания из файла .json"
+                            ]
+                        },
+                        {
+                            "id": "saveInfoButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить",
+                                "Сохранить задания в файл .json"
+                            ]
+                        },
+                        {
+                            "id": "editor-summary",
+                            "childNodesTexts": [
+                                "Править файл заданий"
+                            ]
+                        },
+                        {
+                            "id": "editor-reset",
+                            "childNodesTexts": [
+                                "Отменить правки"
+                            ]
+                        },
+                        {
+                            "id": "editor-apply",
+                            "childNodesTexts": [
+                                "Применить правки"
+                            ]
+                        },
+                        {
+                            "id": "selects-heading",
+                            "childNodesTexts": [
+                                "Показать задания"
+                            ]
+                        },
+                        {
+                            "id": "group-select",
+                            "childNodesTexts": [
+                                "Группа"
+                            ]
+                        },
+                        {
+                            "id": "group-hint",
+                            "childNodesTexts": [
+                                "Группа"
+                            ]
+                        },
+                        {
+                            "id": "subject-select",
+                            "childNodesTexts": [
+                                "Предмет"
+                            ]
+                        },
+                        {
+                            "id": "subject-hint",
+                            "childNodesTexts": [
+                                "Предмет"
+                            ]
+                        },
+                        {
+                            "id": "completed-summary",
+                            "childNodesTexts": [
+                                "Выполненные задания"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment1",
+                            "childNodesTexts": [
+                                "Задание"
+                            ]
+                        },
+                        {
+                            "id": "th-date1",
+                            "childNodesTexts": [
+                                "Дата"
+                            ]
+                        },
+                        {
+                            "id": "available-summary",
+                            "childNodesTexts": [
+                                "Доступные задания"
+                            ]
+                        },
+                        {
+                            "id": "table-reset",
+                            "childNodesTexts": [
+                                "Сброс"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Перемешать"
+                            ]
+                        },
+                        {
+                            "id": "th-assignment2",
+                            "childNodesTexts": [
+                                "Задание"
+                            ]
+                        },
+                        {
+                            "id": "th-date2",
+                            "childNodesTexts": [
+                                "Дата"
+                            ]
+                        },
+                        {
                             "id": "author",
                             "childNodesTexts": [
                                 "Автор — Виталий Павлович Ульянов."
@@ -1526,6 +1769,9 @@
                     ]
                 }
             ]);
+
+            generateInfoTemplate();
+            fillEditor();
         </script>
     </body>
 </html>
