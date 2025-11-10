@@ -127,9 +127,7 @@
             
             h1 {
                 align-self: center;
-                border-bottom-style: dotted;
-                border-bottom-width: 4px;
-                border-color: var(--accent1);
+                border-bottom: 4px dotted var(--accent1);
                 margin: 4px 0px 4px 0px;
                 padding: 8px 12px 4px 12px;
                 font-size: 1.7em;
@@ -160,8 +158,7 @@
             }
             
             input {
-                border-color: var(--secondary-colour);
-                border-style: outset;
+                border: 2px outset var(--secondary-colour);
                 accent-color: var(--accent2);
             }
             
@@ -201,9 +198,7 @@
             
             select {
                 background-color: var(--primary-colour);
-                border-color: var(--accent1);
-                border-style: inset;
-                border-width: 2px;
+                border: 2px inset var(--accent1);
                 border-radius: 4px;
                 color: var(--secondary-colour);
                 overflow: auto;
@@ -211,31 +206,15 @@
             
             table {
                 width: 100%;
-                border-collapse: separate;
+                border-collapse: collapse;
             }
             
             td,
             th {
-                border-style: inset;
-                border-width: 2px;
-                border-radius: 2px;
+                border: 2px solid var(--secondary-colour);
                 padding-inline: 4px;
                 text-align: center;
-            }
-            
-            td {
-                border-color: var(--secondary-colour);
                 font-weight: 600;
-            }
-            
-            td:focus,
-            td:hover,
-            th:focus,
-            th:hover {
-                border-color: var(--accent1);
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-                border-style: solid;
             }
             
             th {
@@ -244,29 +223,29 @@
                 border-color: var(--accent1);
                 color: var(--accent1);
                 font-size: 1.05em;
-                font-weight: 600;
                 position: sticky;
                 top: 0px;
                 z-index: 1;
             }
             
-            tbody > tr:nth-of-type(even) > td {
+            th:focus,
+            th:hover,
+            tr:focus,
+            tr:hover,
+            tbody > tr:nth-of-type(even):focus,
+            tbody > tr:nth-of-type(even):hover {
+                border-color: var(--accent1);
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+            
+            tbody > tr:nth-of-type(even) {
                 background-color: var(--accent1);
                 color: var(--primary-colour);
             }
             
-            tbody > tr:nth-of-type(even) > td:focus,
-            tbody > tr:nth-of-type(even) > td:hover {
-                border-color: var(--accent1);
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-                border-style: solid;
-            }
-            
             textarea {
-                border-color: var(--secondary-colour);
-                border-style: outset;
-                border-width: 2px;
+                border: 2px outset var(--secondary-colour);
                 border-radius: 4px;
             }
             
@@ -277,10 +256,8 @@
             .box {
                 display: flex;
                 flex-direction: row;
-                border-color: var(--accent1);
+                border: 2px outset var(--accent1);
                 border-radius: 4px;
-                border-style: outset;
-                border-width: 2px;
                 padding: 2px;
             }
             
@@ -345,10 +322,8 @@
                 background-color: var(--secondary-colour);
                 color: var(--primary-colour);
                 opacity: 0.95;
-                border-color: var(--accent1);
+                border: 2px outset var(--accent1);
                 border-radius: 4px;
-                border-style: outset;
-                border-width: 2px;
                 padding: 3px;
                 position: fixed;
                 top: 5px;
@@ -1118,10 +1093,6 @@
                 if (!event.data) return;
                 const cursor = this.selectionEnd;
 
-                // Replace ' with "
-                this.value = this.value.replace(/'/g, '"');
-                this.selectionEnd = cursor;
-
                 // Autocomplete
                 switch (event.data) {
                     case '{':
@@ -1134,6 +1105,8 @@
                         insertText(this, ']');
                         break;
                     case '\'':
+                        insertText(this, '\'');
+                        break;
                     case '"':
                         insertText(this, '"');
                         break;
@@ -1372,6 +1345,7 @@
                         } else {
                             delete assignment[g];
                         }
+                        fillEditor();
                         updateAssignmentsTable();
                     });
                 }

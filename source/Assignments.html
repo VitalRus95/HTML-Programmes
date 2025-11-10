@@ -268,10 +268,6 @@
                 if (!event.data) return;
                 const cursor = this.selectionEnd;
 
-                // Replace ' with "
-                this.value = this.value.replace(/'/g, '"');
-                this.selectionEnd = cursor;
-
                 // Autocomplete
                 switch (event.data) {
                     case '{':
@@ -284,6 +280,8 @@
                         insertText(this, ']');
                         break;
                     case '\'':
+                        insertText(this, '\'');
+                        break;
                     case '"':
                         insertText(this, '"');
                         break;
@@ -522,6 +520,7 @@
                         } else {
                             delete assignment[g];
                         }
+                        fillEditor();
                         updateAssignmentsTable();
                     });
                 }
