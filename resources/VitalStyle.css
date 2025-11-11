@@ -112,7 +112,7 @@ details[open] > summary {
     padding-bottom: 2px;
     position: sticky;
     top: 0px;
-    z-index: 1;
+    z-index: 2;
 }
 
 h1 {
@@ -196,7 +196,13 @@ select {
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+}
+
+thead {
+    position: sticky;
+    top: 0px;
+    z-index: 1;
 }
 
 td,
@@ -213,9 +219,6 @@ th {
     border-color: var(--accent1);
     color: var(--accent1);
     font-size: 1.05em;
-    position: sticky;
-    top: 0px;
-    z-index: 1;
 }
 
 th:focus,

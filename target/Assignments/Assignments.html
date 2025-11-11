@@ -122,7 +122,7 @@
                 padding-bottom: 2px;
                 position: sticky;
                 top: 0px;
-                z-index: 1;
+                z-index: 2;
             }
             
             h1 {
@@ -206,7 +206,13 @@
             
             table {
                 width: 100%;
-                border-collapse: collapse;
+                border-collapse: separate;
+            }
+            
+            thead {
+                position: sticky;
+                top: 0px;
+                z-index: 1;
             }
             
             td,
@@ -223,9 +229,6 @@
                 border-color: var(--accent1);
                 color: var(--accent1);
                 font-size: 1.05em;
-                position: sticky;
-                top: 0px;
-                z-index: 1;
             }
             
             th:focus,
@@ -354,6 +357,10 @@
                 display: block;
             }
 
+            thead {
+                top: 32px;
+            }
+
             .equal-width-div {
                 display: flex;
                 flex-wrap: wrap;
@@ -373,10 +380,6 @@
                 padding: 2px;
                 min-width: fit-content;
                 max-width: 100%;
-            }
-
-            .table-head {
-                top: 32px;
             }
 
             .table-data {
@@ -412,6 +415,7 @@
             }
 
             #group-select, #subject-select {
+                font-weight: 600;
                 width: 100%;
             }
 
@@ -509,6 +513,15 @@
                     <option value='' id='subject-hint'>Subject</option>
                 </select>
             </div>
+
+            <!-- Group's students -->
+            <details open>
+                <summary id='students-summary'>Students list</summary>
+
+                <ol id='students-list'></ol>
+
+                <p id='student-name' style='display: none;'>Student</p>
+            </details>
 
             <!-- Completed assignments -->
             <details open>
@@ -1070,6 +1083,8 @@
             let groupSelect = document.getElementById('group-select');
             /** @type {HTMLSelectElement} */
             let subjectSelect = document.getElementById('subject-select');
+            /** @type {HTMLOListElement} */
+            let studentsList = document.getElementById('students-list');
             /** @type {HTMLTableSectionElement} */
             let completedTable = document.getElementById('completed-table');
             /** @type {HTMLTableSectionElement} */
@@ -1083,8 +1098,7 @@
 
             // Variables
             let info = {
-                /** @type {string[]} */
-                groups: [],
+                groups: {},
                 subjects: {}
             };
 
@@ -1132,26 +1146,26 @@
                 try {
                     let newInfo = JSON.parse(editor.value);
 
-                    if (!newInfo.groups) newInfo.groups = [];
+                    if (!newInfo.groups) newInfo.groups = {};
                     if (!newInfo.subjects) newInfo.subject = {};
 
                     info = newInfo;
                     fillEditor();
                     updateGroupSelect();
                     updateSubjectSelect();
-                    updateAssignmentsTable();
+                    updateTables();
                 } catch (error) {
                     alert(`Error while applying changes: ${error}`);
                 }
             });
 
             // Process menus
-            groupSelect.addEventListener('change', updateAssignmentsTable);
-            subjectSelect.addEventListener('change', updateAssignmentsTable);
+            groupSelect.addEventListener('change', updateTables);
+            subjectSelect.addEventListener('change', updateTables);
 
             // Process table buttons
             randomAssignments.addEventListener('click', function () {
-                updateAssignmentsTable();
+                updateTables();
 
                 const max = clamp(
                     +randomAssignmentsCount.min,
@@ -1168,7 +1182,7 @@
             });
 
             tableReset.addEventListener('click', function () {
-                updateAssignmentsTable();
+                updateTables();
             });
 
             /**
@@ -1208,7 +1222,7 @@
                         fillEditor();
                         updateGroupSelect();
                         updateSubjectSelect();
-                        updateAssignmentsTable();
+                        updateTables();
                     } catch (error) {
                         alert(`Error while reading assignments file: ${error}`);
                     }
@@ -1236,6 +1250,7 @@
 
             function generateInfoTemplate() {
                 const group = document.getElementById('group-hint').textContent.trim();
+                const student = document.getElementById('student-name').textContent.trim();
                 const subject = document.getElementById('subject-hint').textContent.trim();
                 const assignment = document.getElementById('th-assignment1').textContent.trim();
 
@@ -1244,12 +1259,14 @@
                     const g = `${group} ${i}`;
                     const s = `${subject} ${i}`;
 
-                    info.groups.push(g);
+                    /** @type {string[]} */
+                    info.groups[g] = [];
                     info.subjects[s] = {};
 
                     ['1', '2', '3'].forEach(j => {
                         const a = `${assignment} ${j}`;
 
+                        info.groups[g].push(`${student} ${j}`);
                         info.subjects[s][a] = {};
                         if (j === '3') return;
 
@@ -1276,7 +1293,7 @@
             function updateGroupSelect() {
                 while (groupSelect.hasChildNodes()) groupSelect.lastChild.remove();
 
-                info.groups.forEach(g => {
+                Object.keys(info.groups).forEach(g => {
                     let option = groupSelect.appendChild(
                         document.createElement('option')
                     );
@@ -1299,7 +1316,8 @@
                 }
             }
 
-            function updateAssignmentsTable() {
+            function updateTables() {
+                while (studentsList.hasChildNodes()) studentsList.lastChild.remove();
                 while (completedTable.hasChildNodes()) completedTable.lastChild.remove();
                 while (availableTable.hasChildNodes()) availableTable.lastChild.remove();
                 if (!groupSelect.value) return;
@@ -1311,6 +1329,19 @@
                 let completedCount = 0;
                 let availableCount = 0;
 
+                // Students list
+                /** @type {string[]} */
+                const list = info.groups[g];
+
+                list.forEach(s => {
+                    let item = studentsList.appendChild(
+                        document.createElement('li')
+                    );
+                    item.tabIndex = 0;
+                    item.textContent = s;
+                });
+
+                // Assignments
                 for (const a in info.subjects[s]) {
                     const assignment = info.subjects[s][a];
                     const table = (assignment[g]) ? completedTable : availableTable;
@@ -1346,7 +1377,7 @@
                             delete assignment[g];
                         }
                         fillEditor();
-                        updateAssignmentsTable();
+                        updateTables();
                     });
                 }
 
@@ -1486,6 +1517,18 @@
                             ]
                         },
                         {
+                            "id": "students-summary",
+                            "childNodesTexts": [
+                                "Students list"
+                            ]
+                        },
+                        {
+                            "id": "student-name",
+                            "childNodesTexts": [
+                                "Student"
+                            ]
+                        },
+                        {
                             "id": "completed-summary",
                             "childNodesTexts": [
                                 "Completed assignments"
@@ -1510,18 +1553,6 @@
                             ]
                         },
                         {
-                            "id": "table-reset",
-                            "childNodesTexts": [
-                                "Reset"
-                            ]
-                        },
-                        {
-                            "id": "random-assignments",
-                            "childNodesTexts": [
-                                "Randomise"
-                            ]
-                        },
-                        {
                             "id": "th-assignment2",
                             "childNodesTexts": [
                                 "Assignment"
@@ -1531,6 +1562,18 @@
                             "id": "th-date2",
                             "childNodesTexts": [
                                 "Date"
+                            ]
+                        },
+                        {
+                            "id": "table-reset",
+                            "childNodesTexts": [
+                                "Reset"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Randomise"
                             ]
                         },
                         {
@@ -1680,6 +1723,18 @@
                             ]
                         },
                         {
+                            "id": "students-summary",
+                            "childNodesTexts": [
+                                "Список учащихся"
+                            ]
+                        },
+                        {
+                            "id": "student-name",
+                            "childNodesTexts": [
+                                "Учащийся"
+                            ]
+                        },
+                        {
                             "id": "completed-summary",
                             "childNodesTexts": [
                                 "Выполненные задания"
@@ -1704,18 +1759,6 @@
                             ]
                         },
                         {
-                            "id": "table-reset",
-                            "childNodesTexts": [
-                                "Сброс"
-                            ]
-                        },
-                        {
-                            "id": "random-assignments",
-                            "childNodesTexts": [
-                                "Перемешать"
-                            ]
-                        },
-                        {
                             "id": "th-assignment2",
                             "childNodesTexts": [
                                 "Задание"
@@ -1725,6 +1768,18 @@
                             "id": "th-date2",
                             "childNodesTexts": [
                                 "Дата"
+                            ]
+                        },
+                        {
+                            "id": "table-reset",
+                            "childNodesTexts": [
+                                "Сброс"
+                            ]
+                        },
+                        {
+                            "id": "random-assignments",
+                            "childNodesTexts": [
+                                "Перемешать"
                             ]
                         },
                         {
