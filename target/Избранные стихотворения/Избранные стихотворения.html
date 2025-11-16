@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang='ru'>
+<html lang='en'>
     <head>
         <meta charset='utf-8' />
         <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <title>Транскриптор</title>
+        <title>Виталий Ульянов — Избранные стихотворения</title>
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         
 
@@ -357,28 +357,30 @@
             #author {
                 display: block;
             }
-</style>
+
+            .poem-text {
+              padding: 4px 16px;
+              margin-bottom: 8px;
+            }
+            
+            .poem-date {
+              border-top: 6px double var(--accent1);
+              margin-left: 16px;
+              padding: 4px 32px;
+              text-align: center;
+            }
+        </style>
     </head>
     <body>
-        <h1>Транскриптор</h1>
+        <h1 id='page-title'>Vitaly Ulyanov<br>Selected poems</h1>
 
         <!-- Settings -->
         <details id='settings'>
-            <summary>Настройки</summary>
+            <summary id='settings-summary'>Settings</summary>
         </details>
 
         <!-- Page main body -->
-
-        <div style='display: flex; flex-wrap: wrap; align-items: center;'>
-            <label for='text' style='margin-right: 4px;'>Введите текст:</label>
-            <input type='text' id='text' style='flex-grow: 1;'>
-        </div>
-
-        <ul id='transcription'></ul>
-
-        <div class='box' style='font-style: italic'>
-            Автор — Виталий Павлович Ульянов.
-        </div>
+        <div id='poems-div'></div>
 
         <script>
             /**
@@ -862,83 +864,270 @@
         </script>
         <script>
             // Elements
-            /** @type {HTMLInputElement} */
-            let text = document.getElementById('text');
-            /** @type {HTMLUListElement} */
-            let transcription = document.getElementById('transcription');
+            /** @type {HTMLDivElement} */
+            let poemsDiv = document.getElementById('poems-div');
+
+            // Types
             /**
-             * @typedef {Object} RuleSet
+             * @typedef Poem
              * @property {string} name
-             * @property {string[][]} map
-             * @property {string[][]} exceptions
+             * @property {string} text
+             * @property {string} date
             */
-            /** @type {RuleSet[]} */
-            let ruleSets = [
-                {
-                    name: 'ГОСТ 7.79-2000',
-                    map: [
-                        ['А', 'A'],
-                        ['Б', 'B'],
-                        ['В', 'V'],
-                        ['Г', 'G'],
-                        ['Д', 'D'],
-                        ['Е', 'E'],
-                        ['Ё', 'Yo'],
-                        ['Ж', 'Zh'],
-                        ['З', 'Z'],
-                        ['И', 'I'],
-                        ['Й', 'J'],
-                        ['К', 'K'],
-                        ['Л', 'L'],
-                        ['М', 'M'],
-                        ['Н', 'N'],
-                        ['О', 'O'],
-                        ['П', 'P'],
-                        ['Р', 'R'],
-                        ['С', 'S'],
-                        ['Т', 'T'],
-                        ['У', 'U'],
-                        ['Ф', 'F'],
-                        ['Х', 'X'],
-                        ['Ц', 'C'],
-                        ['Ч', 'Ch'],
-                        ['Ш', 'Sh'],
-                        ['Щ', 'Shh'],
-                        ['Ъ', '``'],
-                        ['Ы', 'Y`'],
-                        ['Ь', '`'],
-                        ['Э', 'E`'],
-                        ['Ю', 'Yu'],
-                        ['Я', 'Ya'],
-                    ]
-                }
+
+            // Variables
+            /** @type {Poem[]} */
+            let poemsList = [
+                {   // «Город»
+                    name: '«Город»',
+                    text: `Город, утро, шум машин,
+                        Душно, в воздухе бензин,
+                        Повсюду спешка, беготня
+                        И недовольство, толкотня,
+                        Уставшие глаза, зевота,
+                        Дела, учёба и работа,
+                        И душно, в воздухе бензин,
+                        Город, утро, шум машин.
+                        
+                        День — вот время для заботы,
+                        Горы непростой работы
+                        И часов неспешный бег,
+                        Тихий, как зимою снег,
+                        И гул порою за окном,
+                        А мысли всё же об одном:
+                        Что много непростой работы,
+                        День — вот время для заботы.
+                        
+                        Вечер и мельканье фонарей,
+                        Город весь в сиянии огней,
+                        Суета, усталость тут и там
+                        И люди отовсюду — по домам,
+                        Конец работ, конец трудов
+                        И силуэт родных домов,
+                        Наш город весь в сиянии огней,
+                        Вечер и мельканье фонарей.
+                        
+                        Ночь и в небе тишина,
+                        Редкий окон свет и полная луна,
+                        Пустые улицы, машин негромкий звук,
+                        Колёс метро спокойный стук,
+                        Повсюду сновиденья и мечтанья,
+                        И будущего утра ожиданье,
+                        И редкий свет окон, и полная луна,
+                        Ночь и в небе тишина…`,
+                    date: '13.10.2012'
+                },
+                {   // «Будь честным»
+                    name: '«Будь честным»',
+                    text: `Вот с ложью собираются
+                        Ленивые гонцы,
+                        Существовать пытаются
+                        Живые мертвецы,
+                        Над всеми возвышаются
+                        Учёные глупцы,
+                        И вмиг обогащаются
+                        Бесчестные купцы.
+                        
+                        Пред златом поклонение
+                        Ты должен победить,
+                        Ведь сердца обеднение
+                        Не можем мы простить,
+                        Ведь это преступление,
+                        Что можно всё купить,
+                        Ведь есть такое мнение,
+                        Что честным надо быть!`,
+                    date: '31.10.2012'
+                },
             ];
 
-            text.addEventListener('mouseenter', function () { this.select(); });
-            text.addEventListener('input', function () {
-                while (transcription.hasChildNodes()) transcription.lastChild.remove();
+            function fillPoems() {
+                poemsList.forEach(p => {
+                    let details = poemsDiv.appendChild(
+                        document.createElement('details')
+                    );
 
-                ruleSets.forEach(s => {
-                    let copy = text.value;
-                    s.map.forEach(c => {
-                        if (c.length === 2) {
-                            copy = copy
-                                .replace(new RegExp(c[0], 'g'), c[1])
-                                .replace(new RegExp(c[0].toLowerCase(), 'g'), c[1].toLowerCase());
-                        }
-                    });
+                    let name = details.appendChild(
+                        document.createElement('summary')
+                    );
+                    name.classList = 'poem-name';
+                    name.textContent = p.name;
 
-                    transcription.appendChild(
-                        document.createElement('li')
-                    ).appendChild(
+                    let text = details.appendChild(
+                        document.createElement('pre')
+                    );
+                    text.classList = 'poem-text';
+                    text.textContent = p.text.replace(/  /g, '');
+
+                    let date = details.appendChild(
                         document.createElement('b')
-                    ).innerText = s.name;
-
-                    transcription.appendChild(
-                        document.createElement('p')
-                    ).innerText = copy;
+                    );
+                    date.classList = 'poem-date';
+                    date.textContent = p.date;
                 });
-            });
+            }
+
+            fillPoems();
+
+            generateLanguagesList([
+                {
+                    name: 'English [Vitaly Ulyanov]',
+                    langTags: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Vitaly Ulyanov",
+                                "Selected poems"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Settings"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Font"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Type a font's name and press Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Background colour"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Text colour"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Accent colour 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Accent colour 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Load colours"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Save colours"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Export texts for translation"
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Fullscreen"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Русский [Виталий Ульянов]',
+                    langTags: ['ru', 'ru-RU'],
+                    elements: [
+                        {
+                            "id": "page-title",
+                            "childNodesTexts": [
+                                "Виталий Ульянов",
+                                "Избранные стихотворения"
+                            ]
+                        },
+                        {
+                            "id": "settings-summary",
+                            "childNodesTexts": [
+                                "Настройки"
+                            ]
+                        },
+                        {
+                            "id": "fontLabel",
+                            "childNodesTexts": [
+                                "Шрифт"
+                            ]
+                        },
+                        {
+                            "id": "fontInput",
+                            "childNodesTexts": [],
+                            "placeholder": "Введите название шрифта и нажмите Enter"
+                        },
+                        {
+                            "id": "primLabel",
+                            "childNodesTexts": [
+                                "Цвет фона"
+                            ]
+                        },
+                        {
+                            "id": "secLabel",
+                            "childNodesTexts": [
+                                "Цвет текста"
+                            ]
+                        },
+                        {
+                            "id": "acc1Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 1"
+                            ]
+                        },
+                        {
+                            "id": "acc2Label",
+                            "childNodesTexts": [
+                                "Акцентный цвет 2"
+                            ]
+                        },
+                        {
+                            "id": "loadLabel",
+                            "childNodesTexts": [
+                                "📁 Загрузить цвета"
+                            ]
+                        },
+                        {
+                            "id": "saveColoursButton",
+                            "childNodesTexts": [
+                                "💾 Сохранить цвета"
+                            ]
+                        },
+                        {
+                            "id": "exportLang",
+                            "childNodesTexts": [
+                                "🌐 Экспортировать тексты для перевода"
+                            ]
+                        },
+                        {
+                            "id": "fullscreenButton",
+                            "childNodesTexts": [
+                                "▲",
+                                "Полный экран"
+                            ]
+                        }
+                    ]
+                }
+            ]);
         </script>
     </body>
 </html>

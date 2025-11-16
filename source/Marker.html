@@ -136,19 +136,9 @@
                 margin-bottom: 0;
             }
 
-            #res-mark {
-                background-color: var(--accent2);
-            }
-
             #res-mark:focus,
             #res-mark:hover {
                 background-color: var(--secondary-colour);
-            }
-
-            #copy-mark-button {
-                border-radius: 0px 0px 0px 7px;
-                border-top-style: none;
-                margin-top: 0;
             }
 
             /* CSS classes */
@@ -383,24 +373,33 @@
 
         <!-- Results -->
         <table id='results-table'>
-            <th id='results-header' colspan='2' tabindex='0'>
-                Results
-            </th>
+            <thead>
+                <th id='results-header' colspan='2' tabindex='0'>
+                    Results
+                </th>
+            </thead>
 
-            <tr>
-                <td id='res-mistakes-label' tabindex='0'>Mistakes count</td>
-                <td id='res-mistakes' tabindex='0'>0</td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td id='res-mistakes-label' tabindex='0'>Mistakes count</td>
+                    <td id='res-mistakes' tabindex='0'>0</td>
+                </tr>
 
-            <tr>
-                <td id='res-weight-label' tabindex='0'>Mistakes weight</td>
-                <td id='res-weight' tabindex='0'>0</td>
-            </tr>
+                <tr>
+                    <td id='res-weight-label' tabindex='0'>Mistakes weight</td>
+                    <td id='res-weight' tabindex='0'>0</td>
+                </tr>
 
-            <tr>
-                <td id='res-mark-label' tabindex='0'>Mark</td>
-                <td id='res-mark' tabindex='0'>100 (A)</td>
-            </tr>
+                <tr>
+                    <td id='res-mult-label' tabindex='0'>Length multiplier</td>
+                    <td id='res-mult' tabindex='0'>0</td>
+                </tr>
+
+                <tr>
+                    <td id='res-mark-label' tabindex='0'>Mark</td>
+                    <td id='res-mark' tabindex='0'>100 (A)</td>
+                </tr>
+            </tbody>
         </table>
 
         <button id='copy-mark-button'>Copy mark</button>
@@ -435,6 +434,10 @@
             </ol>
 
             <span id='help-context'>*<b>Immediate context</b> = <i>everything before</i> the analysed sentence + <i>this sentence</i> + <i>one sentence after</i> it.</span>
+
+            <br>
+
+            <span id='help-multiplier'><b>Text length multiplier</b> = total number of characters in the original text / 1800.</span>
         </details>
 
         <!-- Author -->
@@ -479,6 +482,8 @@
             /** @type {HTMLTableDataCellElement} */
             let resultsMistakeWeight = document.getElementById('res-weight');
             /** @type {HTMLTableDataCellElement} */
+            let resultsLengthMultiplier = document.getElementById('res-mult');
+            /** @type {HTMLTableDataCellElement} */
             let resultsMark = document.getElementById('res-mark');
             /** @type {HTMLButtonElement} */
             let copyMark = document.getElementById('copy-mark-button');
@@ -515,6 +520,8 @@
              */
 
             // Variables
+            /** @type {number} */
+            let lengthMultiplier = 0;
             /** @type {number} */
             let studentIndex = 0;
             /** @type {number} */
@@ -588,6 +595,12 @@
                 updateStudent(studentIndex);
             });
 
+            sourceText.addEventListener('input', function (event) {
+                lengthMultiplier = sourceText.value.length / 1800;
+                resultsLengthMultiplier.textContent = lengthMultiplier.toFixed(2);
+                updateMistakes(studentIndex);
+            });
+
             work.addEventListener('select', function (event) {
                 let content = work.value.slice(
                     work.selectionStart, work.selectionEnd
@@ -626,6 +639,12 @@
                     document.getElementById('page-title').textContent
                 }\n${
                     document.getElementById('author').textContent
+                }`;
+
+                results += `${
+                    document.getElementById('res-mark-label').textContent
+                }: ${
+                    lengthMultiplier.toFixed(2)
                 }`;
 
                 works.forEach((w, i) => {
@@ -683,6 +702,8 @@
                         sourceText.value = file.source || '';
                         works = file.translations || [];
                         studentIndex = clamp(0, file.index || 0, works.length - 1);
+                        lengthMultiplier = sourceText.value.length / 1800;
+                        resultsLengthMultiplier.textContent = lengthMultiplier.toFixed(2);
                         updateStudent(studentIndex);
                     } catch (error) {
                         alert(`Error while reading works file: ${error}`);
@@ -735,6 +756,7 @@
                     work.readOnly = false;
                     resultsMistakeCount.textContent = 0;
                     resultsMistakeWeight.textContent = 0;
+                    resultsLengthMultiplier.textContent = 0;
                     resultsMark.textContent = '100 (A)';
                     currentMark = 100;
                     return;
@@ -894,7 +916,7 @@
                     }; -${weight.toFixed(2)}`;
                 });
 
-                mark = Math.round(clamp(0, 100 + totalWeight, 100));
+                mark = Math.round(clamp(0, 100 + totalWeight / lengthMultiplier, 100));
                 currentMark = mark;
 
                 if (mark > 94) letter = 'A';
@@ -1269,6 +1291,12 @@
                             ]
                         },
                         {
+                            "id": "res-mult-label",
+                            "childNodesTexts": [
+                                "Length multiplier"
+                            ]
+                        },
+                        {
                             "id": "res-mark-label",
                             "childNodesTexts": [
                                 "Mark"
@@ -1396,6 +1424,13 @@
                                 "+ ",
                                 "one sentence after ",
                                 "it."
+                            ]
+                        },
+                        {
+                            "id": "help-multiplier",
+                            "childNodesTexts": [
+                                "Text length multiplier",
+                                " = total number of characters in the original text / 1800."
                             ]
                         },
                         {
@@ -1710,6 +1745,12 @@
                             ]
                         },
                         {
+                            "id": "res-mult-label",
+                            "childNodesTexts": [
+                                "Множитель объёма"
+                            ]
+                        },
+                        {
                             "id": "res-mark-label",
                             "childNodesTexts": [
                                 "Оценка"
@@ -1837,6 +1878,13 @@
                                 "+ ",
                                 "одно предложение после ",
                                 "него."
+                            ]
+                        },
+                        {
+                            "id": "help-multiplier",
+                            "childNodesTexts": [
+                                "Множитель объёма текста",
+                                " = общее число знаков в исходном тексте / 1800."
                             ]
                         },
                         {

@@ -131,6 +131,7 @@
                 margin: 4px 0px 4px 0px;
                 padding: 8px 12px 4px 12px;
                 font-size: 1.7em;
+                text-align: center;
             }
             
             h2 {
@@ -1270,13 +1271,13 @@
                     document.querySelector('[name="mSubtype"]:checked').id
                 ) {
                     case 'deletion':
-                        subtype = 'опущение';
+                        subtype = 'отсутствие элемента';
                         break;
                     case 'modification':
-                        subtype = 'изменение';
+                        subtype = 'неверный элемент';
                         break;
                     case 'addition':
-                        subtype = 'добавление';
+                        subtype = 'лишний элемент';
                     default:
                         break;
                 }
