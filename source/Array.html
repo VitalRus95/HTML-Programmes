@@ -76,9 +76,8 @@
                 width: var(--cell-size);
                 cursor: cell;
                 transition:
-                    background-color 1.75s ease-in,
-                    color 0.5s ease-in,
-                    opacity 0.5s ease;
+                    all 0.5s ease-in,
+                    background-color 0.75s ease-in;
                 animation: cell-show 1s ease-in;
             }
 
@@ -95,15 +94,14 @@
                 cursor: default;
                 transition:
                     all 0.5s ease,
-                    color 1s ease;
+                    color 0.75s ease;
             }
 
             .cell-highlight {
+                border-color: var(--secondary-colour);
                 background-color: var(--accent1);
                 color: var(--accent2);
-                transition:
-                    background-color 1.5s ease-in,
-                    color 0.5s ease-in;
+                transition: all 0.5s ease-in;
             }
 
             .mistake {
@@ -579,6 +577,7 @@
             }
 
             function randomHighlight() {
+                if (document.hidden) return;
                 if (wordInput.value) return;
                 if (words.length < 2) return;
 
@@ -601,6 +600,7 @@
                 cell.textContent = text;
                 cell.classList.add('cell');
                 cell.addEventListener('keydown', /** @type {KeyboardEvent} */ function(event) {
+                    if (this.classList.contains('cell-hidden')) return;
                     if (event.key === ' ' || event.key === 'Enter') {
                         event.preventDefault();
                         wordInput.value += text;
@@ -608,6 +608,7 @@
                     }
                 });
                 cell.addEventListener('click', function (event) {
+                    if (this.classList.contains('cell-hidden')) return;
                     wordInput.value += text;
                     checkInput();
                 });
