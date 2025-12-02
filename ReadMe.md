@@ -5,11 +5,11 @@
 * Programmes list:
     - [Array (game)](target/Array)
     - [Crosswords (game)](target/Array)
-    - [English Grammar](<target/English Grammar>)
     - [English Reading](<target/English Reading>)
     - [Splitter (game)](<target/Splitter>)
     - [TexTwo (text editor)](target/TexTwo)
     - [Word Guesser (game)](target/WordGuesser)
+    - [Marker (translation assessing tool)](target/Marker)
 * Requirements: Any more or less modern web browser.
 * Installation: You can download the whole repository as a .zip archive to have full control over the programmes' files. The compiled programmes themselves are located in `target` folder. You can study the source codes and resource files in `source` and `resources` directories respectively.
 
@@ -19,7 +19,6 @@
 * Список программ:
     - [«Массив» (игра)](target/Array)
     - [Кроссворды (игра)](target/Array)
-    - [Английская грамматика](<target/English Grammar>)
     - [Английское чтение](<target/English Reading>)
     - [«Разделитель» (игра)](<target/Splitter>)
     - [TexTwo (текстовый редактор)](target/TexTwo)
