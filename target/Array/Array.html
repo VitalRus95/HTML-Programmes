@@ -410,6 +410,7 @@
 
             :root {
                 --cell-size: 2.1rem;
+                --grid-max-size: 32rem;
             }
 
             .cell {
@@ -487,16 +488,17 @@
                 padding: 2px;
             }
 
-            #grid-score-container {
+            #grid-mistakes-container {
                 display: flex;
                 position: sticky;
                 top: 0px;
                 z-index: 1;
+                border-radius: 7px;
                 opacity: 0.9;
                 margin: 0;
             }
 
-            #grid-score {
+            #grid-mistakes {
                 display: flex;
                 flex-grow: 1;
                 justify-content: center;
@@ -505,13 +507,14 @@
                 background-color: var(--accent2);
                 border: 2px outset var(--accent1);
                 border-radius: 0px 0px 0px 7px;
+                margin-top: 0px;
             }
 
-            #grid-score-label {
+            #grid-mistakes-label {
                 background-color: transparent;
             }
 
-            #grid-score-value {
+            #grid-mistakes-value {
                 background-color: transparent;
             }
 
@@ -519,16 +522,16 @@
                 border-radius: 0px 0px 7px 0px;
                 font-weight: 700;
                 min-width: 3em;
+                margin-top: 0px;
             }
 
             #grid-letters {
                 display: none;
-                justify-content: center;
+                align-self: center;
                 flex-wrap: wrap;
                 column-gap: 2px;
-                padding: 2px;
-                padding-inline: 5vw;
                 background-color: transparent;
+                max-width: var(--grid-max-size);
             }
 
             #grid-victory {
@@ -554,6 +557,7 @@
                 position: sticky;
                 bottom: 0px;
                 z-index: 1;
+                border-radius: 7px;
                 margin: 0;
                 height: 2em;
                 opacity: 0.9;
@@ -592,7 +596,7 @@
                 box-shadow: none;
             }
 
-            #letters-count-descr {
+            #letters-count-container {
                 background-color: var(--accent2);
                 border-left: 2px outset var(--accent1);
                 border-right: 2px inset var(--accent1);
@@ -692,11 +696,12 @@
             <span id='grid-header' tabindex='0'>...</span>
 
             <!-- Score -->
-            <div id='grid-score-container'>
-                <div id='grid-score' tabindex='0'>
-                    <span id='grid-score-label'>Score:</span>
-                    <span id='grid-score-value'>0%</span>
+            <div id='grid-mistakes-container'>
+                <div id='grid-mistakes' tabindex='0'>
+                    <span id='grid-mistakes-label'>Mistakes:</span>
+                    <span id='grid-mistakes-value'>0</span>
                 </div>
+
                 <button
                     id='undo-mistake'
                     class='tooltipParent'
@@ -765,7 +770,7 @@
             </div>
 
             <!-- Letters counter -->
-            <span id='letters-count-descr' tabindex='0'>
+            <span id='letters-count-container' tabindex='0'>
                 Letters count:
                 <span id='letters-count'></span>
             </span>
@@ -775,7 +780,7 @@
                 <span id='guessedWordsLabel' tabindex='0'>
                     Guessed words
                 </span>
-                <ul id='guessedList' tabindex='0'></ul>
+                <ul id='guessedList'></ul>
             </div>
         </div>
 
@@ -1265,6 +1270,13 @@
 
         </script>
         <script>
+            // Types
+            /**
+             * @typedef Word
+             * @property {string} word
+             * @property {HTMLDivElement[]} letters
+            */
+
             // Elements
             /** @type {HTMLInputElement} */
             let hideCells = document.getElementById('hideCells');
@@ -1273,17 +1285,21 @@
             /** @type {HTMLAnchorElement} */
             let saveWordsButton = document.getElementById('saveWordsButton');
             /** @type {HTMLTextAreaElement} */
-            let words = document.getElementById('words');
+            let wordsText = document.getElementById('words');
             /** @type {HTMLSpanElement} */
             let header = document.getElementById('grid-header');
             /** @type {HTMLDivElement} */
-            let scoreDiv = document.getElementById('grid-score');
+            let mistakesContainer = document.getElementById('grid-mistakes-container');
+            /** @type {HTMLDivElement} */
+            let mistakesDiv = document.getElementById('grid-mistakes');
             /** @type {HTMLSpanElement} */
-            let scoreSpan = document.getElementById('grid-score-value');
+            let mistakesSpan = document.getElementById('grid-mistakes-value');
             /** @type {HTMLButtonElement} */
             let undoMistake = document.getElementById('undo-mistake');
             /** @type {HTMLSpanElement} */
             let wordCount = document.getElementById('grid-words-count');
+            /** @type {HTMLSpanElement} */
+            let lettersContainer = document.getElementById('letters-count-container');
             /** @type {HTMLSpanElement} */
             let lettersCount = document.getElementById('letters-count');
             /** @type {HTMLDivElement} */
@@ -1295,7 +1311,7 @@
             /** @type {HTMLSpanElement} */
             let mistakes = document.getElementById('grid-win-mistakes');
             /** @type {HTMLDivElement} */
-            let gridInput = document.getElementById('grid-input');
+            let inputDiv = document.getElementById('grid-input');
             /** @type {HTMLInputElement} */
             let wordInput = document.getElementById('wordInput');
             /** @type {HTMLButtonElement} */
@@ -1303,23 +1319,13 @@
             /** @type {HTMLUListElement} */
             let guessedList = document.getElementById('guessedList');
 
-            // Constants
-            /** @type {number} */
-            const mistakeCost = 0.5;
-
             // Variables
+            /** @type {Word[]} */
+            let words = [];
             /** @type {string[]} */
             let wordsList = [];
-            /** @type {string[]} */
-            let wordsLeftOnGrid = [];
-            /** @type {string[]} */
-            let letters = [];
             /** @type {number} */
             let highlight;
-            /** @type {number} */
-            let score;
-            /** @type {number} */
-            let maxScore;
             /** @type {number} */
             let mistakesCount;
             /** @type {number} */
@@ -1334,16 +1340,17 @@
             });
 
             undoMistake.addEventListener('click', function (event) {
-                score += mistakeCost;
+                if (mistakesCount < 1) return;
                 mistakesCount --;
-                updateScore();
+                updateMistakesCounter();
                 this.disabled = true;
+                wordInput.focus();
             });
 
             async function loadWords() {
                 await loadWordsInput.files[0].text().then((content) => {
                     try {
-                        words.value = content;
+                        wordsText.value = content;
                         fillGrid();
                     } catch (error) {
                         alert(`Error while reading words file: ${error}`);
@@ -1352,139 +1359,126 @@
             }
 
             function saveWords() {
-                let data = encodeURIComponent(words.value);
+                let data = encodeURIComponent(wordsText.value);
                 saveWordsButton.download = 'Words.txt';
                 saveWordsButton.href = `data:text/plain;charset=utf-8,${data}`;
             }
 
             function fillGrid() {
-                if (!words.value) return;
+                if (!wordsText.value) return;
 
-                // Hide victory block
-                win.style.display = 'none';
-
-                // Try to remove highlight interval
-                if (highlight) clearInterval(highlight);
+                // Stop random cells highlighting
+                if (highlight) clearTimeout(highlight);
 
                 // Set the header
                 if (loadWordsInput.files[0]?.name) {
                     header.textContent = loadWordsInput.files[0].name.replace('.txt', '');
                 }
 
-                // Show the grid
-                grid.style.display = 'flex';
-
-                // Empty the guessed words list
+                // Empty the guessed words list & the grid
                 while (guessedList.hasChildNodes()) guessedList.lastChild.remove();
-
-                // Empty the letters array
-                letters = [];
-
-                // Fill the list of words
-                wordsList = words.value
-                    .toUpperCase()
-                    .trim()
-                    .split(/\s/);
-
-                // Create a string with all words from the list
-                let wordsString = words.value
-                    .toUpperCase()
-                    .trim()
-                    .replace(/\s/g, '');
-
-                // Set the initial value for the words & letters counters
-                wordCount.textContent = wordsList.length;
-                countLetters(wordsList);
-
-                // Reset score & stats
-                score = 0;
-                mistakesCount = 0;
-                maxScore = wordsList.length;
-                updateScore();
-
-                // Push random letters from the string to the letters array
-                let tempArray = Array.from(wordsString);
-                while (tempArray.length > 0) {
-                    let i = Math.floor(Math.random() * tempArray.length);
-                    letters.push(tempArray[i]);
-                    tempArray.splice(i, 1);
-                }
-
-                // Empty the grid
                 while (grid.hasChildNodes()) grid.lastChild.remove();
 
-                // Fill the grid with cells
-                letters.forEach((l, i) => {
-                    let cell = grid.appendChild(
-                        document.createElement('div')
-                    );
+                // Generate words array & create cells
+                words = [];
+                wordsList = wordsText.value.split(' ');
+                wordCount.textContent = wordsList.length;
 
-                    cell.style.animationDelay = `${
-                        (i / (letters.length - 1)) * 3
-                    }s`;
-                    cell.className = 'cell';
-                    cell.textContent = l;
-                    cell.tabIndex = 2;
+                // Grab a random word, add its letters to the grid
+                while (wordsList.length > 0) {
+                    let i = getRandomIndexOfArray(wordsList);
+                    insertWord(wordsList[i]);
+                    wordsList.splice(i, 1);
+                }
 
-                    cell.addEventListener('click', function (event) {
-                        if (this.classList.contains('cell-hidden')) return;
-                        wordInput.value += this.textContent;
-                        checkInput();
-                    });
-                });
+                // Set up initial stuff
+                mistakesCount = 0;
+                wordInput.value = '';
+                timerStart = Date.now();
+                highlight = setInterval(randomHighlight, 5000);
 
-                // Block input for the duration of fade in animation
-                wordInput.readOnly = true;
-                setTimeout(() => {
-                    wordInput.readOnly = false;
-                    wordInput.focus();
-                    timerStart = Date.now();
-                }, 3100);
+                win.style.display = 'none';
+                grid.style.display = 'flex';
+                inputDiv.style.display = 'flex';
+                lettersContainer.style.display = 'block';
+                mistakesContainer.style.display = 'flex';
+                
+                wordInput.focus();
+                countLetters(words);
+                updateMistakesCounter();
+            }
 
-                // Create highlight interval
-                highlight = setInterval(() => {
-                    for (let c of grid.children) {
-                        c.classList.remove('cell-highlight');
-                    }
+            function randomHighlight() {
+                if (wordInput.value) return;
+                if (words.length < 2) return;
 
+                let i = getRandomIndexOfArray(words);
+
+                words[i].letters.forEach(l => {
+                    l.classList.add('cell-highlight');
                     setTimeout(() => {
-                        if (wordsList.length < 2 || wordInput.value) return;
-
-                        let word = wordsList[Math.floor(Math.random() * wordsList.length)];
-
-                        for (let l of word) {
-                            /** @type {HTMLDivElement[]} */
-                            let cells = [...grid.children].filter(
-                                (c) => (
-                                    c.textContent === l
-                                    && !c.classList.contains('cell-highlight')
-                                )
-                            );
-
-                            try {
-                                let i = Math.floor(Math.random() * cells.length);
-                                cells[i].classList.add('cell-highlight');
-                            } catch (error) {
-                                alert(`${error}:
-                                    word[letter]: ${word}[${l}]
-                                    cells: ${cells}
-                                `);
-                            }
-                        }
-                    }, 1900);
-                }, 6500);
+                        l.classList.remove('cell-highlight');
+                    }, 2500);
+                });
             }
 
             /**
-             * @param {HTMLElement} id
+             * @param {HTMLDivElement} cell
+             * @param {string} text
+            */
+            function setUpCell(cell, text) {
+                cell.tabIndex = 1;
+                cell.textContent = text;
+                cell.classList.add('cell');
+                cell.addEventListener('keydown', /** @type {KeyboardEvent} */ function(event) {
+                    if (event.key === ' ' || event.key === 'Enter') {
+                        event.preventDefault();
+                        wordInput.value += text;
+                        checkInput();
+                    }
+                });
+                cell.addEventListener('click', function (event) {
+                    wordInput.value += text;
+                    checkInput();
+                });
+            }
+
+            /**
+             * @param {string} word
+            */
+            function insertWord(word) {
+                /** @type {string[]} */
+                let lettersOriginal = word.split('');
+                /** @type {string[]} */
+                let lettersFinal = [];
+
+                while (lettersOriginal.length > 0) {
+                    let i = getRandomIndexOfArray(lettersOriginal);
+
+                    let cell = grid.appendChild(
+                        document.createElement('div')
+                    );
+                    setUpCell(cell, lettersOriginal[i].toUpperCase());
+                    lettersOriginal.splice(i, 1);
+                    lettersFinal.push(cell);
+                }
+
+                words.push({
+                    word: word.toUpperCase(),
+                    letters: lettersFinal
+                });
+            }
+
+            /**
+             * @param {HTMLElement} cell
              * @param {boolean} state
             */
-            function setCellVisibility(id, state) {
-                if (id) {
-                    id.tabIndex = state ? 0 : -1;
+            function setCellVisibility(cell, state) {
+                if (cell) {
+                    cell.tabIndex = state ? 0 : -1;
 
                     // Hide completely or restore visibility
-                    id.style.visibility = hideCells.checked
+                    cell.style.visibility = hideCells.checked
                         ? state
                             ? 'visible'
                             : 'hidden'
@@ -1492,9 +1486,9 @@
 
                     // Make transparent
                     if (state || hideCells.checked) {
-                        id.classList.remove('cell-hidden');
+                        cell.classList.remove('cell-hidden');
                     } else {
-                        id.classList.add('cell-hidden');
+                        cell.classList.add('cell-hidden');
                     }
                 }
             }
@@ -1507,82 +1501,66 @@
             }
 
             /**
-             * @param {string[]} words
+             * @param {Word[]} wordSet
             */
-            function countLetters(words) {
+            function countLetters(wordSet) {
+                wordCount.textContent = wordSet.length;
                 lettersCount.textContent = '';
-                words.forEach((w, i) => {
-                    lettersCount.textContent += `${w.length}${
-                        i < words.length - 1 ? ', ' : '.'
+                wordSet.forEach((w, i) => {
+                    lettersCount.textContent += `${w.word.length}${
+                        i < wordSet.length - 1 ? ', ' : '.'
                     }`;
                 });
             }
 
-            function updateScore() {
-                let displayedScore = score / maxScore * 100;
-                displayedScore = displayedScore > 100
-                    ? 100
-                    : displayedScore < 0
-                        ? 0
-                        : displayedScore;
-                scoreSpan.textContent = `${displayedScore.toFixed(0)}%`;
+            function updateMistakesCounter() {
+                mistakesSpan.textContent = `${mistakesCount}`;
             }
 
             function checkInput() {
                 // Return if there are no words
-                if (wordsList.length === 0) return;
+                if (words.length === 0) return;
 
                 // Empty the array of words left on the grid
                 wordsLeftOnGrid = [];
 
                 // Reset cells' visibility if there's no input
                 if (wordInput.value === '') {
-                    wordCount.textContent = wordsList.length;
-                    countLetters(wordsList);
                     resetCellsVisibility();
+                    countLetters(words);
                     return;
                 }
 
                 // Convert the input's value to upper case
                 wordInput.value = wordInput.value.toUpperCase();
 
-                // Remove letters when full word is typed
-                for (let i = 0; i < wordsList.length; i++) {
-                    if (wordsList[i] === wordInput.value) {
-                        for (let l of wordsList[i]) {
-                            for (let c of grid.children) {
-                                if (c.textContent === l) {
-                                    c.remove();
-                                    break;
-                                }
-                            }
-                        }
+                for (let i = 0; i < words.length; i++) {
+                    // Full word is typed -> remove its letters
+                    if (words[i].word === wordInput.value) {
+                        words[i].letters.forEach(l => l.remove());
 
                         // Append guessed words list
                         let li = document.createElement('li');
-                        li.textContent = wordsList[i];
-                        li.tabIndex = 1;
+                        li.textContent = words[i].word;
+                        li.tabIndex = 0;
                         guessedList.insertBefore(li, guessedList.firstChild);
 
                         // Remove the word from the list and empty the input
-                        wordsList.splice(i, 1);
+                        words.splice(i, 1);
                         wordInput.value = '';
 
-                        // Add and update score
-                        score ++;
-                        updateScore();
-
-                        scoreDiv.classList.add('correct');
+                        // Animate the input field
+                        inputDiv.classList.add('correct');
                         wordInput.readOnly = true;
                         setTimeout(() => {
-                            scoreDiv.classList.remove('correct');
+                            inputDiv.classList.remove('correct');
                             wordInput.readOnly = false;
                         }, 800);
 
-                        // Show victory text if all words are removed
+                        // All words are removed -> victory
                         if (!grid.hasChildNodes()) {
                             win.style.display = 'flex';
-                            grid.style.display = 'none';
+                            win.focus();
                             timerEnd = Date.now();
 
                             let date = new Date(timerEnd - timerStart);
@@ -1594,52 +1572,50 @@
                             }:${
                                 sec > 9 ? sec : `0${sec}`
                             }`;
+
+                            // Update mistakes count in results table
                             mistakes.textContent = mistakesCount;
+
+                            // Hide unnecessary gameplay elements
+                            mistakesContainer.style.display = 'none';
+                            lettersContainer.style.display = 'none';
+                            inputDiv.style.display = 'none';
+                            grid.style.display = 'none';
                         } else {
                             resetCellsVisibility();
+                            countLetters(words);
                         }
 
-                        // Update stats
-                        wordCount.textContent = wordsList.length;
-                        countLetters(wordsList);
-                        
+                        // Update stats and quit
+                        countLetters(words);
                         return;
                     }
                 }
+                // No full words guessed -> leave only words starting with the input
+                words.forEach(w => {
+                    w.letters.forEach(l => {
+                        setCellVisibility(l, w.word.startsWith(wordInput.value));
+                    });
+                });
 
-                // If only a part of a word is typed, continue
-                /** @type {string[]} */
-                let neighbouringLetters = [];
+                // Get the list of words left on the grid
+                let wordsLeft = words.filter(w => w.word.startsWith(wordInput.value));
 
-                // Take the input, find matches with words, determine nearby letters
-                for (let w of wordsList) {
-                    if (w.startsWith(wordInput.value)) {
-                        wordsLeftOnGrid.push(w);
-
-                        for (let l of w) {
-                            if (!neighbouringLetters.includes(l)) {
-                                neighbouringLetters.push(l);
-                            }
-                        }
-                    }
-                }
-
-                // No words left -> mistake
-                if (wordsLeftOnGrid.length === 0) {
-                    if (wordInput.value.length > 3 && score >= mistakeCost) {
-                        scoreDiv.classList.add('mistake');
+                // No words left & input is more than 3 letters -> mistake
+                if (wordsLeft.length === 0) {
+                    if (wordInput.value.length > 3) {
+                        mistakesContainer.classList.add('mistake');
                         undoMistake.disabled = false;
-                        score -= mistakeCost;
                         mistakesCount ++;
-                        updateScore();
+                        updateMistakesCounter();
                     }
 
                     wordInput.readOnly = true;
-                    gridInput.classList.add('mistake');
+                    inputDiv.classList.add('mistake');
 
                     setTimeout(() => {
-                        scoreDiv.classList.remove('mistake');
-                        gridInput.classList.remove('mistake');
+                        mistakesContainer.classList.remove('mistake');
+                        inputDiv.classList.remove('mistake');
                         wordInput.value = wordInput.value.substring(
                             0, wordInput.value.length - 1
                         );
@@ -1647,21 +1623,15 @@
                         checkInput();
                     }, 600);
                 } else {
-                    // Update stats
-                    wordCount.textContent = `${wordsLeftOnGrid.length}/${wordsList.length}`;
-                    countLetters(wordsLeftOnGrid);
+                    countLetters(wordsLeft);
                 }
+            }
 
-                // Manage cells' visibility
-                for (let c of grid.children) {
-                    c.classList.remove('cell-highlight');
-
-                    if (!neighbouringLetters.includes(c.textContent)) {
-                        setCellVisibility(c, false);
-                    } else {
-                        setCellVisibility(c, true);
-                    }
-                }
+            /**
+             * @param {any[]} array
+            */
+            function getRandomIndexOfArray(array) {
+                return Math.floor(Math.random() * array.length);
             }
         
             generateLanguagesList([
@@ -1772,9 +1742,9 @@
                             ]
                         },
                         {
-                            "id": "grid-score-label",
+                            "id": "grid-mistakes-label",
                             "childNodesTexts": [
-                                "Score:"
+                                "Mistakes:"
                             ]
                         },
                         {
@@ -1809,7 +1779,7 @@
                             ]
                         },
                         {
-                            "id": "letters-count-descr",
+                            "id": "letters-count-container",
                             "childNodesTexts": [
                                 "Letters count: "
                             ]
@@ -1954,9 +1924,9 @@
                             ]
                         },
                         {
-                            "id": "grid-score-label",
+                            "id": "grid-mistakes-label",
                             "childNodesTexts": [
-                                "Счёт:"
+                                "Ошибок:"
                             ]
                         },
                         {
@@ -1991,7 +1961,7 @@
                             ]
                         },
                         {
-                            "id": "letters-count-descr",
+                            "id": "letters-count-container",
                             "childNodesTexts": [
                                 "Число букв: "
                             ]
