@@ -260,12 +260,14 @@
             });
 
             grid.addEventListener('keydown', function (event) {
+                event.preventDefault();
+                
                 switch (event.key) {
                     case 'ArrowLeft':
                         document?.activeElement?.previousElementSibling?.focus();
                         break;
                     case 'ArrowRight':
-                    document?.activeElement?.nextElementSibling?.focus();
+                        document?.activeElement?.nextElementSibling?.focus();
                         break;
                     case 'Home':
                         grid?.firstChild?.focus();

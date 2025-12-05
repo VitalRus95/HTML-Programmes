@@ -76,8 +76,8 @@
                 width: var(--cell-size);
                 cursor: cell;
                 transition:
-                    all 0.5s ease-in,
-                    background-color 0.75s ease-in;
+                    all 0.4s ease-in,
+                    background-color 0.35s ease-in;
                 animation: cell-show 1s ease-in;
             }
 
@@ -102,6 +102,14 @@
                 background-color: var(--accent1);
                 color: var(--accent2);
                 transition: all 0.5s ease-in;
+            }
+
+            .cell-typed {
+                border-color: var(--accent2);
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+                scale: 0.95;
+                transition: all 0.3s ease-in;
             }
 
             .mistake {
@@ -427,7 +435,7 @@
                 <span id='guessedWordsLabel' tabindex='0'>
                     Guessed words
                 </span>
-                <ul id='guessedList'></ul>
+                <ol id='guessedList'></ol>
             </div>
         </div>
 
@@ -484,7 +492,7 @@
             let wordInput = document.getElementById('wordInput');
             /** @type {HTMLButtonElement} */
             let backspace = document.getElementById('backspace');
-            /** @type {HTMLUListElement} */
+            /** @type {HTMLOListElement} */
             let guessedList = document.getElementById('guessedList');
 
             // Variables
@@ -601,16 +609,36 @@
                 cell.classList.add('cell');
                 cell.addEventListener('keydown', /** @type {KeyboardEvent} */ function(event) {
                     if (this.classList.contains('cell-hidden')) return;
-                    if (event.key === ' ' || event.key === 'Enter') {
-                        event.preventDefault();
-                        wordInput.value += text;
-                        checkInput();
+                    event.preventDefault();
+                    
+                    switch (event.key) {
+                        case 'Enter':
+                        case ' ':
+                            event.preventDefault();
+                            wordInput.value += text;
+                            checkInput();
+                            break;
+                        case 'ArrowLeft':
+                            let previous = document?.activeElement?.previousElementSibling;
+                            if (previous && !previous.classList.contains('cell-hidden')) {
+                                previous.focus();
+                            }
+                            break;
+                        case 'ArrowRight':
+                            let next = document?.activeElement?.nextElementSibling;
+                            if (next && !next.classList.contains('cell-hidden')) {
+                                next.focus();
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 });
                 cell.addEventListener('click', function (event) {
                     if (this.classList.contains('cell-hidden')) return;
                     wordInput.value += text;
                     checkInput();
+                    this.blur();
                 });
             }
 
@@ -646,6 +674,7 @@
             */
             function setCellVisibility(cell, state) {
                 if (cell) {
+                    cell.classList.remove('cell-highlight', 'cell-typed');
                     cell.tabIndex = state ? 0 : -1;
 
                     // Hide completely or restore visibility
@@ -762,15 +791,16 @@
                         return;
                     }
                 }
+
+                // Get the list of words left on the grid
+                let wordsLeft = words.filter(w => w.word.startsWith(wordInput.value));
+
                 // No full words guessed -> leave only words starting with the input
                 words.forEach(w => {
                     w.letters.forEach(l => {
                         setCellVisibility(l, w.word.startsWith(wordInput.value));
                     });
                 });
-
-                // Get the list of words left on the grid
-                let wordsLeft = words.filter(w => w.word.startsWith(wordInput.value));
 
                 // No words left & input is more than 3 letters -> mistake
                 if (wordsLeft.length === 0) {
@@ -795,6 +825,20 @@
                     }, 600);
                 } else {
                     countLetters(wordsLeft);
+
+                    // Highlight already typed letters
+                    if (wordsLeft.length === 1) {
+                        for (let inputLetter of wordInput.value) {
+                            for (let wordLetter of wordsLeft[0].letters) {
+                                if (wordLetter.textContent === inputLetter
+                                    && !wordLetter.classList.contains('cell-typed')
+                                ) {
+                                    wordLetter.classList.add('cell-typed');
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
