@@ -83,12 +83,19 @@
 
             .cell:focus,
             .cell:hover {
+                outline: 3px outset var(--secondary-colour);
                 background-color: var(--accent2);
                 color: var(--secondary-colour);
                 transition: background-color 0s ease-out;
             }
 
+            .cell-first {
+                background-color: var(--secondary-colour);
+                color: var(--primary-colour);
+            }
+
             .cell-hidden {
+                background-color: var(--primary-colour);
                 color: var(--primary-colour);
                 opacity: 0.2;
                 cursor: default;
@@ -110,6 +117,14 @@
                 color: var(--accent2);
                 scale: 0.95;
                 transition: all 0.3s ease-in;
+            }
+
+            .cell-typed:focus,
+            .cell-typed:hover {
+                outline: 3px outset var(--accent1);
+                background-color: var(--secondary-colour);
+                color: var(--accent2);
+                scale: 1;
             }
 
             .mistake {
@@ -262,6 +277,7 @@
 
             #letters-count {
                 text-shadow: 1px 1px var(--primary-colour);
+                margin-left: 4px;
             }
 
             #guessedWordsLabel {
@@ -283,13 +299,6 @@
         <!-- Settings -->
         <details id='settings'>
             <summary id='settings-summary'>Settings</summary>
-
-            <div style='display: flex; align-items: baseline;'>
-                <input type='checkbox' id='hideCells'>
-                <label for='hideCells' id='hideCells-label'>Hide inactive cells completely</label>
-            </div>
-
-            <hr>
         </details>
 
         <!-- Words list textarea -->
@@ -439,6 +448,20 @@
             </div>
         </div>
 
+        <!-- Rules -->
+        <details>
+            <summary id='rules-summary'>How to play?</summary>
+            <ol>
+                <li id='rules-1'>Load a list of words or type them manually into the text field in ‘Words (answers)’ section.</li>
+                <li id='rules-2'>Press ‘Start’ and clear the grid by guessing words scattered on it:</li>
+                <ul id='rules-3'>
+                    <li>You can wait for random words to be highlighted on the grid, with their first letters getting a different colour.</li>
+                    <li>To make a guess, either type it in the text field below the grid or click a letter on it.</li>
+                    <li>Mistakes counter above the grid only goes up when at least three letters have been guessed correctly.</li>
+                </ul>
+            </ol>
+        </details>
+
         <p id='author' class='box' style='font-style: italic'>
             Made by Vitaly Pavlovich Ulyanov.
         </p>
@@ -454,8 +477,6 @@
             */
 
             // Elements
-            /** @type {HTMLInputElement} */
-            let hideCells = document.getElementById('hideCells');
             /** @type {HTMLInputElement} */
             let loadWordsInput = document.getElementById('loadWordsInput');
             /** @type {HTMLAnchorElement} */
@@ -589,14 +610,23 @@
                 if (wordInput.value) return;
                 if (words.length < 2) return;
 
+                /** @type {boolean} */
+                let firstLetterFound = false;
                 let i = getRandomIndexOfArray(words);
 
-                words[i].letters.forEach(l => {
-                    l.classList.add('cell-highlight');
-                    setTimeout(() => {
-                        l.classList.remove('cell-highlight');
-                    }, 2500);
-                });
+                for (const l of words[i].letters) {
+                    if (firstLetterFound || l.textContent !== words[i].word[0]) {
+                        // Usual highlight
+                        l.classList.add('cell-highlight');
+                        setTimeout(() => {
+                            l.classList.remove('cell-highlight');
+                        }, 2500);
+                    } else {
+                        // Special permanent highlight for first letters
+                        l.classList.add('cell-first');
+                        firstLetterFound = true;
+                    }
+                }
             }
 
             /**
@@ -646,9 +676,11 @@
              * @param {string} word
             */
             function insertWord(word) {
+                word = word.toUpperCase();
+
                 /** @type {string[]} */
                 let lettersOriginal = word.split('');
-                /** @type {string[]} */
+                /** @type {HTMLDivElement[]} */
                 let lettersFinal = [];
 
                 while (lettersOriginal.length > 0) {
@@ -657,13 +689,13 @@
                     let cell = grid.appendChild(
                         document.createElement('div')
                     );
-                    setUpCell(cell, lettersOriginal[i].toUpperCase());
+                    setUpCell(cell, lettersOriginal[i]);
                     lettersOriginal.splice(i, 1);
                     lettersFinal.push(cell);
                 }
 
                 words.push({
-                    word: word.toUpperCase(),
+                    word: word,
                     letters: lettersFinal
                 });
             }
@@ -677,15 +709,8 @@
                     cell.classList.remove('cell-highlight', 'cell-typed');
                     cell.tabIndex = state ? 0 : -1;
 
-                    // Hide completely or restore visibility
-                    cell.style.visibility = hideCells.checked
-                        ? state
-                            ? 'visible'
-                            : 'hidden'
-                        : 'visible';
-
                     // Make transparent
-                    if (state || hideCells.checked) {
+                    if (state) {
                         cell.classList.remove('cell-hidden');
                     } else {
                         cell.classList.add('cell-hidden');
@@ -867,12 +892,6 @@
                             ]
                         },
                         {
-                            "id": "hideCells-label",
-                            "childNodesTexts": [
-                                "Hide inactive cells completely"
-                            ]
-                        },
-                        {
                             "id": "fontLabel",
                             "childNodesTexts": [
                                 "Font"
@@ -994,12 +1013,6 @@
                             ]
                         },
                         {
-                            "id": "letters-count-container",
-                            "childNodesTexts": [
-                                "Letters count: "
-                            ]
-                        },
-                        {
                             "id": "wordInput",
                             "childNodesTexts": [],
                             "placeholder": "Type your guess"
@@ -1012,9 +1025,41 @@
                             ]
                         },
                         {
+                            "id": "letters-count-container",
+                            "childNodesTexts": [
+                                "Letters count:"
+                            ]
+                        },
+                        {
                             "id": "guessedWordsLabel",
                             "childNodesTexts": [
                                 "Guessed words"
+                            ]
+                        },
+                        {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "How to play?"
+                            ]
+                        },
+                        {
+                            "id": "rules-1",
+                            "childNodesTexts": [
+                                "Load a list of words or type them manually into the text field in ‘Words (answers)’ section."
+                            ]
+                        },
+                        {
+                            "id": "rules-2",
+                            "childNodesTexts": [
+                                "Press ‘Start’ and clear the grid by guessing words scattered on it:"
+                            ]
+                        },
+                        {
+                            "id": "rules-3",
+                            "childNodesTexts": [
+                                "You can wait for random words to be highlighted on the grid, with their first letters getting a different colour.",
+                                "To make a guess, either type it in the text field below the grid or click a letter on it.",
+                                "Mistakes counter above the grid only goes up when at least three letters have been guessed correctly."
                             ]
                         },
                         {
@@ -1046,12 +1091,6 @@
                             "id": "settings-summary",
                             "childNodesTexts": [
                                 "Настройки"
-                            ]
-                        },
-                        {
-                            "id": "hideCells-label",
-                            "childNodesTexts": [
-                                "Полностью скрывать неактивные клетки"
                             ]
                         },
                         {
@@ -1176,12 +1215,6 @@
                             ]
                         },
                         {
-                            "id": "letters-count-container",
-                            "childNodesTexts": [
-                                "Число букв: "
-                            ]
-                        },
-                        {
                             "id": "wordInput",
                             "childNodesTexts": [],
                             "placeholder": "Введите догадку"
@@ -1194,9 +1227,41 @@
                             ]
                         },
                         {
+                            "id": "letters-count-container",
+                            "childNodesTexts": [
+                                "Число букв:"
+                            ]
+                        },
+                        {
                             "id": "guessedWordsLabel",
                             "childNodesTexts": [
                                 "Отгаданные слова"
+                            ]
+                        },
+                        {
+                            "id": "rules-summary",
+                            "childNodesTexts": [
+                                "Как играть?"
+                            ]
+                        },
+                        {
+                            "id": "rules-1",
+                            "childNodesTexts": [
+                                "Загрузите список слов или введите их вручную в текстовое поле в разделе «Слова (ответы)»."
+                            ]
+                        },
+                        {
+                            "id": "rules-2",
+                            "childNodesTexts": [
+                                "Нажмите «Начать» и очистите сетку, отгадывая разбросанные по ней слова:"
+                            ]
+                        },
+                        {
+                            "id": "rules-3",
+                            "childNodesTexts": [
+                                "Вы можете подождать, когда подсветится случайное слово, а его первая буква изменит цвет.",
+                                "Для отгадывания введите догадку в поле под сеткой или щёлкните по букве на ней.",
+                                "Счётчик ошибок над сеткой увеличивается, только если отгадано не меньше трёх букв."
                             ]
                         },
                         {
