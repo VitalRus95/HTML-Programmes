@@ -642,8 +642,8 @@
                     document.getElementById('author').textContent
                 }`;
 
-                results += `${
-                    document.getElementById('res-mark-label').textContent
+                results += `\n\n${
+                    document.getElementById('res-mult-label').textContent
                 }: ${
                     lengthMultiplier.toFixed(2)
                 }`;
@@ -784,19 +784,19 @@
 
                     switch (m.type) {
                         case TYPE_GRAMMAR:
-                            weight = 4.25;
+                            weight = 5;
                             typeText = document.getElementById(
                                 'type-gr'
                             ).outerText.toLowerCase();
                             break;
                         case TYPE_VOCABULARY:
-                            weight = 3.5;
+                            weight = 4;
                             typeText = document.getElementById(
                                 'type-voc'
                             ).outerText.toLowerCase();
                             break;
                         case TYPE_ORTHOGRAPHY:
-                            weight = 3.25;
+                            weight = 3.5;
                             typeText = document.getElementById(
                                 'type-orth'
                             ).outerText.toLowerCase();
@@ -808,7 +808,7 @@
                             ).outerText.toLowerCase();
                             break;
                         case TYPE_COMPLEX:
-                            weight = 7;
+                            weight = 8;
                             typeText = document.getElementById(
                                 'type-comp'
                             ).outerText.toLowerCase();
