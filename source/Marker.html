@@ -438,7 +438,7 @@
 
             <br>
 
-            <span id='help-multiplier'><b>Text length multiplier</b> = total number of characters in the original text / 1800.</span>
+            <span id='help-multiplier'><b>Text length multiplier</b> = 1800 / total number of characters in the original text.</span>
         </details>
 
         <!-- Author -->
@@ -597,7 +597,7 @@
             });
 
             sourceText.addEventListener('input', function (event) {
-                lengthMultiplier = sourceText.value.length / 1800;
+                lengthMultiplier = 1800 / (sourceText.value.length || 1800);
                 resultsLengthMultiplier.textContent = lengthMultiplier.toFixed(2);
                 updateMistakes(studentIndex);
             });
@@ -703,7 +703,7 @@
                         sourceText.value = file.source || '';
                         works = file.translations || [];
                         studentIndex = clamp(0, file.index || 0, works.length - 1);
-                        lengthMultiplier = sourceText.value.length / 1800;
+                        lengthMultiplier = 1800 / (sourceText.value.length || 1800);
                         resultsLengthMultiplier.textContent = lengthMultiplier.toFixed(2);
                         updateStudent(studentIndex);
                     } catch (error) {
@@ -916,7 +916,7 @@
                     }; -${weight.toFixed(2)}`;
                 });
 
-                mark = Math.round(clamp(0, 100 + totalWeight / lengthMultiplier, 100));
+                mark = Math.round(clamp(0, 100 + totalWeight * lengthMultiplier, 100));
                 currentMark = mark;
 
                 if (mark > 94) letter = 'A';
@@ -1430,7 +1430,7 @@
                             "id": "help-multiplier",
                             "childNodesTexts": [
                                 "Text length multiplier",
-                                " = total number of characters in the original text / 1800."
+                                " = 1800 / total number of characters in the original text."
                             ]
                         },
                         {
@@ -1884,7 +1884,7 @@
                             "id": "help-multiplier",
                             "childNodesTexts": [
                                 "Множитель объёма текста",
-                                " = общее число знаков в исходном тексте / 1800."
+                                " = 1800 / общее число знаков в исходном тексте."
                             ]
                         },
                         {
