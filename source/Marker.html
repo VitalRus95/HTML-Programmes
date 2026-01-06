@@ -613,6 +613,10 @@
 
                 this.value = `${before}${pasted}${after}`;
                 this.setSelectionRange(start, start + pasted.length);
+
+                lengthMultiplier = 1800 / (sourceText.value.length || 1800);
+                resultsLengthMultiplier.textContent = lengthMultiplier.toFixed(2);
+                updateMistakes(studentIndex);
             });
 
             work.addEventListener('select', function (event) {
@@ -640,6 +644,8 @@
 
                 this.value = `${before}${pasted}${after}`;
                 this.setSelectionRange(start, start + pasted.length);
+                
+                works[studentIndex].text = this.value;
             });
 
             studentName.addEventListener('input', function (event) {
