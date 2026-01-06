@@ -1432,6 +1432,19 @@
                 updateMistakes(studentIndex);
             });
 
+            sourceText.addEventListener('paste', function(event) {
+                event.preventDefault();
+                let start = this.selectionStart;
+                let end = this.selectionEnd;
+                let pasted = event.clipboardData.getData('text').replace(/\r?\n/g, '\r\r').trim();
+
+                let before = this.value.substring(0, start);
+                let after = this.value.substring(end);
+
+                this.value = `${before}${pasted}${after}`;
+                this.setSelectionRange(start, start + pasted.length);
+            });
+
             work.addEventListener('select', function (event) {
                 let content = work.value.slice(
                     work.selectionStart, work.selectionEnd
@@ -1444,6 +1457,19 @@
 
             work.addEventListener('input', function (event) {
                 works[studentIndex].text = this.value;
+            });
+
+            work.addEventListener('paste', function(event) {
+                event.preventDefault();
+                let start = this.selectionStart;
+                let end = this.selectionEnd;
+                let pasted = event.clipboardData.getData('text').replace(/\r?\n/g, '\r\r').trim();
+
+                let before = this.value.substring(0, start);
+                let after = this.value.substring(end);
+
+                this.value = `${before}${pasted}${after}`;
+                this.setSelectionRange(start, start + pasted.length);
             });
 
             studentName.addEventListener('input', function (event) {
@@ -1746,7 +1772,7 @@
                     }; -${weight.toFixed(2)}`;
                 });
 
-                mark = Math.round(clamp(0, 100 + totalWeight / lengthMultiplier, 100));
+                mark = Math.round(clamp(0, 100 + totalWeight * lengthMultiplier, 100));
                 currentMark = mark;
 
                 if (mark > 94) letter = 'A';
