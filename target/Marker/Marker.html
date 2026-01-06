@@ -1436,7 +1436,10 @@
                 event.preventDefault();
                 let start = this.selectionStart;
                 let end = this.selectionEnd;
-                let pasted = event.clipboardData.getData('text').replace(/\r?\n/g, '\r\r').trim();
+                let pasted = event.clipboardData
+                    .getData('text/plain')
+                    .replace(/\r\n?/g, '\n')
+                    .replace(/\n/g, '\n\n').trim();
 
                 let before = this.value.substring(0, start);
                 let after = this.value.substring(end);
@@ -1467,14 +1470,17 @@
                 event.preventDefault();
                 let start = this.selectionStart;
                 let end = this.selectionEnd;
-                let pasted = event.clipboardData.getData('text').replace(/\r?\n/g, '\r\r').trim();
+                let pasted = event.clipboardData
+                    .getData('text/plain')
+                    .replace(/\r\n?/g, '\n')
+                    .replace(/\n/g, '\n\n').trim();
 
                 let before = this.value.substring(0, start);
                 let after = this.value.substring(end);
 
                 this.value = `${before}${pasted}${after}`;
                 this.setSelectionRange(start, start + pasted.length);
-                
+
                 works[studentIndex].text = this.value;
             });
 
