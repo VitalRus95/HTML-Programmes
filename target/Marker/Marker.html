@@ -1439,7 +1439,7 @@
                 let pasted = event.clipboardData
                     .getData('text/plain')
                     .replace(/\r\n?/g, '\n')
-                    .replace(/\n/g, '\n\n').trim();
+                    .replace(/(.)\n(.)/g, '$1\n\n$2').trim();
 
                 let before = this.value.substring(0, start);
                 let after = this.value.substring(end);
@@ -1473,7 +1473,7 @@
                 let pasted = event.clipboardData
                     .getData('text/plain')
                     .replace(/\r\n?/g, '\n')
-                    .replace(/\n/g, '\n\n').trim();
+                    .replace(/(.)\n(.)/g, '$1\n\n$2').trim();
 
                 let before = this.value.substring(0, start);
                 let after = this.value.substring(end);
