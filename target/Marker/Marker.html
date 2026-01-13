@@ -733,6 +733,11 @@
 
             <tbody>
                 <tr>
+                    <td id='res-mult-label' tabindex='0'>Length multiplier</td>
+                    <td id='res-mult' tabindex='0'>0</td>
+                </tr>
+                
+                <tr>
                     <td id='res-mistakes-label' tabindex='0'>Mistakes count</td>
                     <td id='res-mistakes' tabindex='0'>0</td>
                 </tr>
@@ -740,11 +745,6 @@
                 <tr>
                     <td id='res-weight-label' tabindex='0'>Mistakes weight</td>
                     <td id='res-weight' tabindex='0'>0</td>
-                </tr>
-
-                <tr>
-                    <td id='res-mult-label' tabindex='0'>Length multiplier</td>
-                    <td id='res-mult' tabindex='0'>0</td>
                 </tr>
 
                 <tr>
@@ -1320,19 +1320,19 @@
             let copyMark = document.getElementById('copy-mark-button');
 
             // Constants
-            const TYPE_GRAMMAR = 0
-            const TYPE_VOCABULARY = 1
-            const TYPE_ORTHOGRAPHY = 2
-            const TYPE_PUNCTUATION = 3
-            const TYPE_COMPLEX = 4
+            const TYPE_GRAMMAR = 0;
+            const TYPE_VOCABULARY = 1;
+            const TYPE_ORTHOGRAPHY = 2;
+            const TYPE_PUNCTUATION = 3;
+            const TYPE_COMPLEX = 4;
 
-            const SUBTYPE_DELETION = 0
-            const SUBTYPE_DISTORTION = 1
-            const SUBTYPE_ADDITION = 2
+            const SUBTYPE_DELETION = 0;
+            const SUBTYPE_DISTORTION = 1;
+            const SUBTYPE_ADDITION = 2;
 
-            const MEANING_RETAINED = 0
-            const MEANING_OBSCURED = 1
-            const MEANING_LOST = 2
+            const MEANING_RETAINED = 0;
+            const MEANING_OBSCURED = 1;
+            const MEANING_LOST = 2;
 
             // Types
             /** @typedef Mistake
@@ -1499,7 +1499,7 @@
                     index: studentIndex
                 };
                 let data = encodeURIComponent(JSON.stringify(file, undefined, 2));
-                saveWorksButton.download = 'Works.json';
+                saveWorksButton.download = loadWorksInput.files[0]?.name || 'Works.json';
                 saveWorksButton.href = `data:text/plain;charset=utf-8,${data}`;
             }
 
@@ -1551,7 +1551,9 @@
                 });
 
                 results = encodeURIComponent(results);
-                saveResultsButton.download = 'Results.txt';
+                saveResultsButton.download = loadWorksInput.files[0]?.name.replace(
+                    '.json', '.txt'
+                ) || 'Results.txt';
                 saveResultsButton.href = `data:text/plain;charset=utf-8,${results}`;
 
                 updateStudent(studentIndex);
@@ -1796,7 +1798,13 @@
                 else letter = 'F';
 
                 resultsMistakeCount.textContent = w.mistakes.length;
-                resultsMistakeWeight.textContent = (totalWeight * -1).toFixed(2);
+                resultsMistakeWeight.textContent = `${
+                    (totalWeight * -1).toFixed(2)
+                } x ${
+                    lengthMultiplier.toFixed(2)
+                } = ${
+                    (totalWeight * lengthMultiplier * -1).toFixed(2)
+                }`;
                 resultsMark.childNodes[0].textContent = `${mark} (${letter})`;
             }
 
