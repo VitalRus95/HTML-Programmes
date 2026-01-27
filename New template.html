@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Template</title>
+        <style>
+            /* Animations */
+
+            /* All elements */
+            :root {
+                --colour-bgr-1: rgb(255, 150, 150);
+                --colour-bgr-2: rgb(255, 245, 210);
+                --colour-bgr-3: rgb(215, 210, 255);
+                --colour-text: rgb(0, 0, 0);
+                --colour-button: rgb(235, 235, 255);
+                --colour-border: rgb(0, 85, 125);
+                --colour-input: rgb(255, 255, 215);
+                --colour-author: rgb(255, 180, 180);
+                --colour-hovered-bgr: rgb(25, 25, 25);
+                --colour-hovered-fgr: rgb(235, 235, 235);
+                --colour-hovered-border: rgb(180, 180, 180);
+                --colour-disabled-bgr: rgb(175, 175, 175);
+                --colour-disabled-fgr: rgb(30, 30, 30);
+            }
+
+            * {
+                color: var(--colour-text);
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    Oxygen,
+                    Ubuntu,
+                    Cantarell,
+                    "Open Sans",
+                    "Helvetica Neue",
+                    sans-serif;
+            }
+
+            /* Elements by tag */
+            html {
+                align-content: center;
+                background-color: var(--colour-bgr-2);
+                background-image: linear-gradient(
+                    60deg,
+                    var(--colour-bgr-1),
+                    transparent,
+                    var(--colour-bgr-3)
+                );
+                background-attachment: fixed;
+                height: 100%;
+            }
+
+            body {
+                display: flex;
+                background-color: transparent;
+                flex-direction: column;
+                margin: auto;
+                font-size: 14pt;
+                min-width: 40%;
+                max-width: 90%;
+            }
+
+            a {
+                background-color: transparent;
+                color: var(--colour-text);
+            }
+
+            button,
+            .pseudo-button {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                background-color: var(--colour-button);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                font-size: 1em;
+                font-weight: 600;
+                margin-block: 2px;
+                padding: 2px;
+                min-height: 1.7em;
+            }
+
+            button:disabled,
+            .pseudo-button:disabled {
+                background-color: var(--colour-disabled-bgr);
+                color: var(--colour-disabled-fgr);
+                cursor: not-allowed;
+            }
+
+            button:focus,
+            button:hover,
+            .pseudo-button:focus,
+            .pseudo-button:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+            }
+
+            caption {
+                font-size: 1.1em;
+                font-style: italic;
+                font-weight: 600;
+            }
+
+            details {
+                background-color: var(--colour-bgr-2);
+                border: 2px outset var(--colour-border);
+                margin-block: 2px;
+                padding: 2px;
+            }
+
+            h1,
+            h2,
+            h3 {
+                text-align: center;
+                margin-block: 4px;
+            }
+
+            h1 {
+                border-bottom: 3px inset var(--colour-border);
+                font-size: 1.9em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            h3 {
+                font-size: 1.25em;
+            }
+
+            hr {
+                border-style: none;
+                border-top: 4px double var(--colour-border);
+                margin-block: 4px;
+                width: 100%;
+            }
+
+            input,
+            textarea {
+                background-color: var(--colour-input);
+                border: 2px outset var(--colour-border);
+                font-size: 1em;
+            }
+
+            input:focus,
+            input:hover,
+            textarea:focus,
+            textarea:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+            }
+
+            p {
+                margin-block: 4px;
+            }
+
+            select {
+                background-color: var(--colour-input);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                border-radius: 0px;
+                font-size: 1em;
+                margin-block: 2px;
+                padding-inline: 4px;
+                min-height: 1.7em;
+            }
+
+            select:focus,
+            select:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+            }
+
+            select:focus > option,
+            select:hover > option {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+            }
+
+            summary {
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            table {
+                border-collapse: collapse;
+                margin-block: 4px;
+                width: 100%;
+            }
+
+            td,
+            th {
+                border: 2px outset var(--colour-border);
+                padding-inline: 2px;
+            }
+
+            tr {
+                background-color: var(--colour-bgr-2);
+            }
+
+            tr:nth-of-type(even) {
+                background-color: var(--colour-button);
+            }
+
+            tr:focus,
+            tr:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+            }
+
+            /* Elements by ID */
+            #lang {
+                margin-bottom: 10px;
+            }
+
+            #menu,
+            #main,
+            #editor,
+            #settings,
+            #about {
+                display: flex;
+                flex-direction: column;
+            }
+
+            #main,
+            #editor,
+            #settings,
+            #about {
+                display: none;
+            }
+
+            #author {
+                background-color: var(--colour-author);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                text-align: center;
+                font-size: 1em;
+                margin-block: 2px;
+                margin-top: 10px;
+                padding: 2px;
+                cursor: help;
+                width: 100%;
+                opacity: 0.9;
+            }
+
+            #author:focus,
+            #author:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+            }
+
+            #author:focus > a,
+            #author:hover > a {
+                color: var(--colour-hovered-fgr);
+            }
+
+            /* Classes */
+            .settings-list {
+                display: flex;
+                flex-direction: column;
+                margin-block: 4px;
+                row-gap: 2px;
+            }
+
+            .tooltip-parent {
+                position: relative;
+            }
+
+            .tooltip-parent:focus > .tooltip,
+            .tooltip-parent:hover > .tooltip {
+                display: flex;
+            }
+
+            .tooltip {
+                display: none;
+                background-color: var(--colour-author);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                border-radius: 0px;
+                padding: 0px 6px 0px 0px;
+                max-height: 60%;
+                max-width: 50%;
+                cursor: help;
+                font-style: italic;
+                text-align: left;
+                opacity: 0.95;
+                position: fixed;
+                top: 8px;
+                left: 8px;
+                z-index: 10;
+                overflow: auto;
+            }
+
+            .tooltip::before {
+                content: "i";
+                background-color: var(--colour-text);
+                color: var(--colour-author);
+                border-radius: 0px 0px 6px 0px;
+                margin-right: 4px;
+                height: fit-content;
+                padding-inline: 0.5em;
+                font-style: italic;
+                font-weight: 600;
+            }
+
+            /* Media queries */
+            @media (min-width: 720px) {
+                body {
+                    max-width: 60%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <button id="exportLang" onclick="exportTranslationTemplate()">
+            Export texts for translation
+        </button>
+
+        <!-- Main menu div -->
+        <div id="menu" tabindex="1">
+            <h1 id="title">Template</h1>
+
+            <select id="lang" tabindex="0"></select>
+
+            <button
+                id="start-button"
+                tabindex="1"
+                onclick="switchScene('menu', 'main')"
+            >
+                Start
+            </button>
+            <button
+                id="editor-button"
+                tabindex="1"
+                onclick="switchScene('menu', 'editor')"
+            >
+                Editor
+            </button>
+            <button
+                id="settings-button"
+                tabindex="1"
+                onclick="switchScene('menu', 'settings')"
+            >
+                Settings
+            </button>
+            <button
+                id="about-button"
+                tabindex="1"
+                onclick="switchScene('menu', 'about')"
+            >
+                About
+            </button>
+
+            <!-- Author -->
+            <p id="author" tabindex="0" class="tooltip-parent">
+                Made by
+                <a href="https://github.com/VitalRus95"
+                    >Vitaly Pavlovich Ulyanov (Vital)</a
+                >.
+                <span class="tooltip">Visit my GitHub page to learn more!</span>
+            </p>
+        </div>
+
+        <!-- Main div -->
+        <div id="main" tabindex="0">
+            <button id="main-back" onclick="switchScene('main', 'menu')">
+                Back
+            </button>
+        </div>
+
+        <!-- Editor div -->
+        <div id="editor" tabindex="0">
+            <h2 id="editor-title">Level editor</h2>
+
+            <button id="editor-back" onclick="switchScene('editor', 'menu')">
+                Back
+            </button>
+        </div>
+
+        <!-- Settings div -->
+        <div id="settings" tabindex="0">
+            <h2 id="settings-title">Settings</h2>
+
+            <button
+                id="settings-back"
+                onclick="switchScene('settings', 'menu')"
+            >
+                Back
+            </button>
+
+            <ul class="settings-list">
+                <li>
+                    <div class="setting-div">
+                        <label for="set-volume" id="volume-label"
+                            >Sound volume</label
+                        >
+                        <input
+                            type="number"
+                            id="set-volume"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            value="0.5"
+                        />
+                    </div>
+                </li>
+            </ul>
+
+            <button id="default-settings">Restore default settings</button>
+        </div>
+
+        <!-- About div -->
+        <div id="about" tabindex="0">
+            <h2 id="about-title">About</h2>
+
+            <button id="about-back" onclick="switchScene('about', 'menu')">
+                Back
+            </button>
+
+            <p>Programme description. To be continued...</p>
+        </div>
+
+        <script>
+            // Elements
+            /** @type {HTMLDivElement} */
+            let menu = document.getElementById("menu");
+            /** @type {HTMLDivElement} */
+            let main = document.getElementById("main");
+            /** @type {HTMLDivElement} */
+            let editor = document.getElementById("editor");
+            /** @type {HTMLDivElement} */
+            let settings = document.getElementById("settings");
+            /** @type {HTMLDivElement} */
+            let about = document.getElementById("about");
+
+            /** @type {HTMLInputElement} */
+            let volumeInput = document.getElementById("set-volume");
+            /** @type {HTMLButtonElement} */
+            let defaultSettings = document.getElementById("default-settings");
+
+            // Objects
+
+            // Variables
+            /** @type {AudioContext} */
+            let audio = new (
+                window.AudioContext || window.webkitAudioContext
+            )();
+
+            // Resetting some elements & loading settings
+            loadSettings();
+
+            // Settings' events
+            volumeInput.addEventListener("change", function (event) {
+                volumeInput.value = clamp(0, +volumeInput.value, 1);
+                localStorage.setItem("volume", volumeInput.value);
+            });
+            defaultSettings.addEventListener("click", function (event) {
+                volumeInput.value = "0.5";
+                localStorage.setItem("volume", volumeInput.value);
+            });
+
+            // Exiting on pressing Escape
+            main.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") switchScene("main", "menu");
+            });
+            editor.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") switchScene("editor", "menu");
+            });
+            settings.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") switchScene("settings", "menu");
+            });
+            about.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") switchScene("about", "menu");
+            });
+
+            // Other events
+
+            // Functions
+            function loadSettings() {
+                volumeInput.value = localStorage.getItem("volume") ?? "0.5";
+            }
+
+            function switchScene(from, to) {
+                if (from === to) return;
+
+                try {
+                    document.getElementById(from).style.display = "none";
+                    document.getElementById(to).style.display = "flex";
+                    document.getElementById(to).focus();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            /**
+             * @param {'square' | 'sawtooth' | 'triangle' | 'sine'} type
+             * @param {number[]} frequencies
+             * @param {number} duration
+             */
+            function playSound(type, frequencies, duration) {
+                if (!audio || +volumeInput.value === 0) return;
+
+                /** @type {OscillatorNode} */
+                let oscillator = audio.createOscillator();
+                /** @type {GainNode} */
+                let volume = audio.createGain();
+
+                oscillator.type = type;
+                oscillator.frequency.value = frequencies[0];
+                oscillator.frequency.setValueCurveAtTime(
+                    frequencies,
+                    audio.currentTime,
+                    duration,
+                );
+                oscillator.connect(volume);
+
+                volume.gain.value = +volumeInput.value;
+                volume.gain.setValueCurveAtTime(
+                    [0, +volumeInput.value, 0],
+                    audio.currentTime,
+                    duration,
+                );
+                volume.connect(audio.destination);
+
+                oscillator.start();
+                oscillator.stop(audio.currentTime + duration);
+            }
+
+            /**
+             * @param {number} min
+             * @param {number} value
+             * @param {number} max
+             * @returns {number}
+             */
+            function ringClamp(min, value, max) {
+                return value < min ? max : value > max ? min : value;
+            }
+
+            /**
+             * @param {number} min
+             * @param {number} value
+             * @param {number} max
+             * @returns {number}
+             */
+            function clamp(min, value, max) {
+                return value < min ? min : value > max ? max : value;
+            }
+
+            generateLanguagesList([
+                {
+                    name: "English [Vitaly Ulyanov]",
+                    langTags: [
+                        "en",
+                        "en-AU",
+                        "en-BZ",
+                        "en-CA",
+                        "en-CB",
+                        "en-GB",
+                        "en-IE",
+                        "en-JM",
+                        "en-NZ",
+                        "en-PH",
+                        "en-TT",
+                        "en-US",
+                        "en-ZA",
+                        "en-ZW",
+                    ],
+                    elements: [
+                        {
+                            id: "exportLang",
+                            childNodesTexts: ["Export texts for translation"],
+                        },
+                        {
+                            id: "title",
+                            childNodesTexts: ["Template"],
+                        },
+                        {
+                            id: "start-button",
+                            childNodesTexts: ["Start"],
+                        },
+                        {
+                            id: "editor-button",
+                            childNodesTexts: ["Editor"],
+                        },
+                        {
+                            id: "settings-button",
+                            childNodesTexts: ["Settings"],
+                        },
+                        {
+                            id: "about-button",
+                            childNodesTexts: ["About"],
+                        },
+                        {
+                            id: "author",
+                            childNodesTexts: [
+                                "Made by ",
+                                "Vitaly Pavlovich Ulyanov (Vital)",
+                                ".",
+                                "Visit my GitHub page to learn more!",
+                            ],
+                        },
+                        {
+                            id: "main-back",
+                            childNodesTexts: ["Back"],
+                        },
+                        {
+                            id: "editor-title",
+                            childNodesTexts: ["Editor"],
+                        },
+                        {
+                            id: "editor-back",
+                            childNodesTexts: ["Back"],
+                        },
+                        {
+                            id: "settings-title",
+                            childNodesTexts: ["Settings"],
+                        },
+                        {
+                            id: "settings-back",
+                            childNodesTexts: ["Back"],
+                        },
+                        {
+                            id: "volume-label",
+                            childNodesTexts: ["Sound volume"],
+                        },
+                        {
+                            id: "default-settings",
+                            childNodesTexts: ["Restore default settings"],
+                        },
+                        {
+                            id: "about-title",
+                            childNodesTexts: ["About"],
+                        },
+                        {
+                            id: "about-back",
+                            childNodesTexts: ["Back"],
+                        },
+                    ],
+                },
+                {
+                    name: "Русский [Виталий Ульянов]",
+                    langTags: ["ru", "ru-RU"],
+                    elements: [
+                        {
+                            id: "exportLang",
+                            childNodesTexts: ["Экспорт текстов для перевода"],
+                        },
+                        {
+                            id: "title",
+                            childNodesTexts: ["Шаблон"],
+                        },
+                        {
+                            id: "start-button",
+                            childNodesTexts: ["Начать"],
+                        },
+                        {
+                            id: "editor-button",
+                            childNodesTexts: ["Редактор"],
+                        },
+                        {
+                            id: "settings-button",
+                            childNodesTexts: ["Настройки"],
+                        },
+                        {
+                            id: "about-button",
+                            childNodesTexts: ["О программе"],
+                        },
+                        {
+                            id: "author",
+                            childNodesTexts: [
+                                "Автор — ",
+                                "Виталий Павлович Ульянов (Vital)",
+                                ".",
+                                "Заходите ко мне на GitHub, чтобы узнать больше!",
+                            ],
+                        },
+                        {
+                            id: "main-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                        {
+                            id: "editor-title",
+                            childNodesTexts: ["Редактор"],
+                        },
+                        {
+                            id: "editor-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                        {
+                            id: "settings-title",
+                            childNodesTexts: ["Настройки"],
+                        },
+                        {
+                            id: "settings-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                        {
+                            id: "volume-label",
+                            childNodesTexts: ["Громкость звука"],
+                        },
+                        {
+                            id: "default-settings",
+                            childNodesTexts: ["Сбросить все настройки"],
+                        },
+                        {
+                            id: "about-title",
+                            childNodesTexts: ["О программе"],
+                        },
+                        {
+                            id: "about-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                    ],
+                },
+            ]);
+
+            /**
+             * @typedef {Object} Translation
+             * @property {string} name
+             * @property {string[]} langTags
+             * @property {LangElement[]} elements
+             */
+            /**
+             * @param {Translation[]} languages
+             */
+            function generateLanguagesList(languages) {
+                /** @type {HTMLSelectElement} */
+                let list = document.getElementById("lang");
+                list.addEventListener("change", function (event) {
+                    selectLanguage(languages, true);
+                });
+
+                for (let l of languages) {
+                    /** @type {HTMLOptionElement} */
+                    let option = list.appendChild(
+                        document.createElement("option"),
+                    );
+                    option.value = l.name;
+                    option.textContent = l.name;
+                }
+
+                selectLanguage(languages, false);
+            }
+
+            /**
+             * @param {Translation[]} languages
+             * @param {boolean} fromMenu
+             */
+            function selectLanguage(languages, fromMenu) {
+                /** @type {HTMLSelectElement} */
+                let menu = document.getElementById("lang");
+                /** @type {string} */
+                let selection = null;
+
+                if (!fromMenu) {
+                    if (localStorage.getItem("lang")) {
+                        selection = localStorage.getItem("lang");
+                        menu.value = selection;
+                    } else if (navigator.language) {
+                        // Iterate over translations
+                        for (let l of languages) {
+                            // If the valid option is finally found, exit
+                            if (selection) {
+                                break;
+                            } else if (l.langTags) {
+                                // Otherwise iterate over the tags and
+                                // compare them to the browser language
+                                for (let t of l.langTags) {
+                                    if (navigator.language === t) {
+                                        menu.value = l.name;
+                                        selection = l.name;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    selection = menu.value;
+                }
+
+                if (selection) {
+                    /** @type {Translation} */
+                    let translation = {};
+
+                    for (let l of languages) {
+                        if (l.name === selection) {
+                            translation = l;
+                            break;
+                        }
+                    }
+
+                    if (translation) {
+                        localStorage.setItem("lang", selection);
+
+                        for (let e of translation.elements) {
+                            let target = document.getElementById(e.id);
+
+                            if (target) {
+                                if (e.textContent) {
+                                    target.textContent = e.textContent;
+                                }
+
+                                if (e.placeholder) {
+                                    target.placeholder = e.placeholder;
+                                }
+
+                                if (e.childNodesTexts) {
+                                    /** @type {number} */
+                                    let index = 0;
+
+                                    for (let c of target.childNodes) {
+                                        if (
+                                            c.textContent &&
+                                            c.textContent.trim() !== "" &&
+                                            e.childNodesTexts[index]
+                                        ) {
+                                            c.textContent =
+                                                e.childNodesTexts[index];
+                                            index++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            /**
+             * @typedef {Object} LangElement
+             * @property {string} id
+             * @property {string} textContent
+             * @property {string} placeholder
+             * @property {string[]} childNodesTexts
+             */
+            function exportTranslationTemplate() {
+                /** @type {LangElement[]} */
+                let elements = [];
+
+                document.querySelectorAll("body *").forEach((e) => {
+                    if (
+                        e.tagName !== "DIV" &&
+                        e.tagName !== "DETAILS" &&
+                        e.tagName !== "TABLE" &&
+                        e.id &&
+                        e.id !== "lang"
+                    ) {
+                        /** @type {LangElement} */
+                        let newEl = {};
+
+                        newEl.id = e.id;
+
+                        if (e.childNodes) {
+                            newEl.childNodesTexts = [];
+
+                            for (let n of e.childNodes) {
+                                if (
+                                    n.textContent &&
+                                    n.textContent.trim() !== ""
+                                ) {
+                                    newEl.childNodesTexts.push(
+                                        n.textContent.trim(),
+                                    );
+                                }
+                            }
+                        } else {
+                            if (e.textContent) {
+                                newEl.textContent = e.textContent;
+                            }
+                        }
+
+                        if (e.placeholder) {
+                            newEl.placeholder = e.placeholder;
+                        }
+
+                        if (
+                            newEl.textContent ||
+                            newEl.placeholder ||
+                            newEl?.childNodesTexts.length > 0
+                        ) {
+                            elements.push(newEl);
+                        }
+                    }
+                });
+
+                navigator.clipboard.writeText(
+                    JSON.stringify(elements, null, 4),
+                );
+                alert("Translation template copied");
+            }
+        </script>
+    </body>
+</html>
