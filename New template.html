@@ -9,23 +9,24 @@
 
             /* All elements */
             :root {
-                --colour-bgr-1: rgb(255, 150, 150);
-                --colour-bgr-2: rgb(255, 245, 210);
-                --colour-bgr-3: rgb(215, 210, 255);
-                --colour-text: rgb(0, 0, 0);
-                --colour-button: rgb(235, 235, 255);
-                --colour-border: rgb(0, 85, 125);
-                --colour-input: rgb(255, 255, 215);
-                --colour-author: rgb(255, 180, 180);
-                --colour-hovered-bgr: rgb(25, 25, 25);
-                --colour-hovered-fgr: rgb(235, 235, 235);
-                --colour-hovered-border: rgb(180, 180, 180);
-                --colour-disabled-bgr: rgb(175, 175, 175);
-                --colour-disabled-fgr: rgb(30, 30, 30);
+                --colour-bgr-1: #ff9696;
+                --colour-bgr-2: #fff5d2;
+                --colour-bgr-3: #d7d2ff;
+                --colour-text: #000000;
+                --colour-button: #ebebff;
+                --colour-border: #00557d;
+                --colour-input: #ffffd7;
+                --colour-tooltip: #ffb4b4;
+                --colour-hovered-bgr: #191919;
+                --colour-hovered-fgr: #ebebeb;
+                --colour-hovered-border: #b4b4b4;
+                --colour-disabled-bgr: #afafaf;
+                --colour-disabled-fgr: #1e1e1e;
             }
 
             * {
                 color: var(--colour-text);
+                border-radius: 4px;
                 box-sizing: border-box;
                 -moz-box-sizing: border-box;
                 -webkit-box-sizing: border-box;
@@ -46,6 +47,11 @@
             /* Elements by tag */
             html {
                 align-content: center;
+                height: 100%;
+            }
+
+            body {
+                display: flex;
                 background-color: var(--colour-bgr-2);
                 background-image: linear-gradient(
                     60deg,
@@ -54,12 +60,6 @@
                     var(--colour-bgr-3)
                 );
                 background-attachment: fixed;
-                height: 100%;
-            }
-
-            body {
-                display: flex;
-                background-color: transparent;
                 flex-direction: column;
                 margin: auto;
                 font-size: 14pt;
@@ -75,6 +75,7 @@
             button,
             .pseudo-button {
                 display: flex;
+                flex-grow: 1;
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
@@ -87,10 +88,12 @@
                 margin-block: 2px;
                 padding: 2px;
                 min-height: 1.7em;
+                cursor: default;
             }
 
             button:disabled,
-            .pseudo-button:disabled {
+            .pseudo-button:disabled,
+            input:disabled {
                 background-color: var(--colour-disabled-bgr);
                 color: var(--colour-disabled-fgr);
                 cursor: not-allowed;
@@ -112,10 +115,9 @@
             }
 
             details {
-                background-color: var(--colour-bgr-2);
                 border: 2px outset var(--colour-border);
                 margin-block: 2px;
-                padding: 2px;
+                padding: 2px 4px;
             }
 
             h1,
@@ -127,6 +129,7 @@
 
             h1 {
                 border-bottom: 3px inset var(--colour-border);
+                border-radius: 0px;
                 font-size: 1.9em;
             }
 
@@ -150,6 +153,8 @@
                 background-color: var(--colour-input);
                 border: 2px outset var(--colour-border);
                 font-size: 1em;
+                min-height: 1.7em;
+                align-self: center;
             }
 
             input:focus,
@@ -161,6 +166,11 @@
                 border-color: var(--colour-hovered-border);
             }
 
+            input[type="text"] {
+                display: flex;
+                flex-grow: 1;
+            }
+
             p {
                 margin-block: 4px;
             }
@@ -169,7 +179,6 @@
                 background-color: var(--colour-input);
                 color: var(--colour-text);
                 border: 2px outset var(--colour-border);
-                border-radius: 0px;
                 font-size: 1em;
                 margin-block: 2px;
                 padding-inline: 4px;
@@ -243,7 +252,7 @@
             }
 
             #author {
-                background-color: var(--colour-author);
+                background-color: var(--colour-tooltip);
                 color: var(--colour-text);
                 border: 2px outset var(--colour-border);
                 text-align: center;
@@ -269,6 +278,12 @@
             }
 
             /* Classes */
+            .button-container {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 4px;
+            }
+
             .settings-list {
                 display: flex;
                 flex-direction: column;
@@ -287,15 +302,15 @@
 
             .tooltip {
                 display: none;
-                background-color: var(--colour-author);
+                background-color: var(--colour-tooltip);
                 color: var(--colour-text);
                 border: 2px outset var(--colour-border);
-                border-radius: 0px;
                 padding: 0px 6px 0px 0px;
                 max-height: 60%;
                 max-width: 50%;
                 cursor: help;
                 font-style: italic;
+                font-weight: 400;
                 text-align: left;
                 opacity: 0.95;
                 position: fixed;
@@ -308,8 +323,8 @@
             .tooltip::before {
                 content: "i";
                 background-color: var(--colour-text);
-                color: var(--colour-author);
-                border-radius: 0px 0px 6px 0px;
+                color: var(--colour-tooltip);
+                border-radius: 0px;
                 margin-right: 4px;
                 height: fit-content;
                 padding-inline: 0.5em;
@@ -368,7 +383,7 @@
             <!-- Author -->
             <p id="author" tabindex="0" class="tooltip-parent">
                 Made by
-                <a href="https://github.com/VitalRus95"
+                <a href="https://github.com/VitalRus95" target="_blank"
                     >Vitaly Pavlovich Ulyanov (Vital)</a
                 >.
                 <span class="tooltip">Visit my GitHub page to learn more!</span>
@@ -402,9 +417,12 @@
                 Back
             </button>
 
-            <ul class="settings-list">
-                <li>
-                    <div class="setting-div">
+            <!-- Sound settings -->
+            <details>
+                <summary id="settings-sound">Sound</summary>
+
+                <ul class="settings-list">
+                    <li>
                         <label for="set-volume" id="volume-label"
                             >Sound volume</label
                         >
@@ -416,9 +434,46 @@
                             step="0.1"
                             value="0.5"
                         />
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </details>
+
+            <!-- Colour scheme settings -->
+            <details>
+                <summary id="colour-settings">Colours</summary>
+
+                <div class="button-container">
+                    <input
+                        type="file"
+                        id="colour-loader"
+                        accept=".json"
+                        style="display: none"
+                    />
+                    <button id="load-colours">Load colours</button>
+                    <a
+                        id="save-colours"
+                        href=""
+                        download="Colours.json"
+                        class="pseudo-button"
+                        >Save colours</a
+                    >
+                </div>
+
+                <ul id="colours" class="settings-list"></ul>
+
+                <div class="button-container">
+                    <button id="example-button">Button example</button>
+                    <button id="example-disabled-button" disabled>
+                        Disabled button example
+                    </button>
+                    <input
+                        type="text"
+                        id="example-input"
+                        placeholder="Input example"
+                        value="12345 ABCDE"
+                    />
+                </div>
+            </details>
 
             <button id="default-settings">Restore default settings</button>
         </div>
@@ -444,8 +499,16 @@
             let editor = document.getElementById("editor");
             /** @type {HTMLDivElement} */
             let settings = document.getElementById("settings");
+            /** @type {HTMLUListElement} */
+            let colours = document.getElementById("colours");
             /** @type {HTMLDivElement} */
             let about = document.getElementById("about");
+            /** @type {HTMLInputElement} */
+            let colourLoader = document.getElementById("colour-loader");
+            /** @type {HTMLButtonElement} */
+            let loadColours = document.getElementById("load-colours");
+            /** @type {HTMLAnchorElement} */
+            let saveColours = document.getElementById("save-colours");
 
             /** @type {HTMLInputElement} */
             let volumeInput = document.getElementById("set-volume");
@@ -453,6 +516,21 @@
             let defaultSettings = document.getElementById("default-settings");
 
             // Objects
+            const allColours = {
+                "--colour-bgr-1": "#ff9696",
+                "--colour-bgr-2": "#fff5d2",
+                "--colour-bgr-3": "#d7d2ff",
+                "--colour-text": "#000000",
+                "--colour-button": "#ebebff",
+                "--colour-border": "#00557d",
+                "--colour-input": "#ffffd7",
+                "--colour-tooltip": "#ffb4b4",
+                "--colour-hovered-bgr": "#191919",
+                "--colour-hovered-fgr": "#ebebeb",
+                "--colour-hovered-border": "#b4b4b4",
+                "--colour-disabled-bgr": "#afafaf",
+                "--colour-disabled-fgr": "#1e1e1e",
+            };
 
             // Variables
             /** @type {AudioContext} */
@@ -460,17 +538,103 @@
                 window.AudioContext || window.webkitAudioContext
             )();
 
-            // Resetting some elements & loading settings
-            loadSettings();
-
             // Settings' events
             volumeInput.addEventListener("change", function (event) {
                 volumeInput.value = clamp(0, +volumeInput.value, 1);
                 localStorage.setItem("volume", volumeInput.value);
             });
+
             defaultSettings.addEventListener("click", function (event) {
+                // Volume
                 volumeInput.value = "0.5";
                 localStorage.setItem("volume", volumeInput.value);
+
+                // Colours
+                for (const c in allColours) {
+                    document.body.style.setProperty(c, allColours[c]);
+                    document.getElementById(c).value = allColours[c];
+                    localStorage.setItem(c, allColours[c]);
+                }
+            });
+
+            // Colour settings
+            Object.keys(allColours).forEach((c) => {
+                document.body.style.setProperty(
+                    c,
+                    localStorage.getItem(c) ??
+                        getComputedStyle(document.body).getPropertyValue(c),
+                );
+
+                /** @type {HTMLLIElement} */
+                let item = colours.appendChild(document.createElement("li"));
+                /** @type {HTMLLabelElement} */
+                let label = item.appendChild(document.createElement("label"));
+                /** @type {HTMLInputElement} */
+                let input = item.appendChild(document.createElement("input"));
+
+                label.id = `${c}-label`;
+                label.htmlFor = c;
+                label.textContent = c;
+                label.style.marginRight = "4px";
+
+                input.id = c;
+                input.type = "color";
+                input.value = document.body.style.getPropertyValue(c);
+                input.addEventListener("input", function () {
+                    document.body.style.setProperty(c, this.value);
+                    localStorage.setItem(c, this.value);
+                });
+
+                if (c === "--colour-tooltip") {
+                    item.classList.add("tooltip-parent");
+                    /** @type {HTMLSpanElement} */
+                    let tooltip = item.appendChild(
+                        document.createElement("span"),
+                    );
+
+                    tooltip.id = "example-tooltip";
+                    tooltip.classList.add("tooltip");
+                    tooltip.textContent = "Tooltip example";
+                }
+            });
+
+            // Loading colours
+            loadColours.addEventListener("click", function () {
+                colourLoader.click();
+            });
+
+            colourLoader.addEventListener("change", async function () {
+                await colourLoader.files[0].text().then((content) => {
+                    try {
+                        let loadedColours = JSON.parse(content);
+
+                        for (const c in loadedColours) {
+                            document.body.style.setProperty(
+                                c,
+                                loadedColours[c],
+                            );
+                            document.getElementById(c).value = loadedColours[c];
+                            localStorage.setItem(c, loadedColours[c]);
+                            this.value = "";
+                        }
+                    } catch (error) {
+                        alert(`Error while reading colours file: ${error}`);
+                    }
+                });
+            });
+
+            // Saving colours
+            saveColours.addEventListener("click", function () {
+                let savedColours = {};
+
+                Object.keys(allColours).forEach((c) => {
+                    savedColours[c] = document.body.style.getPropertyValue(c);
+                });
+
+                let data = encodeURIComponent(
+                    JSON.stringify(savedColours, undefined, 4),
+                );
+                this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
             // Exiting on pressing Escape
@@ -559,174 +723,6 @@
             function clamp(min, value, max) {
                 return value < min ? min : value > max ? max : value;
             }
-
-            generateLanguagesList([
-                {
-                    name: "English [Vitaly Ulyanov]",
-                    langTags: [
-                        "en",
-                        "en-AU",
-                        "en-BZ",
-                        "en-CA",
-                        "en-CB",
-                        "en-GB",
-                        "en-IE",
-                        "en-JM",
-                        "en-NZ",
-                        "en-PH",
-                        "en-TT",
-                        "en-US",
-                        "en-ZA",
-                        "en-ZW",
-                    ],
-                    elements: [
-                        {
-                            id: "exportLang",
-                            childNodesTexts: ["Export texts for translation"],
-                        },
-                        {
-                            id: "title",
-                            childNodesTexts: ["Template"],
-                        },
-                        {
-                            id: "start-button",
-                            childNodesTexts: ["Start"],
-                        },
-                        {
-                            id: "editor-button",
-                            childNodesTexts: ["Editor"],
-                        },
-                        {
-                            id: "settings-button",
-                            childNodesTexts: ["Settings"],
-                        },
-                        {
-                            id: "about-button",
-                            childNodesTexts: ["About"],
-                        },
-                        {
-                            id: "author",
-                            childNodesTexts: [
-                                "Made by ",
-                                "Vitaly Pavlovich Ulyanov (Vital)",
-                                ".",
-                                "Visit my GitHub page to learn more!",
-                            ],
-                        },
-                        {
-                            id: "main-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "editor-title",
-                            childNodesTexts: ["Editor"],
-                        },
-                        {
-                            id: "editor-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "settings-title",
-                            childNodesTexts: ["Settings"],
-                        },
-                        {
-                            id: "settings-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "volume-label",
-                            childNodesTexts: ["Sound volume"],
-                        },
-                        {
-                            id: "default-settings",
-                            childNodesTexts: ["Restore default settings"],
-                        },
-                        {
-                            id: "about-title",
-                            childNodesTexts: ["About"],
-                        },
-                        {
-                            id: "about-back",
-                            childNodesTexts: ["Back"],
-                        },
-                    ],
-                },
-                {
-                    name: "Русский [Виталий Ульянов]",
-                    langTags: ["ru", "ru-RU"],
-                    elements: [
-                        {
-                            id: "exportLang",
-                            childNodesTexts: ["Экспорт текстов для перевода"],
-                        },
-                        {
-                            id: "title",
-                            childNodesTexts: ["Шаблон"],
-                        },
-                        {
-                            id: "start-button",
-                            childNodesTexts: ["Начать"],
-                        },
-                        {
-                            id: "editor-button",
-                            childNodesTexts: ["Редактор"],
-                        },
-                        {
-                            id: "settings-button",
-                            childNodesTexts: ["Настройки"],
-                        },
-                        {
-                            id: "about-button",
-                            childNodesTexts: ["О программе"],
-                        },
-                        {
-                            id: "author",
-                            childNodesTexts: [
-                                "Автор — ",
-                                "Виталий Павлович Ульянов (Vital)",
-                                ".",
-                                "Заходите ко мне на GitHub, чтобы узнать больше!",
-                            ],
-                        },
-                        {
-                            id: "main-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "editor-title",
-                            childNodesTexts: ["Редактор"],
-                        },
-                        {
-                            id: "editor-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "settings-title",
-                            childNodesTexts: ["Настройки"],
-                        },
-                        {
-                            id: "settings-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "volume-label",
-                            childNodesTexts: ["Громкость звука"],
-                        },
-                        {
-                            id: "default-settings",
-                            childNodesTexts: ["Сбросить все настройки"],
-                        },
-                        {
-                            id: "about-title",
-                            childNodesTexts: ["О программе"],
-                        },
-                        {
-                            id: "about-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                    ],
-                },
-            ]);
 
             /**
              * @typedef {Object} Translation
@@ -901,8 +897,348 @@
                 navigator.clipboard.writeText(
                     JSON.stringify(elements, null, 4),
                 );
-                alert("Translation template copied");
+                alert("Translation template copied to clipboard!");
             }
+
+            // Resetting some elements & loading settings
+            loadSettings();
+            generateLanguagesList([
+                {
+                    name: "English [Vitaly Ulyanov]",
+                    langTags: [
+                        "en",
+                        "en-AU",
+                        "en-BZ",
+                        "en-CA",
+                        "en-CB",
+                        "en-GB",
+                        "en-IE",
+                        "en-JM",
+                        "en-NZ",
+                        "en-PH",
+                        "en-TT",
+                        "en-US",
+                        "en-ZA",
+                        "en-ZW",
+                    ],
+                    elements: [
+                        {
+                            id: "exportLang",
+                            childNodesTexts: ["Export texts for translation"],
+                        },
+                        {
+                            id: "title",
+                            childNodesTexts: ["Template"],
+                        },
+                        {
+                            id: "start-button",
+                            childNodesTexts: ["Start"],
+                        },
+                        {
+                            id: "editor-button",
+                            childNodesTexts: ["Editor"],
+                        },
+                        {
+                            id: "settings-button",
+                            childNodesTexts: ["Settings"],
+                        },
+                        {
+                            id: "about-button",
+                            childNodesTexts: ["About"],
+                        },
+                        {
+                            id: "author",
+                            childNodesTexts: [
+                                "Made by ",
+                                "Vitaly Pavlovich Ulyanov (Vital)",
+                                ".",
+                                "Visit my GitHub page to learn more!",
+                            ],
+                        },
+                        {
+                            id: "main-back",
+                            childNodesTexts: ["Back"],
+                        },
+                        {
+                            id: "editor-title",
+                            childNodesTexts: ["Editor"],
+                        },
+                        {
+                            id: "editor-back",
+                            childNodesTexts: ["Back"],
+                        },
+                        {
+                            id: "settings-title",
+                            childNodesTexts: ["Settings"],
+                        },
+                        {
+                            id: "settings-back",
+                            childNodesTexts: ["Back"],
+                        },
+                        {
+                            id: "settings-sound",
+                            childNodesTexts: ["Sound"],
+                        },
+                        {
+                            id: "volume-label",
+                            childNodesTexts: ["Sound volume"],
+                        },
+                        {
+                            id: "colour-settings",
+                            childNodesTexts: ["Colours"],
+                        },
+                        {
+                            id: "load-colours",
+                            childNodesTexts: ["Load colours"],
+                        },
+                        {
+                            id: "save-colours",
+                            childNodesTexts: ["Save colours"],
+                        },
+                        {
+                            id: "--colour-bgr-1-label",
+                            childNodesTexts: ["Background (left)"],
+                        },
+                        {
+                            id: "--colour-bgr-2-label",
+                            childNodesTexts: ["Background (centre)"],
+                        },
+                        {
+                            id: "--colour-bgr-3-label",
+                            childNodesTexts: ["Background (right)"],
+                        },
+                        {
+                            id: "--colour-text-label",
+                            childNodesTexts: ["Text"],
+                        },
+                        {
+                            id: "--colour-button-label",
+                            childNodesTexts: ["Buttons"],
+                        },
+                        {
+                            id: "--colour-border-label",
+                            childNodesTexts: ["Borders"],
+                        },
+                        {
+                            id: "--colour-input-label",
+                            childNodesTexts: ["Inputs"],
+                        },
+                        {
+                            id: "--colour-tooltip-label",
+                            childNodesTexts: ["Tooltip's background"],
+                        },
+                        {
+                            id: "--colour-hovered-bgr-label",
+                            childNodesTexts: ["Hovered element's background"],
+                        },
+                        {
+                            id: "--colour-hovered-fgr-label",
+                            childNodesTexts: ["Hovered element's text"],
+                        },
+                        {
+                            id: "--colour-hovered-border-label",
+                            childNodesTexts: ["Hovered element's border"],
+                        },
+                        {
+                            id: "--colour-disabled-bgr-label",
+                            childNodesTexts: ["Disabled element's background"],
+                        },
+                        {
+                            id: "--colour-disabled-fgr-label",
+                            childNodesTexts: ["Disabled element's text"],
+                        },
+                        {
+                            id: "example-button",
+                            childNodesTexts: ["Button example"],
+                        },
+                        {
+                            id: "example-tooltip",
+                            childNodesTexts: ["Tooltip example"],
+                        },
+                        {
+                            id: "example-disabled-button",
+                            childNodesTexts: ["Disabled button example"],
+                        },
+                        {
+                            id: "example-input",
+                            childNodesTexts: [],
+                            placeholder: "Input example",
+                        },
+                        {
+                            id: "default-settings",
+                            childNodesTexts: ["Restore default settings"],
+                        },
+                        {
+                            id: "about-title",
+                            childNodesTexts: ["About"],
+                        },
+                        {
+                            id: "about-back",
+                            childNodesTexts: ["Back"],
+                        },
+                    ],
+                },
+                {
+                    name: "Русский [Виталий Ульянов]",
+                    langTags: ["ru", "ru-RU"],
+                    elements: [
+                        {
+                            id: "exportLang",
+                            childNodesTexts: ["Экспорт текстов для перевода"],
+                        },
+                        {
+                            id: "title",
+                            childNodesTexts: ["Шаблон"],
+                        },
+                        {
+                            id: "start-button",
+                            childNodesTexts: ["Начать"],
+                        },
+                        {
+                            id: "editor-button",
+                            childNodesTexts: ["Редактор"],
+                        },
+                        {
+                            id: "settings-button",
+                            childNodesTexts: ["Настройки"],
+                        },
+                        {
+                            id: "about-button",
+                            childNodesTexts: ["О программе"],
+                        },
+                        {
+                            id: "author",
+                            childNodesTexts: [
+                                "Автор — ",
+                                "Виталий Павлович Ульянов (Vital)",
+                                ".",
+                                "Заходите ко мне на GitHub, чтобы узнать больше!",
+                            ],
+                        },
+                        {
+                            id: "main-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                        {
+                            id: "editor-title",
+                            childNodesTexts: ["Редактор"],
+                        },
+                        {
+                            id: "editor-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                        {
+                            id: "settings-title",
+                            childNodesTexts: ["Настройки"],
+                        },
+                        {
+                            id: "settings-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                        {
+                            id: "settings-sound",
+                            childNodesTexts: ["Звук"],
+                        },
+                        {
+                            id: "volume-label",
+                            childNodesTexts: ["Громкость звука"],
+                        },
+                        {
+                            id: "colour-settings",
+                            childNodesTexts: ["Цвета"],
+                        },
+                        {
+                            id: "load-colours",
+                            childNodesTexts: ["Загрузить цвета"],
+                        },
+                        {
+                            id: "save-colours",
+                            childNodesTexts: ["Сохранить цвета"],
+                        },
+                        {
+                            id: "--colour-bgr-1-label",
+                            childNodesTexts: ["Фон (левая часть)"],
+                        },
+                        {
+                            id: "--colour-bgr-2-label",
+                            childNodesTexts: ["Фон (средняя часть)"],
+                        },
+                        {
+                            id: "--colour-bgr-3-label",
+                            childNodesTexts: ["Фон (правая часть)"],
+                        },
+                        {
+                            id: "--colour-text-label",
+                            childNodesTexts: ["Текст"],
+                        },
+                        {
+                            id: "--colour-button-label",
+                            childNodesTexts: ["Кнопки"],
+                        },
+                        {
+                            id: "--colour-border-label",
+                            childNodesTexts: ["Рамки"],
+                        },
+                        {
+                            id: "--colour-input-label",
+                            childNodesTexts: ["Поля ввода"],
+                        },
+                        {
+                            id: "--colour-tooltip-label",
+                            childNodesTexts: ["Фон подсказок"],
+                        },
+                        {
+                            id: "--colour-hovered-bgr-label",
+                            childNodesTexts: ["Фон элемента при наведении"],
+                        },
+                        {
+                            id: "--colour-hovered-fgr-label",
+                            childNodesTexts: ["Текст элемента при наведении"],
+                        },
+                        {
+                            id: "--colour-hovered-border-label",
+                            childNodesTexts: ["Рамки элемента при наведении"],
+                        },
+                        {
+                            id: "--colour-disabled-bgr-label",
+                            childNodesTexts: ["Фон отключённого элемента"],
+                        },
+                        {
+                            id: "--colour-disabled-fgr-label",
+                            childNodesTexts: ["Текст отключённого элемента"],
+                        },
+                        {
+                            id: "example-button",
+                            childNodesTexts: ["Пример кнопки"],
+                        },
+                        {
+                            id: "example-tooltip",
+                            childNodesTexts: ["Пример подсказки"],
+                        },
+                        {
+                            id: "example-disabled-button",
+                            childNodesTexts: ["Пример отключённой кнопки"],
+                        },
+                        {
+                            id: "example-input",
+                            childNodesTexts: [],
+                            placeholder: "Пример поля ввода",
+                        },
+                        {
+                            id: "default-settings",
+                            childNodesTexts: ["Сбросить все настройки"],
+                        },
+                        {
+                            id: "about-title",
+                            childNodesTexts: ["О программе"],
+                        },
+                        {
+                            id: "about-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                    ],
+                },
+            ]);
         </script>
     </body>
 </html>
