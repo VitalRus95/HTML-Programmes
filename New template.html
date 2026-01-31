@@ -6,6 +6,25 @@
         <title>Template</title>
         <style>
             /* Animations */
+            @keyframes scene-show {
+                from {
+                    opacity: 0;
+                    transform: translateX(-10%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0%);
+                }
+            }
+
+            @keyframes details-show {
+                from {
+                    background-color: var(--colour-border);
+                }
+                to {
+                    background-color: transparent;
+                }
+            }
 
             /* All elements */
             :root {
@@ -120,6 +139,10 @@
                 padding: 2px 4px;
             }
 
+            details[open] {
+                animation: details-show 0.6s ease-in;
+            }
+
             h1,
             h2,
             h3 {
@@ -153,8 +176,8 @@
                 background-color: var(--colour-input);
                 border: 2px outset var(--colour-border);
                 font-size: 1em;
+                margin-block: 2px;
                 min-height: 1.7em;
-                align-self: center;
             }
 
             input:focus,
@@ -230,58 +253,23 @@
                 border-color: var(--colour-hovered-border);
             }
 
-            /* Elements by ID */
-            #lang {
-                margin-bottom: 10px;
-            }
-
-            #menu,
-            #main,
-            #editor,
-            #settings,
-            #about {
-                display: flex;
-                flex-direction: column;
-            }
-
-            #main,
-            #editor,
-            #settings,
-            #about {
-                display: none;
-            }
-
-            #author {
-                background-color: var(--colour-tooltip);
-                color: var(--colour-text);
-                border: 2px outset var(--colour-border);
-                text-align: center;
-                font-size: 1em;
-                margin-block: 2px;
-                margin-top: 10px;
-                padding: 2px;
-                cursor: help;
-                width: 100%;
-                opacity: 0.9;
-            }
-
-            #author:focus,
-            #author:hover {
-                background-color: var(--colour-hovered-bgr);
-                color: var(--colour-hovered-fgr);
-                border-color: var(--colour-hovered-border);
-            }
-
-            #author:focus > a,
-            #author:hover > a {
-                color: var(--colour-hovered-fgr);
-            }
-
             /* Classes */
             .button-container {
                 display: flex;
                 flex-wrap: wrap;
                 column-gap: 4px;
+            }
+
+            .checkbox-div {
+                display: flex;
+                column-gap: 4px;
+                align-items: center;
+            }
+
+            .scene {
+                display: none;
+                flex-direction: column;
+                animation: scene-show 0.4s ease;
             }
 
             .settings-list {
@@ -332,6 +320,41 @@
                 font-weight: 600;
             }
 
+            /* Elements by ID */
+            #lang {
+                margin-bottom: 10px;
+            }
+
+            #menu {
+                display: flex;
+            }
+
+            #author {
+                background-color: var(--colour-tooltip);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                text-align: center;
+                font-size: 1em;
+                margin-block: 2px;
+                margin-top: 10px;
+                padding: 2px;
+                cursor: help;
+                width: 100%;
+                opacity: 0.9;
+            }
+
+            #author:focus,
+            #author:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+            }
+
+            #author:focus > a,
+            #author:hover > a {
+                color: var(--colour-hovered-fgr);
+            }
+
             /* Media queries */
             @media (min-width: 720px) {
                 body {
@@ -346,7 +369,7 @@
         </button>
 
         <!-- Main menu div -->
-        <div id="menu" tabindex="1">
+        <div id="menu" class="scene" tabindex="1">
             <h1 id="title">Template</h1>
 
             <select id="lang" tabindex="0"></select>
@@ -391,14 +414,14 @@
         </div>
 
         <!-- Main div -->
-        <div id="main" tabindex="0">
+        <div id="main" class="scene" tabindex="0">
             <button id="main-back" onclick="switchScene('main', 'menu')">
                 Back
             </button>
         </div>
 
         <!-- Editor div -->
-        <div id="editor" tabindex="0">
+        <div id="editor" class="scene" tabindex="0">
             <h2 id="editor-title">Level editor</h2>
 
             <button id="editor-back" onclick="switchScene('editor', 'menu')">
@@ -407,7 +430,7 @@
         </div>
 
         <!-- Settings div -->
-        <div id="settings" tabindex="0">
+        <div id="settings" class="scene" tabindex="0">
             <h2 id="settings-title">Settings</h2>
 
             <button
@@ -422,6 +445,7 @@
                 <summary id="settings-sound">Sound</summary>
 
                 <ul class="settings-list">
+                    <!-- Volume -->
                     <li>
                         <label for="set-volume" id="volume-label"
                             >Sound volume</label
@@ -434,6 +458,16 @@
                             step="0.1"
                             value="0.5"
                         />
+                    </li>
+
+                    <!-- Default sounds (buttons, inputs, etc.) -->
+                    <li>
+                        <div class="checkbox-div">
+                            <label for="set-def-sounds" id="def-sounds-label"
+                                >Default sounds (buttons, inputs, etc.)</label
+                            >
+                            <input type="checkbox" id="set-def-sounds" />
+                        </div>
                     </li>
                 </ul>
             </details>
@@ -479,7 +513,7 @@
         </div>
 
         <!-- About div -->
-        <div id="about" tabindex="0">
+        <div id="about" class="scene" tabindex="0">
             <h2 id="about-title">About</h2>
 
             <button id="about-back" onclick="switchScene('about', 'menu')">
@@ -512,6 +546,8 @@
 
             /** @type {HTMLInputElement} */
             let volumeInput = document.getElementById("set-volume");
+            /** @type {HTMLInputElement} */
+            let defaultSounds = document.getElementById("set-def-sounds");
             /** @type {HTMLButtonElement} */
             let defaultSettings = document.getElementById("default-settings");
 
@@ -544,10 +580,18 @@
                 localStorage.setItem("volume", volumeInput.value);
             });
 
+            defaultSounds.addEventListener("change", function (event) {
+                localStorage.setItem("default-sounds", this.checked);
+            });
+
             defaultSettings.addEventListener("click", function (event) {
                 // Volume
                 volumeInput.value = "0.5";
                 localStorage.setItem("volume", volumeInput.value);
+
+                // Default sounds
+                defaultSounds.checked = true;
+                localStorage.setItem("default-sounds", this.checked);
 
                 // Colours
                 for (const c in allColours) {
@@ -651,11 +695,34 @@
                 if (event.key === "Escape") switchScene("about", "menu");
             });
 
-            // Other events
+            // Default sounds
+            document
+                .querySelectorAll("button, input, select, textarea, summary, a")
+                .forEach((e) => {
+                    e.addEventListener("click", function (event) {
+                        if (!defaultSounds.checked) return;
+                        playSound("sine", [350, 50, 200], 0.1);
+                    });
+                });
 
             // Functions
             function loadSettings() {
-                volumeInput.value = localStorage.getItem("volume") ?? "0.5";
+                // Volume
+                if (localStorage.getItem("volume")) {
+                    volumeInput.value = localStorage.getItem("volume");
+                } else {
+                    volumeInput.value = "0.5";
+                    localStorage.setItem("volume", "0.5");
+                }
+
+                // Default sounds
+                if (localStorage.getItem("default-sounds")) {
+                    defaultSounds.checked =
+                        localStorage.getItem("default-sounds") === "true";
+                } else {
+                    defaultSettings.checked = true;
+                    localStorage.setItem("default-sounds", "true");
+                }
             }
 
             function switchScene(from, to) {
@@ -984,6 +1051,12 @@
                             childNodesTexts: ["Sound volume"],
                         },
                         {
+                            id: "def-sounds-label",
+                            childNodesTexts: [
+                                "Default sounds (buttons, inputs, etc.)",
+                            ],
+                        },
+                        {
                             id: "colour-settings",
                             childNodesTexts: ["Colours"],
                         },
@@ -1112,7 +1185,7 @@
                                 "Автор — ",
                                 "Виталий Павлович Ульянов (Vital)",
                                 ".",
-                                "Заходите ко мне на GitHub, чтобы узнать больше!",
+                                "Узнайте больше на GitHub!",
                             ],
                         },
                         {
@@ -1142,6 +1215,12 @@
                         {
                             id: "volume-label",
                             childNodesTexts: ["Громкость звука"],
+                        },
+                        {
+                            id: "def-sounds-label",
+                            childNodesTexts: [
+                                "Стандартные звуки (кнопки, поля ввода и т.п.)",
+                            ],
                         },
                         {
                             id: "colour-settings",

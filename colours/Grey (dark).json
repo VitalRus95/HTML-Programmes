@@ -5,7 +5,7 @@
     "--colour-text": "#fafafa",
     "--colour-button": "#363636",
     "--colour-border": "#4a4a4a",
-    "--colour-input": "#37373f",
+    "--colour-input": "#3f3f3f",
     "--colour-tooltip": "#1f1f1f",
     "--colour-hovered-bgr": "#dedede",
     "--colour-hovered-fgr": "#141414",
