@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Template</title>
+        <title>Traduco</title>
         <style>
             /* Animations */
             @keyframes scene-show {
@@ -368,6 +368,16 @@
                 row-gap: 2px;
             }
 
+            .table-text {
+                display: flex;
+                background-color: transparent;
+                resize: vertical;
+                min-height: 100%;
+                height: 100%;
+                width: 100%;
+                margin: 0px;
+            }
+
             .tooltip-parent {
                 position: relative;
             }
@@ -444,6 +454,25 @@
                 color: var(--colour-hovered-fgr);
             }
 
+            #table-source-stats,
+            #table-target-stats {
+                border-left: none;
+                padding: 0px 4px 0px 0px;
+                border-top: 2px outset var(--colour-border);
+                border-bottom: 2px outset var(--colour-border);
+                border-right: 2px outset var(--colour-border);
+            }
+
+            #table-source-stats:before,
+            #table-target-stats:before {
+                content: "Aa:";
+                background-color: var(--colour-text);
+                color: var(--colour-bgr-2);
+                border-radius: 4px 0px 0px 4px;
+                padding-inline: 4px;
+                margin-right: 4px;
+            }
+
             /* Media queries */
             @media (min-width: 720px) {
                 body {
@@ -457,25 +486,28 @@
             Export texts for translation
         </button>
 
-        <!-- Main menu div -->
+        <!-- Menu div -->
         <div id="menu" class="scene" tabindex="1">
-            <h1 id="title">Template</h1>
+            <h1 id="title">Traduco</h1>
 
             <select id="lang" tabindex="0"></select>
 
+            <input
+                type="file"
+                id="load-file"
+                accept=".txt,.json"
+                style="display: none"
+            />
+
+            <button id="start-button" tabindex="1" onclick="fillTable()">
+                Open
+            </button>
             <button
-                id="start-button"
+                id="continue-button"
                 tabindex="1"
                 onclick="switchScene('menu', 'main')"
             >
-                Start
-            </button>
-            <button
-                id="editor-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'editor')"
-            >
-                Editor
+                Continue
             </button>
             <button
                 id="settings-button"
@@ -507,15 +539,24 @@
             <button id="main-back" onclick="switchScene('main', 'menu')">
                 Back
             </button>
-        </div>
 
-        <!-- Editor div -->
-        <div id="editor" class="scene" tabindex="0">
-            <h2 id="editor-title">Level editor</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th id="table-source" tabindex="0">Source</th>
+                        <th id="table-target" tabindex="0">Target</th>
+                    </tr>
+                </thead>
 
-            <button id="editor-back" onclick="switchScene('editor', 'menu')">
-                Back
-            </button>
+                <tbody id="table-body"></tbody>
+
+                <tfoot>
+                    <tr>
+                        <td id="table-source-stats" tabindex="0"></td>
+                        <td id="table-target-stats" tabindex="0"></td>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
 
         <!-- Settings div -->
@@ -613,7 +654,10 @@
                 Back
             </button>
 
-            <p>Programme description. To be continued...</p>
+            <p id="about-p">
+                A simple translation tool allowing to precisely track your
+                progress and symbol count.
+            </p>
         </div>
 
         <script>
@@ -622,8 +666,12 @@
             let menu = document.getElementById("menu");
             /** @type {HTMLDivElement} */
             let main = document.getElementById("main");
-            /** @type {HTMLDivElement} */
-            let editor = document.getElementById("editor");
+            /** @type {HTMLTableSectionElement} */
+            let tableBody = document.getElementById("table-body");
+            /** @type {HTMLTableSectionElement} */
+            let tableSrcStats = document.getElementById("table-source-stats");
+            /** @type {HTMLTableSectionElement} */
+            let tableTarStats = document.getElementById("table-target-stats");
             /** @type {HTMLDivElement} */
             let settings = document.getElementById("settings");
             /** @type {HTMLUListElement} */
@@ -666,6 +714,9 @@
             let audio = new (
                 window.AudioContext || window.webkitAudioContext
             )();
+            /** @type {string} */
+            let source =
+                'Lego Introduces First-Ever Affordable Lego Set\n\nBILLUND, DENMARK — Motivated by worldwide economic stagnation, engineers at Lego headquarters in Billund have developed the first-ever affordable LEGO® set: a single brick that retails for a meager $9.99.\n\n"Finally, a Lego set most people can afford!" said one thrilled parent.\n\n"Wow!" exclaimed every child in the world. "And it comes in such cool colors!"\n\nLEGO® Brick comes in blue.\n\nThe new "One Brick" Lego set includes a ten-page booklet detailing its infinite possibilities.\n\nPer the official LEGO® Brick Imagination Guide™: "Kids can turn their LEGO® Brick into anything! It could be a table, a chair, or even a chest-high wall for your LEGO® figures to hide behind! (LEGO® figures sold separately)"\n\n"This set is our most ambitious set to date," said Professor LEGO, the mysterious CEO who has rarely been seen by the public. "Now everyone can enjoy the fun of LEGO, not just very wealthy people like me."\n\nTo save costs during the manufacturing process, the new set forgoes popular license tie-ins such as Star Wars or Jurassic World in favor of the power of imagination. To get kids started, a tie-in graphic novel was produced that sets up a world made out of plastic in which bricks live as hermits. The graphic novel retails for $34.95.\n\nAt publishing time, sales of the LEGO® Brick set have exceeded demand, causing prices to surge in excess of $1,000.';
 
             // Settings' events
             volumeInput.addEventListener("change", function (event) {
@@ -778,9 +829,6 @@
             main.addEventListener("keydown", function (event) {
                 if (event.key === "Escape") switchScene("main", "menu");
             });
-            editor.addEventListener("keydown", function (event) {
-                if (event.key === "Escape") switchScene("editor", "menu");
-            });
             settings.addEventListener("keydown", function (event) {
                 if (event.key === "Escape") switchScene("settings", "menu");
             });
@@ -799,6 +847,70 @@
                 });
 
             // Functions
+            function fillTable() {
+                source.split("\n").forEach((p) => {
+                    if (p === "") return;
+
+                    /** @type {HTMLTableRowElement} */
+                    let row = tableBody.appendChild(
+                        document.createElement("tr"),
+                    );
+
+                    /** @type {HTMLTableDataCellElement} */
+                    let dataSource = row.appendChild(
+                        document.createElement("td"),
+                    );
+                    dataSource.style.border = "none";
+                    dataSource.style.padding = "0px";
+
+                    /** @type {HTMLTextAreaElement} */
+                    let textSource = dataSource.appendChild(
+                        document.createElement("textarea"),
+                    );
+                    textSource.value = p;
+                    textSource.classList.add("table-text");
+
+                    /** @type {HTMLTableDataCellElement} */
+                    let dataTarget = row.appendChild(
+                        document.createElement("td"),
+                    );
+                    dataTarget.style.border = "none";
+                    dataTarget.style.padding = "0px";
+
+                    /** @type {HTMLTextAreaElement */
+                    let textTarget = dataTarget.appendChild(
+                        document.createElement("textarea"),
+                    );
+                    textTarget.classList.add("table-text");
+
+                    // Source text area events
+                    textSource.addEventListener("click", function (event) {
+                        let selection = this.selectionEnd - this.selectionStart;
+                        let total = this.value.length;
+
+                        if (selection) {
+                            tableSrcStats.textContent = `${selection}/${total}`;
+                        } else {
+                            tableSrcStats.textContent = `${total}`;
+                        }
+                    });
+
+                    // Target text area events
+                    textTarget.addEventListener("click", function (event) {
+                        let selection = this.selectionEnd - this.selectionStart;
+                        let total = this.value.length;
+
+                        if (selection) {
+                            tableTarStats.textContent = `${selection}/${total}`;
+                        } else {
+                            tableTarStats.textContent = `${total}`;
+                        }
+                    });
+                });
+            }
+
+            fillTable();
+
             function loadSettings() {
                 // Volume
                 if (localStorage.getItem("volume")) {
@@ -1095,7 +1207,7 @@
                             childNodesTexts: ["Start"],
                         },
                         {
-                            id: "editor-button",
+                            id: "continue-button",
                             childNodesTexts: ["Editor"],
                         },
                         {
@@ -1261,7 +1373,7 @@
                             childNodesTexts: ["Начать"],
                         },
                         {
-                            id: "editor-button",
+                            id: "continue-button",
                             childNodesTexts: ["Редактор"],
                         },
                         {
