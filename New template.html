@@ -166,7 +166,19 @@
             details[open] > summary:hover,
             details[open]:focus > summary,
             details[open]:hover > summary {
-                animation: summary-focus 0.7s ease;
+                background-color: var(--colour-button);
+                background-image: linear-gradient(
+                    60deg,
+                    var(--colour-input),
+                    transparent,
+                    var(--colour-tooltip)
+                );
+                transition: background-color 0.7s ease;
+                -moz-transition: background-color 0.7s ease;
+                -webkit-transition: background-color 0.7s ease;
+            }
+
+            details[open]:focus-within > summary {
                 background-color: var(--colour-button);
                 background-image: linear-gradient(
                     60deg,
