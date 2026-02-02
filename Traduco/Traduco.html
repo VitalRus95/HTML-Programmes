@@ -277,11 +277,6 @@
                 z-index: 8;
             }
 
-            thead > tr,
-            tfoot > tr {
-                margin-block: 2px;
-            }
-
             tfoot > tr > td,
             tfoot > tr > th {
                 background-color: var(--colour-input);
@@ -476,7 +471,7 @@
             /* Media queries */
             @media (min-width: 720px) {
                 body {
-                    max-width: 60%;
+                    max-width: 70%;
                 }
             }
         </style>
@@ -492,35 +487,22 @@
 
             <select id="lang" tabindex="0"></select>
 
-            <input
-                type="file"
-                id="load-file"
-                accept=".txt,.json"
-                style="display: none"
-            />
+            <input type="file" id="load-project" accept=".txt,.json" style="display: none" />
 
-            <button id="start-button" tabindex="1" onclick="fillTable()">
+            <button id="start-button" tabindex="1" class="tooltip-parent">
                 Open
+                <span id="start-tooltip" class="tooltip"
+                    >Open a text (.txt) or a project (.json)</span
+                >
             </button>
-            <button
-                id="continue-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'main')"
+            <button id="continue-button" tabindex="1" disabled>Continue</button>
+            <a id="save-project" href="" download="Project.json" class="pseudo-button"
+                >Save project</a
             >
-                Continue
-            </button>
-            <button
-                id="settings-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'settings')"
-            >
+            <button id="settings-button" tabindex="1" onclick="switchScene('menu', 'settings')">
                 Settings
             </button>
-            <button
-                id="about-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'about')"
-            >
+            <button id="about-button" tabindex="1" onclick="switchScene('menu', 'about')">
                 About
             </button>
 
@@ -536,9 +518,9 @@
 
         <!-- Main div -->
         <div id="main" class="scene" tabindex="0">
-            <button id="main-back" onclick="switchScene('main', 'menu')">
-                Back
-            </button>
+            <button id="main-back" onclick="switchScene('main', 'menu')">Back</button>
+
+            <h3 id="project-name" contenteditable="true">...</h3>
 
             <table>
                 <thead>
@@ -563,12 +545,7 @@
         <div id="settings" class="scene" tabindex="0">
             <h2 id="settings-title">Settings</h2>
 
-            <button
-                id="settings-back"
-                onclick="switchScene('settings', 'menu')"
-            >
-                Back
-            </button>
+            <button id="settings-back" onclick="switchScene('settings', 'menu')">Back</button>
 
             <!-- Sound settings -->
             <details>
@@ -577,9 +554,7 @@
                 <ul class="settings-list">
                     <!-- Volume -->
                     <li>
-                        <label for="set-volume" id="volume-label"
-                            >Sound volume</label
-                        >
+                        <label for="set-volume" id="volume-label">Sound volume</label>
                         <input
                             type="number"
                             id="set-volume"
@@ -596,11 +571,7 @@
                             <label for="set-def-sounds" id="def-sounds-label"
                                 >Default sounds (buttons, inputs, etc.)</label
                             >
-                            <input
-                                type="checkbox"
-                                id="set-def-sounds"
-                                checked
-                            />
+                            <input type="checkbox" id="set-def-sounds" checked />
                         </div>
                     </li>
                 </ul>
@@ -611,18 +582,9 @@
                 <summary id="colour-settings">Colours</summary>
 
                 <div class="button-container">
-                    <input
-                        type="file"
-                        id="colour-loader"
-                        accept=".json"
-                        style="display: none"
-                    />
+                    <input type="file" id="colour-loader" accept=".json" style="display: none" />
                     <button id="load-colours">Load colours</button>
-                    <a
-                        id="save-colours"
-                        href=""
-                        download="Colours.json"
-                        class="pseudo-button"
+                    <a id="save-colours" href="" download="Colours.json" class="pseudo-button"
                         >Save colours</a
                     >
                 </div>
@@ -631,9 +593,7 @@
 
                 <div class="button-container">
                     <button id="example-button">Button example</button>
-                    <button id="example-disabled-button" disabled>
-                        Disabled button example
-                    </button>
+                    <button id="example-disabled-button" disabled>Disabled button example</button>
                     <input
                         type="text"
                         id="example-input"
@@ -650,13 +610,11 @@
         <div id="about" class="scene" tabindex="0">
             <h2 id="about-title">About</h2>
 
-            <button id="about-back" onclick="switchScene('about', 'menu')">
-                Back
-            </button>
+            <button id="about-back" onclick="switchScene('about', 'menu')">Back</button>
 
             <p id="about-p">
-                A simple translation tool allowing to precisely track your
-                progress and symbol count.
+                A simple translation tool allowing to precisely track your progress and symbol
+                count.
             </p>
         </div>
 
@@ -666,6 +624,8 @@
             let menu = document.getElementById("menu");
             /** @type {HTMLDivElement} */
             let main = document.getElementById("main");
+            /** @type {HTMLHeadingElement} */
+            let projectName = document.getElementById("project-name");
             /** @type {HTMLTableSectionElement} */
             let tableBody = document.getElementById("table-body");
             /** @type {HTMLTableSectionElement} */
@@ -684,6 +644,14 @@
             let loadColours = document.getElementById("load-colours");
             /** @type {HTMLAnchorElement} */
             let saveColours = document.getElementById("save-colours");
+            /** @type {HTMLButtonElement} */
+            let startButton = document.getElementById("start-button");
+            /** @type {HTMLButtonElement} */
+            let continueButton = document.getElementById("continue-button");
+            /** @type {HTMLInputElement} */
+            let loadProjectInput = document.getElementById("load-project");
+            /** @type {HTMLAnchorElement} */
+            let saveProject = document.getElementById("save-project");
 
             /** @type {HTMLInputElement} */
             let volumeInput = document.getElementById("set-volume");
@@ -691,6 +659,14 @@
             let defaultSounds = document.getElementById("set-def-sounds");
             /** @type {HTMLButtonElement} */
             let defaultSettings = document.getElementById("default-settings");
+
+            continueButton.disabled = true;
+
+            // Types
+            /** @typedef Paragraph
+             * @property {string} source;
+             * @property {string} target;
+             */
 
             // Objects
             const allColours = {
@@ -711,12 +687,15 @@
 
             // Variables
             /** @type {AudioContext} */
-            let audio = new (
-                window.AudioContext || window.webkitAudioContext
-            )();
-            /** @type {string} */
-            let source =
-                'Lego Introduces First-Ever Affordable Lego Set\n\nBILLUND, DENMARK — Motivated by worldwide economic stagnation, engineers at Lego headquarters in Billund have developed the first-ever affordable LEGO® set: a single brick that retails for a meager $9.99.\n\n"Finally, a Lego set most people can afford!" said one thrilled parent.\n\n"Wow!" exclaimed every child in the world. "And it comes in such cool colors!"\n\nLEGO® Brick comes in blue.\n\nThe new "One Brick" Lego set includes a ten-page booklet detailing its infinite possibilities.\n\nPer the official LEGO® Brick Imagination Guide™: "Kids can turn their LEGO® Brick into anything! It could be a table, a chair, or even a chest-high wall for your LEGO® figures to hide behind! (LEGO® figures sold separately)"\n\n"This set is our most ambitious set to date," said Professor LEGO, the mysterious CEO who has rarely been seen by the public. "Now everyone can enjoy the fun of LEGO, not just very wealthy people like me."\n\nTo save costs during the manufacturing process, the new set forgoes popular license tie-ins such as Star Wars or Jurassic World in favor of the power of imagination. To get kids started, a tie-in graphic novel was produced that sets up a world made out of plastic in which bricks live as hermits. The graphic novel retails for $34.95.\n\nAt publishing time, sales of the LEGO® Brick set have exceeded demand, causing prices to surge in excess of $1,000.';
+            let audio = new (window.AudioContext || window.webkitAudioContext)();
+            /** @type {{
+             name: string;
+             notes: string;
+             lastId: string;
+             selection: [number, number];
+             paragraphs: Paragraph[];
+            }} */
+            let project = {};
 
             // Settings' events
             volumeInput.addEventListener("change", function (event) {
@@ -749,8 +728,7 @@
             Object.keys(allColours).forEach((c) => {
                 document.body.style.setProperty(
                     c,
-                    localStorage.getItem(c) ??
-                        getComputedStyle(document.body).getPropertyValue(c),
+                    localStorage.getItem(c) ?? getComputedStyle(document.body).getPropertyValue(c),
                 );
 
                 /** @type {HTMLLIElement} */
@@ -776,9 +754,7 @@
                 if (c === "--colour-tooltip") {
                     item.classList.add("tooltip-parent");
                     /** @type {HTMLSpanElement} */
-                    let tooltip = item.appendChild(
-                        document.createElement("span"),
-                    );
+                    let tooltip = item.appendChild(document.createElement("span"));
 
                     tooltip.id = "example-tooltip";
                     tooltip.classList.add("tooltip");
@@ -787,20 +763,17 @@
             });
 
             // Loading colours
-            loadColours.addEventListener("click", function () {
+            loadColours.addEventListener("click", function (event) {
                 colourLoader.click();
             });
 
-            colourLoader.addEventListener("change", async function () {
+            colourLoader.addEventListener("change", async function (event) {
                 await colourLoader.files[0].text().then((content) => {
                     try {
                         let loadedColours = JSON.parse(content);
 
                         for (const c in loadedColours) {
-                            document.body.style.setProperty(
-                                c,
-                                loadedColours[c],
-                            );
+                            document.body.style.setProperty(c, loadedColours[c]);
                             document.getElementById(c).value = loadedColours[c];
                             localStorage.setItem(c, loadedColours[c]);
                             this.value = "";
@@ -812,16 +785,14 @@
             });
 
             // Saving colours
-            saveColours.addEventListener("click", function () {
+            saveColours.addEventListener("click", function (event) {
                 let savedColours = {};
 
                 Object.keys(allColours).forEach((c) => {
                     savedColours[c] = document.body.style.getPropertyValue(c);
                 });
 
-                let data = encodeURIComponent(
-                    JSON.stringify(savedColours, undefined, 4),
-                );
+                let data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
                 this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
@@ -846,70 +817,148 @@
                     });
                 });
 
+            // Project name
+            projectName.addEventListener("input", function (event) {
+                project.name = projectName.textContent;
+            });
+
+            // Loading project
+            startButton.addEventListener("click", function (event) {
+                loadProjectInput.click();
+            });
+
+            continueButton.addEventListener("click", function (event) {
+                switchScene("menu", "main");
+                /** @type {HTMLTextAreaElement} */
+                let lastText = document.getElementById(project.lastId);
+                if (lastText) {
+                    lastText.setSelectionRange(...project.selection);
+                    lastText.focus();
+                }
+            });
+
+            loadProjectInput.addEventListener("change", async function (event) {
+                await loadProjectInput.files[0].text().then((content) => {
+                    try {
+                        let name = loadProjectInput.files[0].name;
+                        if (!name.endsWith(".txt") && !name.endsWith(".json"))
+                            throw new Error("Wrong file type! Only .txt or .json are allowed!");
+
+                        if (name.endsWith(".json")) {
+                            // A project is loaded
+                            project = JSON.parse(content);
+                        } else {
+                            // A source text is loaded
+                            project.name = loadProjectInput.files[0].name.replace(".txt", "");
+                            project.lastId = `t0`;
+                            project.selection = [0, 0];
+                            project.paragraphs = [];
+                            content.split("\n").forEach((p) => {
+                                if (p.trim() === "") return;
+                                project.paragraphs.push({
+                                    source: p.trim(),
+                                    target: "",
+                                });
+                            });
+                        }
+                        fillTable();
+                        continueButton.disabled = false;
+                        projectName.textContent = project.name;
+                    } catch (error) {
+                        alert(`Error while opening the file: ${error}`);
+                    }
+                });
+            });
+
+            // Saving project
+            saveProject.addEventListener("click", function (event) {
+                let data = encodeURIComponent(JSON.stringify(project, undefined, 4));
+                this.download = `${project.name}.json`;
+                this.href = `data:text/plain;charset=utf-8,${data}`;
+            });
+
             // Functions
             function fillTable() {
-                source.split("\n").forEach((p) => {
-                    if (p === "") return;
+                switchScene("menu", "main");
+                while (tableBody.hasChildNodes()) tableBody.lastChild.remove();
 
+                /** @type {number} */
+                let index = 0;
+
+                project.paragraphs.forEach((p, i) => {
                     /** @type {HTMLTableRowElement} */
-                    let row = tableBody.appendChild(
-                        document.createElement("tr"),
-                    );
+                    let row = tableBody.appendChild(document.createElement("tr"));
 
                     /** @type {HTMLTableDataCellElement} */
-                    let dataSource = row.appendChild(
-                        document.createElement("td"),
-                    );
+                    let dataSource = row.appendChild(document.createElement("td"));
                     dataSource.style.border = "none";
                     dataSource.style.padding = "0px";
 
                     /** @type {HTMLTextAreaElement} */
-                    let textSource = dataSource.appendChild(
-                        document.createElement("textarea"),
-                    );
-                    textSource.value = p;
+                    let textSource = dataSource.appendChild(document.createElement("textarea"));
+                    textSource.id = `s${index}`;
+                    textSource.value = p.source;
                     textSource.classList.add("table-text");
+                    textSource.style.height = textSource.scrollHeight * 2 + "px";
 
                     /** @type {HTMLTableDataCellElement} */
-                    let dataTarget = row.appendChild(
-                        document.createElement("td"),
-                    );
+                    let dataTarget = row.appendChild(document.createElement("td"));
                     dataTarget.style.border = "none";
                     dataTarget.style.padding = "0px";
 
                     /** @type {HTMLTextAreaElement */
-                    let textTarget = dataTarget.appendChild(
-                        document.createElement("textarea"),
-                    );
+                    let textTarget = dataTarget.appendChild(document.createElement("textarea"));
+                    textTarget.id = `t${index}`;
+                    textTarget.value = p.target;
                     textTarget.classList.add("table-text");
 
-                    // Source text area events
-                    textSource.addEventListener("click", function (event) {
-                        let selection = this.selectionEnd - this.selectionStart;
-                        let total = this.value.length;
+                    // Common source & target text areas' events
+                    ["selectionchange", "focus", "input"].forEach((e) => {
+                        [textSource, textTarget].forEach((t) => {
+                            // Update statistics
+                            t.addEventListener(e, function (event) {
+                                /** @type {HTMLTableSectionElement} */
+                                let stats = t === textSource ? tableSrcStats : tableTarStats;
+                                let selection = this.selectionEnd - this.selectionStart;
+                                let paragraph = this.value.length;
+                                let total = 0;
 
-                        if (selection) {
-                            tableSrcStats.textContent = `${selection}/${total}`;
-                        } else {
-                            tableSrcStats.textContent = `${total}`;
-                        }
+                                project.paragraphs.forEach((p) => {
+                                    total += t === textSource ? p.source.length : p.target.length;
+                                });
+
+                                if (selection) {
+                                    stats.textContent = `${selection}/${paragraph}/${total}`;
+                                } else {
+                                    stats.textContent = `${paragraph}/${total}`;
+                                }
+                                project.lastId = this.id;
+                                project.selection = [this.selectionStart, this.selectionEnd];
+                            });
+
+                            // Save changes to paragraphs array
+                            if (e === "input") {
+                                t.addEventListener("input", function (event) {
+                                    if (t === textSource) {
+                                        project.paragraphs[i].source = this.value;
+                                    } else {
+                                        project.paragraphs[i].target = this.value;
+                                    }
+                                });
+                            }
+                        });
                     });
 
-                    // Target text area events
-                    textTarget.addEventListener("click", function (event) {
-                        let selection = this.selectionEnd - this.selectionStart;
-                        let total = this.value.length;
-
-                        if (selection) {
-                            tableTarStats.textContent = `${selection}/${total}`;
-                        } else {
-                            tableTarStats.textContent = `${total}`;
-                        }
-                    });
+                    index++;
                 });
-            }
 
-            fillTable();
+                /** @type {HTMLTextAreaElement} */
+                let lastText = document.getElementById(project.lastId);
+                if (lastText) {
+                    lastText.setSelectionRange(...project.selection);
+                    lastText.focus();
+                }
+            }
 
             function loadSettings() {
                 // Volume
@@ -922,8 +971,7 @@
 
                 // Default sounds
                 if (localStorage.getItem("default-sounds")) {
-                    defaultSounds.checked =
-                        localStorage.getItem("default-sounds") === "true";
+                    defaultSounds.checked = localStorage.getItem("default-sounds") === "true";
                 } else {
                     defaultSettings.checked = true;
                     localStorage.setItem("default-sounds", "true");
@@ -957,11 +1005,7 @@
 
                 oscillator.type = type;
                 oscillator.frequency.value = frequencies[0];
-                oscillator.frequency.setValueCurveAtTime(
-                    frequencies,
-                    audio.currentTime,
-                    duration,
-                );
+                oscillator.frequency.setValueCurveAtTime(frequencies, audio.currentTime, duration);
                 oscillator.connect(volume);
 
                 volume.gain.value = +volumeInput.value;
@@ -1014,9 +1058,7 @@
 
                 for (let l of languages) {
                     /** @type {HTMLOptionElement} */
-                    let option = list.appendChild(
-                        document.createElement("option"),
-                    );
+                    let option = list.appendChild(document.createElement("option"));
                     option.value = l.name;
                     option.textContent = l.name;
                 }
@@ -1097,8 +1139,7 @@
                                             c.textContent.trim() !== "" &&
                                             e.childNodesTexts[index]
                                         ) {
-                                            c.textContent =
-                                                e.childNodesTexts[index];
+                                            c.textContent = e.childNodesTexts[index];
                                             index++;
                                         }
                                     }
@@ -1137,13 +1178,8 @@
                             newEl.childNodesTexts = [];
 
                             for (let n of e.childNodes) {
-                                if (
-                                    n.textContent &&
-                                    n.textContent.trim() !== ""
-                                ) {
-                                    newEl.childNodesTexts.push(
-                                        n.textContent.trim(),
-                                    );
+                                if (n.textContent && n.textContent.trim() !== "") {
+                                    newEl.childNodesTexts.push(n.textContent.trim());
                                 }
                             }
                         } else {
@@ -1166,9 +1202,7 @@
                     }
                 });
 
-                navigator.clipboard.writeText(
-                    JSON.stringify(elements, null, 4),
-                );
+                navigator.clipboard.writeText(JSON.stringify(elements, null, 4));
                 alert("Translation template copied to clipboard!");
             }
 
@@ -1204,11 +1238,11 @@
                         },
                         {
                             id: "start-button",
-                            childNodesTexts: ["Start"],
+                            childNodesTexts: ["Open"],
                         },
                         {
                             id: "continue-button",
-                            childNodesTexts: ["Editor"],
+                            childNodesTexts: ["Continue"],
                         },
                         {
                             id: "settings-button",
@@ -1257,9 +1291,7 @@
                         },
                         {
                             id: "def-sounds-label",
-                            childNodesTexts: [
-                                "Default sounds (buttons, inputs, etc.)",
-                            ],
+                            childNodesTexts: ["Default sounds (buttons, inputs, etc.)"],
                         },
                         {
                             id: "colour-settings",
@@ -1370,11 +1402,11 @@
                         },
                         {
                             id: "start-button",
-                            childNodesTexts: ["Начать"],
+                            childNodesTexts: ["Открыть"],
                         },
                         {
                             id: "continue-button",
-                            childNodesTexts: ["Редактор"],
+                            childNodesTexts: ["Продолжить"],
                         },
                         {
                             id: "settings-button",
@@ -1423,9 +1455,7 @@
                         },
                         {
                             id: "def-sounds-label",
-                            childNodesTexts: [
-                                "Стандартные звуки (кнопки, поля ввода и т.п.)",
-                            ],
+                            childNodesTexts: ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
                         },
                         {
                             id: "colour-settings",

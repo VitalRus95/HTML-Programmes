@@ -277,11 +277,6 @@
                 z-index: 8;
             }
 
-            thead > tr,
-            tfoot > tr {
-                margin-block: 2px;
-            }
-
             tfoot > tr > td,
             tfoot > tr > th {
                 background-color: var(--colour-input);
@@ -717,7 +712,7 @@
                 input.id = c;
                 input.type = "color";
                 input.value = document.body.style.getPropertyValue(c);
-                input.addEventListener("input", function () {
+                input.addEventListener("input", function (event) {
                     document.body.style.setProperty(c, this.value);
                     localStorage.setItem(c, this.value);
                 });
@@ -736,11 +731,11 @@
             });
 
             // Loading colours
-            loadColours.addEventListener("click", function () {
+            loadColours.addEventListener("click", function (event) {
                 colourLoader.click();
             });
 
-            colourLoader.addEventListener("change", async function () {
+            colourLoader.addEventListener("change", async function (event) {
                 await colourLoader.files[0].text().then((content) => {
                     try {
                         let loadedColours = JSON.parse(content);
@@ -761,7 +756,7 @@
             });
 
             // Saving colours
-            saveColours.addEventListener("click", function () {
+            saveColours.addEventListener("click", function (event) {
                 let savedColours = {};
 
                 Object.keys(allColours).forEach((c) => {
