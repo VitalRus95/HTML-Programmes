@@ -344,16 +344,16 @@
                 column-gap: 4px;
             }
 
-            .checkbox-div {
-                display: flex;
-                column-gap: 4px;
-                align-items: center;
-            }
-
             .scene {
                 display: none;
                 flex-direction: column;
                 animation: scene-show 0.4s ease;
+            }
+
+            .setting-div {
+                display: flex;
+                column-gap: 4px;
+                align-items: center;
             }
 
             .settings-list {
@@ -454,36 +454,20 @@
 
         <!-- Main menu div -->
         <div id="menu" class="scene" tabindex="1">
-            <h1 id="title">Template</h1>
+            <h1 id="title" tabindex="1">Template</h1>
 
             <select id="lang" tabindex="0"></select>
 
-            <button
-                id="start-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'main')"
-            >
+            <button id="start-button" tabindex="1" onclick="switchScene('menu', 'main')">
                 Start
             </button>
-            <button
-                id="editor-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'editor')"
-            >
+            <button id="editor-button" tabindex="1" onclick="switchScene('menu', 'editor')">
                 Editor
             </button>
-            <button
-                id="settings-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'settings')"
-            >
+            <button id="settings-button" tabindex="1" onclick="switchScene('menu', 'settings')">
                 Settings
             </button>
-            <button
-                id="about-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'about')"
-            >
+            <button id="about-button" tabindex="1" onclick="switchScene('menu', 'about')">
                 About
             </button>
 
@@ -499,41 +483,30 @@
 
         <!-- Main div -->
         <div id="main" class="scene" tabindex="0">
-            <button id="main-back" onclick="switchScene('main', 'menu')">
-                Back
-            </button>
+            <button id="main-back" onclick="switchScene('main', 'menu')">Back</button>
         </div>
 
         <!-- Editor div -->
         <div id="editor" class="scene" tabindex="0">
-            <h2 id="editor-title">Level editor</h2>
+            <h2 id="editor-title" tabindex="0">Editor</h2>
 
-            <button id="editor-back" onclick="switchScene('editor', 'menu')">
-                Back
-            </button>
+            <button id="editor-back" onclick="switchScene('editor', 'menu')">Back</button>
         </div>
 
         <!-- Settings div -->
         <div id="settings" class="scene" tabindex="0">
-            <h2 id="settings-title">Settings</h2>
+            <h2 id="settings-title" tabindex="0">Settings</h2>
 
-            <button
-                id="settings-back"
-                onclick="switchScene('settings', 'menu')"
-            >
-                Back
-            </button>
+            <button id="settings-back" onclick="switchScene('settings', 'menu')">Back</button>
 
             <!-- Sound settings -->
             <details>
-                <summary id="settings-sound">Sound</summary>
+                <summary id="sound-settings">Sound</summary>
 
                 <ul class="settings-list">
                     <!-- Volume -->
                     <li>
-                        <label for="set-volume" id="volume-label"
-                            >Sound volume</label
-                        >
+                        <label for="set-volume" id="volume-label">Sound volume</label>
                         <input
                             type="number"
                             id="set-volume"
@@ -546,15 +519,11 @@
 
                     <!-- Default sounds (buttons, inputs, etc.) -->
                     <li>
-                        <div class="checkbox-div">
+                        <div class="setting-div">
                             <label for="set-def-sounds" id="def-sounds-label"
                                 >Default sounds (buttons, inputs, etc.)</label
                             >
-                            <input
-                                type="checkbox"
-                                id="set-def-sounds"
-                                checked
-                            />
+                            <input type="checkbox" id="set-def-sounds" checked />
                         </div>
                     </li>
                 </ul>
@@ -565,18 +534,9 @@
                 <summary id="colour-settings">Colours</summary>
 
                 <div class="button-container">
-                    <input
-                        type="file"
-                        id="colour-loader"
-                        accept=".json"
-                        style="display: none"
-                    />
+                    <input type="file" id="colour-loader" accept=".json" style="display: none" />
                     <button id="load-colours">Load colours</button>
-                    <a
-                        id="save-colours"
-                        href=""
-                        download="Colours.json"
-                        class="pseudo-button"
+                    <a id="save-colours" href="" download="Colours.json" class="pseudo-button"
                         >Save colours</a
                     >
                 </div>
@@ -585,9 +545,7 @@
 
                 <div class="button-container">
                     <button id="example-button">Button example</button>
-                    <button id="example-disabled-button" disabled>
-                        Disabled button example
-                    </button>
+                    <button id="example-disabled-button" disabled>Disabled button example</button>
                     <input
                         type="text"
                         id="example-input"
@@ -602,11 +560,9 @@
 
         <!-- About div -->
         <div id="about" class="scene" tabindex="0">
-            <h2 id="about-title">About</h2>
+            <h2 id="about-title" tabindex="0">About</h2>
 
-            <button id="about-back" onclick="switchScene('about', 'menu')">
-                Back
-            </button>
+            <button id="about-back" onclick="switchScene('about', 'menu')">Back</button>
 
             <p>Programme description. To be continued...</p>
         </div>
@@ -658,9 +614,7 @@
 
             // Variables
             /** @type {AudioContext} */
-            let audio = new (
-                window.AudioContext || window.webkitAudioContext
-            )();
+            let audio = new (window.AudioContext || window.webkitAudioContext)();
 
             // Settings' events
             volumeInput.addEventListener("change", function (event) {
@@ -693,8 +647,7 @@
             Object.keys(allColours).forEach((c) => {
                 document.body.style.setProperty(
                     c,
-                    localStorage.getItem(c) ??
-                        getComputedStyle(document.body).getPropertyValue(c),
+                    localStorage.getItem(c) ?? getComputedStyle(document.body).getPropertyValue(c),
                 );
 
                 /** @type {HTMLLIElement} */
@@ -720,9 +673,7 @@
                 if (c === "--colour-tooltip") {
                     item.classList.add("tooltip-parent");
                     /** @type {HTMLSpanElement} */
-                    let tooltip = item.appendChild(
-                        document.createElement("span"),
-                    );
+                    let tooltip = item.appendChild(document.createElement("span"));
 
                     tooltip.id = "example-tooltip";
                     tooltip.classList.add("tooltip");
@@ -741,10 +692,7 @@
                         let loadedColours = JSON.parse(content);
 
                         for (const c in loadedColours) {
-                            document.body.style.setProperty(
-                                c,
-                                loadedColours[c],
-                            );
+                            document.body.style.setProperty(c, loadedColours[c]);
                             document.getElementById(c).value = loadedColours[c];
                             localStorage.setItem(c, loadedColours[c]);
                             this.value = "";
@@ -763,9 +711,7 @@
                     savedColours[c] = document.body.style.getPropertyValue(c);
                 });
 
-                let data = encodeURIComponent(
-                    JSON.stringify(savedColours, undefined, 4),
-                );
+                let data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
                 this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
@@ -796,19 +742,13 @@
             // Functions
             function loadSettings() {
                 // Volume
-                if (localStorage.getItem("volume")) {
-                    volumeInput.value = localStorage.getItem("volume");
-                } else {
-                    volumeInput.value = "0.5";
-                    localStorage.setItem("volume", "0.5");
-                }
+                volumeInput.value = localStorage.getItem("volume") ?? "0.5";
 
                 // Default sounds
                 if (localStorage.getItem("default-sounds")) {
-                    defaultSounds.checked =
-                        localStorage.getItem("default-sounds") === "true";
+                    defaultSounds.checked = localStorage.getItem("default-sounds") === "true";
                 } else {
-                    defaultSettings.checked = true;
+                    defaultSounds.checked = true;
                     localStorage.setItem("default-sounds", "true");
                 }
             }
@@ -840,11 +780,7 @@
 
                 oscillator.type = type;
                 oscillator.frequency.value = frequencies[0];
-                oscillator.frequency.setValueCurveAtTime(
-                    frequencies,
-                    audio.currentTime,
-                    duration,
-                );
+                oscillator.frequency.setValueCurveAtTime(frequencies, audio.currentTime, duration);
                 oscillator.connect(volume);
 
                 volume.gain.value = +volumeInput.value;
@@ -897,9 +833,7 @@
 
                 for (let l of languages) {
                     /** @type {HTMLOptionElement} */
-                    let option = list.appendChild(
-                        document.createElement("option"),
-                    );
+                    let option = list.appendChild(document.createElement("option"));
                     option.value = l.name;
                     option.textContent = l.name;
                 }
@@ -980,8 +914,7 @@
                                             c.textContent.trim() !== "" &&
                                             e.childNodesTexts[index]
                                         ) {
-                                            c.textContent =
-                                                e.childNodesTexts[index];
+                                            c.textContent = e.childNodesTexts[index];
                                             index++;
                                         }
                                     }
@@ -1020,13 +953,8 @@
                             newEl.childNodesTexts = [];
 
                             for (let n of e.childNodes) {
-                                if (
-                                    n.textContent &&
-                                    n.textContent.trim() !== ""
-                                ) {
-                                    newEl.childNodesTexts.push(
-                                        n.textContent.trim(),
-                                    );
+                                if (n.textContent && n.textContent.trim() !== "") {
+                                    newEl.childNodesTexts.push(n.textContent.trim());
                                 }
                             }
                         } else {
@@ -1049,9 +977,7 @@
                     }
                 });
 
-                navigator.clipboard.writeText(
-                    JSON.stringify(elements, null, 4),
-                );
+                navigator.clipboard.writeText(JSON.stringify(elements, null, 4));
                 alert("Translation template copied to clipboard!");
             }
 
@@ -1131,7 +1057,7 @@
                             childNodesTexts: ["Back"],
                         },
                         {
-                            id: "settings-sound",
+                            id: "sound-settings",
                             childNodesTexts: ["Sound"],
                         },
                         {
@@ -1140,9 +1066,7 @@
                         },
                         {
                             id: "def-sounds-label",
-                            childNodesTexts: [
-                                "Default sounds (buttons, inputs, etc.)",
-                            ],
+                            childNodesTexts: ["Default sounds (buttons, inputs, etc.)"],
                         },
                         {
                             id: "colour-settings",
@@ -1297,7 +1221,7 @@
                             childNodesTexts: ["Назад"],
                         },
                         {
-                            id: "settings-sound",
+                            id: "sound-settings",
                             childNodesTexts: ["Звук"],
                         },
                         {
@@ -1306,9 +1230,7 @@
                         },
                         {
                             id: "def-sounds-label",
-                            childNodesTexts: [
-                                "Стандартные звуки (кнопки, поля ввода и т.п.)",
-                            ],
+                            childNodesTexts: ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
                         },
                         {
                             id: "colour-settings",

@@ -74,6 +74,7 @@
 
             body {
                 display: flex;
+                flex-direction: column;
                 background-color: var(--colour-bgr-2);
                 background-image: linear-gradient(
                     60deg,
@@ -82,7 +83,6 @@
                     var(--colour-bgr-3)
                 );
                 background-attachment: fixed;
-                flex-direction: column;
                 margin: auto;
                 font-size: 14pt;
                 min-width: 40%;
@@ -230,6 +230,7 @@
 
             input[type="text"] {
                 display: flex;
+                flex-direction: row;
                 flex-grow: 1;
             }
 
@@ -301,6 +302,7 @@
 
             tr {
                 display: flex;
+                flex-direction: row;
                 column-gap: 2px;
                 margin-block: 2px;
                 width: 100%;
@@ -341,19 +343,22 @@
             .button-container {
                 display: flex;
                 flex-wrap: wrap;
+                flex-direction: row;
                 column-gap: 4px;
-            }
-
-            .checkbox-div {
-                display: flex;
-                column-gap: 4px;
-                align-items: center;
             }
 
             .scene {
                 display: none;
                 flex-direction: column;
                 animation: scene-show 0.4s ease;
+            }
+
+            .setting-div {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                column-gap: 4px;
+                align-items: center;
             }
 
             .settings-list {
@@ -365,9 +370,11 @@
 
             .table-text {
                 display: flex;
+                flex-direction: row;
                 background-color: transparent;
                 resize: vertical;
                 min-height: 100%;
+                max-height: 50vh;
                 height: 100%;
                 width: 100%;
                 margin: 0px;
@@ -384,6 +391,7 @@
 
             .tooltip {
                 display: none;
+                flex-direction: row;
                 background-color: var(--colour-tooltip);
                 color: var(--colour-text);
                 border: 2px outset var(--colour-border);
@@ -460,6 +468,7 @@
 
             #notes-container {
                 display: flex;
+                flex-direction: row;
                 align-items: center;
                 background-color: transparent;
                 border: none;
@@ -483,16 +492,17 @@
             #notes-container::after,
             #notes-container::before {
                 content: "?";
+                align-content: center;
                 background-color: var(--colour-text);
                 color: var(--colour-bgr-2);
-                border: 2px outset var(--colour-bgr-2);
-                border-radius: 50%;
+                border-radius: 4px;
                 font-family: "Courier New", Courier, monospace;
-                font-size: 1.1em;
+                font-size: 1.2em;
                 font-weight: 600;
+                text-align: center;
                 margin-inline: 2px;
-                height: 1.1em;
-                width: 1.2em;
+                height: 100%;
+                width: 1.6em;
                 cursor: help;
             }
 
@@ -531,7 +541,7 @@
 
         <!-- Menu div -->
         <div id="menu" class="scene" tabindex="1">
-            <h1 id="title">Traduco</h1>
+            <h1 id="title" tabindex="1">Traduco</h1>
 
             <select id="lang" tabindex="0"></select>
 
@@ -539,14 +549,12 @@
 
             <button id="start-button" tabindex="1" class="tooltip-parent">
                 Open
-                <span id="start-tooltip" class="tooltip"
-                    >Open a text (.txt) or a project (.json)</span
-                >
+                <span class="tooltip">Open a text (.txt) or a project (.json)</span>
             </button>
             <button id="continue-button" tabindex="1" disabled>Continue</button>
-            <a id="save-project" href="" download="Project.json" class="pseudo-button"
-                >Save project</a
-            >
+            <button id="save-button" tabindex="1" onclick="switchScene('menu', 'saving')" disabled>
+                Save
+            </button>
             <button id="settings-button" tabindex="1" onclick="switchScene('menu', 'settings')">
                 Settings
             </button>
@@ -568,7 +576,7 @@
         <div id="main" class="scene" tabindex="0">
             <button id="main-back" onclick="switchScene('main', 'menu')">Back</button>
 
-            <h3 id="project-name" contenteditable="true">...</h3>
+            <h3 id="project-name" tabindex="0" contenteditable="true">...</h3>
 
             <table>
                 <thead>
@@ -579,9 +587,7 @@
 
                     <tr>
                         <th id="notes-container" colspan="2">
-                            <textarea id="notes" autocomplete="off" placeholder="Notes">
-Notes</textarea
-                            >
+                            <textarea id="notes" autocomplete="off" placeholder="Notes"></textarea>
                         </th>
                     </tr>
                 </thead>
@@ -597,15 +603,27 @@ Notes</textarea
             </table>
         </div>
 
+        <!-- Saving div -->
+        <div id="saving" class="scene" tabindex="0">
+            <button id="saving-back" onclick="switchScene('saving', 'menu')">Back</button>
+
+            <h2 id="saving-title" tabindex="0">Save</h2>
+
+            <a id="save-project" href="" download="Project.json" class="pseudo-button">Project</a>
+            <a id="save-source" href="" download="Source.txt" class="pseudo-button">Source</a>
+            <a id="save-target" href="" download="Target.txt" class="pseudo-button">Target</a>
+            <a id="save-notes" href="" download="Notes.txt" class="pseudo-button">Notes</a>
+        </div>
+
         <!-- Settings div -->
         <div id="settings" class="scene" tabindex="0">
-            <h2 id="settings-title">Settings</h2>
+            <h2 id="settings-title" tabindex="0">Settings</h2>
 
             <button id="settings-back" onclick="switchScene('settings', 'menu')">Back</button>
 
             <!-- Sound settings -->
             <details>
-                <summary id="settings-sound">Sound</summary>
+                <summary id="sound-settings">Sound</summary>
 
                 <ul class="settings-list">
                     <!-- Volume -->
@@ -623,7 +641,7 @@ Notes</textarea
 
                     <!-- Default sounds (buttons, inputs, etc.) -->
                     <li>
-                        <div class="checkbox-div">
+                        <div class="setting-div">
                             <label for="set-def-sounds" id="def-sounds-label"
                                 >Default sounds (buttons, inputs, etc.)</label
                             >
@@ -659,16 +677,37 @@ Notes</textarea
                 </div>
             </details>
 
+            <!-- Translation settings -->
+            <details>
+                <summary id="translation-settings">Translation</summary>
+
+                <ul class="settings-list">
+                    <li>
+                        <label for="set-newlines" id="newlines-label"
+                            >Number of new lines between paragraphs in saved texts</label
+                        >
+                        <input
+                            type="number"
+                            id="set-newlines"
+                            min="1"
+                            max="10"
+                            step="1"
+                            value="2"
+                        />
+                    </li>
+                </ul>
+            </details>
+
             <button id="default-settings">Restore default settings</button>
         </div>
 
         <!-- About div -->
         <div id="about" class="scene" tabindex="0">
-            <h2 id="about-title">About</h2>
+            <h2 id="about-title" tabindex="0">About</h2>
 
             <button id="about-back" onclick="switchScene('about', 'menu')">Back</button>
 
-            <p id="about-p">
+            <p id="about-p" tabindex="0">
                 A simple translation tool allowing to precisely track your progress and symbol
                 count.
             </p>
@@ -680,10 +719,16 @@ Notes</textarea
             let menu = document.getElementById("menu");
             /** @type {HTMLDivElement} */
             let main = document.getElementById("main");
+            /** @type {HTMLDivElement} */
+            let saving = document.getElementById("saving");
             /** @type {HTMLHeadingElement} */
             let projectName = document.getElementById("project-name");
             /** @type {HTMLTextAreaElement} */
             let notes = document.getElementById("notes");
+            /** @type {HTMLTableCellElement} */
+            let tableSource = document.getElementById("table-source");
+            /** @type {HTMLTableCellElement} */
+            let tableTarget = document.getElementById("table-target");
             /** @type {HTMLTableSectionElement} */
             let tableBody = document.getElementById("table-body");
             /** @type {HTMLTableSectionElement} */
@@ -708,8 +753,16 @@ Notes</textarea
             let continueButton = document.getElementById("continue-button");
             /** @type {HTMLInputElement} */
             let loadProjectInput = document.getElementById("load-project");
+            /** @type {HTMLButtonElement} */
+            let saveButton = document.getElementById("save-button");
             /** @type {HTMLAnchorElement} */
             let saveProject = document.getElementById("save-project");
+            /** @type {HTMLAnchorElement} */
+            let saveSource = document.getElementById("save-source");
+            /** @type {HTMLAnchorElement} */
+            let saveTarget = document.getElementById("save-target");
+            /** @type {HTMLAnchorElement} */
+            let saveNotes = document.getElementById("save-notes");
 
             /** @type {HTMLInputElement} */
             let volumeInput = document.getElementById("set-volume");
@@ -717,8 +770,11 @@ Notes</textarea
             let defaultSounds = document.getElementById("set-def-sounds");
             /** @type {HTMLButtonElement} */
             let defaultSettings = document.getElementById("default-settings");
+            /** @type {HTMLInputElement} */
+            let newLines = document.getElementById("set-newlines");
 
             continueButton.disabled = true;
+            saveButton.disabled = true;
 
             // Types
             /** @typedef Paragraph
@@ -746,6 +802,7 @@ Notes</textarea
             // Variables
             /** @type {AudioContext} */
             let audio = new (window.AudioContext || window.webkitAudioContext)();
+
             /** @type {{
              name: string;
              notes: string;
@@ -854,9 +911,20 @@ Notes</textarea
                 this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
+            // Translation settings
+            newLines.addEventListener("change", function (event) {
+                localStorage.setItem(
+                    "new-lines",
+                    clamp(+newLines.min, +newLines.value, +newLines.max),
+                );
+            });
+
             // Exiting on pressing Escape
             main.addEventListener("keydown", function (event) {
                 if (event.key === "Escape") switchScene("main", "menu");
+            });
+            saving.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") switchScene("saving", "menu");
             });
             settings.addEventListener("keydown", function (event) {
                 if (event.key === "Escape") switchScene("settings", "menu");
@@ -927,6 +995,7 @@ Notes</textarea
                         }
                         fillTable();
                         continueButton.disabled = false;
+                        saveButton.disabled = false;
                         projectName.textContent = project.name;
                     } catch (error) {
                         alert(`Error while opening the file: ${error}`);
@@ -934,10 +1003,46 @@ Notes</textarea
                 });
             });
 
-            // Saving project
+            // Saving project, source, target, and notes
             saveProject.addEventListener("click", function (event) {
                 let data = encodeURIComponent(JSON.stringify(project, undefined, 4));
                 this.download = `${project.name}.json`;
+                this.href = `data:text/plain;charset=utf-8,${data}`;
+            });
+
+            saveSource.addEventListener("click", function (event) {
+                let numNewLines = clamp(+newLines.min, +newLines.value, +newLines.max);
+                let data = "";
+                project.paragraphs.forEach((p, i) => {
+                    if (p.source === "") return;
+                    if (i > 0) {
+                        data += `${"\n".repeat(numNewLines)}${p.source}`;
+                    } else {
+                        data += `${p.source}`;
+                    }
+                });
+                this.download = `${project.name} [${tableSource.textContent}].txt`;
+                this.href = `data:text/plain;charset=utf-8,${data}`;
+            });
+
+            saveTarget.addEventListener("click", function (event) {
+                let numNewLines = clamp(+newLines.min, +newLines.value, +newLines.max);
+                let data = "";
+                project.paragraphs.forEach((p, i) => {
+                    if (p.target === "") return;
+                    if (i > 0) {
+                        data += `${"\n".repeat(numNewLines)}${p.target}`;
+                    } else {
+                        data += `${p.target}`;
+                    }
+                });
+                this.download = `${project.name} [${tableTarget.textContent}].txt`;
+                this.href = `data:text/plain;charset=utf-8,${data}`;
+            });
+
+            saveNotes.addEventListener("click", function (event) {
+                let data = encodeURIComponent(project.notes);
+                this.download = `${project.name} [${notes.placeholder}].txt`;
                 this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
@@ -983,19 +1088,32 @@ Notes</textarea
                             t.addEventListener(e, function (event) {
                                 /** @type {HTMLTableSectionElement} */
                                 let stats = t === textSource ? tableSrcStats : tableTarStats;
+                                /** @type {number} */
                                 let selection = this.selectionEnd - this.selectionStart;
+                                /** @type {number} */
                                 let paragraph = this.value.length;
+                                /** @type {number} */
                                 let total = 0;
 
-                                project.paragraphs.forEach((p) => {
-                                    total += t === textSource ? p.source.length : p.target.length;
-                                });
+                                // Count total number of characters
+                                if (t === textSource) {
+                                    project.paragraphs.forEach((p) => {
+                                        total += p.source.length;
+                                    });
+                                } else {
+                                    project.paragraphs.forEach((p) => {
+                                        total += p.target.length;
+                                    });
+                                }
 
+                                // Statistics format: with or without selection length
                                 if (selection) {
                                     stats.textContent = `${selection}/${paragraph}/${total}`;
                                 } else {
                                     stats.textContent = `${paragraph}/${total}`;
                                 }
+
+                                // Update last selected table cell
                                 project.lastId = this.id;
                                 project.selection = [this.selectionStart, this.selectionEnd];
                             });
@@ -1026,20 +1144,18 @@ Notes</textarea
 
             function loadSettings() {
                 // Volume
-                if (localStorage.getItem("volume")) {
-                    volumeInput.value = localStorage.getItem("volume");
-                } else {
-                    volumeInput.value = "0.5";
-                    localStorage.setItem("volume", "0.5");
-                }
+                volumeInput.value = localStorage.getItem("volume") ?? "0.5";
 
                 // Default sounds
                 if (localStorage.getItem("default-sounds")) {
                     defaultSounds.checked = localStorage.getItem("default-sounds") === "true";
                 } else {
-                    defaultSettings.checked = true;
+                    defaultSounds.checked = true;
                     localStorage.setItem("default-sounds", "true");
                 }
+
+                // Translation settings
+                newLines.value = localStorage.getItem("new-lines") ?? "2";
             }
 
             function switchScene(from, to) {
@@ -1309,8 +1425,8 @@ Notes</textarea
                             childNodesTexts: ["Continue"],
                         },
                         {
-                            id: "save-project",
-                            childNodesTexts: ["Save project"],
+                            id: "save-button",
+                            childNodesTexts: ["Save"],
                         },
                         {
                             id: "settings-button",
@@ -1343,8 +1459,32 @@ Notes</textarea
                         },
                         {
                             id: "notes",
-                            childNodesTexts: ["Notes"],
+                            childNodesTexts: [],
                             placeholder: "Notes",
+                        },
+                        {
+                            id: "saving-back",
+                            childNodesTexts: ["Back"],
+                        },
+                        {
+                            id: "saving-title",
+                            childNodesTexts: ["Save"],
+                        },
+                        {
+                            id: "save-project",
+                            childNodesTexts: ["Project"],
+                        },
+                        {
+                            id: "save-source",
+                            childNodesTexts: ["Source"],
+                        },
+                        {
+                            id: "save-target",
+                            childNodesTexts: ["Target"],
+                        },
+                        {
+                            id: "save-notes",
+                            childNodesTexts: ["Notes"],
                         },
                         {
                             id: "settings-title",
@@ -1355,7 +1495,7 @@ Notes</textarea
                             childNodesTexts: ["Back"],
                         },
                         {
-                            id: "settings-sound",
+                            id: "sound-settings",
                             childNodesTexts: ["Sound"],
                         },
                         {
@@ -1448,6 +1588,16 @@ Notes</textarea
                             placeholder: "Input example",
                         },
                         {
+                            id: "translation-settings",
+                            childNodesTexts: ["Translation"],
+                        },
+                        {
+                            id: "newlines-label",
+                            childNodesTexts: [
+                                "Number of new lines between paragraphs in saved texts",
+                            ],
+                        },
+                        {
                             id: "default-settings",
                             childNodesTexts: ["Restore default settings"],
                         },
@@ -1488,8 +1638,8 @@ Notes</textarea
                             childNodesTexts: ["Продолжить"],
                         },
                         {
-                            id: "save-project",
-                            childNodesTexts: ["Сохранить проект"],
+                            id: "save-button",
+                            childNodesTexts: ["Сохранить"],
                         },
                         {
                             id: "settings-button",
@@ -1522,8 +1672,32 @@ Notes</textarea
                         },
                         {
                             id: "notes",
-                            childNodesTexts: ["Заметки"],
+                            childNodesTexts: [],
                             placeholder: "Заметки",
+                        },
+                        {
+                            id: "saving-back",
+                            childNodesTexts: ["Назад"],
+                        },
+                        {
+                            id: "saving-title",
+                            childNodesTexts: ["Сохранить"],
+                        },
+                        {
+                            id: "save-project",
+                            childNodesTexts: ["Проект"],
+                        },
+                        {
+                            id: "save-source",
+                            childNodesTexts: ["Оригинал"],
+                        },
+                        {
+                            id: "save-target",
+                            childNodesTexts: ["Перевод"],
+                        },
+                        {
+                            id: "save-notes",
+                            childNodesTexts: ["Заметки"],
                         },
                         {
                             id: "settings-title",
@@ -1534,7 +1708,7 @@ Notes</textarea
                             childNodesTexts: ["Назад"],
                         },
                         {
-                            id: "settings-sound",
+                            id: "sound-settings",
                             childNodesTexts: ["Звук"],
                         },
                         {
@@ -1625,6 +1799,16 @@ Notes</textarea
                             id: "example-input",
                             childNodesTexts: [],
                             placeholder: "Пример поля ввода",
+                        },
+                        {
+                            id: "translation-settings",
+                            childNodesTexts: ["Перевод"],
+                        },
+                        {
+                            id: "newlines-label",
+                            childNodesTexts: [
+                                "Число разрывов строки между абзацами в сохраняемых текстах",
+                            ],
                         },
                         {
                             id: "default-settings",
