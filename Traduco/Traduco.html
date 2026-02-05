@@ -462,6 +462,7 @@
                 height: 100%;
                 width: 100%;
                 margin: 0px;
+                padding-left: 8px;
                 font-weight: 600;
                 overflow: hidden;
             }
@@ -732,9 +733,9 @@
             /** @type {HTMLTableSectionElement} */
             let tableBody = document.getElementById("table-body");
             /** @type {HTMLTableSectionElement} */
-            let tableSrcStats = document.getElementById("table-source-stats");
+            let tableSourceStats = document.getElementById("table-source-stats");
             /** @type {HTMLTableSectionElement} */
-            let tableTarStats = document.getElementById("table-target-stats");
+            let tableTargetStats = document.getElementById("table-target-stats");
             /** @type {HTMLDivElement} */
             let settings = document.getElementById("settings");
             /** @type {HTMLUListElement} */
@@ -804,13 +805,17 @@
             let audio = new (window.AudioContext || window.webkitAudioContext)();
 
             /** @type {{
-             name: string;
-             notes: string;
-             lastId: string;
-             selection: [number, number];
-             paragraphs: Paragraph[];
+                name: string;
+                notes: string;
+                lastId: string;
+                selection: [number, number];
+                paragraphs: Paragraph[];
             }} */
             let project = {};
+            /** @type {number} */
+            let totalSourceLength = 0;
+            /** @type {number} */
+            let totalTargetLength = 0;
 
             // Settings' events
             volumeInput.addEventListener("change", function (event) {
@@ -972,23 +977,21 @@
                 await loadProjectInput.files[0].text().then((content) => {
                     try {
                         let name = loadProjectInput.files[0].name;
-                        if (!name.endsWith(".txt") && !name.endsWith(".json"))
-                            throw new Error("Wrong file type! Only .txt or .json are allowed!");
 
                         if (name.endsWith(".json")) {
                             // A project is loaded
                             project = JSON.parse(content);
-                            notes.value = project.notes;
                         } else {
                             // A source text is loaded
                             project.name = loadProjectInput.files[0].name.replace(".txt", "");
                             project.lastId = `t0`;
+                            project.notes = "";
                             project.selection = [0, 0];
                             project.paragraphs = [];
                             content.split("\n").forEach((p) => {
                                 if (p.trim() === "") return;
                                 project.paragraphs.push({
-                                    source: p.trim(),
+                                    source: p.trimEnd(),
                                     target: "",
                                 });
                             });
@@ -997,6 +1000,7 @@
                         continueButton.disabled = false;
                         saveButton.disabled = false;
                         projectName.textContent = project.name;
+                        notes.value = project.notes;
                     } catch (error) {
                         alert(`Error while opening the file: ${error}`);
                     }
@@ -1067,6 +1071,7 @@
                     let textSource = dataSource.appendChild(document.createElement("textarea"));
                     textSource.id = `s${index}`;
                     textSource.value = p.source;
+                    textSource.dataset.type = "source";
                     textSource.classList.add("table-text");
                     textSource.style.height = textSource.scrollHeight * 2 + "px";
 
@@ -1079,60 +1084,38 @@
                     let textTarget = dataTarget.appendChild(document.createElement("textarea"));
                     textTarget.id = `t${index}`;
                     textTarget.value = p.target;
+                    textTarget.dataset.type = "target";
                     textTarget.classList.add("table-text");
 
                     // Common source & target text areas' events
-                    ["selectionchange", "focus", "input"].forEach((e) => {
-                        [textSource, textTarget].forEach((t) => {
-                            // Update statistics
+                    [textSource, textTarget].forEach((t) => {
+                        // Input actions
+                        t.addEventListener("input", function (event) {
+                            if (t === textSource) {
+                                project.paragraphs[i].source = this.value;
+                            } else {
+                                project.paragraphs[i].target = this.value;
+                            }
+                            updateTotalLengths();
+                            updateStatistics(this);
+                        });
+
+                        // Other actions
+                        ["click", "focus", "select"].forEach((e) => {
                             t.addEventListener(e, function (event) {
-                                /** @type {HTMLTableSectionElement} */
-                                let stats = t === textSource ? tableSrcStats : tableTarStats;
-                                /** @type {number} */
-                                let selection = this.selectionEnd - this.selectionStart;
-                                /** @type {number} */
-                                let paragraph = this.value.length;
-                                /** @type {number} */
-                                let total = 0;
-
-                                // Count total number of characters
-                                if (t === textSource) {
-                                    project.paragraphs.forEach((p) => {
-                                        total += p.source.length;
-                                    });
-                                } else {
-                                    project.paragraphs.forEach((p) => {
-                                        total += p.target.length;
-                                    });
-                                }
-
-                                // Statistics format: with or without selection length
-                                if (selection) {
-                                    stats.textContent = `${selection}/${paragraph}/${total}`;
-                                } else {
-                                    stats.textContent = `${paragraph}/${total}`;
-                                }
+                                updateStatistics(this);
 
                                 // Update last selected table cell
                                 project.lastId = this.id;
                                 project.selection = [this.selectionStart, this.selectionEnd];
                             });
-
-                            // Save changes to paragraphs array
-                            if (e === "input") {
-                                t.addEventListener("input", function (event) {
-                                    if (t === textSource) {
-                                        project.paragraphs[i].source = this.value;
-                                    } else {
-                                        project.paragraphs[i].target = this.value;
-                                    }
-                                });
-                            }
                         });
                     });
 
                     index++;
                 });
+
+                updateStatistics();
 
                 /** @type {HTMLTextAreaElement} */
                 let lastText = document.getElementById(project.lastId);
@@ -1140,6 +1123,65 @@
                     lastText.setSelectionRange(...project.selection);
                     lastText.focus();
                 }
+            }
+
+            function updateTotalLengths() {
+                totalSourceLength = 0;
+                totalTargetLength = 0;
+
+                project.paragraphs.forEach((p) => {
+                    totalSourceLength += p.source.length;
+                    totalTargetLength += p.target.length;
+                });
+            }
+
+            function getTargetToSourceRatio() {
+                let percent = (totalTargetLength / totalSourceLength) * 100;
+                return percent > 0 && percent < 1000 ? percent : undefined;
+            }
+
+            /**
+             * @param {HTMLTextAreaElement} text
+             */
+            function updateStatistics(text = undefined) {
+                // If no text area is given, only show total lengths
+                if (!text) {
+                    updateTotalLengths();
+                    tableSourceStats.textContent = totalSourceLength;
+                    tableTargetStats.textContent = totalTargetLength;
+
+                    let percent = getTargetToSourceRatio();
+                    if (percent) {
+                        tableTargetStats.textContent += ` (${percent.toFixed(0)}%)`;
+                    }
+                    return;
+                }
+
+                // If a text area is given, proceed normally
+                /** @type {string} */
+                let result = "";
+                /** @type {number} */
+                let textLength = text.value.length;
+                /** @type {number} */
+                let selection = text.selectionEnd - text.selectionStart;
+                /** @type {number} */
+                let totalLength =
+                    text.dataset.type === "source" ? totalSourceLength : totalTargetLength;
+                /** @type {HTMLTableDataCellElement} */
+                let cell = text.dataset.type === "source" ? tableSourceStats : tableTargetStats;
+
+                if (selection > 0) result += `${selection}/`;
+                result += `${textLength}/`;
+                result += `${totalLength}`;
+
+                if (text.dataset.type === "target") {
+                    let percent = getTargetToSourceRatio();
+                    if (percent) {
+                        result += ` (${percent.toFixed(0)}%)`;
+                    }
+                }
+
+                cell.textContent = result;
             }
 
             function loadSettings() {
