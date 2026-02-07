@@ -461,7 +461,7 @@
                 resize: none;
                 height: 100%;
                 width: 100%;
-                margin: 0px;
+                margin-inline: 2px;
                 padding-left: 8px;
                 font-weight: 600;
                 overflow: hidden;
@@ -475,7 +475,7 @@
                 border: none;
                 padding: 0px;
                 opacity: 0.8;
-                height: 1.8em;
+                height: 1.7em;
                 transition: height 0.4s ease;
             }
 
@@ -499,12 +499,37 @@
                 border-radius: 4px;
                 font-family: "Courier New", Courier, monospace;
                 font-size: 1.2em;
-                font-weight: 600;
+                font-weight: 900;
                 text-align: center;
-                margin-inline: 2px;
                 height: 100%;
                 width: 1.6em;
                 cursor: help;
+            }
+
+            #pages-container {
+                display: flex;
+                flex-direction: row;
+                column-gap: 2px;
+                background-color: transparent;
+                border: none;
+                padding: 0px;
+                max-width: 100%;
+                overflow: auto;
+            }
+
+            #pages-container > button {
+                font-family: "Courier New", Courier, monospace;
+                font-weight: 900;
+            }
+
+            #pages-container > div {
+                max-width: 50%;
+            }
+
+            #pages-container > div > input {
+                font-weight: 600;
+                text-align: center;
+                width: 100%;
             }
 
             #table-source-stats,
@@ -581,7 +606,7 @@
 
             <table>
                 <thead>
-                    <tr>
+                    <tr style="margin: 0px">
                         <th id="table-source" tabindex="0">Source</th>
                         <th id="table-target" tabindex="0">Target</th>
                     </tr>
@@ -596,9 +621,45 @@
                 <tbody id="table-body"></tbody>
 
                 <tfoot>
-                    <tr>
+                    <tr style="margin: 0px">
                         <td id="table-source-stats" tabindex="0"></td>
                         <td id="table-target-stats" tabindex="0"></td>
+                    </tr>
+
+                    <tr style="margin: 0px">
+                        <td id="pages-container" colspan="2">
+                            <button class="tooltip-parent" onclick="setPage('first')">
+                                &lt;&lt;
+                                <span class="tooltip">First page</span>
+                            </button>
+
+                            <button class="tooltip-parent" onclick="setPage('previous')">
+                                &lt;
+                                <span class="tooltip">Previous page</span>
+                            </button>
+
+                            <div class="tooltip-parent">
+                                <input
+                                    type="number"
+                                    id="page-input"
+                                    min="1"
+                                    step="1"
+                                    value="1"
+                                    onchange="setPage('input')"
+                                />
+                                <span class="tooltip">Current page</span>
+                            </div>
+
+                            <button class="tooltip-parent" onclick="setPage('next')">
+                                &gt;
+                                <span class="tooltip">Next page</span>
+                            </button>
+
+                            <button class="tooltip-parent" onclick="setPage('last')">
+                                &gt;&gt;
+                                <span class="tooltip">Last page</span>
+                            </button>
+                        </td>
                     </tr>
                 </tfoot>
             </table>
@@ -736,6 +797,8 @@
             let tableSourceStats = document.getElementById("table-source-stats");
             /** @type {HTMLTableSectionElement} */
             let tableTargetStats = document.getElementById("table-target-stats");
+            /** @type {HTMLInputElement} */
+            let pageInput = document.getElementById("page-input");
             /** @type {HTMLDivElement} */
             let settings = document.getElementById("settings");
             /** @type {HTMLUListElement} */
@@ -800,12 +863,16 @@
                 "--colour-disabled-fgr": "#1e1e1e",
             };
 
+            // Constants
+            const PARAGRAPHS_PER_PAGE = 25;
+
             // Variables
             /** @type {AudioContext} */
             let audio = new (window.AudioContext || window.webkitAudioContext)();
 
             /** @type {{
                 name: string;
+                page: nubmer;
                 notes: string;
                 lastId: string;
                 selection: [number, number];
@@ -848,7 +915,7 @@
             Object.keys(allColours).forEach((c) => {
                 document.body.style.setProperty(
                     c,
-                    localStorage.getItem(c) ?? getComputedStyle(document.body).getPropertyValue(c),
+                    localStorage.getItem(c) || getComputedStyle(document.body).getPropertyValue(c),
                 );
 
                 /** @type {HTMLLIElement} */
@@ -977,6 +1044,7 @@
                 await loadProjectInput.files[0].text().then((content) => {
                     try {
                         let name = loadProjectInput.files[0].name;
+                        project = {};
 
                         if (name.endsWith(".json")) {
                             // A project is loaded
@@ -984,9 +1052,6 @@
                         } else {
                             // A source text is loaded
                             project.name = loadProjectInput.files[0].name.replace(".txt", "");
-                            project.lastId = `t0`;
-                            project.notes = "";
-                            project.selection = [0, 0];
                             project.paragraphs = [];
                             content.split("\n").forEach((p) => {
                                 if (p.trim() === "") return;
@@ -996,10 +1061,12 @@
                                 });
                             });
                         }
-                        fillTable();
+                        verifyProject();
+                        fillCurrentPage();
                         continueButton.disabled = false;
                         saveButton.disabled = false;
                         projectName.textContent = project.name;
+                        pageInput.value = project.page;
                         notes.value = project.notes;
                     } catch (error) {
                         alert(`Error while opening the file: ${error}`);
@@ -1051,69 +1118,131 @@
             });
 
             // Functions
-            function fillTable() {
+            function verifyProject() {
+                if (!project.name) project.name = "";
+                if (!project.page) project.page = 0;
+                if (!project.notes) project.notes = "";
+                if (!project.lastId) project.lastId = "t0";
+                if (!project.paragraphs) project.paragraphs = [];
+                if (!project.selection) project.selection = [0, 0];
+            }
+
+            /**
+             * @param {number} index
+             */
+            function addCell(index) {
+                /** @type {Paragraph} */
+                const p = project.paragraphs[index];
+
+                /** @type {HTMLTableRowElement} */
+                let row = tableBody.appendChild(document.createElement("tr"));
+
+                /** @type {HTMLTableDataCellElement} */
+                let dataSource = row.appendChild(document.createElement("td"));
+                dataSource.style.border = "none";
+                dataSource.style.padding = "0px";
+
+                /** @type {HTMLTextAreaElement} */
+                let textSource = dataSource.appendChild(document.createElement("textarea"));
+                textSource.id = `s${index}`;
+                textSource.value = p.source;
+                textSource.dataset.type = "source";
+                textSource.classList.add("table-text");
+                textSource.style.height = textSource.scrollHeight * 2 + "px";
+
+                /** @type {HTMLTableDataCellElement} */
+                let dataTarget = row.appendChild(document.createElement("td"));
+                dataTarget.style.border = "none";
+                dataTarget.style.padding = "0px";
+
+                /** @type {HTMLTextAreaElement */
+                let textTarget = dataTarget.appendChild(document.createElement("textarea"));
+                textTarget.id = `t${index}`;
+                textTarget.value = p.target;
+                textTarget.dataset.type = "target";
+                textTarget.classList.add("table-text");
+
+                // Common source & target text areas' events
+                [textSource, textTarget].forEach((t) => {
+                    // Input actions
+                    t.addEventListener("input", function (event) {
+                        if (t === textSource) {
+                            project.paragraphs[index].source = this.value;
+                        } else {
+                            project.paragraphs[index].target = this.value;
+                        }
+                        updateTotalLengths();
+                        updateStatistics(this);
+                    });
+
+                    // Other actions
+                    ["click", "focus", "select"].forEach((e) => {
+                        t.addEventListener(e, function (event) {
+                            updateStatistics(this);
+
+                            // Update last selected table cell
+                            project.lastId = this.id;
+                            project.selection = [this.selectionStart, this.selectionEnd];
+                        });
+                    });
+                });
+            }
+
+            function getLastPage() {
+                return Math.ceil(project.paragraphs.length / PARAGRAPHS_PER_PAGE);
+            }
+
+            /**
+             * @param {string} page
+             */
+            function setPage(page) {
+                /** @type {number} */
+                let newPage = project.page;
+
+                switch (page) {
+                    case "first":
+                        newPage = 1;
+                        break;
+                    case "previous":
+                        newPage--;
+                        break;
+                    case "input":
+                        newPage = +pageInput.value;
+                        break;
+                    case "next":
+                        newPage++;
+                        break;
+                    case "last":
+                        newPage = getLastPage();
+                        break;
+                    default:
+                        break;
+                }
+
+                newPage = clamp(1, newPage, getLastPage());
+
+                if (newPage !== project.page) {
+                    project.page = newPage;
+                    pageInput.value = newPage;
+                    fillCurrentPage();
+                }
+            }
+
+            function fillCurrentPage() {
                 switchScene("menu", "main");
                 while (tableBody.hasChildNodes()) tableBody.lastChild.remove();
 
+                project.page = clamp(1, project.page, getLastPage());
+
                 /** @type {number} */
-                let index = 0;
+                const firstIndex = (project.page - 1) * PARAGRAPHS_PER_PAGE;
+                /** @type {number} */
+                const lastIndex = firstIndex + PARAGRAPHS_PER_PAGE;
 
-                project.paragraphs.forEach((p, i) => {
-                    /** @type {HTMLTableRowElement} */
-                    let row = tableBody.appendChild(document.createElement("tr"));
-
-                    /** @type {HTMLTableDataCellElement} */
-                    let dataSource = row.appendChild(document.createElement("td"));
-                    dataSource.style.border = "none";
-                    dataSource.style.padding = "0px";
-
-                    /** @type {HTMLTextAreaElement} */
-                    let textSource = dataSource.appendChild(document.createElement("textarea"));
-                    textSource.id = `s${index}`;
-                    textSource.value = p.source;
-                    textSource.dataset.type = "source";
-                    textSource.classList.add("table-text");
-                    textSource.style.height = textSource.scrollHeight * 2 + "px";
-
-                    /** @type {HTMLTableDataCellElement} */
-                    let dataTarget = row.appendChild(document.createElement("td"));
-                    dataTarget.style.border = "none";
-                    dataTarget.style.padding = "0px";
-
-                    /** @type {HTMLTextAreaElement */
-                    let textTarget = dataTarget.appendChild(document.createElement("textarea"));
-                    textTarget.id = `t${index}`;
-                    textTarget.value = p.target;
-                    textTarget.dataset.type = "target";
-                    textTarget.classList.add("table-text");
-
-                    // Common source & target text areas' events
-                    [textSource, textTarget].forEach((t) => {
-                        // Input actions
-                        t.addEventListener("input", function (event) {
-                            if (t === textSource) {
-                                project.paragraphs[i].source = this.value;
-                            } else {
-                                project.paragraphs[i].target = this.value;
-                            }
-                            updateTotalLengths();
-                            updateStatistics(this);
-                        });
-
-                        // Other actions
-                        ["click", "focus", "select"].forEach((e) => {
-                            t.addEventListener(e, function (event) {
-                                updateStatistics(this);
-
-                                // Update last selected table cell
-                                project.lastId = this.id;
-                                project.selection = [this.selectionStart, this.selectionEnd];
-                            });
-                        });
-                    });
-
-                    index++;
-                });
+                for (let i = firstIndex; i < lastIndex; i++) {
+                    if (!project.paragraphs[i]) break;
+                    addCell(i);
+                }
 
                 updateStatistics();
 
@@ -1186,7 +1315,7 @@
 
             function loadSettings() {
                 // Volume
-                volumeInput.value = localStorage.getItem("volume") ?? "0.5";
+                volumeInput.value = localStorage.getItem("volume") || "0.5";
 
                 // Default sounds
                 if (localStorage.getItem("default-sounds")) {
@@ -1197,7 +1326,7 @@
                 }
 
                 // Translation settings
-                newLines.value = localStorage.getItem("new-lines") ?? "2";
+                newLines.value = localStorage.getItem("new-lines") || "2";
             }
 
             function switchScene(from, to) {
