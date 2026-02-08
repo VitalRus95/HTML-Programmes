@@ -118,7 +118,8 @@
 
             button:disabled,
             .pseudo-button:disabled,
-            input:disabled {
+            input:disabled,
+            textarea:disabled {
                 background-color: var(--colour-disabled-bgr);
                 color: var(--colour-disabled-fgr);
                 cursor: not-allowed;
@@ -234,6 +235,18 @@
                 flex-grow: 1;
             }
 
+            kbd {
+                border: 2px outset var(--colour-border);
+                box-shadow: 1px 1px 1px var(--colour-text);
+                padding-inline: 2px;
+            }
+
+            li {
+                margin-bottom: 6px;
+            }
+
+            ol,
+            ul,
             p {
                 margin-block: 4px;
             }
@@ -262,6 +275,7 @@
 
             table {
                 border-collapse: separate;
+                table-layout: fixed;
                 margin-block: 4px;
                 width: 100%;
             }
@@ -378,6 +392,7 @@
                 height: 100%;
                 width: 100%;
                 margin: 0px;
+                padding-left: 4px;
             }
 
             .tooltip-parent {
@@ -400,6 +415,7 @@
                 max-width: 50%;
                 cursor: help;
                 font-style: italic;
+                font-size: 14pt;
                 font-weight: 400;
                 text-align: left;
                 opacity: 0.95;
@@ -461,7 +477,7 @@
                 resize: none;
                 height: 100%;
                 width: 100%;
-                margin-inline: 2px;
+                margin: 0px;
                 padding-left: 8px;
                 font-weight: 600;
                 overflow: hidden;
@@ -470,12 +486,11 @@
             #notes-container {
                 display: flex;
                 flex-direction: row;
-                align-items: center;
                 background-color: transparent;
                 border: none;
                 padding: 0px;
                 opacity: 0.8;
-                height: 1.7em;
+                height: 1.5em;
                 transition: height 0.4s ease;
             }
 
@@ -490,22 +505,6 @@
                 overflow: auto;
             }
 
-            #notes-container::after,
-            #notes-container::before {
-                content: "?";
-                align-content: center;
-                background-color: var(--colour-text);
-                color: var(--colour-bgr-2);
-                border-radius: 4px;
-                font-family: "Courier New", Courier, monospace;
-                font-size: 1.2em;
-                font-weight: 900;
-                text-align: center;
-                height: 100%;
-                width: 1.6em;
-                cursor: help;
-            }
-
             #pages-container {
                 display: flex;
                 flex-direction: row;
@@ -515,11 +514,13 @@
                 padding: 0px;
                 max-width: 100%;
                 overflow: auto;
+                opacity: 0.95;
             }
 
             #pages-container > button {
                 font-family: "Courier New", Courier, monospace;
                 font-weight: 900;
+                margin-bottom: 0px;
             }
 
             #pages-container > div {
@@ -529,6 +530,7 @@
             #pages-container > div > input {
                 font-weight: 600;
                 text-align: center;
+                margin-bottom: 0px;
                 width: 100%;
             }
 
@@ -539,7 +541,10 @@
                 border-top: 2px outset var(--colour-border);
                 border-bottom: 2px outset var(--colour-border);
                 border-right: 2px outset var(--colour-border);
+                white-space: nowrap;
                 overflow: auto;
+                text-overflow: ellipsis;
+                opacity: 0.95;
             }
 
             #table-source-stats:before,
@@ -558,6 +563,12 @@
                     max-width: 70%;
                 }
             }
+
+            @media (min-width: 1080px) {
+                body {
+                    max-width: 70%;
+                }
+            }
         </style>
     </head>
     <body>
@@ -567,7 +578,10 @@
 
         <!-- Menu div -->
         <div id="menu" class="scene" tabindex="1">
-            <h1 id="title" tabindex="1">Traduco</h1>
+            <h1 id="title" tabindex="1" class="tooltip-parent">
+                Traduco
+                <span class="tooltip">&gt;(^o.o^)&lt;</span>
+            </h1>
 
             <select id="lang" tabindex="0"></select>
 
@@ -621,7 +635,7 @@
                 <tbody id="table-body"></tbody>
 
                 <tfoot>
-                    <tr style="margin: 0px">
+                    <tr style="margin-bottom: 0px">
                         <td id="table-source-stats" tabindex="0"></td>
                         <td id="table-target-stats" tabindex="0"></td>
                     </tr>
@@ -630,12 +644,12 @@
                         <td id="pages-container" colspan="2">
                             <button class="tooltip-parent" onclick="setPage('first')">
                                 &lt;&lt;
-                                <span class="tooltip">First page</span>
+                                <span id="first-page-tooltip" class="tooltip">First page</span>
                             </button>
 
                             <button class="tooltip-parent" onclick="setPage('previous')">
                                 &lt;
-                                <span class="tooltip">Previous page</span>
+                                <span id="prev-page-tooltip" class="tooltip">Previous page</span>
                             </button>
 
                             <div class="tooltip-parent">
@@ -647,17 +661,17 @@
                                     value="1"
                                     onchange="setPage('input')"
                                 />
-                                <span class="tooltip">Current page</span>
+                                <span id="cur-page-tooltip" class="tooltip">Current page</span>
                             </div>
 
                             <button class="tooltip-parent" onclick="setPage('next')">
                                 &gt;
-                                <span class="tooltip">Next page</span>
+                                <span id="next-page-tooltip" class="tooltip">Next page</span>
                             </button>
 
                             <button class="tooltip-parent" onclick="setPage('last')">
                                 &gt;&gt;
-                                <span class="tooltip">Last page</span>
+                                <span id="last-page-tooltip" class="tooltip">Last page</span>
                             </button>
                         </td>
                     </tr>
@@ -770,9 +784,33 @@
             <button id="about-back" onclick="switchScene('about', 'menu')">Back</button>
 
             <p id="about-p" tabindex="0">
-                A simple translation tool allowing to precisely track your progress and symbol
-                count.
+                Named after a Latin word meaning ‘I translate’, <b>Traduco</b> is a simple yet
+                powerful translation tool. Open either a plain text file (<i>.txt</i>, for example)
+                to start a translation, or a project (stored in <i>.json</i>) to continue the work.
+                While translating, you can make and consult notes using the text input field at the
+                top of the screen. At the bottom of the screen, you will find source and target
+                texts' symbol count in the following format:
+                <i
+                    >selection / parapgraph / whole text (proportion of the target text's length to
+                    that of the source one in %)</i
+                >. To make the process easier, <b>Traduco</b> offers a number of hotkeys:
             </p>
+            <ul tabindex="0">
+                <li id="hotkey-0"><kbd>Alt</kbd>+<kbd>left arrow</kbd> - select previous cell</li>
+                <li id="hotkey-1"><kbd>Alt</kbd>+<kbd>right arrow</kbd> - select next cell</li>
+                <li id="hotkey-2"><kbd>Alt</kbd>+<kbd>up arrow</kbd> - select cell above</li>
+                <li id="hotkey-3"><kbd>Alt</kbd>+<kbd>down arrow</kbd> - select cell below</li>
+                <li id="hotkey-4"><kbd>Alt</kbd>+<kbd>Page Up</kbd> - go to the previous page</li>
+                <li id="hotkey-5"><kbd>Alt</kbd>+<kbd>Page Down</kbd> - go to the next page</li>
+                <li id="hotkey-6">
+                    <kbd>Alt</kbd>+<kbd>Home</kbd> - switch between notes and current cell
+                </li>
+                <li id="hotkey-7">
+                    <kbd>Alt</kbd>+<kbd>End</kbd> - switch between statistics and current cell
+                </li>
+                <li id="hotkey-8"><kbd>Alt</kbd>+<kbd>Insert</kbd> - copy source to target</li>
+                <li id="hotkey-9"><kbd>Alt</kbd>+<kbd>Delete</kbd> - clear current cell</li>
+            </ul>
         </div>
 
         <script>
@@ -1024,6 +1062,24 @@
             notes.addEventListener("input", function (event) {
                 project.notes = notes.value;
             });
+            notes.addEventListener("keydown", function (event) {
+                if (!event.altKey) return;
+                if (event.key === "Home") {
+                    event.preventDefault();
+                    document.getElementById(project.lastId)?.focus();
+                }
+            });
+
+            // Project statistics
+            [tableSourceStats, tableTargetStats].forEach((e) => {
+                e.addEventListener("keydown", function (event) {
+                    if (!event.altKey) return;
+                    if (event.key === "End") {
+                        event.preventDefault();
+                        document.getElementById(project.lastId)?.focus();
+                    }
+                });
+            });
 
             // Loading project
             startButton.addEventListener("click", function (event) {
@@ -1128,6 +1184,39 @@
             }
 
             /**
+             * @param {boolean} isSource
+             * @param {number} index
+             * @param {"up"|"down"|"left"|"right"} direction
+             */
+            function getNeighbourCell(isSource, index, direction) {
+                /** @type {HTMLTextAreaElement} */
+                let result = undefined;
+
+                switch (direction) {
+                    case "up":
+                        result = document.getElementById(
+                            isSource ? `s${index - 1}` : `t${index - 1}`,
+                        );
+                        break;
+                    case "down":
+                        result = document.getElementById(
+                            isSource ? `s${index + 1}` : `t${index + 1}`,
+                        );
+                        break;
+                    case "left":
+                        result = document.getElementById(isSource ? `t${index - 1}` : `s${index}`);
+                        break;
+                    case "right":
+                        result = document.getElementById(isSource ? `t${index}` : `s${index + 1}`);
+                        break;
+                    default:
+                        break;
+                }
+
+                return result;
+            }
+
+            /**
              * @param {number} index
              */
             function addCell(index) {
@@ -1175,7 +1264,63 @@
                         updateStatistics(this);
                     });
 
-                    // Other actions
+                    // Actions with Alt
+                    t.addEventListener("keydown", function (event) {
+                        if (!event.altKey) return;
+
+                        switch (event.key) {
+                            case "ArrowUp":
+                                event.preventDefault();
+                                getNeighbourCell(this === textSource, index, "up")?.focus();
+                                break;
+                            case "ArrowDown":
+                                event.preventDefault();
+                                getNeighbourCell(this === textSource, index, "down")?.focus();
+                                break;
+                            case "ArrowLeft":
+                                event.preventDefault();
+                                getNeighbourCell(this === textSource, index, "left")?.focus();
+                                break;
+                            case "ArrowRight":
+                                event.preventDefault();
+                                getNeighbourCell(this === textSource, index, "right")?.focus();
+                                break;
+                            case "PageUp":
+                                event.preventDefault();
+                                setPage("previous");
+                                break;
+                            case "PageDown":
+                                event.preventDefault();
+                                setPage("next");
+                                break;
+                            case "Home":
+                                event.preventDefault();
+                                notes.focus();
+                                break;
+                            case "End":
+                                event.preventDefault();
+                                if (this === textSource) {
+                                    tableSourceStats.focus();
+                                } else {
+                                    tableTargetStats.focus();
+                                }
+                                break;
+                            case "Insert":
+                                event.preventDefault();
+                                textTarget.value = textSource.value;
+                                textTarget.dispatchEvent(new Event("input"));
+                                break;
+                            case "Delete":
+                                event.preventDefault();
+                                this.value = "";
+                                this.dispatchEvent(new Event("input"));
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+
+                    // Update stats on focus and selection
                     ["click", "focus", "select"].forEach((e) => {
                         t.addEventListener(e, function (event) {
                             updateStatistics(this);
@@ -1193,7 +1338,7 @@
             }
 
             /**
-             * @param {string} page
+             * @param {"first"|"previous"|"input"|"next"|"last"} page
              */
             function setPage(page) {
                 /** @type {number} */
@@ -1251,6 +1396,8 @@
                 if (lastText) {
                     lastText.setSelectionRange(...project.selection);
                     lastText.focus();
+                } else {
+                    document.getElementById(`t${firstIndex}`)?.focus();
                 }
             }
 
@@ -1584,10 +1731,6 @@
                             childNodesTexts: ["Export texts for translation"],
                         },
                         {
-                            id: "title",
-                            childNodesTexts: ["Traduco"],
-                        },
-                        {
                             id: "start-button",
                             childNodesTexts: ["Open", "Open a text (.txt) or a project (.json)"],
                         },
@@ -1632,6 +1775,26 @@
                             id: "notes",
                             childNodesTexts: [],
                             placeholder: "Notes",
+                        },
+                        {
+                            id: "first-page-tooltip",
+                            childNodesTexts: ["First page"],
+                        },
+                        {
+                            id: "prev-page-tooltip",
+                            childNodesTexts: ["Previous page"],
+                        },
+                        {
+                            id: "cur-page-tooltip",
+                            childNodesTexts: ["Current page"],
+                        },
+                        {
+                            id: "next-page-tooltip",
+                            childNodesTexts: ["Next page"],
+                        },
+                        {
+                            id: "last-page-tooltip",
+                            childNodesTexts: ["Last page"],
                         },
                         {
                             id: "saving-back",
@@ -1783,8 +1946,68 @@
                         {
                             id: "about-p",
                             childNodesTexts: [
-                                "A simple translation tool allowing to precisely track your progress and symbol count.",
+                                "Named after a Latin word meaning ‘I translate’, ",
+                                "Traduco ",
+                                "is a simple yet powerful translation tool. Open either a plain text file (",
+                                ".txt",
+                                ", for example) to start a translation, or a project (stored in ",
+                                ".json",
+                                ") to continue the work. While translating, you can make and consult notes using the text input field at the top of the screen. At the bottom of the screen, you will find source and target texts' symbol count in the following format: ",
+                                "selection / parapgraph / whole text (proportion of the target text's length to that of the source one in %)",
+                                ". To make the process easier, ",
+                                "Traduco ",
+                                "offers a number of hotkeys:",
                             ],
+                        },
+                        {
+                            id: "hotkey-0",
+                            childNodesTexts: ["Alt", "+", "left arrow", " - select previous cell"],
+                        },
+                        {
+                            id: "hotkey-1",
+                            childNodesTexts: ["Alt", "+", "right arrow", " - select next cell"],
+                        },
+                        {
+                            id: "hotkey-2",
+                            childNodesTexts: ["Alt", "+", "up arrow", " - select cell above"],
+                        },
+                        {
+                            id: "hotkey-3",
+                            childNodesTexts: ["Alt", "+", "down arrow", " - select cell below"],
+                        },
+                        {
+                            id: "hotkey-4",
+                            childNodesTexts: ["Alt", "+", "Page Up", " - go to the previous page"],
+                        },
+                        {
+                            id: "hotkey-5",
+                            childNodesTexts: ["Alt", "+", "Page Down", " - go to the next page"],
+                        },
+                        {
+                            id: "hotkey-6",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Home",
+                                " - switch between notes and current cell",
+                            ],
+                        },
+                        {
+                            id: "hotkey-7",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "End",
+                                " - switch between statistics and current cell",
+                            ],
+                        },
+                        {
+                            id: "hotkey-8",
+                            childNodesTexts: ["Alt", "+", "Insert", " - copy source to target"],
+                        },
+                        {
+                            id: "hotkey-9",
+                            childNodesTexts: ["Alt", "+", "Delete", " - clear current cell"],
                         },
                     ],
                 },
@@ -1795,10 +2018,6 @@
                         {
                             id: "exportLang",
                             childNodesTexts: ["Экспорт текстов для перевода"],
-                        },
-                        {
-                            id: "title",
-                            childNodesTexts: ["Traduco"],
                         },
                         {
                             id: "start-button",
@@ -1845,6 +2064,26 @@
                             id: "notes",
                             childNodesTexts: [],
                             placeholder: "Заметки",
+                        },
+                        {
+                            id: "first-page-tooltip",
+                            childNodesTexts: ["Первая страница"],
+                        },
+                        {
+                            id: "prev-page-tooltip",
+                            childNodesTexts: ["Предыдущая страница"],
+                        },
+                        {
+                            id: "cur-page-tooltip",
+                            childNodesTexts: ["Текущая страница"],
+                        },
+                        {
+                            id: "next-page-tooltip",
+                            childNodesTexts: ["Следующая страница"],
+                        },
+                        {
+                            id: "last-page-tooltip",
+                            childNodesTexts: ["Последняя страница"],
                         },
                         {
                             id: "saving-back",
@@ -1996,8 +2235,98 @@
                         {
                             id: "about-p",
                             childNodesTexts: [
-                                "Простой инструмент для перевода с удобным отслеживанием прогресса и числа знаков.",
+                                "Названная латинским словом, означающим «я перевожу», программа ",
+                                "Traduco ",
+                                "— это простой, но мощный инструмент для перевода. Откройте обычный текстовый файл (например, ",
+                                ".txt",
+                                ") для начала работы или файл проекта (с расширением ",
+                                ".json",
+                                ") для её продолжения. Во время перевода Вы можете вести заметки, пользуясь полем ввода вверху экрана. А в нижней его части находится число знаков в оригинале и переводе в следующем формате: ",
+                                "выделение / абзац / весь текст (соотношение длины перевода и длины оригинала в %)",
+                                ". Для упрощения переводческой работы в ",
+                                "Traduco ",
+                                "доступны следующие сочетания кнопок:",
                             ],
+                        },
+                        {
+                            id: "hotkey-0",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "стрелка влево",
+                                " — выбрать предыдущую ячейку",
+                            ],
+                        },
+                        {
+                            id: "hotkey-1",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "стрелка вправо",
+                                " — выбрать следующую ячейку",
+                            ],
+                        },
+                        {
+                            id: "hotkey-2",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "стрелка вверх",
+                                " — выбрать ячейку выше",
+                            ],
+                        },
+                        {
+                            id: "hotkey-3",
+                            childNodesTexts: ["Alt", "+", "стрелка вниз", " — выбрать ячейку ниже"],
+                        },
+                        {
+                            id: "hotkey-4",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Page Up",
+                                " — переход к предыдущей странице",
+                            ],
+                        },
+                        {
+                            id: "hotkey-5",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Page Down",
+                                " — переход к следующей странице",
+                            ],
+                        },
+                        {
+                            id: "hotkey-6",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Home",
+                                " — переключение между заметками и текущей ячейкой",
+                            ],
+                        },
+                        {
+                            id: "hotkey-7",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "End",
+                                " — переключение между статистикой и текущей ячейкой",
+                            ],
+                        },
+                        {
+                            id: "hotkey-8",
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Insert",
+                                " — копировать оригинал в перевод",
+                            ],
+                        },
+                        {
+                            id: "hotkey-9",
+                            childNodesTexts: ["Alt", "+", "Delete", " — очистить текущую ячейку"],
                         },
                     ],
                 },
