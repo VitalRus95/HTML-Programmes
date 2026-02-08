@@ -1,0 +1,15 @@
+{
+    "--colour-bgr-1": "#030516",
+    "--colour-bgr-2": "#0a1045",
+    "--colour-bgr-3": "#0e2439",
+    "--colour-text": "#ffcf9e",
+    "--colour-button": "#1a2156",
+    "--colour-border": "#141300",
+    "--colour-input": "#333823",
+    "--colour-tooltip": "#00233d",
+    "--colour-hovered-bgr": "#e1d989",
+    "--colour-hovered-fgr": "#141414",
+    "--colour-hovered-border": "#ffffff",
+    "--colour-disabled-bgr": "#454545",
+    "--colour-disabled-fgr": "#dedede"
+}
