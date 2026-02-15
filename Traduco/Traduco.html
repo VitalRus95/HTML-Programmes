@@ -571,9 +571,9 @@
         </style>
     </head>
     <body>
-        <button id="exportLang" onclick="exportTranslationTemplate()">
+        <!-- <button id="exportLang" onclick="exportTranslationTemplate()">
             Export texts for translation
-        </button>
+        </button> -->
 
         <!-- Menu div -->
         <div id="menu" class="scene" tabindex="1">
@@ -1322,7 +1322,8 @@
                     // Update stats on focus and selection
                     ["click", "focus", "select"].forEach((e) => {
                         t.addEventListener(e, function (event) {
-                            updateStatistics(this);
+                            updateStatistics(textSource);
+                            updateStatistics(textTarget);
 
                             // Update last selected table cell
                             project.lastId = this.id;
