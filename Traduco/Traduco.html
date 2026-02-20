@@ -807,9 +807,12 @@
                 <li id="hotkey-7">
                     <kbd>Alt</kbd>+<kbd>End</kbd> - switch between statistics and current cell
                 </li>
-                <li id="hotkey-8"><kbd>Alt</kbd>+<kbd>Insert</kbd> - copy source to target</li>
-                <li id="hotkey-9"><kbd>Alt</kbd>+<kbd>Delete</kbd> - clear current cell</li>
+                <li id="hotkey-8"><kbd>Alt</kbd>+<kbd>Insert</kbd> - copy source to target*</li>
+                <li id="hotkey-9"><kbd>Alt</kbd>+<kbd>Delete</kbd> - clear current cell*</li>
             </ul>
+            <p id="cell-copy-hint">
+                * The cell's previous content will be copied to the clipboard.
+            </p>
         </div>
 
         <script>
@@ -1306,11 +1309,13 @@
                                 break;
                             case "Insert":
                                 event.preventDefault();
+                                navigator.clipboard.writeText(textTarget.value);
                                 textTarget.value = textSource.value;
                                 textTarget.dispatchEvent(new Event("input"));
                                 break;
                             case "Delete":
                                 event.preventDefault();
+                                navigator.clipboard.writeText(this.value);
                                 this.value = "";
                                 this.dispatchEvent(new Event("input"));
                                 break;
@@ -2003,11 +2008,17 @@
                         },
                         {
                             id: "hotkey-8",
-                            childNodesTexts: ["Alt", "+", "Insert", " - copy source to target"],
+                            childNodesTexts: ["Alt", "+", "Insert", " - copy source to target*"],
                         },
                         {
                             id: "hotkey-9",
-                            childNodesTexts: ["Alt", "+", "Delete", " - clear current cell"],
+                            childNodesTexts: ["Alt", "+", "Delete", " - clear current cell*"],
+                        },
+                        {
+                            id: "cell-copy-hint",
+                            childNodesTexts: [
+                                "* The cell's previous content will be copied to the clipboard.",
+                            ],
                         },
                     ],
                 },
@@ -2321,12 +2332,18 @@
                                 "Alt",
                                 "+",
                                 "Insert",
-                                " — копировать оригинал в перевод",
+                                " — копировать оригинал в перевод*",
                             ],
                         },
                         {
                             id: "hotkey-9",
-                            childNodesTexts: ["Alt", "+", "Delete", " — очистить текущую ячейку"],
+                            childNodesTexts: ["Alt", "+", "Delete", " — очистить текущую ячейку*"],
+                        },
+                        {
+                            id: "cell-copy-hint",
+                            childNodesTexts: [
+                                "* Предыдущий текст ячейки будет скопирован в буфер обмена.",
+                            ],
                         },
                     ],
                 },
