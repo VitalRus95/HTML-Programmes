@@ -1,0 +1,1105 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Полезное</title>
+        <style>
+            /* Animations */
+            @keyframes scene-show {
+                from {
+                    opacity: 0;
+                    transform: translateX(-10%);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0%);
+                }
+            }
+
+            @keyframes details-show {
+                from {
+                    background-color: var(--colour-border);
+                }
+                to {
+                    background-color: transparent;
+                }
+            }
+
+            /* All elements */
+            :root {
+                --colour-bgr-1: #ff9696;
+                --colour-bgr-2: #fff5d2;
+                --colour-bgr-3: #d7d2ff;
+                --colour-text: #000000;
+                --colour-button: #ebebff;
+                --colour-border: #00557d;
+                --colour-input: #ffffd7;
+                --colour-tooltip: #ffb4b4;
+                --colour-hovered-bgr: #191919;
+                --colour-hovered-fgr: #ebebeb;
+                --colour-hovered-border: #b4b4b4;
+                --colour-disabled-bgr: #afafaf;
+                --colour-disabled-fgr: #1e1e1e;
+            }
+
+            * {
+                color: var(--colour-text);
+                border-radius: 4px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    Oxygen,
+                    Ubuntu,
+                    Cantarell,
+                    "Open Sans",
+                    "Helvetica Neue",
+                    sans-serif;
+                transition: background-color 0.4s ease;
+                -moz-transition: background-color 0.4s ease;
+                -webkit-transition: background-color 0.4s ease;
+            }
+
+            /* Elements by tag */
+            html {
+                align-content: center;
+                height: 100%;
+            }
+
+            body {
+                display: flex;
+                background-color: var(--colour-bgr-2);
+                background-image: linear-gradient(
+                    60deg,
+                    var(--colour-bgr-1),
+                    transparent,
+                    var(--colour-bgr-3)
+                );
+                background-attachment: fixed;
+                flex-direction: column;
+                margin: auto;
+                font-size: 14pt;
+                min-width: 40%;
+                max-width: 90%;
+                transition: none;
+                -moz-transition: none;
+                -webkit-transition: none;
+            }
+
+            a {
+                background-color: transparent;
+                color: var(--colour-text);
+            }
+
+            button,
+            .pseudo-button {
+                display: flex;
+                flex-grow: 1;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                background-color: var(--colour-button);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                font-size: 1em;
+                font-weight: 600;
+                margin-block: 2px;
+                padding: 2px;
+                min-height: 1.7em;
+                cursor: default;
+            }
+
+            button:disabled,
+            .pseudo-button:disabled,
+            input:disabled {
+                background-color: var(--colour-disabled-bgr);
+                color: var(--colour-disabled-fgr);
+                cursor: not-allowed;
+            }
+
+            caption {
+                font-size: 1.1em;
+                font-style: italic;
+                font-weight: 600;
+            }
+
+            details {
+                background-color: transparent;
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                margin-block: 2px;
+                padding: 2px 4px;
+                max-height: 50vh;
+                overflow: auto;
+            }
+
+            details[open] {
+                animation: details-show 0.6s ease-in;
+            }
+
+            details[open] > summary {
+                border: 2px outset var(--colour-border);
+                background-color: var(--colour-bgr-2);
+                background-image: linear-gradient(
+                    60deg,
+                    var(--colour-bgr-1),
+                    transparent,
+                    var(--colour-bgr-3)
+                );
+                color: var(--colour-text);
+                opacity: 0.95;
+                margin-bottom: 4px;
+                padding: 2px;
+                position: sticky;
+                top: 2px;
+                z-index: 9;
+            }
+
+            details[open] > summary:focus,
+            details[open] > summary:hover,
+            details[open]:focus > summary,
+            details[open]:hover > summary {
+                background-color: var(--colour-button);
+                background-image: linear-gradient(
+                    60deg,
+                    var(--colour-input),
+                    transparent,
+                    var(--colour-tooltip)
+                );
+                transition: background-color 0.7s ease;
+                -moz-transition: background-color 0.7s ease;
+                -webkit-transition: background-color 0.7s ease;
+            }
+
+            details[open]:focus-within > summary {
+                background-color: var(--colour-button);
+                background-image: linear-gradient(
+                    60deg,
+                    var(--colour-input),
+                    transparent,
+                    var(--colour-tooltip)
+                );
+                transition: background-color 0.7s ease;
+                -moz-transition: background-color 0.7s ease;
+                -webkit-transition: background-color 0.7s ease;
+            }
+
+            h1,
+            h2,
+            h3 {
+                text-align: center;
+                margin-block: 4px;
+            }
+
+            h1 {
+                border-bottom: 3px inset var(--colour-border);
+                border-radius: 0px;
+                font-size: 1.9em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            h3 {
+                font-size: 1.25em;
+            }
+
+            hr {
+                border-style: none;
+                border-top: 4px double var(--colour-border);
+                margin-block: 4px;
+                width: 100%;
+            }
+
+            input,
+            textarea {
+                background-color: var(--colour-input);
+                border: 2px outset var(--colour-border);
+                font-size: 1em;
+                margin-block: 2px;
+                min-height: 1.7em;
+            }
+
+            input[type="text"] {
+                display: flex;
+                flex-grow: 1;
+            }
+
+            kbd {
+                border: 2px outset var(--colour-border);
+                box-shadow: 1px 1px 1px var(--colour-text);
+                padding-inline: 2px;
+            }
+
+            li {
+                margin-bottom: 6px;
+            }
+
+            ol,
+            ul,
+            p {
+                margin-block: 4px;
+            }
+
+            select {
+                background-color: var(--colour-input);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                font-size: 1em;
+                margin-block: 2px;
+                padding-inline: 4px;
+                min-height: 1.7em;
+            }
+
+            select:focus > option,
+            select:hover > option {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+            }
+
+            strong {
+                box-shadow: 0px 0px 4px 0px var(--colour-text);
+                margin-inline: 1px;
+                padding-inline: 4px;
+                font-weight: 500;
+            }
+
+            summary {
+                border-radius: 4px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            table {
+                border-collapse: separate;
+                table-layout: fixed;
+                margin-block: 4px;
+                width: 100%;
+            }
+
+            thead {
+                position: sticky;
+                top: 0px;
+                z-index: 8;
+            }
+
+            tfoot {
+                position: sticky;
+                bottom: 0px;
+                z-index: 8;
+            }
+
+            tfoot > tr > td,
+            tfoot > tr > th {
+                background-color: var(--colour-input);
+                font-weight: 600;
+            }
+
+            td,
+            th {
+                border: 2px outset var(--colour-border);
+                width: 100%;
+            }
+
+            td {
+                padding-left: 4px;
+            }
+
+            th {
+                background-color: var(--colour-tooltip);
+                font-weight: 600;
+                text-align: center;
+            }
+
+            tr {
+                display: flex;
+                column-gap: 2px;
+                margin-block: 2px;
+                width: 100%;
+            }
+
+            tr:nth-of-type(even) > td {
+                background-color: var(--colour-button);
+            }
+
+            /* Hovering and focusing */
+            button:focus,
+            button:hover,
+            input:focus,
+            input:hover,
+            select:focus,
+            select:hover,
+            summary:focus,
+            summary:hover,
+            textarea:focus,
+            textarea:hover,
+            td:focus,
+            td:hover,
+            th:focus,
+            th:hover,
+            tr:nth-of-type(even) > td:focus,
+            tr:nth-of-type(even) > td:hover,
+            .pseudo-button:focus,
+            .pseudo-button:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+                transition: background-color 0.4s ease;
+                -moz-transition: background-color 0.4s ease;
+                -webkit-transition: background-color 0.4s ease;
+            }
+
+            /* Classes */
+            .button-container {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 4px;
+            }
+
+            .scene {
+                display: none;
+                flex-direction: column;
+                animation: scene-show 0.4s ease;
+            }
+
+            .setting-div {
+                display: flex;
+                column-gap: 4px;
+                align-items: center;
+            }
+
+            .settings-list {
+                display: flex;
+                flex-direction: column;
+                margin-block: 4px;
+                row-gap: 2px;
+            }
+
+            .tooltip-parent {
+                position: relative;
+            }
+
+            .tooltip-parent:focus > .tooltip,
+            .tooltip-parent:hover > .tooltip {
+                display: flex;
+            }
+
+            .tooltip {
+                display: none;
+                background-color: var(--colour-tooltip);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                padding: 0px 6px 0px 0px;
+                max-height: 60%;
+                max-width: 50%;
+                cursor: help;
+                font-style: italic;
+                font-weight: 400;
+                text-align: left;
+                opacity: 0.95;
+                position: fixed;
+                top: 8px;
+                left: 8px;
+                z-index: 10;
+                overflow: auto;
+            }
+
+            .tooltip::before {
+                content: "i";
+                background-color: var(--colour-text);
+                color: var(--colour-tooltip);
+                border-radius: 0px;
+                margin-right: 4px;
+                height: fit-content;
+                padding-inline: 0.5em;
+                font-style: italic;
+                font-weight: 600;
+            }
+
+            .tree-details {
+                border: none;
+                margin-block: 2px;
+                padding: 0px;
+                max-height: none;
+                overflow: visible;
+            }
+
+            .tree-list {
+                list-style: none;
+                padding-left: 0.3em;
+            }
+
+            .tree-list > li {
+                border-left: 5px double var(--colour-border);
+                border-radius: 0px;
+                margin-block: 4px;
+                padding-block: 1px;
+                padding-left: 3px;
+            }
+
+            .tree-list > li:last-child {
+                border-bottom: 5px double var(--colour-border);
+            }
+
+            /* Elements by ID */
+            #menu {
+                display: flex;
+            }
+
+            #author {
+                background-color: var(--colour-tooltip);
+                color: var(--colour-text);
+                border: 2px outset var(--colour-border);
+                text-align: center;
+                font-size: 1em;
+                margin-block: 2px;
+                margin-top: 10px;
+                padding: 2px;
+                cursor: help;
+                width: 100%;
+            }
+
+            #author:focus,
+            #author:hover {
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border-color: var(--colour-hovered-border);
+            }
+
+            #author:focus > a,
+            #author:hover > a {
+                color: var(--colour-hovered-fgr);
+            }
+
+            /* Media queries */
+            @media (min-width: 720px) {
+                body {
+                    max-width: 60%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Main menu div -->
+        <div id="menu" class="scene" tabindex="1">
+            <h1 id="title" tabindex="1">Полезное</h1>
+
+            <!-- Resources tree -->
+            <ul style="margin-bottom: 2px" class="tree-list">
+                <!-- Языковое -->
+                <details class="tree-details">
+                    <summary>Языковое</summary>
+
+                    <ul class="tree-list">
+                        <li>
+                            <!-- Многоязычные словари -->
+                            <details class="tree-details">
+                                <summary>Многоязычные словари</summary>
+
+                                <ul class="tree-list">
+                                    <li>
+                                        <a href="https://www.lingvolive.com/en-us" target="_blank"
+                                            >ABBYY Lingvo Live</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://thefreedictionary.com/" target="_blank"
+                                            >The Free Dictionary</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://multitran.com/" target="_blank"
+                                            >Мультитран</a
+                                        >
+                                    </li>
+                                </ul>
+                            </details>
+
+                            <!-- Англоязычные словари -->
+                            <details class="tree-details">
+                                <summary>Англоязычные словари</summary>
+
+                                <ul class="tree-list">
+                                    <li>
+                                        <a href="https://www.oed.com/" target="_blank"
+                                            >Oxford English Dictionary</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://www.oxfordlearnersdictionaries.com/"
+                                            target="_blank"
+                                            >Oxford Learner's Dictionaries</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://dictionary.cambridge.org/" target="_blank"
+                                            >Cambridge Dictionary</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://collinsdictionary.com/" target="_blank"
+                                            >Collins English Dictionary</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://ozdic.com/" target="_blank"
+                                            >English Collocations Dictionary</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://ldoceonline.com/" target="_blank"
+                                            >Longman Dictionary of Contemporary English</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://etymonline.com/" target="_blank"
+                                            >Online Etymology Dictionary</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://rhymezone.com/" target="_blank"
+                                            >RhymeZone rhyming dictionary and thesaurus</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://dictionary.com/" target="_blank"
+                                            >Dictionary.com</a
+                                        >
+                                    </li>
+                                </ul>
+                            </details>
+
+                            <!-- Русскоязычные словари -->
+                            <details class="tree-details">
+                                <summary>Русскоязычные словари</summary>
+
+                                <ul class="tree-list">
+                                    <li>
+                                        <a href="https://dic.academic.ru/" target="_blank"
+                                            >Академик</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://gramota.ru/" target="_blank">Грамота.ру</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://kartaslov.ru/" target="_blank"
+                                            >Карта слов и выражений русского языка</a
+                                        >
+                                    </li>
+                                </ul>
+                            </details>
+
+                            <!-- Корпусы текстов -->
+                            <details class="tree-details">
+                                <summary>Корпусы текстов</summary>
+
+                                <ul class="tree-list">
+                                    <li>
+                                        <a href="https://english-corpora.org/" target="_blank"
+                                            >English Corpora</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://context.reverso.net/перевод/"
+                                            target="_blank"
+                                            >Reverso Context</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a href="https://ruscorpora.ru/new/" target="_blank"
+                                            >Национальный корпус русского языка</a
+                                        >
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+                    </ul>
+                </details>
+
+                <!-- Переводческое -->
+                <details class="tree-details">
+                    <summary>Переводческое</summary>
+
+                    <ul class="tree-list">
+                        <!-- Закономерности англоязычных новостных заголовков -->
+                        <li>
+                            <details class="tree-details">
+                                <summary>Закономерности англоязычных новостных заголовков</summary>
+
+                                <ul class="tree-list">
+                                    <li>все значимые слова — с большой буквы</li>
+                                    <li>числительные — цифрами</li>
+                                    <li>
+                                        союзы → знаки препинания (напр., and → <strong>,</strong>)
+                                    </li>
+                                    <li>вспомогательные глаголы — опускаются</li>
+                                    <li>
+                                        артикли, кроме устойчивых и значимых по смыслу, — опускаются
+                                    </li>
+                                    <li>часто встречаются аббревиатуры</li>
+                                    <li>использование препозиционных определений</li>
+                                    <li>
+                                        замена некоторых слов со значением речи (напр., say,
+                                        comment, tell, argue, announce, shout) на двоеточие (напр.,
+                                        Mr Jones: “They’re not taking my house!”)
+                                    </li>
+                                    <li>замена времён:</li>
+                                    <ul class="tree-list">
+                                        <li>
+                                            продолжительные (Continuous) и перфектные (Perfect) →
+                                            простые (Simple)
+                                        </li>
+                                        <li>прошедшее → настоящее</li>
+                                        <li>будущее → инфинитив</li>
+                                    </ul>
+                                </ul>
+
+                                <p>Что почитать по теме:</p>
+                                <ul class="tree-list">
+                                    <li>
+                                        <a
+                                            href="https://englishlessonsbrighton.co.uk/8-grammar-rules-writing-newspaper-headlines/"
+                                            target="_blank"
+                                            >English Lessons Brighton</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://www.englishpractice.com/improve/newspaper-headlines-grammar/"
+                                            target="_blank"
+                                            >English Practice</a
+                                        >
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://www.thoughtco.com/understanding-newspaper-headlines-p2-1211336"
+                                            target="_blank"
+                                            >ThoughtCo.</a
+                                        >
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+                    </ul>
+                </details>
+
+                <!-- Компьютерное -->
+                <details class="tree-details">
+                    <summary>Компьютерное</summary>
+
+                    <ul class="tree-list">
+                        <!-- Программы -->
+                        <li>
+                            <details class="tree-details">
+                                <summary>Программы</summary>
+
+                                <ul class="tree-list">
+                                    <li>
+                                        <a href="https://inkscape.org/" target="_blank">Inkscape</a>
+                                        — векторный графический редактор
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="https://microsoft.com/en-us/download/details.aspx?id=102134"
+                                            target="_blank"
+                                            >Microsoft Keyboard Layout Creator</a
+                                        >
+                                        — редактор раскладок клавиатуры
+                                    </li>
+                                    <li>
+                                        <a href="https://omegat.org/" target="_blank">OmegaT</a>
+                                        — средство автоматизированного перевода
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+
+                        <!-- Всякая всячина моего авторства -->
+                        <li>
+                            <details class="tree-details">
+                                <summary>Всякая всячина моего авторства</summary>
+
+                                <ul class="tree-list">
+                                    <li>
+                                        <a
+                                            href="https://youtube.com/watch?v=10ZRVL7ukfo"
+                                            target="_blank"
+                                            >Видеоурок</a
+                                        >
+                                        по основам OmegaT
+                                    </li>
+                                    <li>
+                                        Две
+                                        <a
+                                            href="https://disk.yandex.ru/d/e21Ho-aPMe9FPQ"
+                                            target="_blank"
+                                            >раскладки клавиатуры</a
+                                        >
+                                        (справка в PDF в комплекте)
+                                    </li>
+                                    <li>
+                                        Мои
+                                        <a
+                                            href="https://github.com/VitalRus95/HTML-Programmes"
+                                            target="_blank"
+                                            >программки</a
+                                        >
+                                        на HTML
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+                    </ul>
+                </details>
+            </ul>
+
+            <button id="settings-button" tabindex="1" onclick="switchScene('menu', 'settings')">
+                Настройки
+            </button>
+            <button id="about-button" tabindex="1" onclick="switchScene('menu', 'about')">
+                О программе
+            </button>
+
+            <!-- Author -->
+            <p id="author" tabindex="0" class="tooltip-parent">
+                Автор —
+                <a href="https://github.com/VitalRus95" target="_blank"
+                    >Виталий Павлович Ульянов (Vital)</a
+                >.
+                <span class="tooltip">Узнайте больше на GitHub!</span>
+            </p>
+        </div>
+
+        <!-- Settings div -->
+        <div id="settings" class="scene" tabindex="0">
+            <h2 id="settings-title" tabindex="0">Настройки</h2>
+
+            <button id="settings-back" onclick="switchScene('settings', 'menu')">Назад</button>
+
+            <!-- Sound settings -->
+            <details>
+                <summary id="sound-settings">Звук</summary>
+
+                <ul class="settings-list">
+                    <!-- Volume -->
+                    <li>
+                        <label for="set-volume" id="volume-label">Громкость звука</label>
+                        <input
+                            type="number"
+                            id="set-volume"
+                            min="0"
+                            max="1"
+                            step="0.1"
+                            value="0.5"
+                        />
+                    </li>
+
+                    <!-- Default sounds (buttons, inputs, etc.) -->
+                    <li>
+                        <div class="setting-div">
+                            <label for="set-def-sounds" id="def-sounds-label"
+                                >Стандартные звуки (кнопки, поля ввода и т.п.)
+                            </label>
+                            <input type="checkbox" id="set-def-sounds" checked />
+                        </div>
+                    </li>
+                </ul>
+            </details>
+
+            <!-- Colour scheme settings -->
+            <details>
+                <summary id="colour-settings">Цвета</summary>
+
+                <div class="button-container">
+                    <input type="file" id="colour-loader" accept=".json" style="display: none" />
+                    <button id="load-colours">Загрузить цвета</button>
+                    <a id="save-colours" href="" download="Colours.json" class="pseudo-button"
+                        >Сохранить цвета</a
+                    >
+                </div>
+
+                <ul id="colours" class="settings-list"></ul>
+
+                <div class="button-container">
+                    <button id="example-button">Пример кнопки</button>
+                    <button id="example-disabled-button" disabled>Пример отключённой кнопки</button>
+                    <input
+                        type="text"
+                        id="example-input"
+                        placeholder="Пример поля ввода"
+                        value="12345 ABCDE"
+                    />
+                </div>
+            </details>
+
+            <button id="default-settings">Сбросить настройки</button>
+        </div>
+
+        <!-- About div -->
+        <div id="about" class="scene" tabindex="0">
+            <h2 id="about-title" tabindex="0">О программе</h2>
+
+            <button id="about-back" onclick="switchScene('about', 'menu')">Назад</button>
+
+            <p>
+                Ценные советы и ссылки для изучающих иностранные языки (в первую очередь английский)
+                и перевод. Составил Виталий Павлович Ульянов, старший преподаватель кафедры теории и
+                практики перевода Института филологии и истории Российского государственного
+                гуманитарного университета.
+            </p>
+        </div>
+
+        <script>
+            // Elements
+            /** @type {HTMLDivElement} */
+            let menu = document.getElementById("menu");
+            /** @type {HTMLDivElement} */
+            let settings = document.getElementById("settings");
+            /** @type {HTMLUListElement} */
+            let colours = document.getElementById("colours");
+            /** @type {HTMLDivElement} */
+            let about = document.getElementById("about");
+            /** @type {HTMLInputElement} */
+            let colourLoader = document.getElementById("colour-loader");
+            /** @type {HTMLButtonElement} */
+            let loadColours = document.getElementById("load-colours");
+            /** @type {HTMLAnchorElement} */
+            let saveColours = document.getElementById("save-colours");
+
+            /** @type {HTMLInputElement} */
+            let volumeInput = document.getElementById("set-volume");
+            /** @type {HTMLInputElement} */
+            let defaultSounds = document.getElementById("set-def-sounds");
+            /** @type {HTMLButtonElement} */
+            let defaultSettings = document.getElementById("default-settings");
+
+            // Objects
+            const allColours = {
+                "--colour-bgr-1": "#ff9696",
+                "--colour-bgr-2": "#fff5d2",
+                "--colour-bgr-3": "#d7d2ff",
+                "--colour-text": "#000000",
+                "--colour-button": "#ebebff",
+                "--colour-border": "#00557d",
+                "--colour-input": "#ffffd7",
+                "--colour-tooltip": "#ffb4b4",
+                "--colour-hovered-bgr": "#191919",
+                "--colour-hovered-fgr": "#ebebeb",
+                "--colour-hovered-border": "#b4b4b4",
+                "--colour-disabled-bgr": "#afafaf",
+                "--colour-disabled-fgr": "#1e1e1e",
+            };
+
+            // Variables
+            /** @type {AudioContext} */
+            let audio = new (window.AudioContext || window.webkitAudioContext)();
+
+            // Settings' events
+            volumeInput.addEventListener("change", function (event) {
+                volumeInput.value = clamp(0, +volumeInput.value, 1);
+                localStorage.setItem("volume", volumeInput.value);
+            });
+
+            defaultSounds.addEventListener("change", function (event) {
+                localStorage.setItem("default-sounds", this.checked);
+            });
+
+            defaultSettings.addEventListener("click", function (event) {
+                // Volume
+                volumeInput.value = "0.5";
+                localStorage.setItem("volume", volumeInput.value);
+
+                // Default sounds
+                defaultSounds.checked = true;
+                localStorage.setItem("default-sounds", this.checked);
+
+                // Colours
+                for (const c in allColours) {
+                    document.body.style.setProperty(c, allColours[c]);
+                    document.getElementById(c).value = allColours[c];
+                    localStorage.setItem(c, allColours[c]);
+                }
+            });
+
+            // Colour settings
+            Object.keys(allColours).forEach((c) => {
+                document.body.style.setProperty(
+                    c,
+                    localStorage.getItem(c) ?? getComputedStyle(document.body).getPropertyValue(c),
+                );
+
+                /** @type {HTMLLIElement} */
+                let item = colours.appendChild(document.createElement("li"));
+                /** @type {HTMLLabelElement} */
+                let label = item.appendChild(document.createElement("label"));
+                /** @type {HTMLInputElement} */
+                let input = item.appendChild(document.createElement("input"));
+
+                label.id = `${c}-label`;
+                label.htmlFor = c;
+                label.textContent = c;
+                label.style.marginRight = "4px";
+
+                input.id = c;
+                input.type = "color";
+                input.value = document.body.style.getPropertyValue(c);
+                input.addEventListener("input", function (event) {
+                    document.body.style.setProperty(c, this.value);
+                    localStorage.setItem(c, this.value);
+                });
+
+                if (c === "--colour-tooltip") {
+                    item.classList.add("tooltip-parent");
+                    /** @type {HTMLSpanElement} */
+                    let tooltip = item.appendChild(document.createElement("span"));
+
+                    tooltip.id = "example-tooltip";
+                    tooltip.classList.add("tooltip");
+                    tooltip.textContent = "Tooltip example";
+                }
+            });
+
+            // Loading colours
+            loadColours.addEventListener("click", function (event) {
+                colourLoader.click();
+            });
+
+            colourLoader.addEventListener("change", async function (event) {
+                await colourLoader.files[0].text().then((content) => {
+                    try {
+                        let loadedColours = JSON.parse(content);
+
+                        for (const c in loadedColours) {
+                            document.body.style.setProperty(c, loadedColours[c]);
+                            document.getElementById(c).value = loadedColours[c];
+                            localStorage.setItem(c, loadedColours[c]);
+                            this.value = "";
+                        }
+                    } catch (error) {
+                        alert(`Error while reading colours file: ${error}`);
+                    }
+                });
+            });
+
+            // Saving colours
+            saveColours.addEventListener("click", function (event) {
+                let savedColours = {};
+
+                Object.keys(allColours).forEach((c) => {
+                    savedColours[c] = document.body.style.getPropertyValue(c);
+                });
+
+                let data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
+                this.href = `data:text/plain;charset=utf-8,${data}`;
+            });
+
+            // Exiting on pressing Escape
+            settings.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") switchScene("settings", "menu");
+            });
+            about.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") switchScene("about", "menu");
+            });
+
+            // Default sounds
+            document
+                .querySelectorAll("button, input, select, textarea, summary, a")
+                .forEach((e) => {
+                    e.addEventListener("click", function (event) {
+                        if (!defaultSounds.checked) return;
+                        playSound("sine", [250, 50, 100], 0.1);
+                    });
+                });
+
+            // Functions
+            function loadSettings() {
+                // Volume
+                volumeInput.value = localStorage.getItem("volume") ?? "0.5";
+
+                // Default sounds
+                if (localStorage.getItem("default-sounds")) {
+                    defaultSounds.checked = localStorage.getItem("default-sounds") === "true";
+                } else {
+                    defaultSounds.checked = true;
+                    localStorage.setItem("default-sounds", "true");
+                }
+            }
+
+            function switchScene(from, to) {
+                if (from === to) return;
+
+                try {
+                    document.getElementById(from).style.display = "none";
+                    document.getElementById(to).style.display = "flex";
+                    document.getElementById(to).focus();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+            /**
+             * @param {'square' | 'sawtooth' | 'triangle' | 'sine'} type
+             * @param {number[]} frequencies
+             * @param {number} duration
+             */
+            function playSound(type, frequencies, duration) {
+                if (!audio || +volumeInput.value === 0) return;
+
+                /** @type {OscillatorNode} */
+                let oscillator = audio.createOscillator();
+                /** @type {GainNode} */
+                let volume = audio.createGain();
+
+                oscillator.type = type;
+                oscillator.frequency.value = frequencies[0];
+                oscillator.frequency.setValueCurveAtTime(frequencies, audio.currentTime, duration);
+                oscillator.connect(volume);
+
+                volume.gain.value = +volumeInput.value;
+                volume.gain.setValueCurveAtTime(
+                    [0, +volumeInput.value, 0],
+                    audio.currentTime,
+                    duration,
+                );
+                volume.connect(audio.destination);
+
+                oscillator.start();
+                oscillator.stop(audio.currentTime + duration);
+            }
+
+            /**
+             * @param {number} min
+             * @param {number} value
+             * @param {number} max
+             * @returns {number}
+             */
+            function ringClamp(min, value, max) {
+                return value < min ? max : value > max ? min : value;
+            }
+
+            /**
+             * @param {number} min
+             * @param {number} value
+             * @param {number} max
+             * @returns {number}
+             */
+            function clamp(min, value, max) {
+                return value < min ? min : value > max ? max : value;
+            }
+
+            // Resetting some elements & loading settings
+            loadSettings();
+        </script>
+    </body>
+</html>
