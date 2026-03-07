@@ -434,19 +434,24 @@
 
             .tree-list {
                 list-style: none;
-                padding-left: 0.3em;
+                padding-left: 10px;
+                border-left: 2px solid var(--colour-text);
+                border-radius: 0px;
             }
 
             .tree-list > li {
-                border-left: 5px double var(--colour-border);
-                border-radius: 0px;
                 margin-block: 4px;
-                padding-block: 1px;
-                padding-left: 3px;
+                position: relative;
             }
 
-            .tree-list > li:last-child {
-                border-bottom: 5px double var(--colour-border);
+            .tree-list > li::before {
+                display: flex;
+                content: "";
+                border-top: 2px solid var(--colour-text);
+                width: 8px;
+                position: absolute;
+                bottom: 0%;
+                left: -10px;
             }
 
             /* Elements by ID */
@@ -499,8 +504,8 @@
                     <summary>Языковое</summary>
 
                     <ul class="tree-list">
+                        <!-- Многоязычные словари -->
                         <li>
-                            <!-- Многоязычные словари -->
                             <details class="tree-details">
                                 <summary>Многоязычные словари</summary>
 
@@ -520,10 +525,36 @@
                                             >Мультитран</a
                                         >
                                     </li>
+                                    <li>
+                                        Фразаурус
+                                        <ul class="tree-list">
+                                            <li>
+                                                <a href="http://frazaurus.ru/" target="_blank"
+                                                    >Сайт</a
+                                                >
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="https://play.google.com/store/apps/details?id=com.frazauruz&hl=ru&gl=RU"
+                                                    target="_blank"
+                                                    >Google Play</a
+                                                >
+                                            </li>
+                                            <li>
+                                                <a
+                                                    href="https://apps.apple.com/ru/app/%D1%84%D1%80%D0%B0%D0%B7%D0%B0%D1%83%D1%80%D1%83%D1%81-idiomatic-thesaurus/id1633510202"
+                                                    target="_blank"
+                                                    >App Store</a
+                                                >
+                                            </li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </details>
+                        </li>
 
-                            <!-- Англоязычные словари -->
+                        <!-- Англоязычные словари -->
+                        <li>
                             <details class="tree-details">
                                 <summary>Англоязычные словари</summary>
 
@@ -577,8 +608,10 @@
                                     </li>
                                 </ul>
                             </details>
+                        </li>
 
-                            <!-- Русскоязычные словари -->
+                        <!-- Русскоязычные словари -->
+                        <li>
                             <details class="tree-details">
                                 <summary>Русскоязычные словари</summary>
 
@@ -598,8 +631,10 @@
                                     </li>
                                 </ul>
                             </details>
+                        </li>
 
-                            <!-- Корпусы текстов -->
+                        <!-- Корпусы текстов -->
+                        <li>
                             <details class="tree-details">
                                 <summary>Корпусы текстов</summary>
 
@@ -632,6 +667,21 @@
                     <summary>Переводческое</summary>
 
                     <ul class="tree-list">
+                        <!-- Ценные сайты -->
+                        <li>
+                            <details class="tree-details">
+                                <summary>Ценные сайты</summary>
+
+                                <ul class="tree-list">
+                                    <li>
+                                        Личный
+                                        <a href="https://yermolovich.ru/" target="_blank">сайт</a>
+                                        переводчика Дмитрия Ивановича Ермоловича
+                                    </li>
+                                </ul>
+                            </details>
+                        </li>
+
                         <!-- Закономерности англоязычных новостных заголовков -->
                         <li>
                             <details class="tree-details">
