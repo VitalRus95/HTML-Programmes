@@ -97,6 +97,15 @@
                 color: var(--colour-text);
             }
 
+            blockquote {
+                background-color: var(--colour-tooltip);
+                border-left: 4px outset var(--colour-border);
+                border-radius: 0px 4px 4px 0px;
+                margin-block: 4px;
+                margin-inline: 2px;
+                padding: 2px 4px;
+            }
+
             button,
             .pseudo-button {
                 display: flex;
@@ -236,19 +245,24 @@
             }
 
             kbd {
+                font-family: monospace;
                 border: 2px outset var(--colour-border);
                 box-shadow: 1px 1px 1px var(--colour-text);
                 padding-inline: 2px;
             }
 
             li {
-                margin-bottom: 6px;
+                margin-bottom: 4px;
             }
 
             ol,
-            ul,
-            p {
+            ul {
                 margin-block: 4px;
+            }
+
+            p {
+                margin-block: 6px;
+                text-indent: 0.6em;
             }
 
             select {
@@ -265,6 +279,13 @@
             select:hover > option {
                 background-color: var(--colour-hovered-bgr);
                 color: var(--colour-hovered-fgr);
+            }
+
+            strong {
+                box-shadow: 0px 0px 4px 0px var(--colour-text);
+                margin-inline: 2px;
+                padding-inline: 4px;
+                font-weight: 500;
             }
 
             summary {
@@ -327,14 +348,26 @@
             }
 
             /* Hovering and focusing */
+            b:focus,
+            b:hover,
+            i:focus,
+            i:hover,
+            u:focus,
+            u:hover,
             button:focus,
             button:hover,
             input:focus,
             input:hover,
+            kbd:focus,
+            kbd:hover,
             select:focus,
             select:hover,
+            strong:focus,
+            strong:hover,
             summary:focus,
+            summary:focus > *,
             summary:hover,
+            summary:hover > *,
             textarea:focus,
             textarea:hover,
             td:focus,

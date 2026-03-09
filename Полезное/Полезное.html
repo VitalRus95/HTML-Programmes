@@ -97,6 +97,15 @@
                 color: var(--colour-text);
             }
 
+            blockquote {
+                background-color: var(--colour-tooltip);
+                border-left: 4px outset var(--colour-border);
+                border-radius: 0px 4px 4px 0px;
+                margin-block: 4px;
+                margin-inline: 2px;
+                padding: 2px 4px;
+            }
+
             button,
             .pseudo-button {
                 display: flex;
@@ -234,19 +243,24 @@
             }
 
             kbd {
+                font-family: monospace;
                 border: 2px outset var(--colour-border);
                 box-shadow: 1px 1px 1px var(--colour-text);
                 padding-inline: 2px;
             }
 
             li {
-                margin-bottom: 6px;
+                margin-bottom: 4px;
             }
 
             ol,
-            ul,
-            p {
+            ul {
                 margin-block: 4px;
+            }
+
+            p {
+                margin-block: 6px;
+                text-indent: 0.6em;
             }
 
             select {
@@ -267,7 +281,7 @@
 
             strong {
                 box-shadow: 0px 0px 4px 0px var(--colour-text);
-                margin-inline: 1px;
+                margin-inline: 2px;
                 padding-inline: 4px;
                 font-weight: 500;
             }
@@ -331,14 +345,26 @@
             }
 
             /* Hovering and focusing */
+            b:focus,
+            b:hover,
+            i:focus,
+            i:hover,
+            u:focus,
+            u:hover,
             button:focus,
             button:hover,
             input:focus,
             input:hover,
+            kbd:focus,
+            kbd:hover,
             select:focus,
             select:hover,
+            strong:focus,
+            strong:hover,
             summary:focus,
+            summary:focus > *,
             summary:hover,
+            summary:hover > *,
             textarea:focus,
             textarea:hover,
             td:focus,
@@ -450,7 +476,7 @@
                 border-top: 2px solid var(--colour-text);
                 width: 8px;
                 position: absolute;
-                bottom: 0%;
+                top: 0%;
                 left: -10px;
             }
 
@@ -498,320 +524,1016 @@
             <h1 id="title" tabindex="1">Полезное</h1>
 
             <!-- Resources tree -->
-            <ul style="margin-bottom: 2px" class="tree-list">
+            <ul class="tree-list">
                 <!-- Языковое -->
-                <details class="tree-details">
-                    <summary>Языковое</summary>
+                <li>
+                    <details class="tree-details">
+                        <summary>Языковое</summary>
 
-                    <ul class="tree-list">
-                        <!-- Многоязычные словари -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Многоязычные словари</summary>
+                        <ul class="tree-list">
+                            <!-- Многоязычные словари -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Многоязычные словари</summary>
 
-                                <ul class="tree-list">
-                                    <li>
-                                        <a href="https://www.lingvolive.com/en-us" target="_blank"
-                                            >ABBYY Lingvo Live</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://thefreedictionary.com/" target="_blank"
-                                            >The Free Dictionary</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://multitran.com/" target="_blank"
-                                            >Мультитран</a
-                                        >
-                                    </li>
-                                    <li>
-                                        Фразаурус
-                                        <ul class="tree-list">
-                                            <li>
-                                                <a href="http://frazaurus.ru/" target="_blank"
-                                                    >Сайт</a
-                                                >
-                                            </li>
-                                            <li>
-                                                <a
-                                                    href="https://play.google.com/store/apps/details?id=com.frazauruz&hl=ru&gl=RU"
-                                                    target="_blank"
-                                                    >Google Play</a
-                                                >
-                                            </li>
-                                            <li>
-                                                <a
-                                                    href="https://apps.apple.com/ru/app/%D1%84%D1%80%D0%B0%D0%B7%D0%B0%D1%83%D1%80%D1%83%D1%81-idiomatic-thesaurus/id1633510202"
-                                                    target="_blank"
-                                                    >App Store</a
-                                                >
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-
-                        <!-- Англоязычные словари -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Англоязычные словари</summary>
-
-                                <ul class="tree-list">
-                                    <li>
-                                        <a href="https://www.oed.com/" target="_blank"
-                                            >Oxford English Dictionary</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a
-                                            href="https://www.oxfordlearnersdictionaries.com/"
-                                            target="_blank"
-                                            >Oxford Learner's Dictionaries</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://dictionary.cambridge.org/" target="_blank"
-                                            >Cambridge Dictionary</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://collinsdictionary.com/" target="_blank"
-                                            >Collins English Dictionary</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://ozdic.com/" target="_blank"
-                                            >English Collocations Dictionary</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://ldoceonline.com/" target="_blank"
-                                            >Longman Dictionary of Contemporary English</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://etymonline.com/" target="_blank"
-                                            >Online Etymology Dictionary</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://rhymezone.com/" target="_blank"
-                                            >RhymeZone rhyming dictionary and thesaurus</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://dictionary.com/" target="_blank"
-                                            >Dictionary.com</a
-                                        >
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-
-                        <!-- Русскоязычные словари -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Русскоязычные словари</summary>
-
-                                <ul class="tree-list">
-                                    <li>
-                                        <a href="https://dic.academic.ru/" target="_blank"
-                                            >Академик</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://gramota.ru/" target="_blank">Грамота.ру</a>
-                                    </li>
-                                    <li>
-                                        <a href="https://kartaslov.ru/" target="_blank"
-                                            >Карта слов и выражений русского языка</a
-                                        >
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-
-                        <!-- Корпусы текстов -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Корпусы текстов</summary>
-
-                                <ul class="tree-list">
-                                    <li>
-                                        <a href="https://english-corpora.org/" target="_blank"
-                                            >English Corpora</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a
-                                            href="https://context.reverso.net/перевод/"
-                                            target="_blank"
-                                            >Reverso Context</a
-                                        >
-                                    </li>
-                                    <li>
-                                        <a href="https://ruscorpora.ru/new/" target="_blank"
-                                            >Национальный корпус русского языка</a
-                                        >
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-                    </ul>
-                </details>
-
-                <!-- Переводческое -->
-                <details class="tree-details">
-                    <summary>Переводческое</summary>
-
-                    <ul class="tree-list">
-                        <!-- Ценные сайты -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Ценные сайты</summary>
-
-                                <ul class="tree-list">
-                                    <li>
-                                        Личный
-                                        <a href="https://yermolovich.ru/" target="_blank">сайт</a>
-                                        переводчика Дмитрия Ивановича Ермоловича
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-
-                        <!-- Закономерности англоязычных новостных заголовков -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Закономерности англоязычных новостных заголовков</summary>
-
-                                <ul class="tree-list">
-                                    <li>все значимые слова — с большой буквы</li>
-                                    <li>числительные — цифрами</li>
-                                    <li>
-                                        союзы → знаки препинания (напр., and → <strong>,</strong>)
-                                    </li>
-                                    <li>вспомогательные глаголы — опускаются</li>
-                                    <li>
-                                        артикли, кроме устойчивых и значимых по смыслу, — опускаются
-                                    </li>
-                                    <li>часто встречаются аббревиатуры</li>
-                                    <li>использование препозиционных определений</li>
-                                    <li>
-                                        замена некоторых слов со значением речи (напр., say,
-                                        comment, tell, argue, announce, shout) на двоеточие (напр.,
-                                        Mr Jones: “They’re not taking my house!”)
-                                    </li>
-                                    <li>замена времён:</li>
                                     <ul class="tree-list">
                                         <li>
-                                            продолжительные (Continuous) и перфектные (Perfect) →
-                                            простые (Simple)
+                                            <a
+                                                href="https://www.lingvolive.com/en-us"
+                                                target="_blank"
+                                            >
+                                                ABBYY Lingvo Live
+                                            </a>
                                         </li>
-                                        <li>прошедшее → настоящее</li>
-                                        <li>будущее → инфинитив</li>
+                                        <li>
+                                            <a
+                                                href="https://thefreedictionary.com/"
+                                                target="_blank"
+                                            >
+                                                The Free Dictionary
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://multitran.com/" target="_blank">
+                                                Мультитран
+                                            </a>
+                                        </li>
+                                        <li>
+                                            Фразаурус
+                                            <ul class="tree-list">
+                                                <li>
+                                                    <a href="http://frazaurus.ru/" target="_blank">
+                                                        Сайт
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href="https://play.google.com/store/apps/details?id=com.frazauruz&hl=ru&gl=RU"
+                                                        target="_blank"
+                                                    >
+                                                        Google Play
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a
+                                                        href="https://apps.apple.com/ru/app/%D1%84%D1%80%D0%B0%D0%B7%D0%B0%D1%83%D1%80%D1%83%D1%81-idiomatic-thesaurus/id1633510202"
+                                                        target="_blank"
+                                                    >
+                                                        App Store
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
                                     </ul>
-                                </ul>
+                                </details>
+                            </li>
 
-                                <p>Что почитать по теме:</p>
-                                <ul class="tree-list">
-                                    <li>
+                            <!-- Англоязычные словари -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Англоязычные словари</summary>
+
+                                    <ul class="tree-list">
+                                        <li>
+                                            <a href="https://www.oed.com/" target="_blank">
+                                                Oxford English Dictionary
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://www.oxfordlearnersdictionaries.com/"
+                                                target="_blank"
+                                            >
+                                                Oxford Learner's Dictionaries
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://dictionary.cambridge.org/"
+                                                target="_blank"
+                                            >
+                                                Cambridge Dictionary
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://collinsdictionary.com/"
+                                                target="_blank"
+                                            >
+                                                Collins English Dictionary
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://ozdic.com/" target="_blank">
+                                                English Collocations Dictionary
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://ldoceonline.com/" target="_blank">
+                                                Longman Dictionary of Contemporary English
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://etymonline.com/" target="_blank">
+                                                Online Etymology Dictionary
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://rhymezone.com/" target="_blank">
+                                                RhymeZone rhyming dictionary and thesaurus
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://dictionary.com/" target="_blank">
+                                                Dictionary.com
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+
+                            <!-- Русскоязычные словари -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Русскоязычные словари</summary>
+
+                                    <ul class="tree-list">
+                                        <li>
+                                            <a href="https://dic.academic.ru/" target="_blank">
+                                                Академик
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://gramota.ru/" target="_blank">
+                                                Грамота.ру
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://kartaslov.ru/" target="_blank">
+                                                Карта слов и выражений русского языка
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+
+                            <!-- Корпусы текстов -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Корпусы текстов</summary>
+
+                                    <ul class="tree-list">
+                                        <li>
+                                            <a href="https://english-corpora.org/" target="_blank">
+                                                English Corpora
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://context.reverso.net/перевод/"
+                                                target="_blank"
+                                            >
+                                                Reverso Context
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="https://ruscorpora.ru/new/" target="_blank">
+                                                Национальный корпус русского языка
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+
+                            <!-- Некоторые тонкости русской пунктуации -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Некоторые тонкости русской пунктуации</summary>
+
+                                    Подборка полезных материалов, призванных помочь с рядом
+                                    пунктуационных трудностей:
+                                    <ul class="tree-list">
+                                        <li>
+                                            Грамота.ру —
+                                            <a
+                                                href="https://gramota.ru/biblioteka/spravochniki/spravochnik-po-punktuatsii/prilozhenie-1-nepervoobraznye-predlogi"
+                                                target="_blank"
+                                            >
+                                                статья
+                                            </a>
+                                            о запятых в оборотах с непервообразными предлогами
+                                        </li>
+                                        <li>
+                                            РБК — статьи о запятой перед «
+                                            <a
+                                                href="https://www.rbc.ru/life/news/646b7d199a79472a90810db7"
+                                                target="_blank"
+                                            >
+                                                и
+                                            </a>
+                                            », «
+                                            <a
+                                                href="https://www.rbc.ru/life/news/649051689a794755a5e77b5f"
+                                                target="_blank"
+                                            >
+                                                или
+                                            </a>
+                                            », «
+                                            <a
+                                                href="https://www.rbc.ru/life/news/6377f6539a7947d67f9f4a67"
+                                                target="_blank"
+                                            >
+                                                как
+                                            </a>
+                                            »
+                                        </li>
+                                        <li>
+                                            Справочник
+                                            <a
+                                                href="http://old-rozental.ru/punctuatio.php?sid=122"
+                                                target="_blank"
+                                            >
+                                                Розенталя
+                                            </a>
+                                            и справочник
+                                            <a
+                                                href="http://orthographia.ru/punctum.php?paragraph=pg93.php"
+                                                target="_blank"
+                                            >
+                                                Лопатина
+                                            </a>
+                                            — параграфы о пунктуации в вводных словах и
+                                            словосочетаниях
+                                        </li>
+                                    </ul>
+
+                                    Некоторые наблюдения по последним постараюсь показать на
+                                    наглядных примерах (например, «например»):
+                                    <ul class="tree-list">
+                                        <li>
+                                            «Животные нашего зоопарка,
+                                            <strong>например тигры, слоны и сурикаты,</strong>
+                                            чувствуют себя хорошо».
+                                        </li>
+                                        <li>
+                                            «Другие звери (
+                                            <strong>например,</strong>
+                                            манулы и белые медведи) к зиме вообще привычны».
+                                        </li>
+                                        <li>
+                                            «А вот у зебр
+                                            <strong>, например,</strong>
+                                            сейчас чёрная полоса».
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+
+                <!-- Переводческое -->
+                <li>
+                    <details class="tree-details">
+                        <summary>Переводческое</summary>
+
+                        <ul class="tree-list">
+                            <!-- Ценные сайты -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Ценные сайты</summary>
+
+                                    <ul class="tree-list">
+                                        <li>
+                                            Личный
+                                            <a href="https://yermolovich.ru/" target="_blank">
+                                                сайт
+                                            </a>
+                                            переводчика Дмитрия Ивановича Ермоловича
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+
+                            <!-- Закономерности англоязычных новостных заголовков -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary
+                                        >Закономерности англоязычных новостных заголовков</summary
+                                    >
+
+                                    <ul class="tree-list">
+                                        <li>все значимые слова — с большой буквы</li>
+                                        <li>числительные — цифрами</li>
+                                        <li>
+                                            союзы → знаки препинания (напр., and →
+                                            <strong>,</strong>
+                                            )
+                                        </li>
+                                        <li>вспомогательные глаголы — опускаются</li>
+                                        <li>
+                                            артикли, кроме устойчивых и значимых по смыслу, —
+                                            опускаются
+                                        </li>
+                                        <li>часто встречаются аббревиатуры</li>
+                                        <li>использование препозиционных определений</li>
+                                        <li>
+                                            замена некоторых слов со значением речи (напр., say,
+                                            comment, tell, argue, announce, shout) на двоеточие
+                                            (напр., Mr Jones: “They’re not taking my house!”)
+                                        </li>
+                                        <li>замена времён:</li>
+                                        <ul class="tree-list">
+                                            <li>
+                                                продолжительные (Continuous) и перфектные (Perfect)
+                                                → простые (Simple)
+                                            </li>
+                                            <li>прошедшее → настоящее</li>
+                                            <li>будущее → инфинитив</li>
+                                        </ul>
+                                    </ul>
+
+                                    <p>Что почитать по теме:</p>
+                                    <ul class="tree-list">
+                                        <li>
+                                            <a
+                                                href="https://englishlessonsbrighton.co.uk/8-grammar-rules-writing-newspaper-headlines/"
+                                                target="_blank"
+                                            >
+                                                English Lessons Brighton
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://www.englishpractice.com/improve/newspaper-headlines-grammar/"
+                                                target="_blank"
+                                            >
+                                                English Practice
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://www.thoughtco.com/understanding-newspaper-headlines-p2-1211336"
+                                                target="_blank"
+                                            >
+                                                ThoughtCo.
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+
+                            <!-- Дарвин и HMS Beagle: His или Her Majesty's Ship? -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary
+                                        >Дарвин и HMS Beagle: His или Her Majesty's Ship?</summary
+                                    >
+
+                                    <p>
+                                        Я заморочился немного и пришёл к выводу, что «Бигль», на
+                                        котором плавал Дарвин, —
+                                        <i>His</i>
+                                        Majesty's Ship, в пользу чего говорит
                                         <a
-                                            href="https://englishlessonsbrighton.co.uk/8-grammar-rules-writing-newspaper-headlines/"
+                                            href="https://www.britannica.com/topic/Beagle-ship"
                                             target="_blank"
-                                            >English Lessons Brighton</a
                                         >
-                                    </li>
-                                    <li>
+                                            время постройки
+                                        </a>
+                                        , приходящееся на правление Георга IV, и упоминание
+                                        <i>His</i>
+                                        в одном из
                                         <a
-                                            href="https://www.englishpractice.com/improve/newspaper-headlines-grammar/"
+                                            href="https://www.darwinproject.ac.uk/search?text=Majesty%2C+Beagle&text-exclude=&sectionType=transcribed&search-author=Charles+Robert+Darwin&year=1831&month=&day=&year-max=1836&month-max=&day-max=&search-date-type=between&exclude-widedate=Yes&exclude-cancelled=Yes&f1-document-type=letter&smode=embedded&f1-document-type=letter"
                                             target="_blank"
-                                            >English Practice</a
                                         >
-                                    </li>
-                                    <li>
+                                            писем
+                                        </a>
+                                        Дарвина.
+                                    </p>
+                                </details>
+                            </li>
+
+                            <!-- Немного о would have -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Немного о <i>would have</i></summary>
+
+                                    <p>
+                                        В тексте про трансляцию полёта «Аполлона-11» затруднения
+                                        вызвала вот эта часть:
+                                    </p>
+                                    <blockquote>
+                                        Armstrong stepped onto the Moon at 3:56am British time. Most
+                                        viewers
+                                        <i>would have watched</i>
+                                        on communal screens, or on home television sets like the
+                                        Philips model 19TG 142 A shown below.
+                                    </blockquote>
+                                    <p>
+                                        Появился вопрос, почему здесь ‘would have watched’, если
+                                        речь не о гипотетическом событии. Возможно, я нашёл ответ.
+                                        На сайте
                                         <a
-                                            href="https://www.thoughtco.com/understanding-newspaper-headlines-p2-1211336"
+                                            href="https://learnenglish.britishcouncil.org/grammar/english-grammar-reference/will-have-and-would-have"
                                             target="_blank"
-                                            >ThoughtCo.</a
                                         >
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-                    </ul>
-                </details>
+                                            British Council
+                                        </a>
+                                        , в разделе Learn English, говорится следующее:
+                                    </p>
+                                    <blockquote>
+                                        We use
+                                        <b>will have</b>
+                                        when we are
+                                        <b>looking back from</b>
+                                        a point in time in the future … or looking back from the
+                                        present. … We use
+                                        <b>would have</b>
+                                        as the
+                                        <b>past tense</b>
+                                        form of will have:
+                                        <ul>
+                                            <li>
+                                                I phoned at six o'clock. I knew he would have got
+                                                home by then.
+                                            </li>
+                                            <li>
+                                                It was half past five. Dad would have finished work.
+                                            </li>
+                                        </ul>
+                                    </blockquote>
+                                    <p>
+                                        Наш случай, кажется, похож: Армстронг ступил на поверхность
+                                        Луны в 3:56 по британскому времени, и
+                                        <i>к этому моменту</i>
+                                        основная масса зрителей уже смотрела трансляцию в
+                                        общественных местах или дома по телевизору.
+                                    </p>
+                                </details>
+                            </li>
+
+                            <!-- Come in hot -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Come in hot</summary>
+
+                                    <p>
+                                        В статье ‘Squirrels use parkour tricks when leaping from
+                                        branch to branch’ некоторые затруднения вызвало выражение
+                                        ‘come in too hot’. Поиск по ряду словарей результата не
+                                        принёс, однако Google со ссылкой на Оксфордский словарь
+                                        приводит такие определения:
+                                    </p>
+                                    <blockquote>
+                                        <ul>
+                                            <li>
+                                                arrive or start doing something with great energy or
+                                                speed make
+                                            </li>
+                                            <li>
+                                                a sudden intense attack, especially by entering a
+                                                combat situation while firing one's weapon
+                                            </li>
+                                        </ul>
+                                    </blockquote>
+                                </details>
+                            </li>
+
+                            <!-- Deputy ли наш депутат? -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Deputy ли наш депутат?</summary>
+
+                                    <p>
+                                        Однажды во время занятия у нас закралось сомнение, что
+                                        депутатов Госдумы можно по-английски назвать ‘deputies’. Я
+                                        решил посмотреть, что думает об этом
+                                        <a
+                                            href="https://www.collinsdictionary.com/dictionary/english/deputy"
+                                            target="_blank"
+                                        >
+                                            Collins
+                                        </a>
+                                        , и вот что обнаружил:
+                                    </p>
+                                    <blockquote>
+                                        2. In some parliaments or law-making bodies, the elected
+                                        members are called deputies.
+                                    </blockquote>
+                                    <p>
+                                        Посему делаем вывод, что, наверное, всё-таки можно. А
+                                        значит, можно выдохнуть.
+                                    </p>
+                                </details>
+                            </li>
+
+                            <!-- Как перевести «[вид] описан по одному образцу»? -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary
+                                        >Как перевести «[вид] описан <i>по</i> одному
+                                        образцу»?</summary
+                                    >
+
+                                    <p>
+                                        На одном из занятий появился вопрос: как можно перевести
+                                        фразу вроде «вид описан по одному образцу». Отдаю должок.
+                                    </p>
+                                    <p>
+                                        В поисках ответа я залез на сайт природоохранной организации
+                                        Re:wild (о которой узнал благодаря одному из текстов для
+                                        домашних заданий), где есть список 25 «разыскиваемых» видов
+                                        растений и животных, которые где-то наглухо потерялись и чей
+                                        статус неизвестен. Поиск по тексту на
+                                        <a
+                                            href="https://www.rewild.org/lost-species/top-25-most-wanted-lost-species"
+                                            target="_blank"
+                                        >
+                                            странице
+                                        </a>
+                                        дал несколько ценных результатов:
+                                    </p>
+                                    <blockquote>
+                                        <ol>
+                                            <li>
+                                                One of the first mammals to be
+                                                <b>described from a fossil alone</b>
+                                                , the Dwarf Hutia looks like a guinea pig–esque
+                                                rodent that once lived all over Cuba and the nearby
+                                                Isle of Youth.
+                                            </li>
+                                            <li>
+                                                Fagilde’s Trapdoor Spider was
+                                                <b>described</b>
+                                                for the first time in 1931
+                                                <b>based on two females</b>
+                                                collected outside a small village in north-central
+                                                Portugal.
+                                            </li>
+                                            <li>
+                                                The species [Himalayan Quail] was first
+                                                <b>described</b>
+                                                in 1846 by J. E. Gray
+                                                <b>from living individuals</b>
+                                                in the collection of the Earl of Derby at Knowsley
+                                                Hall.
+                                            </li>
+                                            <li>
+                                                It [Pernambuco Holly] is
+                                                <b>known only from one sample</b>
+                                                collected from an obscure location in the Atlantic
+                                                Forest, which stretches along the Atlantic coast of
+                                                South America.
+                                            </li>
+                                        </ol>
+                                    </blockquote>
+                                    <p>
+                                        Итого замечаем закономерность: described/known
+                                        <b>from</b>
+                                        или
+                                        <b>based on</b>
+                                        (что-то).
+                                    </p>
+                                </details>
+                            </li>
+
+                            <!-- Медицина и коварные предлоги -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Медицина и коварные предлоги</summary>
+
+                                    <p>
+                                        При переводе
+                                        <a
+                                            href="https://nplus1.ru/news/2023/11/04/less-sleep-more-dopamine"
+                                            target="_blank"
+                                        >
+                                            текста
+                                        </a>
+                                        об антидепрессивном эффекте недосыпа у мышей (на себе не
+                                        повторять, людям не поможет!) возник вопрос, можем ли мы,
+                                        говоря об экспериментах на мышах, смело использовать предлог
+                                        ‘on’. Я прошерстил несколько источников: статью о таких
+                                        опытах в «
+                                        <a
+                                            href="https://en.wikipedia.org/wiki/Animal_testing"
+                                            target="_blank"
+                                        >
+                                            Википедии
+                                        </a>
+                                        »,
+                                        <a
+                                            href="https://www.scielo.br/j/csp/a/ZBC4sh7csJxZcwK3GBKSNkt/?lang=en"
+                                            target="_blank"
+                                        >
+                                            статью
+                                        </a>
+                                        о вопросе их этичности и словарную статью о вивисекции в
+                                        <a
+                                            href="https://www.britannica.com/science/vivisection"
+                                            target="_blank"
+                                        >
+                                            Britannica
+                                        </a>
+                                        — и нашёл такие закономерности (даю с кратким контекстом):
+                                    </p>
+                                    <blockquote>
+                                        <ul>
+                                            <li>
+                                                operation
+                                                <b>on</b>
+                                                a living animal
+                                            </li>
+                                            <li>
+                                                experimentation
+                                                <b>on</b>
+                                                live animals
+                                            </li>
+                                            <li>
+                                                research
+                                                <b>on</b>
+                                                living animals
+                                            </li>
+                                            <li>
+                                                surgery
+                                                <b>on</b>
+                                                animals
+                                            </li>
+                                            <li>
+                                                testing of drugs
+                                                <b>on</b>
+                                                animals
+                                            </li>
+                                            <li>
+                                                procedures
+                                                <b>on</b>
+                                                rodents
+                                            </li>
+                                            <li>
+                                                experiments
+                                                <b>on</b>
+                                                mice
+                                            </li>
+                                        </ul>
+                                        <b><u>Но</u></b>
+                                        : research performed
+                                        <b>in</b>
+                                        animals.
+                                    </blockquote>
+                                    <p>
+                                        А вот если в текстах такой научно-медицинской тематики
+                                        встречается «у мышей», «у пациентов» и подобное, то во
+                                        многих случаях это «у» на английский передаётся с помощью
+                                        ‘in’ (примеры из разных статей в научных журналах):
+                                    </p>
+                                    <blockquote>
+                                        <ul>
+                                            <li>
+                                                affective states
+                                                <b>in</b>
+                                                mice
+                                            </li>
+                                            <li>
+                                                acute sleep loss
+                                                <b>in</b>
+                                                mice
+                                            </li>
+                                            <li>
+                                                conditions that are challenging to fully model
+                                                <b>in</b>
+                                                mice
+                                            </li>
+                                            <li>
+                                                stress-induced anhedonia
+                                                <b>in</b>
+                                                mice
+                                            </li>
+                                            <li>
+                                                disease recurrence
+                                                <b>in</b>
+                                                older patients
+                                            </li>
+                                            <li>
+                                                safety … of … vaccine
+                                                <b>in</b>
+                                                healthy adults
+                                            </li>
+                                            <li>
+                                                Pharmacokinetics
+                                                <b>in</b>
+                                                Patients with Impaired Hepatic Function
+                                            </li>
+                                            <li>
+                                                comorbidities
+                                                <b>in</b>
+                                                patients
+                                            </li>
+                                        </ul>
+                                    </blockquote>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
 
                 <!-- Компьютерное -->
-                <details class="tree-details">
-                    <summary>Компьютерное</summary>
+                <li>
+                    <details class="tree-details">
+                        <summary>Компьютерное</summary>
 
-                    <ul class="tree-list">
-                        <!-- Программы -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Программы</summary>
+                        <ul class="tree-list">
+                            <!-- Программы -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Программы</summary>
 
-                                <ul class="tree-list">
-                                    <li>
-                                        <a href="https://inkscape.org/" target="_blank">Inkscape</a>
-                                        — векторный графический редактор
-                                    </li>
-                                    <li>
-                                        <a
-                                            href="https://microsoft.com/en-us/download/details.aspx?id=102134"
-                                            target="_blank"
-                                            >Microsoft Keyboard Layout Creator</a
-                                        >
-                                        — редактор раскладок клавиатуры
-                                    </li>
-                                    <li>
-                                        <a href="https://omegat.org/" target="_blank">OmegaT</a>
-                                        — средство автоматизированного перевода
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
+                                    <ul class="tree-list">
+                                        <li>
+                                            <a href="https://inkscape.org/" target="_blank">
+                                                Inkscape
+                                            </a>
+                                            — векторный графический редактор
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://microsoft.com/en-us/download/details.aspx?id=102134"
+                                                target="_blank"
+                                            >
+                                                Microsoft Keyboard Layout Creator
+                                            </a>
+                                            — редактор раскладок клавиатуры
+                                        </li>
+                                        <li>
+                                            <a href="https://omegat.org/" target="_blank">OmegaT</a>
+                                            — средство автоматизированного перевода
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
 
-                        <!-- Всякая всячина моего авторства -->
-                        <li>
-                            <details class="tree-details">
-                                <summary>Всякая всячина моего авторства</summary>
+                            <!-- Всякая всячина моего авторства -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Всякая всячина моего авторства</summary>
 
-                                <ul class="tree-list">
-                                    <li>
+                                    <ul class="tree-list">
+                                        <li>
+                                            <a
+                                                href="https://youtube.com/watch?v=10ZRVL7ukfo"
+                                                target="_blank"
+                                            >
+                                                Видеоурок
+                                            </a>
+                                            по основам OmegaT
+                                        </li>
+                                        <li>
+                                            Две
+                                            <a
+                                                href="https://disk.yandex.ru/d/e21Ho-aPMe9FPQ"
+                                                target="_blank"
+                                            >
+                                                раскладки клавиатуры
+                                            </a>
+                                            (справка в PDF в комплекте)
+                                        </li>
+                                        <li>
+                                            Мои
+                                            <a
+                                                href="https://github.com/VitalRus95/HTML-Programmes"
+                                                target="_blank"
+                                            >
+                                                программки
+                                            </a>
+                                            на HTML
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+
+                <!-- Дипломное -->
+                <li>
+                    <details class="tree-details">
+                        <summary>Дипломное</summary>
+
+                        <p>
+                            Практика показывает, что у студентов возникает немало вопросов по поводу
+                            выпускных квалификационных работ (ВКР), на некоторые из которых я
+                            попытаюсь ответить здесь.
+                        </p>
+
+                        <ul class="tree-list">
+                            <!-- О чём писать? -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>О чём писать?</summary>
+
+                                    <p>
+                                        Пожалуй, наиболее трудный выбор — это выбор темы. Важно не
+                                        только подобрать то, что интересно и в чём что-то понимаешь,
+                                        но и найти баланс между новизной и изученностью. Поэтому
+                                        имеет смысл обратиться к поисковикам и сайтам с научными
+                                        статьями вроде «
+                                        <a href="https://cyberleninka.ru/" target="_blank">
+                                            Киберленинки
+                                        </a>
+                                        ». Кроме того, вдохновение можно черпать из тем уже
+                                        написанных на кафедре
+                                        <a href="http://www.translatrsuh.ru/bd" target="_blank">
+                                            работ
+                                        </a>
+                                        .
+                                    </p>
+                                </details>
+                            </li>
+
+                            <!-- С кем писать? -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>С кем писать?</summary>
+
+                                    <p>
+                                        Другая непростая задача — найти научного руководителя. Сразу
+                                        скажу, что люди без учёной степени вроде меня могут быть
+                                        только консультантами, не руководителями.
+                                    </p>
+                                    <p>
+                                        Конечно, в качестве научрука можно просто выбрать уже
+                                        знакомого преподавателя, но это далеко не всегда лучший
+                                        вариант. Часто предпочтительнее искать руководителя по
+                                        области научных интересов. Как это сделать? Для начала можно
+                                        зайти в раздел
                                         <a
-                                            href="https://youtube.com/watch?v=10ZRVL7ukfo"
+                                            href="https://www.rsuh.ru/education/ifi/structure/department-of-theory-and-practice-of-translation.php"
                                             target="_blank"
-                                            >Видеоурок</a
-                                        >
-                                        по основам OmegaT
-                                    </li>
-                                    <li>
-                                        Две
+                                        ></a>
+                                        нашей кафедры на сайте РГГУ и посмотреть список
+                                        преподавателей, затем отыскать их в разделе «Кто есть кто
                                         <a
-                                            href="https://disk.yandex.ru/d/e21Ho-aPMe9FPQ"
+                                            href="https://www.rsuh.ru/who_is_who"
                                             target="_blank"
-                                            >раскладки клавиатуры</a
-                                        >
-                                        (справка в PDF в комплекте)
-                                    </li>
-                                    <li>
-                                        Мои
-                                        <a
-                                            href="https://github.com/VitalRus95/HTML-Programmes"
-                                            target="_blank"
-                                            >программки</a
-                                        >
-                                        на HTML
-                                    </li>
-                                </ul>
-                            </details>
-                        </li>
-                    </ul>
-                </details>
+                                        ></a>
+                                        » с более подробной информацией, включая изданные научные
+                                        труды преподавателя и сферу его интересов. Также можно
+                                        изучить вышеприведённый архив ВКР кафедры и посмотреть, кто
+                                        какими работами руководил.
+                                    </p>
+                                    <p>Если о моём опыте, я писал у следующих преподавателей:</p>
+                                    <ul class="tree-list">
+                                        <li>
+                                            <i>Кружков Григорий Михайлович</i>
+                                            («Особенности художественного перевода стихотворения
+                                            Роберта Фроста ‘Acquainted With the Night’»)
+                                        </li>
+                                        <li>
+                                            <i>Овчинкина Ирина Вячеславовна</i>
+                                            («К вопросу о метатропах и идиостиле в лирических
+                                            произведениях Бориса Пастернака»)
+                                        </li>
+                                        <li>
+                                            <i>Рейнгольд Наталья Игоревна</i>
+                                            («Трудности передачи языка современной научно-популярной
+                                            литературы»)
+                                        </li>
+                                    </ul>
+                                </details>
+                            </li>
+
+                            <!-- О защитах -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>О защитах</summary>
+
+                                    <p>
+                                        Наблюдая за защитами ВКР, я постарался следить за процессом
+                                        внимательнее и отметил, на что желательно обращать внимание
+                                        дипломописцам. Итак, вот какие моменты обычно звучат в
+                                        вопросах и комментариях:
+                                    </p>
+                                    <ul class="tree-list">
+                                        <li>
+                                            <b>подбор терминов и их понимание</b>
+                                            (чаще всего звучат вопросы об эквивалентности и
+                                            адекватности перевода, его стратегиях, способах и
+                                            приёмах и т.п.)
+                                        </li>
+                                        <li>
+                                            <b>выбор темы и материала</b>
+                                            работы (почему выбрали, почему именно так назвали, по
+                                            каким принципам отбирали материал)
+                                        </li>
+                                        <li>
+                                            <b>предмет, объект и цель</b>
+                                            исследования (важно как-то их различать)
+                                        </li>
+                                        <li>
+                                            <b>библиография</b>
+                                            (общее количество, авторы, категории)
+                                        </li>
+                                        <li>
+                                            число
+                                            <b>примеров</b>
+                                            изучаемого явления и их характер
+                                        </li>
+                                        <li>
+                                            наличие или отсутствие (хотя безопаснее сказать «не
+                                            нашёл»)
+                                            <b>других переводов</b>
+                                            или крупных
+                                            <b>научных работ</b>
+                                            по теме
+                                        </li>
+                                        <li>
+                                            <b>оформление</b>
+                                            ВКР, её
+                                            <b>структура</b>
+                                            (например, важно упоминать в тексте работы указанные
+                                            источники и выносить оригиналы в приложения)
+                                        </li>
+                                        <li>
+                                            <b>соответствие</b>
+                                            между заявленной темой и самой работой, особенно
+                                            выводами
+                                        </li>
+                                    </ul>
+                                    <p>
+                                        От особо каверзных вопросов этот список может и не спасти,
+                                        но учёт таких моментов способен уберечь от некоторых
+                                        досадных недочётов и последующих претензий.
+                                    </p>
+                                </details>
+                            </li>
+
+                            <!-- Пара мыслей о презентациях -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Пара мыслей о презентациях</summary>
+
+                                    <p>
+                                        Презентации уже давно стали стандартным помощником
+                                        защищающихся, и это правда удобно. Но иногда их есть куда
+                                        улучшать, поэтому хочу высказать парочку своих наблюдений:
+                                    </p>
+                                    <ul class="tree-list">
+                                        <li>
+                                            <i>Во-первых</i>
+                                            , желательно
+                                            <b>избегать больших объёмов текста на экране</b>
+                                            : успеть его прочесть бывает проблематично, а если он
+                                            полностью совпадает с произносимой речью, то непонятен
+                                            его смысл, и в целом сама перспектива много читать
+                                            некоторых может отпугнуть от презентации. Если объём
+                                            точно нужен большой,
+                                            <b>выделите самые важные идеи</b>
+                                            , хватит и простейшего полужирного начертания — ленивые
+                                            и/или не обученные скорочтению люди будут рады.
+                                        </li>
+                                        <li>
+                                            <i>Во-вторых</i>
+                                            , мне
+                                            <b>показались ненужными</b>
+                                            (хотя не знаю, вдруг правила таковы)
+                                            <b>
+                                                слайды с перечислением объекта, предмета и цели
+                                                работы
+                                            </b>
+                                            , как и соответствующая часть в устном выступлении. Эти
+                                            пункты в ВКР обычно очень похожи друг на друга и потому
+                                            звучат как повтор одного и того же, да ещё и появляется
+                                            риск подставиться под критику, если вдруг в них есть
+                                            недочёты.
+                                        </li>
+                                        <li>
+                                            <i>В-третьих</i>
+                                            , я бы всё же посоветовал
+                                            <b>
+                                                не выносить на экран то, что не проговаривается
+                                                устно
+                                            </b>
+                                            . Даже если текст виден всем присутствующим, в условиях
+                                            стресса сложно выждать столько, сколько понадобится им
+                                            на прочтение, из-за чего иногда слайды «убегают» слишком
+                                            быстро. Для этой же цели
+                                            <b>
+                                                примеры из текстов желательно максимально сокращать
+                                            </b>
+                                            , чтобы повысить их читаемость и информативность.
+                                        </li>
+                                    </ul>
+                                    <p>
+                                        Пока соображения такие. Они могут касаться не только защиты
+                                        ВКР, но и других выступлений с презентациями, и надеюсь, они
+                                        помогут добиться лучшего результата!
+                                    </p>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
             </ul>
 
             <button id="settings-button" tabindex="1" onclick="switchScene('menu', 'settings')">
@@ -822,12 +1544,11 @@
             </button>
 
             <!-- Author -->
-            <p id="author" tabindex="0" class="tooltip-parent">
-                Автор —
-                <a href="https://github.com/VitalRus95" target="_blank"
-                    >Виталий Павлович Ульянов (Vital)</a
-                >.
-                <span class="tooltip">Узнайте больше на GitHub!</span>
+            <p id="author" tabindex="0" class="tooltip-parent"
+                >Автор —
+                <a href="https://github.com/VitalRus95" target="_blank">
+                    Виталий Павлович Ульянов (Vital) </a
+                >.<span class="tooltip">Узнайте больше на GitHub!</span>
             </p>
         </div>
 
@@ -859,8 +1580,8 @@
                     <li>
                         <div class="setting-div">
                             <label for="set-def-sounds" id="def-sounds-label"
-                                >Стандартные звуки (кнопки, поля ввода и т.п.)
-                            </label>
+                                >Стандартные звуки (кнопки, поля ввода и т.п.)</label
+                            >
                             <input type="checkbox" id="set-def-sounds" checked />
                         </div>
                     </li>
@@ -874,9 +1595,9 @@
                 <div class="button-container">
                     <input type="file" id="colour-loader" accept=".json" style="display: none" />
                     <button id="load-colours">Загрузить цвета</button>
-                    <a id="save-colours" href="" download="Colours.json" class="pseudo-button"
-                        >Сохранить цвета</a
-                    >
+                    <a id="save-colours" href="" download="Colours.json" class="pseudo-button">
+                        Сохранить цвета
+                    </a>
                 </div>
 
                 <ul id="colours" class="settings-list"></ul>
@@ -888,7 +1609,7 @@
                         type="text"
                         id="example-input"
                         placeholder="Пример поля ввода"
-                        value="12345 ABCDE"
+                        value="12345 АБВГДЕЁЖ"
                     />
                 </div>
             </details>
@@ -902,12 +1623,12 @@
 
             <button id="about-back" onclick="switchScene('about', 'menu')">Назад</button>
 
-            <p>
-                Ценные советы и ссылки для изучающих иностранные языки (в первую очередь английский)
-                и перевод. Составил Виталий Павлович Ульянов, старший преподаватель кафедры теории и
-                практики перевода Института филологии и истории Российского государственного
-                гуманитарного университета.
-            </p>
+            <p
+                >Ценные советы и ссылки для изучающих иностранные языки (в первую очередь
+                английский) и перевод. Составил Виталий Павлович Ульянов, старший преподаватель
+                кафедры теории и практики перевода Института филологии и истории Российского
+                государственного гуманитарного университета.</p
+            >
         </div>
 
         <script>
@@ -935,20 +1656,26 @@
             let defaultSettings = document.getElementById("default-settings");
 
             // Objects
+            /** @type {{
+                [key: string]: { colour: string, name: string }
+            }} */
             const allColours = {
-                "--colour-bgr-1": "#ff9696",
-                "--colour-bgr-2": "#fff5d2",
-                "--colour-bgr-3": "#d7d2ff",
-                "--colour-text": "#000000",
-                "--colour-button": "#ebebff",
-                "--colour-border": "#00557d",
-                "--colour-input": "#ffffd7",
-                "--colour-tooltip": "#ffb4b4",
-                "--colour-hovered-bgr": "#191919",
-                "--colour-hovered-fgr": "#ebebeb",
-                "--colour-hovered-border": "#b4b4b4",
-                "--colour-disabled-bgr": "#afafaf",
-                "--colour-disabled-fgr": "#1e1e1e",
+                "--colour-bgr-1": { colour: "#ff9696", name: "Фон (левая часть)" },
+                "--colour-bgr-2": { colour: "#fff5d2", name: "Фон (средняя часть)" },
+                "--colour-bgr-3": { colour: "#d7d2ff", name: "Фон (правая часть)" },
+                "--colour-text": { colour: "#000000", name: "Текст" },
+                "--colour-button": { colour: "#ebebff", name: "Кнопки" },
+                "--colour-border": { colour: "#00557d", name: "Рамки" },
+                "--colour-input": { colour: "#ffffd7", name: "Поля ввода" },
+                "--colour-tooltip": { colour: "#ffb4b4", name: "Фон подсказок" },
+                "--colour-hovered-bgr": { colour: "#191919", name: "Фон элемента при наведении" },
+                "--colour-hovered-fgr": { colour: "#ebebeb", name: "Текст элемента при наведении" },
+                "--colour-hovered-border": {
+                    colour: "#b4b4b4",
+                    name: "Рамки элемента при наведении",
+                },
+                "--colour-disabled-bgr": { colour: "#afafaf", name: "Фон отключённого элемента" },
+                "--colour-disabled-fgr": { colour: "#1e1e1e", name: "Текст отключённого элемента" },
             };
 
             // Variables
@@ -976,9 +1703,9 @@
 
                 // Colours
                 for (const c in allColours) {
-                    document.body.style.setProperty(c, allColours[c]);
-                    document.getElementById(c).value = allColours[c];
-                    localStorage.setItem(c, allColours[c]);
+                    document.body.style.setProperty(c, allColours[c].colour);
+                    document.getElementById(c).value = allColours[c].colour;
+                    localStorage.setItem(c, allColours[c].colour);
                 }
             });
 
@@ -1000,6 +1727,7 @@
                 label.htmlFor = c;
                 label.textContent = c;
                 label.style.marginRight = "4px";
+                label.textContent = allColours[c].name;
 
                 input.id = c;
                 input.type = "color";
