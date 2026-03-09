@@ -98,11 +98,13 @@
             }
 
             blockquote {
-                background-color: var(--colour-tooltip);
-                border-left: 4px outset var(--colour-border);
+                background-color: var(--colour-input);
+                background-image: linear-gradient(60deg, var(--colour-tooltip), transparent);
+                border: 2px outset var(--colour-border);
+                border-left: 4px inset var(--colour-border);
                 border-radius: 0px 4px 4px 0px;
                 margin-block: 4px;
-                margin-inline: 2px;
+                margin-inline: 0px;
                 padding: 2px 4px;
             }
 
@@ -138,6 +140,16 @@
                 font-size: 1.1em;
                 font-style: italic;
                 font-weight: 600;
+            }
+
+            code,
+            pre {
+                background-color: var(--colour-input);
+                border-left: 3px outset var(--colour-border);
+                border-radius: 0px 4px 4px 0px;
+                font-family: monospace;
+                margin-block: 4px;
+                padding-left: 2px;
             }
 
             details {
