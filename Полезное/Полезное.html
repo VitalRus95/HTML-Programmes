@@ -108,6 +108,10 @@
                 padding: 2px 4px;
             }
 
+            br {
+                margin-block: 8px;
+            }
+
             button,
             .pseudo-button {
                 display: flex;
@@ -143,11 +147,8 @@
 
             code,
             pre {
-                background-color: var(--colour-input);
-                border-left: 3px outset var(--colour-border);
-                border-radius: 0px 4px 4px 0px;
                 font-family: monospace;
-                margin-block: 4px;
+                margin-block: 1px;
                 padding-left: 2px;
             }
 
@@ -259,6 +260,7 @@
                 border: 2px outset var(--colour-border);
                 box-shadow: 1px 1px 1px var(--colour-text);
                 padding-inline: 2px;
+                margin-inline: 2px;
             }
 
             li {
@@ -273,6 +275,10 @@
             p {
                 margin-block: 6px;
                 text-indent: 0.6em;
+            }
+
+            samp {
+                font-style: italic;
             }
 
             select {
@@ -292,7 +298,7 @@
             }
 
             strong {
-                box-shadow: 0px 0px 4px 0px var(--colour-text);
+                box-shadow: 0px 0px 3px 0px var(--colour-text);
                 margin-inline: 2px;
                 padding-inline: 4px;
                 font-weight: 500;
@@ -402,6 +408,18 @@
                 column-gap: 4px;
             }
 
+            .codeblock {
+                display: flex;
+                flex-direction: column;
+                background-color: var(--colour-input);
+                border-left: 3px outset var(--colour-border);
+                border-radius: 0px 4px 4px 0px;
+                font-family: monospace;
+                margin-block: 4px;
+                padding-left: 2px;
+                overflow: auto;
+            }
+
             .scene {
                 display: none;
                 flex-direction: column;
@@ -503,6 +521,7 @@
                 color: var(--colour-text);
                 border: 2px outset var(--colour-border);
                 text-align: center;
+                text-indent: 0px;
                 font-size: 1em;
                 margin-block: 2px;
                 margin-top: 10px;
@@ -788,6 +807,44 @@
                                             полоса».</li
                                         >
                                     </ul>
+                                </details>
+                            </li>
+
+                            <!-- Приручаем английские межзубные звуки -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Приручаем английские межзубные звуки</summary>
+
+                                    <p
+                                        >Межзубные английские звуки: глухой
+                                        <strong>[θ]</strong> (как в слове ‘thought’ «мысль») и
+                                        звонкий <strong>[ð]</strong> (как в определённом артикле
+                                        ‘the’) — нередко представляют трудность для носителей
+                                        русского языка, из-за чего звучат скорее как [s] и [z]
+                                        соответственно. Чтобы помочь с их приручением, я придумал
+                                        небольшой трюк, который, надеюсь, кому-нибудь да поможет.</p
+                                    >
+                                    <p
+                                        >Состоит он, как бы это странно ни было, в
+                                        <i>пародировании стереотипной шепелявости</i>. Если Вы это
+                                        умеете, попробуйте, скажем, прочесть абзац выше вслух, при
+                                        этом шепелявя. Теперь подойдём ещё чуть ближе к нашей цели:
+                                        попытайтесь так же шепеляво прочитать по-русски «<i>сот</i>»
+                                        и «<i>зе</i>». Если всё получилось верно, буквы «с» и «з»
+                                        должны были звучать весьма близко к искомым английским
+                                        <strong>[θ]</strong> и <strong>[ð]</strong>, а сами «слова»
+                                        — к уже упомянутым ‘thought’ и ‘the’, что нам и нужно!
+                                        Остаётся закрепить успех на других английских словах,
+                                        например на прекрасном ‘thenceforth’ «с того времени,
+                                        впредь», которое начинается с [ð] и заканчивается на [θ], то
+                                        есть содержит обоих наших подопытных.</p
+                                    >
+                                    <p
+                                        >Вот так проθтая θепелявоθть моðет немноθко помоθь
+                                        подруðитьθя θ английθкими меððубными ðвуками. Главное — не
+                                        увлечься и не начать шепелявить там, где это уже не нужно.
+                                        Фонетических Вам успехов!</p
+                                    >
                                 </details>
                             </li>
                         </ul>
@@ -1327,9 +1384,17 @@
                                         ><li>~~<s>зачёркнутый</s>~~</li
                                         ><li><blockquote>> цитата</blockquote></li
                                         ><li>
-                                            <pre><pre>- пункт списка</pre><pre>  - подпункт списка</pre><pre>- второй пункт списка</pre></pre></li
+                                            <span class="codeblock">
+                                                <pre>- пункт списка</pre
+                                                ><pre>  - подпункт списка</pre
+                                                ><pre>- второй пункт списка</pre>
+                                            </span></li
                                         ><li>
-                                            <pre><pre>1. Пункт нумерованного списка.</pre><pre>  1. Подпункт нумерованного списка.</pre><pre>2. Второй пункт нумерованного списка.</pre></pre>
+                                            <span class="codeblock">
+                                                <pre>1. Пункт нумерованного списка.</pre
+                                                ><pre>  1. Подпункт нумерованного списка.</pre
+                                                ><pre>2. Второй пункт нумерованного списка.</pre>
+                                            </span>
                                         </li>
                                     </ul>
                                     <p
@@ -1343,6 +1408,282 @@
                                             target="_blank"
                                             >официальном сайте</a
                                         >.</p
+                                    >
+                                </details>
+                            </li>
+
+                            <!-- Как подружить OmegaT и английские кавычки -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Как подружить OmegaT и английские кавычки</summary>
+
+                                    <p
+                                        >Некоторые уже заметили, что по умолчанию в английских
+                                        текстах OmegaT неправильно сегментирует текст с кавычками,
+                                        не понимая, где заканчивается предложение, в итоге сегмент
+                                        может получиться слишком большим и вместить в себя несколько
+                                        полноценных предложений оригинала.</p
+                                    >
+                                    <p
+                                        >Я нашёл способ это исправить: зайдите в
+                                        <kbd
+                                            ><samp>Настройки</samp> —
+                                            <samp>Параметры сегментации</samp></kbd
+                                        >, выберите в наборах правил английский язык и в нижней
+                                        части добавьте новые правила. В колонке «Разрывы/исключения»
+                                        в них проставьте галочки, а в «Шаблон до» впишите
+                                        следующее:</p
+                                    >
+                                    <span class="codeblock">
+                                        <code>\.”</code>
+                                        <code>\.’</code>
+                                        <code>\."</code>
+                                        <code>\.'</code>
+                                        <code>\!”</code>
+                                        <code>\!’</code>
+                                        <code>\!"</code>
+                                        <code>\!'</code>
+                                        <code>\?”</code>
+                                        <code>\?’</code>
+                                        <code>\?"</code>
+                                        <code>\?'</code>
+                                    </span>
+                                    <p
+                                        >Готово! Теперь OmegaT должна сегментировать текст
+                                        правильно, добавляя разрывы предложений после кавычек.</p
+                                    >
+                                </details>
+                            </li>
+
+                            <!-- Как устроены субтитры -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Как устроены субтитры</summary>
+
+                                    <p
+                                        >Если кто-то хочет переводить или изучать субтитры, будет
+                                        нелишним узнать, как они устроены. Обычно это файлы
+                                        <i>.srt</i>, которые легко открыть даже «Блокнотом», где
+                                        пронумерованные субтитры содержат информацию о периоде
+                                        показа на экране и собственно текст.</p
+                                    >
+                                    <p
+                                        >Пример ниже — субтитры к
+                                        <a
+                                            href="https://www.youtube.com/watch?v=W86cTIoMv2U"
+                                            target="_blank"
+                                            >видео</a
+                                        >
+                                        о ржавой кошке:</p
+                                    >
+                                    <span class="codeblock">
+                                        <code>1</code>
+                                        <code>00:00:04,940 --> 00:00:07,580</code>
+                                        <code>The smallest feline in the world</code>
+                                        <br />
+                                        <code>2</code>
+                                        <code>00:00:09,840 --> 00:00:11,840</code>
+                                        <code>A rusty spotted cat</code>
+                                        <br />
+                                        <code>3</code>
+                                        <code>00:00:17,500 --> 00:00:19,920</code>
+                                        <code>He may look like a kitten</code>
+                                        <br />
+                                        <code>4</code>
+                                        <code>00:00:21,380 --> 00:00:23,380</code>
+                                        <code>He’d still fit in the palm of your hand</code>
+                                        <br />
+                                        <code>5</code>
+                                        <code>00:00:26,400 --> 00:00:29,060</code>
+                                        <code>But this little male is very nearly fully grown</code>
+                                        <br />
+                                        <code>6</code>
+                                        <code>00:00:31,000 --> 00:00:34,220</code>
+                                        <code>He'll soon be setting off on a solitary life</code>
+                                        <br />
+                                        <code>7</code>
+                                        <code>00:00:35,720 --> 00:00:37,140</code>
+                                        <code>fending entirely for himself</code>
+                                        <br />
+                                        <code>8</code>
+                                        <code>00:00:45,240 --> 00:00:47,240</code>
+                                        <code>What he lacks in size,</code>
+                                        <br />
+                                        <code>9</code>
+                                        <code>00:00:48,360 --> 00:00:49,420</code>
+                                        <code>he makes up for</code>
+                                        <br />
+                                        <code>10</code>
+                                        <code>00:00:50,360 --> 00:00:51,880</code>
+                                        <code>in daring</code>
+                                        <br />
+                                        <code>11</code>
+                                        <code>00:01:07,880 --> 00:01:09,880</code>
+                                        <code>Young cats are born curious</code>
+                                        <br />
+                                        <code>12</code>
+                                        <code>00:01:11,600 --> 00:01:13,780</code>
+                                        <code>it's how they learn about their world</code>
+                                        <br />
+                                        <code>13</code>
+                                        <code>00:01:18,900 --> 00:01:20,900</code>
+                                        <code>Even if it can get them into trouble</code>
+                                        <br />
+                                        <code>14</code>
+                                        <code>00:01:26,480 --> 00:01:29,160</code>
+                                        <code>
+                                            Straight away he puts his super senses through their
+                                            paces</code
+                                        >
+                                        <br />
+                                        <code>15</code>
+                                        <code>00:01:41,960 --> 00:01:44,260</code>
+                                        <code>
+                                            His eyes are six times more powerful than our own</code
+                                        >
+                                        <br />
+                                        <code>16</code>
+                                        <code>00:01:46,140 --> 00:01:49,240</code>
+                                        <code>and sensitive to the slightest movement</code>
+                                    </span>
+                                </details>
+                            </li>
+
+                            <!-- Регулярные выражения -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Регулярные выражения</summary>
+
+                                    <p
+                                        >Порой при работе с текстами в них надо что-то найти, а
+                                        обычного поиска недостаточно, ведь он обычно конкретен, а
+                                        отдельные случаи требуют абстракции, например поиска
+                                        определённого набора символов в разных сочетаниях. Для
+                                        обобщения хорошо подходят так называемые регулярные
+                                        выражения (<i>regular expressions</i>). И
+                                        <b>Visual Studio Code</b> — одна из программ, способных с
+                                        ними работать. В качестве иллюстрации возьму субтитры одного
+                                        <a
+                                            href="https://www.youtube.com/watch?v=Xn_O2li_jpk"
+                                            target="_blank"
+                                            >видео</a
+                                        >
+                                        британского блогера Тома Скотта. Вот их кусочек:</p
+                                    >
+                                    <span class="codeblock">
+                                        <code>The whole of Yellowstone Park,</code>
+                                        <br />
+                                        <code>which starts just a couple hundred</code>
+                                        <code>metres that way, is bear country.</code>
+                                        <br />
+                                        <code>And hikers and campers heading</code>
+                                        <code>from this town into the wilderness</code>
+                                        <br />
+                                        <code>will bring food with them.</code>
+                                    </span>
+                                    <p
+                                        >Для удобства чтения с экрана некоторые длинные фразы
+                                        разбиты на две примерно равные строки, но если я хочу
+                                        вписывать перевод сразу после оригинала, это уже неудобно.
+                                        Итак, допустим, я хочу, чтобы все фразы в субтитрах шли
+                                        <i>в одну строку</i>. Можно сделать всё вручную, но это
+                                        будет муторно. На помощь придут как раз регулярные
+                                        выражения.</p
+                                    >
+                                    <p
+                                        >Открываем поиск (<kbd>Ctrl</kbd>+<kbd>F</kbd>) и вводим
+                                        сперва <strong><code>.+</code></strong
+                                        >. Расшифрую это «заклинание»:
+                                        <strong><code>.</code></strong> — любой символ, кроме новой
+                                        строки, <strong><code>+</code></strong> — выражение слева (в
+                                        нашем случае любой символ) должно встретиться не меньше
+                                        одного раза. VS Code при этом запросе считает каждую строку
+                                        с любым текстом как отдельный результат поиска.</p
+                                    >
+                                    <p
+                                        >Но искать нужно группы с двумя строками. Разделяет их
+                                        технический знак переноса строки —
+                                        <strong><code>\n</code></strong
+                                        >. Зная это, дополним запрос:
+                                        <strong><code>.+\n.+</code></strong
+                                        >. Ура, оно работает! Но как же убрать перенос?</p
+                                    >
+                                    <p
+                                        >Тут нужна замена с подстановкой найденного. Группы для
+                                        такой подстановки обозначаются в самом запросе с помощью
+                                        скобок: <strong><code>(.+)\n(.+)</code></strong
+                                        >. В поле замены же группе соответствует
+                                        <strong><code>$</code></strong> с порядковым номером группы.
+                                        Следовательно, в замене пишем:
+                                        <strong><code>$1 $2</code></strong> (первая строка + пробел
+                                        + вторая строка).</p
+                                    >
+                                    <p>Заменяем — готово!</p>
+                                </details>
+                            </li>
+
+                            <!-- Word. Автоматическое оглавление -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Word. Автоматическое оглавление</summary>
+
+                                    <p
+                                        >Автоматическое оглавление зиждется на <i>стилях</i>. В Word
+                                        их можно выбрать во вкладке
+                                        <kbd><samp>Главная</samp></kbd> или во всплывающем окошке
+                                        форматирования. Для оглавления понадобятся стили
+                                        <strong>Заголовок 1/2/3/…</strong> (цифра — уровень
+                                        заголовка в иерархии).</p
+                                    >
+                                    <p
+                                        >Если они не такие, как надо, их можно изменить: выделите в
+                                        документе какой-либо текст как образец, нажмите правой
+                                        клавишей мыши по стилю, который надо поменять, и выберите
+                                        <kbd
+                                            ><samp
+                                                >Обновить в соответствии с выделенным
+                                                фрагментом</samp
+                                            ></kbd
+                                        >. Когда стили готовы, примените их ко всем заголовкам.</p
+                                    >
+                                    <p
+                                        >Теперь само оглавление. Идём на вкладку
+                                        <kbd><samp>Ссылки</samp></kbd
+                                        >. Там в разделе <kbd><samp>Оглавление</samp></kbd> можно
+                                        выбрать один из готовых шаблонов или настроить всё в пункте
+                                        <kbd><samp>Настраиваемое оглавление</samp></kbd
+                                        >. Ура, оглавление добавлено! Программа сама подставит все
+                                        названия частей работы и страницы, на которых они находятся.
+                                        Если что-то поменялось, нажмите по оглавлению правой
+                                        клавишей мыши и выберите
+                                        <kbd><samp>Обновить поле</samp></kbd
+                                        >, после чего программа спросит, всё ли обновить или только
+                                        номера страниц.</p
+                                    >
+                                    <p
+                                        >Готово! Теперь эту нудную работу за нас на 99% будет делать
+                                        машина.</p
+                                    >
+                                </details>
+                            </li>
+
+                            <!-- Word. Автоматическая сортировка текста -->
+                            <li>
+                                <details class="tree-details">
+                                    <summary>Word. Автоматическая сортировка текста</summary>
+
+                                    <p
+                                        >В Word также можно в автоматическом режиме
+                                        <i>сортировать текст по алфавиту</i>, дабы не заниматься
+                                        этим муторным делом самим.</p
+                                    >
+                                    <p
+                                        >Для этого выделяем текст, который нужно отсортировать,
+                                        находим вкладку <kbd><samp>Главная</samp></kbd> в меню
+                                        программы, в ней — раздел <kbd><samp>Абзац</samp></kbd
+                                        >, а уже там — кнопку <kbd><samp>Сортировка</samp></kbd
+                                        >. Жмём её, задаём параметры сортировки (хотя обычно это не
+                                        нужно), тыкаем <kbd>ОК</kbd>, готово!</p
                                     >
                                 </details>
                             </li>
@@ -1399,7 +1740,8 @@
                                         знакомого преподавателя, но это далеко не всегда лучший
                                         вариант. Часто предпочтительнее искать руководителя по
                                         области научных интересов. Как это сделать? Для начала можно
-                                        зайти в раздел<a
+                                        зайти в раздел
+                                        <a
                                             href="https://www.rsuh.ru/education/ifi/structure/department-of-theory-and-practice-of-translation.php"
                                             target="_blank"
                                             >нашей кафедры</a
