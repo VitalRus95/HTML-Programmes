@@ -257,10 +257,12 @@
 
             kbd {
                 font-family: monospace;
+                font-size: 0.99em;
                 border: 2px outset var(--colour-border);
                 box-shadow: 1px 1px 1px var(--colour-text);
                 padding-inline: 2px;
                 margin-inline: 2px;
+                cursor: default;
             }
 
             li {
@@ -273,12 +275,18 @@
             }
 
             p {
-                margin-block: 6px;
+                margin-block: 8px;
+                line-height: 1.5;
                 text-indent: 0.6em;
             }
 
             samp {
-                font-style: italic;
+                font-size: 0.98em;
+                border: 2px outset var(--colour-border);
+                border-radius: 0px;
+                padding-inline: 2px;
+                margin-inline: 1px;
+                cursor: default;
             }
 
             select {
@@ -375,6 +383,8 @@
             input:hover,
             kbd:focus,
             kbd:hover,
+            samp:focus,
+            samp:hover,
             select:focus,
             select:hover,
             strong:focus,

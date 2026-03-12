@@ -257,10 +257,12 @@
 
             kbd {
                 font-family: monospace;
+                font-size: 0.99em;
                 border: 2px outset var(--colour-border);
                 box-shadow: 1px 1px 1px var(--colour-text);
                 padding-inline: 2px;
                 margin-inline: 2px;
+                cursor: default;
             }
 
             li {
@@ -273,12 +275,18 @@
             }
 
             p {
-                margin-block: 6px;
+                margin-block: 8px;
+                line-height: 1.5;
                 text-indent: 0.6em;
             }
 
             samp {
-                font-style: italic;
+                font-size: 0.98em;
+                border: 2px outset var(--colour-border);
+                border-radius: 0px;
+                padding-inline: 2px;
+                margin-inline: 1px;
+                cursor: default;
             }
 
             select {
@@ -375,6 +383,8 @@
             input:hover,
             kbd:focus,
             kbd:hover,
+            samp:focus,
+            samp:hover,
             select:focus,
             select:hover,
             strong:focus,
@@ -1145,7 +1155,8 @@
                                             target="_blank"
                                             >статью</a
                                         >
-                                        о вопросе их этичности и словарную статью о вивисекции в<a
+                                        о вопросе их этичности и словарную статью о вивисекции в
+                                        <a
                                             href="https://www.britannica.com/science/vivisection"
                                             target="_blank"
                                             >Britannica</a
@@ -1426,13 +1437,11 @@
                                     >
                                     <p
                                         >Я нашёл способ это исправить: зайдите в
-                                        <kbd
-                                            ><samp>Настройки</samp> —
-                                            <samp>Параметры сегментации</samp></kbd
-                                        >, выберите в наборах правил английский язык и в нижней
-                                        части добавьте новые правила. В колонке «Разрывы/исключения»
-                                        в них проставьте галочки, а в «Шаблон до» впишите
-                                        следующее:</p
+                                        <samp>Настройки</samp> — <samp>Параметры сегментации</samp>,
+                                        выберите в наборах правил английский язык и в нижней части
+                                        добавьте новые правила. В колонке
+                                        <samp>Разрывы/исключения</samp> в них проставьте галочки, а
+                                        в <samp>Шаблон до</samp> впишите следующее:</p
                                     >
                                     <span class="codeblock">
                                         <code>\.”</code>
@@ -1461,11 +1470,11 @@
                                     <summary>Как устроены субтитры</summary>
 
                                     <p
-                                        >Если кто-то хочет переводить или изучать субтитры, будет
-                                        нелишним узнать, как они устроены. Обычно это файлы
-                                        <i>.srt</i>, которые легко открыть даже «Блокнотом», где
-                                        пронумерованные субтитры содержат информацию о периоде
-                                        показа на экране и собственно текст.</p
+                                        >Если кто-то хочет переводить, создавать или изучать
+                                        субтитры, будет нелишним узнать, как они устроены. Обычно
+                                        это файлы <i>.srt</i>, которые легко открыть даже
+                                        «Блокнотом», где пронумерованные субтитры содержат
+                                        информацию о периоде показа на экране и собственно текст.</p
                                     >
                                     <p
                                         >Пример ниже — субтитры к
@@ -1477,74 +1486,71 @@
                                         о ржавой кошке:</p
                                     >
                                     <span class="codeblock">
-                                        <code>1</code>
-                                        <code>00:00:04,940 --> 00:00:07,580</code>
-                                        <code>The smallest feline in the world</code>
+                                        <pre>1</pre>
+                                        <pre>00:00:04,940 --> 00:00:07,580</pre>
+                                        <pre>The smallest feline in the world</pre>
                                         <br />
-                                        <code>2</code>
-                                        <code>00:00:09,840 --> 00:00:11,840</code>
-                                        <code>A rusty spotted cat</code>
+                                        <pre>2</pre>
+                                        <pre>00:00:09,840 --> 00:00:11,840</pre>
+                                        <pre>A rusty spotted cat</pre>
                                         <br />
-                                        <code>3</code>
-                                        <code>00:00:17,500 --> 00:00:19,920</code>
-                                        <code>He may look like a kitten</code>
+                                        <pre>3</pre>
+                                        <pre>00:00:17,500 --> 00:00:19,920</pre>
+                                        <pre>He may look like a kitten</pre>
                                         <br />
-                                        <code>4</code>
-                                        <code>00:00:21,380 --> 00:00:23,380</code>
-                                        <code>He’d still fit in the palm of your hand</code>
+                                        <pre>4</pre>
+                                        <pre>00:00:21,380 --> 00:00:23,380</pre>
+                                        <pre>He’d still fit in the palm of your hand</pre>
                                         <br />
-                                        <code>5</code>
-                                        <code>00:00:26,400 --> 00:00:29,060</code>
-                                        <code>But this little male is very nearly fully grown</code>
+                                        <pre>5</pre>
+                                        <pre>00:00:26,400 --> 00:00:29,060</pre>
+                                        <pre>But this little male is very nearly fully grown</pre>
                                         <br />
-                                        <code>6</code>
-                                        <code>00:00:31,000 --> 00:00:34,220</code>
-                                        <code>He'll soon be setting off on a solitary life</code>
+                                        <pre>6</pre>
+                                        <pre>00:00:31,000 --> 00:00:34,220</pre>
+                                        <pre>He'll soon be setting off on a solitary life</pre>
                                         <br />
-                                        <code>7</code>
-                                        <code>00:00:35,720 --> 00:00:37,140</code>
-                                        <code>fending entirely for himself</code>
+                                        <pre>7</pre>
+                                        <pre>00:00:35,720 --> 00:00:37,140</pre>
+                                        <pre>fending entirely for himself</pre>
                                         <br />
-                                        <code>8</code>
-                                        <code>00:00:45,240 --> 00:00:47,240</code>
-                                        <code>What he lacks in size,</code>
+                                        <pre>8</pre>
+                                        <pre>00:00:45,240 --> 00:00:47,240</pre>
+                                        <pre>What he lacks in size,</pre>
                                         <br />
-                                        <code>9</code>
-                                        <code>00:00:48,360 --> 00:00:49,420</code>
-                                        <code>he makes up for</code>
+                                        <pre>9</pre>
+                                        <pre>00:00:48,360 --> 00:00:49,420</pre>
+                                        <pre>he makes up for</pre>
                                         <br />
-                                        <code>10</code>
-                                        <code>00:00:50,360 --> 00:00:51,880</code>
-                                        <code>in daring</code>
+                                        <pre>10</pre>
+                                        <pre>00:00:50,360 --> 00:00:51,880</pre>
+                                        <pre>in daring</pre>
                                         <br />
-                                        <code>11</code>
-                                        <code>00:01:07,880 --> 00:01:09,880</code>
-                                        <code>Young cats are born curious</code>
+                                        <pre>11</pre>
+                                        <pre>00:01:07,880 --> 00:01:09,880</pre>
+                                        <pre>Young cats are born curious</pre>
                                         <br />
-                                        <code>12</code>
-                                        <code>00:01:11,600 --> 00:01:13,780</code>
-                                        <code>it's how they learn about their world</code>
+                                        <pre>12</pre>
+                                        <pre>00:01:11,600 --> 00:01:13,780</pre>
+                                        <pre>it's how they learn about their world</pre>
                                         <br />
-                                        <code>13</code>
-                                        <code>00:01:18,900 --> 00:01:20,900</code>
-                                        <code>Even if it can get them into trouble</code>
+                                        <pre>13</pre>
+                                        <pre>00:01:18,900 --> 00:01:20,900</pre>
+                                        <pre>Even if it can get them into trouble</pre>
                                         <br />
-                                        <code>14</code>
-                                        <code>00:01:26,480 --> 00:01:29,160</code>
-                                        <code>
-                                            Straight away he puts his super senses through their
-                                            paces</code
+                                        <pre>14</pre>
+                                        <pre>00:01:26,480 --> 00:01:29,160</pre>
+                                        <!-- prettier-ignore -->
+                                        <pre>Straight away he puts his super senses through their paces</pre
                                         >
                                         <br />
-                                        <code>15</code>
-                                        <code>00:01:41,960 --> 00:01:44,260</code>
-                                        <code>
-                                            His eyes are six times more powerful than our own</code
-                                        >
+                                        <pre>15</pre>
+                                        <pre>00:01:41,960 --> 00:01:44,260</pre>
+                                        <pre>His eyes are six times more powerful than our own</pre>
                                         <br />
-                                        <code>16</code>
-                                        <code>00:01:46,140 --> 00:01:49,240</code>
-                                        <code>and sensitive to the slightest movement</code>
+                                        <pre>16</pre>
+                                        <pre>00:01:46,140 --> 00:01:49,240</pre>
+                                        <pre>and sensitive to the slightest movement</pre>
                                     </span>
                                 </details>
                             </li>
@@ -1571,15 +1577,15 @@
                                         британского блогера Тома Скотта. Вот их кусочек:</p
                                     >
                                     <span class="codeblock">
-                                        <code>The whole of Yellowstone Park,</code>
+                                        <pre>The whole of Yellowstone Park,</pre>
                                         <br />
-                                        <code>which starts just a couple hundred</code>
-                                        <code>metres that way, is bear country.</code>
+                                        <pre>which starts just a couple hundred</pre>
+                                        <pre>metres that way, is bear country.</pre>
                                         <br />
-                                        <code>And hikers and campers heading</code>
-                                        <code>from this town into the wilderness</code>
+                                        <pre>And hikers and campers heading</pre>
+                                        <pre>from this town into the wilderness</pre>
                                         <br />
-                                        <code>will bring food with them.</code>
+                                        <pre>will bring food with them.</pre>
                                     </span>
                                     <p
                                         >Для удобства чтения с экрана некоторые длинные фразы
@@ -1629,36 +1635,29 @@
 
                                     <p
                                         >Автоматическое оглавление зиждется на <i>стилях</i>. В Word
-                                        их можно выбрать во вкладке
-                                        <kbd><samp>Главная</samp></kbd> или во всплывающем окошке
-                                        форматирования. Для оглавления понадобятся стили
-                                        <strong>Заголовок 1/2/3/…</strong> (цифра — уровень
-                                        заголовка в иерархии).</p
+                                        их можно выбрать во вкладке <samp>Главная</samp> или во
+                                        всплывающем окошке форматирования. Для оглавления
+                                        понадобятся стили <strong>Заголовок 1/2/3/…</strong> (цифра
+                                        — уровень заголовка в иерархии).</p
                                     >
                                     <p
                                         >Если они не такие, как надо, их можно изменить: выделите в
                                         документе какой-либо текст как образец, нажмите правой
                                         клавишей мыши по стилю, который надо поменять, и выберите
-                                        <kbd
-                                            ><samp
-                                                >Обновить в соответствии с выделенным
-                                                фрагментом</samp
-                                            ></kbd
+                                        <samp>Обновить в соответствии с выделенным фрагментом</samp
                                         >. Когда стили готовы, примените их ко всем заголовкам.</p
                                     >
                                     <p
                                         >Теперь само оглавление. Идём на вкладку
-                                        <kbd><samp>Ссылки</samp></kbd
-                                        >. Там в разделе <kbd><samp>Оглавление</samp></kbd> можно
-                                        выбрать один из готовых шаблонов или настроить всё в пункте
-                                        <kbd><samp>Настраиваемое оглавление</samp></kbd
-                                        >. Ура, оглавление добавлено! Программа сама подставит все
-                                        названия частей работы и страницы, на которых они находятся.
-                                        Если что-то поменялось, нажмите по оглавлению правой
-                                        клавишей мыши и выберите
-                                        <kbd><samp>Обновить поле</samp></kbd
-                                        >, после чего программа спросит, всё ли обновить или только
-                                        номера страниц.</p
+                                        <samp>Ссылки</samp>. Там в разделе
+                                        <samp>Оглавление</samp> можно выбрать один из готовых
+                                        шаблонов или настроить всё в пункте
+                                        <samp>Настраиваемое оглавление</samp>. Ура, оглавление
+                                        добавлено! Программа сама подставит все названия частей
+                                        работы и страницы, на которых они находятся. Если что-то
+                                        поменялось, нажмите по оглавлению правой клавишей мыши и
+                                        выберите <samp>Обновить поле</samp>, после чего программа
+                                        спросит, всё ли обновить или только номера страниц.</p
                                     >
                                     <p
                                         >Готово! Теперь эту нудную работу за нас на 99% будет делать
@@ -1679,11 +1678,11 @@
                                     >
                                     <p
                                         >Для этого выделяем текст, который нужно отсортировать,
-                                        находим вкладку <kbd><samp>Главная</samp></kbd> в меню
-                                        программы, в ней — раздел <kbd><samp>Абзац</samp></kbd
-                                        >, а уже там — кнопку <kbd><samp>Сортировка</samp></kbd
-                                        >. Жмём её, задаём параметры сортировки (хотя обычно это не
-                                        нужно), тыкаем <kbd>ОК</kbd>, готово!</p
+                                        находим вкладку <samp>Главная</samp> в меню программы, в ней
+                                        — раздел <samp>Абзац</samp>, а уже там — кнопку
+                                        <samp>Сортировка</samp>. Жмём её, задаём параметры
+                                        сортировки (хотя обычно это не нужно), тыкаем <kbd>ОК</kbd>,
+                                        готово!</p
                                     >
                                 </details>
                             </li>
