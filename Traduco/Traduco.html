@@ -159,7 +159,7 @@
                 border: 2px outset var(--colour-border);
                 margin-block: 2px;
                 padding: 2px 4px;
-                max-height: 50vh;
+                max-height: 55vh;
                 overflow: auto;
             }
 
@@ -268,7 +268,7 @@
             }
 
             li {
-                margin-bottom: 4px;
+                margin-block: 2px;
             }
 
             ol,
@@ -311,7 +311,7 @@
                 box-shadow: 0px 0px 3px 0px var(--colour-text);
                 margin-inline: 2px;
                 padding-inline: 4px;
-                font-weight: 500;
+                font-weight: 400;
             }
 
             summary {
@@ -824,6 +824,25 @@
                         value="12345 ABCDE"
                     />
                 </div>
+
+                <blockquote>
+                    <p id="example-buttons"
+                        >Text example with keyboard buttons (such as <kbd>Enter</kbd>) and
+                        programmes' interface buttons (for example, <samp>Apply</samp>).</p
+                    >
+                    <p id="example-formatting"
+                        >Examples of <strong>important</strong>, <b>boldface</b>, <i>italicised</i>,
+                        and <u>underlined</u> text.</p
+                    >
+                </blockquote>
+                <span class="codeblock">
+                    <pre id="example-code">Пример кода</pre>
+                    <pre>print("Hello, world!")</pre>
+                    <br />
+                    <pre>if (a > b) {</pre>
+                    <pre>    ...</pre>
+                    <pre>}</pre>
+                </span>
             </details>
 
             <!-- Translation settings -->
@@ -2001,6 +2020,34 @@
                             placeholder: "Input example",
                         },
                         {
+                            id: "example-buttons",
+                            childNodesTexts: [
+                                "Text example with keyboard buttons (such as ",
+                                "Enter",
+                                ") and programmes' interface buttons (for example, ",
+                                "Apply",
+                                ").",
+                            ],
+                        },
+                        {
+                            id: "example-formatting",
+                            childNodesTexts: [
+                                "Examples of ",
+                                "important",
+                                ", ",
+                                "boldface",
+                                ", ",
+                                "italicised",
+                                ", and ",
+                                "underlined",
+                                " text.",
+                            ],
+                        },
+                        {
+                            id: "example-code",
+                            childNodesTexts: ["Code example"],
+                        },
+                        {
                             id: "translation-settings",
                             childNodesTexts: ["Translation"],
                         },
@@ -2294,6 +2341,34 @@
                             id: "example-input",
                             childNodesTexts: [],
                             placeholder: "Пример поля ввода",
+                        },
+                        {
+                            id: "example-buttons",
+                            childNodesTexts: [
+                                "Пример текста с кнопками клавиатуры (например, ",
+                                "Enter",
+                                ") и\n интерфейса программ (например, ",
+                                "Применить",
+                                ").",
+                            ],
+                        },
+                        {
+                            id: "example-formatting",
+                            childNodesTexts: [
+                                "Пример ",
+                                "важного",
+                                ", ",
+                                "полужирного",
+                                ", ",
+                                "курсивного",
+                                " и ",
+                                "подчёркнутого",
+                                " текста.",
+                            ],
+                        },
+                        {
+                            id: "example-code",
+                            childNodesTexts: ["Пример кода"],
                         },
                         {
                             id: "translation-settings",
