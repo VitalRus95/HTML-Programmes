@@ -213,6 +213,10 @@
                 -webkit-transition: background-color 0.7s ease;
             }
 
+            details[open] > summary::marker {
+                content: "< ";
+            }
+
             h1,
             h2,
             h3 {
@@ -316,6 +320,11 @@
                 border-radius: 4px;
                 font-weight: 600;
                 cursor: pointer;
+            }
+
+            summary::marker {
+                font-family: monospace;
+                content: "> ";
             }
 
             table {
@@ -573,6 +582,8 @@
 
             <!-- Resources tree -->
             <ul class="tree-list">
+                <!-- TO DO: оксфордская запятая, запятая с «да и», запятые при тире -->
+
                 <!-- Языковое -->
                 <li>
                     <details class="tree-details">
@@ -658,6 +669,13 @@
                                         <li>
                                             <a href="https://collinsdictionary.com/" target="_blank"
                                                 >Collins English Dictionary</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://www.merriam-webster.com"
+                                                target="_blank"
+                                                >Merriam-Webster</a
                                             >
                                         </li>
                                         <li>
