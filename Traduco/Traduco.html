@@ -99,7 +99,11 @@
 
             blockquote {
                 background-color: var(--colour-input);
-                background-image: linear-gradient(60deg, var(--colour-tooltip), transparent);
+                background-image: linear-gradient(
+                    60deg,
+                    var(--colour-tooltip),
+                    transparent
+                );
                 border: 2px outset var(--colour-border);
                 border-left: 4px inset var(--colour-border);
                 border-radius: 0px 4px 4px 0px;
@@ -185,8 +189,6 @@
                 z-index: 9;
             }
 
-            details[open] > summary:focus,
-            details[open] > summary:hover,
             details[open]:focus > summary,
             details[open]:hover > summary {
                 background-color: var(--colour-button);
@@ -196,19 +198,7 @@
                     transparent,
                     var(--colour-tooltip)
                 );
-                transition: background-color 0.7s ease;
-                -moz-transition: background-color 0.7s ease;
-                -webkit-transition: background-color 0.7s ease;
-            }
-
-            details[open]:focus-within > summary {
-                background-color: var(--colour-button);
-                background-image: linear-gradient(
-                    60deg,
-                    var(--colour-input),
-                    transparent,
-                    var(--colour-tooltip)
-                );
+                color: var(--colour-text);
                 transition: background-color 0.7s ease;
                 -moz-transition: background-color 0.7s ease;
                 -webkit-transition: background-color 0.7s ease;
@@ -395,6 +385,8 @@
             input:hover,
             kbd:focus,
             kbd:hover,
+            legend:focus,
+            legend:hover,
             samp:focus,
             samp:hover,
             select:focus,
@@ -415,8 +407,9 @@
             tr:nth-of-type(even) > td:hover,
             .pseudo-button:focus,
             .pseudo-button:hover {
-                background-color: var(--colour-hovered-bgr);
-                color: var(--colour-hovered-fgr);
+                background-color: var(--colour-hovered-bgr) !important;
+                background-image: none !important;
+                color: var(--colour-hovered-fgr) !important;
                 border-color: var(--colour-hovered-border);
                 transition: background-color 0.4s ease;
                 -moz-transition: background-color 0.4s ease;
@@ -667,17 +660,31 @@
 
             <select id="lang" tabindex="0"></select>
 
-            <input type="file" id="load-project" accept=".txt,.json" style="display: none" />
+            <input
+                type="file"
+                id="load-project"
+                accept=".txt,.json"
+                style="display: none"
+            />
 
             <button id="start-button" tabindex="1" class="tooltip-parent">
                 Open
                 <span class="tooltip">Open a text (.txt) or a project (.json)</span>
             </button>
             <button id="continue-button" tabindex="1" disabled>Continue</button>
-            <button id="save-button" tabindex="1" onclick="switchScene('menu', 'saving')" disabled>
+            <button
+                id="save-button"
+                tabindex="1"
+                onclick="switchScene('menu', 'saving')"
+                disabled
+            >
                 Save
             </button>
-            <button id="settings-button" tabindex="1" onclick="switchScene('menu', 'settings')">
+            <button
+                id="settings-button"
+                tabindex="1"
+                onclick="switchScene('menu', 'settings')"
+            >
                 Settings
             </button>
             <button id="about-button" tabindex="1" onclick="switchScene('menu', 'about')">
@@ -709,7 +716,11 @@
 
                     <tr>
                         <th id="notes-container" colspan="2">
-                            <textarea id="notes" autocomplete="off" placeholder="Notes"></textarea>
+                            <textarea
+                                id="notes"
+                                autocomplete="off"
+                                placeholder="Notes"
+                            ></textarea>
                         </th>
                     </tr>
                 </thead>
@@ -726,12 +737,16 @@
                         <td id="pages-container" colspan="2">
                             <button class="tooltip-parent" onclick="setPage('first')">
                                 &lt;&lt;
-                                <span id="first-page-tooltip" class="tooltip">First page</span>
+                                <span id="first-page-tooltip" class="tooltip"
+                                    >First page</span
+                                >
                             </button>
 
                             <button class="tooltip-parent" onclick="setPage('previous')">
                                 &lt;
-                                <span id="prev-page-tooltip" class="tooltip">Previous page</span>
+                                <span id="prev-page-tooltip" class="tooltip"
+                                    >Previous page</span
+                                >
                             </button>
 
                             <div class="tooltip-parent">
@@ -743,17 +758,23 @@
                                     value="1"
                                     onchange="setPage('input')"
                                 />
-                                <span id="cur-page-tooltip" class="tooltip">Current page</span>
+                                <span id="cur-page-tooltip" class="tooltip"
+                                    >Current page</span
+                                >
                             </div>
 
                             <button class="tooltip-parent" onclick="setPage('next')">
                                 &gt;
-                                <span id="next-page-tooltip" class="tooltip">Next page</span>
+                                <span id="next-page-tooltip" class="tooltip"
+                                    >Next page</span
+                                >
                             </button>
 
                             <button class="tooltip-parent" onclick="setPage('last')">
                                 &gt;&gt;
-                                <span id="last-page-tooltip" class="tooltip">Last page</span>
+                                <span id="last-page-tooltip" class="tooltip"
+                                    >Last page</span
+                                >
                             </button>
                         </td>
                     </tr>
@@ -767,17 +788,27 @@
 
             <h2 id="saving-title" tabindex="0">Save</h2>
 
-            <a id="save-project" href="" download="Project.json" class="pseudo-button">Project</a>
-            <a id="save-source" href="" download="Source.txt" class="pseudo-button">Source</a>
-            <a id="save-target" href="" download="Target.txt" class="pseudo-button">Target</a>
-            <a id="save-notes" href="" download="Notes.txt" class="pseudo-button">Notes</a>
+            <a id="save-project" href="" download="Project.json" class="pseudo-button"
+                >Project</a
+            >
+            <a id="save-source" href="" download="Source.txt" class="pseudo-button"
+                >Source</a
+            >
+            <a id="save-target" href="" download="Target.txt" class="pseudo-button"
+                >Target</a
+            >
+            <a id="save-notes" href="" download="Notes.txt" class="pseudo-button"
+                >Notes</a
+            >
         </div>
 
         <!-- Settings div -->
         <div id="settings" class="scene" tabindex="0">
             <h2 id="settings-title" tabindex="0">Settings</h2>
 
-            <button id="settings-back" onclick="switchScene('settings', 'menu')">Back</button>
+            <button id="settings-back" onclick="switchScene('settings', 'menu')"
+                >Back</button
+            >
 
             <!-- Sound settings -->
             <details>
@@ -814,9 +845,18 @@
                 <summary id="colour-settings">Colours</summary>
 
                 <div class="button-container">
-                    <input type="file" id="colour-loader" accept=".json" style="display: none" />
+                    <input
+                        type="file"
+                        id="colour-loader"
+                        accept=".json"
+                        style="display: none"
+                    />
                     <button id="load-colours">Load colours</button>
-                    <a id="save-colours" href="" download="Colours.json" class="pseudo-button"
+                    <a
+                        id="save-colours"
+                        href=""
+                        download="Colours.json"
+                        class="pseudo-button"
                         >Save colours</a
                     >
                 </div>
@@ -825,7 +865,9 @@
 
                 <div class="button-container">
                     <button id="example-button">Button example</button>
-                    <button id="example-disabled-button" disabled>Disabled button example</button>
+                    <button id="example-disabled-button" disabled
+                        >Disabled button example</button
+                    >
                     <input
                         type="text"
                         id="example-input"
@@ -837,11 +879,12 @@
                 <blockquote>
                     <p id="example-buttons"
                         >Text example with keyboard buttons (such as <kbd>Enter</kbd>) and
-                        programmes' interface buttons (for example, <samp>Apply</samp>).</p
+                        programmes' interface buttons (for example,
+                        <samp>Apply</samp>).</p
                     >
                     <p id="example-formatting"
-                        >Examples of <strong>important</strong>, <b>boldface</b>, <i>italicised</i>,
-                        and <u>underlined</u> text.</p
+                        >Examples of <strong>important</strong>, <b>boldface</b>,
+                        <i>italicised</i>, and <u>underlined</u> text.</p
                     >
                 </blockquote>
                 <span class="codeblock">
@@ -885,32 +928,50 @@
             <button id="about-back" onclick="switchScene('about', 'menu')">Back</button>
 
             <p id="about-p" tabindex="0">
-                Named after a Latin word meaning ‘I translate’, <b>Traduco</b> is a simple yet
-                powerful translation tool. Open either a plain text file (<i>.txt</i>, for example)
-                to start a translation, or a project (stored in <i>.json</i>) to continue the work.
-                While translating, you can make and consult notes using the text input field at the
-                top of the screen. At the bottom of the screen, you will find source and target
-                texts' symbol count in the following format:
+                Named after a Latin word meaning ‘I translate’, <b>Traduco</b> is a simple
+                yet powerful translation tool. Open either a plain text file (<i>.txt</i>,
+                for example) to start a translation, or a project (stored in <i>.json</i>)
+                to continue the work. While translating, you can make and consult notes
+                using the text input field at the top of the screen. At the bottom of the
+                screen, you will find source and target texts' symbol count in the
+                following format:
                 <i
-                    >selection / parapgraph / whole text (proportion of the target text's length to
-                    that of the source one in %)</i
+                    >selection / parapgraph / whole text (proportion of the target text's
+                    length to that of the source one in %)</i
                 >. To make the process easier, <b>Traduco</b> offers a number of hotkeys:
             </p>
             <ul tabindex="0">
-                <li id="hotkey-0"><kbd>Alt</kbd>+<kbd>left arrow</kbd> - select previous cell</li>
-                <li id="hotkey-1"><kbd>Alt</kbd>+<kbd>right arrow</kbd> - select next cell</li>
-                <li id="hotkey-2"><kbd>Alt</kbd>+<kbd>up arrow</kbd> - select cell above</li>
-                <li id="hotkey-3"><kbd>Alt</kbd>+<kbd>down arrow</kbd> - select cell below</li>
-                <li id="hotkey-4"><kbd>Alt</kbd>+<kbd>Page Up</kbd> - go to the previous page</li>
-                <li id="hotkey-5"><kbd>Alt</kbd>+<kbd>Page Down</kbd> - go to the next page</li>
+                <li id="hotkey-0"
+                    ><kbd>Alt</kbd>+<kbd>left arrow</kbd> - select previous cell</li
+                >
+                <li id="hotkey-1"
+                    ><kbd>Alt</kbd>+<kbd>right arrow</kbd> - select next cell</li
+                >
+                <li id="hotkey-2"
+                    ><kbd>Alt</kbd>+<kbd>up arrow</kbd> - select cell above</li
+                >
+                <li id="hotkey-3"
+                    ><kbd>Alt</kbd>+<kbd>down arrow</kbd> - select cell below</li
+                >
+                <li id="hotkey-4"
+                    ><kbd>Alt</kbd>+<kbd>Page Up</kbd> - go to the previous page</li
+                >
+                <li id="hotkey-5"
+                    ><kbd>Alt</kbd>+<kbd>Page Down</kbd> - go to the next page</li
+                >
                 <li id="hotkey-6">
                     <kbd>Alt</kbd>+<kbd>Home</kbd> - switch between notes and current cell
                 </li>
                 <li id="hotkey-7">
-                    <kbd>Alt</kbd>+<kbd>End</kbd> - switch between statistics and current cell
+                    <kbd>Alt</kbd>+<kbd>End</kbd> - switch between statistics and current
+                    cell
                 </li>
-                <li id="hotkey-8"><kbd>Alt</kbd>+<kbd>Insert</kbd> - copy source to target*</li>
-                <li id="hotkey-9"><kbd>Alt</kbd>+<kbd>Delete</kbd> - clear current cell*</li>
+                <li id="hotkey-8"
+                    ><kbd>Alt</kbd>+<kbd>Insert</kbd> - copy source to target*</li
+                >
+                <li id="hotkey-9"
+                    ><kbd>Alt</kbd>+<kbd>Delete</kbd> - clear current cell*</li
+                >
             </ul>
             <p id="cell-copy-hint">
                 * The cell's previous content will be copied to the clipboard.
@@ -1057,7 +1118,8 @@
             Object.keys(allColours).forEach((c) => {
                 document.body.style.setProperty(
                     c,
-                    localStorage.getItem(c) || getComputedStyle(document.body).getPropertyValue(c),
+                    localStorage.getItem(c) ||
+                        getComputedStyle(document.body).getPropertyValue(c),
                 );
 
                 /** @type {HTMLLIElement} */
@@ -1100,6 +1162,7 @@
                 await colourLoader.files[0].text().then((content) => {
                     try {
                         let loadedColours = JSON.parse(content);
+                        saveColours.download = colourLoader.files[0].name;
 
                         for (const c in loadedColours) {
                             document.body.style.setProperty(c, loadedColours[c]);
@@ -1211,7 +1274,10 @@
                             project = JSON.parse(content);
                         } else {
                             // A source text is loaded
-                            project.name = loadProjectInput.files[0].name.replace(".txt", "");
+                            project.name = loadProjectInput.files[0].name.replace(
+                                ".txt",
+                                "",
+                            );
                             project.paragraphs = [];
                             content.split("\n").forEach((p) => {
                                 if (p.trim() === "") return;
@@ -1308,10 +1374,14 @@
                         );
                         break;
                     case "left":
-                        result = document.getElementById(isSource ? `t${index - 1}` : `s${index}`);
+                        result = document.getElementById(
+                            isSource ? `t${index - 1}` : `s${index}`,
+                        );
                         break;
                     case "right":
-                        result = document.getElementById(isSource ? `t${index}` : `s${index + 1}`);
+                        result = document.getElementById(
+                            isSource ? `t${index}` : `s${index + 1}`,
+                        );
                         break;
                     default:
                         break;
@@ -1336,7 +1406,9 @@
                 dataSource.style.padding = "0px";
 
                 /** @type {HTMLTextAreaElement} */
-                let textSource = dataSource.appendChild(document.createElement("textarea"));
+                let textSource = dataSource.appendChild(
+                    document.createElement("textarea"),
+                );
                 textSource.id = `s${index}`;
                 textSource.value = p.source;
                 textSource.dataset.type = "source";
@@ -1349,7 +1421,9 @@
                 dataTarget.style.padding = "0px";
 
                 /** @type {HTMLTextAreaElement */
-                let textTarget = dataTarget.appendChild(document.createElement("textarea"));
+                let textTarget = dataTarget.appendChild(
+                    document.createElement("textarea"),
+                );
                 textTarget.id = `t${index}`;
                 textTarget.value = p.target;
                 textTarget.dataset.type = "target";
@@ -1375,19 +1449,35 @@
                         switch (event.key) {
                             case "ArrowUp":
                                 event.preventDefault();
-                                getNeighbourCell(this === textSource, index, "up")?.focus();
+                                getNeighbourCell(
+                                    this === textSource,
+                                    index,
+                                    "up",
+                                )?.focus();
                                 break;
                             case "ArrowDown":
                                 event.preventDefault();
-                                getNeighbourCell(this === textSource, index, "down")?.focus();
+                                getNeighbourCell(
+                                    this === textSource,
+                                    index,
+                                    "down",
+                                )?.focus();
                                 break;
                             case "ArrowLeft":
                                 event.preventDefault();
-                                getNeighbourCell(this === textSource, index, "left")?.focus();
+                                getNeighbourCell(
+                                    this === textSource,
+                                    index,
+                                    "left",
+                                )?.focus();
                                 break;
                             case "ArrowRight":
                                 event.preventDefault();
-                                getNeighbourCell(this === textSource, index, "right")?.focus();
+                                getNeighbourCell(
+                                    this === textSource,
+                                    index,
+                                    "right",
+                                )?.focus();
                                 break;
                             case "PageUp":
                                 event.preventDefault();
@@ -1549,9 +1639,12 @@
                 let selection = text.selectionEnd - text.selectionStart;
                 /** @type {number} */
                 let totalLength =
-                    text.dataset.type === "source" ? totalSourceLength : totalTargetLength;
+                    text.dataset.type === "source"
+                        ? totalSourceLength
+                        : totalTargetLength;
                 /** @type {HTMLTableDataCellElement} */
-                let cell = text.dataset.type === "source" ? tableSourceStats : tableTargetStats;
+                let cell =
+                    text.dataset.type === "source" ? tableSourceStats : tableTargetStats;
 
                 if (selection > 0) result += `${selection}/`;
                 result += `${textLength}/`;
@@ -1573,7 +1666,8 @@
 
                 // Default sounds
                 if (localStorage.getItem("default-sounds")) {
-                    defaultSounds.checked = localStorage.getItem("default-sounds") === "true";
+                    defaultSounds.checked =
+                        localStorage.getItem("default-sounds") === "true";
                 } else {
                     defaultSounds.checked = true;
                     localStorage.setItem("default-sounds", "true");
@@ -1610,7 +1704,11 @@
 
                 oscillator.type = type;
                 oscillator.frequency.value = frequencies[0];
-                oscillator.frequency.setValueCurveAtTime(frequencies, audio.currentTime, duration);
+                oscillator.frequency.setValueCurveAtTime(
+                    frequencies,
+                    audio.currentTime,
+                    duration,
+                );
                 oscillator.connect(volume);
 
                 volume.gain.value = +volumeInput.value;
@@ -1839,7 +1937,10 @@
                         },
                         {
                             id: "start-button",
-                            childNodesTexts: ["Open", "Open a text (.txt) or a project (.json)"],
+                            childNodesTexts: [
+                                "Open",
+                                "Open a text (.txt) or a project (.json)",
+                            ],
                         },
                         {
                             id: "continue-button",
@@ -2096,27 +2197,57 @@
                         },
                         {
                             id: "hotkey-0",
-                            childNodesTexts: ["Alt", "+", "left arrow", " - select previous cell"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "left arrow",
+                                " - select previous cell",
+                            ],
                         },
                         {
                             id: "hotkey-1",
-                            childNodesTexts: ["Alt", "+", "right arrow", " - select next cell"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "right arrow",
+                                " - select next cell",
+                            ],
                         },
                         {
                             id: "hotkey-2",
-                            childNodesTexts: ["Alt", "+", "up arrow", " - select cell above"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "up arrow",
+                                " - select cell above",
+                            ],
                         },
                         {
                             id: "hotkey-3",
-                            childNodesTexts: ["Alt", "+", "down arrow", " - select cell below"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "down arrow",
+                                " - select cell below",
+                            ],
                         },
                         {
                             id: "hotkey-4",
-                            childNodesTexts: ["Alt", "+", "Page Up", " - go to the previous page"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Page Up",
+                                " - go to the previous page",
+                            ],
                         },
                         {
                             id: "hotkey-5",
-                            childNodesTexts: ["Alt", "+", "Page Down", " - go to the next page"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Page Down",
+                                " - go to the next page",
+                            ],
                         },
                         {
                             id: "hotkey-6",
@@ -2138,11 +2269,21 @@
                         },
                         {
                             id: "hotkey-8",
-                            childNodesTexts: ["Alt", "+", "Insert", " - copy source to target*"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Insert",
+                                " - copy source to target*",
+                            ],
                         },
                         {
                             id: "hotkey-9",
-                            childNodesTexts: ["Alt", "+", "Delete", " - clear current cell*"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Delete",
+                                " - clear current cell*",
+                            ],
                         },
                         {
                             id: "cell-copy-hint",
@@ -2162,7 +2303,10 @@
                         },
                         {
                             id: "start-button",
-                            childNodesTexts: ["Открыть", "Открыть текст (.txt) или проект (.json)"],
+                            childNodesTexts: [
+                                "Открыть",
+                                "Открыть текст (.txt) или проект (.json)",
+                            ],
                         },
                         {
                             id: "continue-button",
@@ -2268,7 +2412,9 @@
                         },
                         {
                             id: "def-sounds-label",
-                            childNodesTexts: ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
+                            childNodesTexts: [
+                                "Стандартные звуки (кнопки, поля ввода и т.п.)",
+                            ],
                         },
                         {
                             id: "colour-settings",
@@ -2446,7 +2592,12 @@
                         },
                         {
                             id: "hotkey-3",
-                            childNodesTexts: ["Alt", "+", "стрелка вниз", " — выбрать ячейку ниже"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "стрелка вниз",
+                                " — выбрать ячейку ниже",
+                            ],
                         },
                         {
                             id: "hotkey-4",
@@ -2495,7 +2646,12 @@
                         },
                         {
                             id: "hotkey-9",
-                            childNodesTexts: ["Alt", "+", "Delete", " — очистить текущую ячейку*"],
+                            childNodesTexts: [
+                                "Alt",
+                                "+",
+                                "Delete",
+                                " — очистить текущую ячейку*",
+                            ],
                         },
                         {
                             id: "cell-copy-hint",

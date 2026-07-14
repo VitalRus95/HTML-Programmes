@@ -10,6 +10,6 @@
     "--colour-hovered-bgr": "#cfcf9a",
     "--colour-hovered-fgr": "#16150e",
     "--colour-hovered-border": "#3a3a23",
-    "--colour-disabled-bgr": "#949494",
-    "--colour-disabled-fgr": "#f0f0f0"
+    "--colour-disabled-bgr": "#a1a1a1",
+    "--colour-disabled-fgr": "#1f1f1f"
 }
