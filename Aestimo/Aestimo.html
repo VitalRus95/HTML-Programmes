@@ -278,6 +278,13 @@
                 margin-block: 2px;
             }
 
+            mark {
+                background-color: var(--colour-tooltip);
+                border: 2px solid var(--colour-text);
+                padding-inline: 2px;
+                margin-inline: 1px;
+            }
+
             ol,
             ul {
                 margin-block: 4px;
@@ -571,6 +578,14 @@
                 border-left: none;
             }
 
+            .rich-text-div {
+                display: block;
+                border: 2px outset var(--colour-border);
+                padding-block: 2px;
+                max-height: 8em;
+                overflow: auto;
+            }
+
             /* Elements by ID */
             #lang {
                 margin-bottom: 10px;
@@ -760,7 +775,7 @@
                         <th class="table-text-container">
                             <textarea
                                 id="main-source-paragraph"
-                                class="table-text"
+                                class="table-text shadow-border"
                                 readonly
                             ></textarea>
                         </th>
@@ -1183,6 +1198,23 @@
                     {
                         student: "Студент 01",
                         text: "Banks saw threat in new AI models\n\nFinancial Times say that banking and financial officials warned about the risks for international banking system connected with the new AI models. The new AI model Claude Mythos Preview by Anthropic start-up became the main topic of spring meetings of the IMF and the World Bank in Washington.\n\nAndrew Baily – Head of the Bank of England – called the situation «a very serious challenge», stating that the AI is developing faster than the regulatory systems and called out for emergency risk assessment in cybersecurity. According to the Anthropic, the AI model is able to show thousands of critical vulnerabilities in operating systems and browsers, shifting between attacks and defense and automatically spotting and combining vulnerabilities in scales human being can’t comprehend. \n\nHead of the ECB Christine Lagarde warned that such developments may pose a serious threat in the «wrong hands» pointing at the lack of global regulation. Part of the European regulators claimed that they have no access to the AI model and cannot assess its risks yet. Head of the European banking authority Francois-Louis Michaud pointed out that the assertive planning has just started.\n\nHowever, banks do see the potential advantages. Head of JPMorgan Chase Jamie Dimon claimed that the AI model helps showing the vulnerabilities and head of Morgan Stanley Ted Pick called AI an integral part of future financial ecosystem. \n\nExperts warn that coordination of global rules of regulation may be obstructed due to geopolitical tension and reluctance towards boxing prospective technologies. In March, federal department of the US has created a bureau designated fighting AI threats which will assert risks including cyberattacks and space militarization.",
+                        mistakes: [
+                            {
+                                paragraph: 3,
+                                startIndex: 51,
+                                endIndex: 63,
+                            },
+                            {
+                                paragraph: 3,
+                                startIndex: 110,
+                                endIndex: 111,
+                            },
+                            {
+                                paragraph: 3,
+                                startIndex: 289,
+                                endIndex: 306,
+                            },
+                        ],
                     },
                     {
                         student: "Студент 02",
@@ -1478,9 +1510,7 @@
 
             function updateEditor() {
                 // Cleanup
-                while (editorTranslations.hasChildNodes()) {
-                    editorTranslations.lastChild.remove();
-                }
+                removeChildNodes(editorTranslations);
 
                 // Source text
                 sourceText.value = project.source || "";
@@ -1492,9 +1522,7 @@
 
                 // Show and fill or hide page selector
                 if (maxPage > 0) {
-                    while (editorPageSelect.hasChildNodes()) {
-                        editorPageSelect.lastChild.remove();
-                    }
+                    removeChildNodes(editorPageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
                         let option = editorPageSelect.appendChild(
                             document.createElement("option"),
@@ -1648,9 +1676,7 @@
 
             function updateMainParagraphsList() {
                 // Clean `select` children elements
-                while (mainParagraphSelect.hasChildNodes()) {
-                    mainParagraphSelect.lastChild.remove();
-                }
+                removeChildNodes(mainParagraphSelect);
 
                 /** @type {string[]} */
                 let paragraphs = project.source.split("\n").filter((p) => p);
@@ -1668,6 +1694,59 @@
                 mainParagraphSelect.value = mainParagraphIndex;
             }
 
+            /**
+             * @param {number} studentIndex
+             */
+            function updateMainTranslation(studentIndex) {
+                // Prepare translation, table row, and table cell
+                let text = project.translations[studentIndex].text
+                    .split("\n")
+                    .filter((p) => p);
+
+                let row = mainTranslations.appendChild(document.createElement("tr"));
+
+                let cell = row.appendChild(document.createElement("td"));
+                cell.classList.add("table-text-container");
+
+                // Generating innerHTML for the translation div
+                /** @type {string} */
+                const startTag = "<mark>";
+                /** @type {string} */
+                const endTag = "</mark>";
+
+                /** @type {string} */
+                let code = text[mainParagraphIndex];
+                /** @type {number} */
+                let shift = 0;
+
+                project.translations[studentIndex].mistakes
+                    ?.filter((m) => m.paragraph === mainParagraphIndex)
+                    .sort((a, b) => {
+                        a.startIndex - b.startIndex;
+                    })
+                    .forEach((m) => {
+                        /** @type {number} */
+                        const startPos = m.startIndex + shift;
+                        /** @type {number} */
+                        const endPos = m.endIndex + shift;
+
+                        code =
+                            code.slice(0, startPos) +
+                            startTag +
+                            code.slice(startPos, endPos) +
+                            endTag +
+                            code.slice(endPos);
+
+                        shift += startTag.length + endTag.length;
+                    });
+
+                // Translation div with mistakes highlighted
+                let translation = cell.appendChild(document.createElement("div"));
+                translation.id = `s${studentIndex}`;
+                translation.classList.add("table-text", "rich-text-div");
+                translation.innerHTML = code;
+            }
+
             function updateMain() {
                 /** @type {string[]} */
                 let paragraphs = project.source.split("\n").filter((p) => p);
@@ -1677,31 +1756,15 @@
                 mainSourceParagraph.value = paragraphs[mainParagraphIndex];
 
                 // Clean translations
-                while (mainTranslations.hasChildNodes()) {
-                    mainTranslations.lastChild.remove();
-                }
+                removeChildNodes(mainTranslations);
 
                 // Iterate over students' translations and add them
-                getArraySubset(
-                    project.translations,
-                    mainPageIndex,
-                    mainItemsPerPage,
-                ).forEach((t, i) => {
-                    let text = t.text.split("\n").filter((p) => p);
+                const firstIndex = mainPageIndex * mainItemsPerPage;
+                const lastIndex = firstIndex + mainItemsPerPage;
 
-                    let row = mainTranslations.appendChild(document.createElement("tr"));
-
-                    let cell = row.appendChild(document.createElement("td"));
-                    cell.classList.add("table-text-container");
-
-                    let translation = cell.appendChild(
-                        document.createElement("textarea"),
-                    );
-                    translation.id = `p${mainParagraphIndex}s${i}`;
-                    translation.classList.add("table-text");
-                    translation.value = text[mainParagraphIndex];
-                    translation.readOnly = true;
-                });
+                for (let i = firstIndex; i < lastIndex; i++) {
+                    updateMainTranslation(i);
+                }
 
                 // Manage pages
                 let maxPage = getMaxPageIndex(project.translations, mainItemsPerPage);
@@ -1709,9 +1772,7 @@
 
                 // Show and fill or hide page selector
                 if (maxPage > 0) {
-                    while (mainPageSelect.hasChildNodes()) {
-                        mainPageSelect.lastChild.remove();
-                    }
+                    removeChildNodes(mainPageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
                         let option = mainPageSelect.appendChild(
                             document.createElement("option"),
@@ -1753,6 +1814,15 @@
                 const lastIndex = firstIndex + itemsPerPage;
 
                 return array.slice(firstIndex, lastIndex);
+            }
+
+            /**
+             * @param {HTMLElement} element
+             */
+            function removeChildNodes(element) {
+                while (element.hasChildNodes()) {
+                    element.lastChild.remove();
+                }
             }
 
             /**
