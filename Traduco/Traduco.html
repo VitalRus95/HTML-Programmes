@@ -1233,7 +1233,9 @@
                 if (!event.altKey) return;
                 if (event.key === "Home") {
                     event.preventDefault();
-                    document.getElementById(project.lastId)?.focus();
+                    if (document.getElementById(project.lastId)) {
+                        document.getElementById(project.lastId).focus();
+                    }
                 }
             });
 
@@ -1243,7 +1245,9 @@
                     if (!event.altKey) return;
                     if (event.key === "End") {
                         event.preventDefault();
-                        document.getElementById(project.lastId)?.focus();
+                        if (document.getElementById(project.lastId)) {
+                            document.getElementById(project.lastId).focus();
+                        }
                     }
                 });
             });
@@ -1449,35 +1453,39 @@
                         switch (event.key) {
                             case "ArrowUp":
                                 event.preventDefault();
-                                getNeighbourCell(
+                                let neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "up",
-                                )?.focus();
+                                );
+                                if (neighbour) neighbour.focus();
                                 break;
                             case "ArrowDown":
                                 event.preventDefault();
-                                getNeighbourCell(
+                                let neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "down",
-                                )?.focus();
+                                );
+                                if (neighbour) neighbour.focus();
                                 break;
                             case "ArrowLeft":
                                 event.preventDefault();
-                                getNeighbourCell(
+                                let neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "left",
-                                )?.focus();
+                                );
+                                if (neighbour) neighbour.focus();
                                 break;
                             case "ArrowRight":
                                 event.preventDefault();
-                                getNeighbourCell(
+                                let neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "right",
-                                )?.focus();
+                                );
+                                if (neighbour) neighbour.focus();
                                 break;
                             case "PageUp":
                                 event.preventDefault();
@@ -1594,7 +1602,9 @@
                     lastText.setSelectionRange(...project.selection);
                     lastText.focus();
                 } else {
-                    document.getElementById(`t${firstIndex}`)?.focus();
+                    if (document.getElementById(`t${firstIndex}`)) {
+                        document.getElementById(`t${firstIndex}`).focus();
+                    }
                 }
             }
 
@@ -1898,7 +1908,7 @@
                         if (
                             newEl.textContent ||
                             newEl.placeholder ||
-                            newEl?.childNodesTexts.length > 0
+                            (newEl.childNodesTexts && newEl.childNodesTexts.length > 0)
                         ) {
                             elements.push(newEl);
                         }

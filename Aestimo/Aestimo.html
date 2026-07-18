@@ -578,12 +578,10 @@
                 border-left: none;
             }
 
-            .rich-text-div {
-                display: block;
-                border: 2px outset var(--colour-border);
-                padding-block: 2px;
-                max-height: 8em;
-                overflow: auto;
+            .radio-div {
+                display: flex;
+                column-gap: 4px;
+                align-items: center;
             }
 
             /* Elements by ID */
@@ -769,10 +767,12 @@
                             >
                             <select id="main-para-select"></select>
                         </th>
+
+                        <th id="main-header-mistakes" style="width: 40%">Mistakes</th>
                     </tr>
 
                     <tr>
-                        <th class="table-text-container">
+                        <th class="table-text-container" colspan="2">
                             <textarea
                                 id="main-source-paragraph"
                                 class="table-text shadow-border"
@@ -788,7 +788,7 @@
                 <!-- Footer -->
                 <tfoot id="main-footer">
                     <tr>
-                        <td id="main-page-cell" class="tooltip-parent">
+                        <td id="main-page-cell" class="tooltip-parent" colspan="2">
                             <span id="main-page-tooltip" class="tooltip"
                                 >Page selection</span
                             >
@@ -797,6 +797,168 @@
                     </tr>
                 </tfoot>
             </table>
+        </div>
+
+        <!-- ADDING MISTAKE -->
+        <div id="adding-mistake" class="scene" tabindex="0">
+            <h2 id="adding-mistake-title" tabindex="0">New mistake</h2>
+
+            <button
+                id="adding-mistake-back"
+                onclick="switchScene('adding-mistake', 'main')"
+                >Cancel</button
+            >
+
+            <!-- Comment -->
+            <div class="radio-div">
+                <label id="mistake-comment-label" for="mistake-comment-input"
+                    >Mistake</label
+                >
+                <input type="text" id="mistake-comment-input" />
+            </div>
+
+            <!-- Mistake type -->
+            <fieldset>
+                <legend tabindex="0">Mistake type</legend>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="grammar"
+                        name="mistake-type"
+                        value="grammar"
+                        autocomplete="off"
+                        checked
+                    />
+                    <label id="grammar-label" for="grammar">Grammar</label>
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="vocabulary"
+                        name="mistake-type"
+                        value="vocabulary"
+                        autocomplete="off"
+                    />
+                    <label id="vocabulary-label" for="vocabulary">Vocabulary</label>
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="orthography"
+                        name="mistake-type"
+                        value="orthography"
+                        autocomplete="off"
+                    />
+                    <label id="orthography-label" for="orthography">Orthography</label>
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="punctuation"
+                        name="mistake-type"
+                        value="punctuation"
+                        autocomplete="off"
+                    />
+                    <label id="punctuation-label" for="punctuation">Punctuation</label>
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="complex"
+                        name="mistake-type"
+                        value="complex"
+                        autocomplete="off"
+                    />
+                    <label id="complex-label" for="complex">Complex</label>
+                </div>
+            </fieldset>
+
+            <!-- Mistake subtype -->
+            <fieldset>
+                <legend tabindex="0">Mistake subtype</legend>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="addition"
+                        name="mistake-subtype"
+                        value="addition"
+                        autocomplete="off"
+                        checked
+                    />
+                    <label id="addition-label" for="addition">Redundant element</label>
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="distortion"
+                        name="mistake-subtype"
+                        value="distortion"
+                        autocomplete="off"
+                    />
+                    <label id="distortion-label" for="distortion"
+                        >Incorrect element</label
+                    >
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="deletion"
+                        name="mistake-subtype"
+                        value="deletion"
+                        autocomplete="off"
+                    />
+                    <label id="deletion-label" for="deletion">Lack of element</label>
+                </div>
+            </fieldset>
+
+            <!-- Text's meaning -->
+            <fieldset>
+                <legend tabindex="0">Text's meaning</legend>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="retained"
+                        name="mistake-text-meaning"
+                        value="retained"
+                        autocomplete="off"
+                        checked
+                    />
+                    <label id="retained-label" for="retained">Retained</label>
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="obscured"
+                        name="mistake-text-meaning"
+                        value="obscured"
+                        autocomplete="off"
+                    />
+                    <label id="obscured-label" for="obscured">Obscured</label>
+                </div>
+
+                <div class="radio-div">
+                    <input
+                        type="radio"
+                        id="lost"
+                        name="mistake-text-meaning"
+                        value="lost"
+                        autocomplete="off"
+                    />
+                    <label id="lost-label" for="lost">Lost</label>
+                </div>
+            </fieldset>
+
+            <button id="add-mistake-button" onclick="addMistake()">Add mistake</button>
         </div>
 
         <!-- ADDING STUDENTS -->
@@ -1139,6 +1301,8 @@
             let mainFooter = document.getElementById("main-footer");
             /** @type {HTMLSelectElement} */
             let mainPageSelect = document.getElementById("main-page-select");
+            /** @type {HTMLInputElement} */
+            let mistakeCommentInput = document.getElementById("mistake-comment-input");
 
             // +-------+
             // | Types |
@@ -1150,9 +1314,9 @@
              * @property {number} paragraph
              * @property {number} startIndex
              * @property {number} endIndex
-             * @property {number} type
-             * @property {number} subtype
-             * @property {number} meaning
+             * @property {string} type
+             * @property {string} subtype
+             * @property {string} meaning
              */
 
             /** @typedef Work
@@ -1198,23 +1362,6 @@
                     {
                         student: "Студент 01",
                         text: "Banks saw threat in new AI models\n\nFinancial Times say that banking and financial officials warned about the risks for international banking system connected with the new AI models. The new AI model Claude Mythos Preview by Anthropic start-up became the main topic of spring meetings of the IMF and the World Bank in Washington.\n\nAndrew Baily – Head of the Bank of England – called the situation «a very serious challenge», stating that the AI is developing faster than the regulatory systems and called out for emergency risk assessment in cybersecurity. According to the Anthropic, the AI model is able to show thousands of critical vulnerabilities in operating systems and browsers, shifting between attacks and defense and automatically spotting and combining vulnerabilities in scales human being can’t comprehend. \n\nHead of the ECB Christine Lagarde warned that such developments may pose a serious threat in the «wrong hands» pointing at the lack of global regulation. Part of the European regulators claimed that they have no access to the AI model and cannot assess its risks yet. Head of the European banking authority Francois-Louis Michaud pointed out that the assertive planning has just started.\n\nHowever, banks do see the potential advantages. Head of JPMorgan Chase Jamie Dimon claimed that the AI model helps showing the vulnerabilities and head of Morgan Stanley Ted Pick called AI an integral part of future financial ecosystem. \n\nExperts warn that coordination of global rules of regulation may be obstructed due to geopolitical tension and reluctance towards boxing prospective technologies. In March, federal department of the US has created a bureau designated fighting AI threats which will assert risks including cyberattacks and space militarization.",
-                        mistakes: [
-                            {
-                                paragraph: 3,
-                                startIndex: 51,
-                                endIndex: 63,
-                            },
-                            {
-                                paragraph: 3,
-                                startIndex: 110,
-                                endIndex: 111,
-                            },
-                            {
-                                paragraph: 3,
-                                startIndex: 289,
-                                endIndex: 306,
-                            },
-                        ],
                     },
                     {
                         student: "Студент 02",
@@ -1276,6 +1423,17 @@
             let mainItemsPerPage = +localStorage.getItem("mainStudentsPerPage") || 8;
             /** @type {number} */
             let editorItemsPerPage = +localStorage.getItem("editorStudentsPerPage") || 4;
+            /** @type {Mistake} */
+            let newMistake = {
+                source: "",
+                comment: "",
+                paragraph: 0,
+                startIndex: 0,
+                endIndex: 0,
+                type: "grammar",
+                subtype: "distortion",
+                meaning: "retained",
+            };
 
             // +--------+
             // | Events |
@@ -1424,7 +1582,7 @@
             ["main", "editor", "settings", "about"].forEach((scene) => {
                 document
                     .getElementById(scene)
-                    ?.addEventListener("keydown", function (event) {
+                    .addEventListener("keydown", function (event) {
                         if (event.key === "Escape") switchScene(scene, "menu");
                     });
             });
@@ -1537,11 +1695,14 @@
                 }
 
                 // Students & translations list
-                getArraySubset(
+                /** @type {Work[]} */
+                const subset = getArraySubset(
                     project.translations,
                     editorPageIndex,
                     editorItemsPerPage,
-                ).forEach((t, i) => {
+                );
+
+                subset.forEach((t, i) => {
                     const studentId = editorPageIndex * editorItemsPerPage + i;
 
                     let row = editorTranslations.appendChild(
@@ -1694,59 +1855,6 @@
                 mainParagraphSelect.value = mainParagraphIndex;
             }
 
-            /**
-             * @param {number} studentIndex
-             */
-            function updateMainTranslation(studentIndex) {
-                // Prepare translation, table row, and table cell
-                let text = project.translations[studentIndex].text
-                    .split("\n")
-                    .filter((p) => p);
-
-                let row = mainTranslations.appendChild(document.createElement("tr"));
-
-                let cell = row.appendChild(document.createElement("td"));
-                cell.classList.add("table-text-container");
-
-                // Generating innerHTML for the translation div
-                /** @type {string} */
-                const startTag = "<mark>";
-                /** @type {string} */
-                const endTag = "</mark>";
-
-                /** @type {string} */
-                let code = text[mainParagraphIndex];
-                /** @type {number} */
-                let shift = 0;
-
-                project.translations[studentIndex].mistakes
-                    ?.filter((m) => m.paragraph === mainParagraphIndex)
-                    .sort((a, b) => {
-                        a.startIndex - b.startIndex;
-                    })
-                    .forEach((m) => {
-                        /** @type {number} */
-                        const startPos = m.startIndex + shift;
-                        /** @type {number} */
-                        const endPos = m.endIndex + shift;
-
-                        code =
-                            code.slice(0, startPos) +
-                            startTag +
-                            code.slice(startPos, endPos) +
-                            endTag +
-                            code.slice(endPos);
-
-                        shift += startTag.length + endTag.length;
-                    });
-
-                // Translation div with mistakes highlighted
-                let translation = cell.appendChild(document.createElement("div"));
-                translation.id = `s${studentIndex}`;
-                translation.classList.add("table-text", "rich-text-div");
-                translation.innerHTML = code;
-            }
-
             function updateMain() {
                 /** @type {string[]} */
                 let paragraphs = project.source.split("\n").filter((p) => p);
@@ -1759,12 +1867,33 @@
                 removeChildNodes(mainTranslations);
 
                 // Iterate over students' translations and add them
-                const firstIndex = mainPageIndex * mainItemsPerPage;
-                const lastIndex = firstIndex + mainItemsPerPage;
+                /** @type {Work[]} */
+                const subset = getArraySubset(
+                    project.translations,
+                    mainPageIndex,
+                    mainItemsPerPage,
+                );
 
-                for (let i = firstIndex; i < lastIndex; i++) {
-                    updateMainTranslation(i);
-                }
+                subset.forEach((t, i) => {
+                    /** @type {string[]} */
+                    let text = t.text.split("\n").filter((p) => p)[mainParagraphIndex];
+
+                    let row = mainTranslations.appendChild(document.createElement("tr"));
+
+                    let translationCell = row.appendChild(document.createElement("td"));
+                    translationCell.classList.add("table-text-container");
+
+                    let translation = translationCell.appendChild(
+                        document.createElement("textarea"),
+                    );
+                    translation.classList.add("table-text");
+                    translation.readOnly = true;
+                    translation.value = text;
+
+                    let mistakesCell = row.appendChild(document.createElement("td"));
+
+                    // Events
+                });
 
                 // Manage pages
                 let maxPage = getMaxPageIndex(project.translations, mainItemsPerPage);
@@ -1807,7 +1936,7 @@
              * @param {any[]} array
              * @param {number} pageIndex
              * @param {number} itemsPerPage
-             * @returns {number}
+             * @returns {any[]}
              */
             function getArraySubset(array, pageIndex, itemsPerPage) {
                 const firstIndex = pageIndex * itemsPerPage;
@@ -1831,7 +1960,7 @@
              * @returns {string}
              */
             function getText(elementName) {
-                return document.getElementById(elementName)?.textContent || elementName;
+                return document.getElementById(elementName).textContent || elementName;
             }
 
             function loadSettings() {
@@ -2080,7 +2209,7 @@
                         if (
                             newEl.textContent ||
                             newEl.placeholder ||
-                            newEl?.childNodesTexts.length > 0
+                            (newEl.childNodesTexts && newEl.childNodesTexts.length > 0)
                         ) {
                             elements.push(newEl);
                         }
