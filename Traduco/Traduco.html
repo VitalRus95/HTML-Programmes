@@ -1450,10 +1450,13 @@
                     t.addEventListener("keydown", function (event) {
                         if (!event.altKey) return;
 
+                        /** @type {HTMLTextAreaElement} */
+                        let neighbour = undefined;
+
                         switch (event.key) {
                             case "ArrowUp":
                                 event.preventDefault();
-                                let neighbour = getNeighbourCell(
+                                neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "up",
@@ -1462,7 +1465,7 @@
                                 break;
                             case "ArrowDown":
                                 event.preventDefault();
-                                let neighbour = getNeighbourCell(
+                                neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "down",
@@ -1471,7 +1474,7 @@
                                 break;
                             case "ArrowLeft":
                                 event.preventDefault();
-                                let neighbour = getNeighbourCell(
+                                neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "left",
@@ -1480,7 +1483,7 @@
                                 break;
                             case "ArrowRight":
                                 event.preventDefault();
-                                let neighbour = getNeighbourCell(
+                                neighbour = getNeighbourCell(
                                     this === textSource,
                                     index,
                                     "right",

@@ -281,8 +281,9 @@
             mark {
                 background-color: var(--colour-tooltip);
                 border: 2px solid var(--colour-text);
+                border-radius: 0px;
                 padding-inline: 2px;
-                margin-inline: 1px;
+                cursor: help;
             }
 
             ol,
@@ -406,6 +407,8 @@
             kbd:hover,
             legend:focus,
             legend:hover,
+            mark:focus,
+            mark:hover,
             samp:focus,
             samp:hover,
             select:focus,
@@ -418,8 +421,8 @@
             textarea:hover,
             td:focus,
             td:hover,
-            td:focus *,
-            td:hover *,
+            td:focus .no-left-border,
+            td:hover .no-left-border,
             th:focus,
             th:hover,
             tr:nth-of-type(even) > td:focus,
@@ -427,7 +430,9 @@
             .pseudo-button:focus,
             .pseudo-button:hover,
             .disabled:focus,
-            .disabled:hover {
+            .disabled:hover,
+            .rich-text-div:focus,
+            .rich-text-div:hover {
                 background-color: var(--colour-hovered-bgr);
                 background-image: none;
                 color: var(--colour-hovered-fgr);
@@ -557,25 +562,46 @@
                 column-gap: 0px;
             }
 
-            .student-delete-button {
+            .student-button {
                 background-color: var(--colour-text);
                 color: var(--colour-tooltip);
                 border-radius: 4px 0px 0px 4px;
                 margin: 0px;
-                font-size: 1.2em;
                 font-family: monospace;
+                font-size: 1.45em;
+                font-weight: 900;
             }
 
-            .student-delete-button:focus,
-            .student-delete-button:hover {
+            .student-button:focus,
+            .student-button:hover {
                 background-color: var(--colour-tooltip);
                 color: var(--colour-text);
                 border-color: var(--colour-border);
             }
 
-            .student-name {
+            .no-left-border {
                 border-radius: 0px 4px 4px 0px;
                 border-left: none;
+            }
+
+            .main-student-name {
+                text-align: center;
+                font-style: italic;
+                font-weight: 600;
+                cursor: default;
+            }
+
+            .rich-text-div {
+                display: block;
+                border: 2px outset var(--colour-border);
+                padding-block: 4px;
+                line-height: 1.4;
+                min-height: 4em;
+                max-height: 12em;
+                height: fit-content;
+                overflow: auto;
+                user-select: text;
+                -webkit-user-select: text;
             }
 
             .radio-div {
@@ -652,7 +678,7 @@
 
             #main-source-paragraph {
                 display: flex;
-                line-height: 1.5;
+                border: 2px outset var(--colour-text);
                 min-height: 1.75em;
                 height: 1.75em;
                 overflow: hidden;
@@ -743,6 +769,17 @@
         <div id="main" class="scene" tabindex="0">
             <button id="main-back" onclick="switchScene('main', 'menu')">Back</button>
 
+            <!-- Adding a new mistake help -->
+            <fieldset>
+                <legend id="adding-mistake-help-title">Adding a mistake</legend>
+
+                <p id="adding-mistake-help"
+                    >To add a mistake, select the text containing it in the student's
+                    translation and then either click the <mark>+</mark> button on the
+                    left or press <kbd>Ctrl</kbd>+<kbd>A</kbd>.</p
+                >
+            </fieldset>
+
             <!-- Number of students per page setting -->
             <div class="setting-div" style="margin-left: 1em"
                 ><label id="main-students-per-page" for="main-students-per-page-input"
@@ -767,15 +804,13 @@
                             >
                             <select id="main-para-select"></select>
                         </th>
-
-                        <th id="main-header-mistakes" style="width: 40%">Mistakes</th>
                     </tr>
 
                     <tr>
-                        <th class="table-text-container" colspan="2">
+                        <th class="table-text-container">
                             <textarea
                                 id="main-source-paragraph"
-                                class="table-text shadow-border"
+                                class="table-text"
                                 readonly
                             ></textarea>
                         </th>
@@ -788,7 +823,7 @@
                 <!-- Footer -->
                 <tfoot id="main-footer">
                     <tr>
-                        <td id="main-page-cell" class="tooltip-parent" colspan="2">
+                        <td id="main-page-cell" class="tooltip-parent">
                             <span id="main-page-tooltip" class="tooltip"
                                 >Page selection</span
                             >
@@ -809,17 +844,30 @@
                 >Cancel</button
             >
 
+            <!-- Mistake -->
+            <fieldset>
+                <legend id="mistake-context-title" tabindex="0">Mistake's context</legend>
+
+                <div id="mistake-div" class="table-text rich-text-div" tabindex="0"></div>
+            </fieldset>
+
             <!-- Comment -->
-            <div class="radio-div">
-                <label id="mistake-comment-label" for="mistake-comment-input"
-                    >Mistake</label
+            <fieldset>
+                <legend id="mistake-comment-title" tabindex="0"
+                    >Comment (optional)</legend
                 >
-                <input type="text" id="mistake-comment-input" />
-            </div>
+
+                <input
+                    id="mistake-comment-input"
+                    style="width: 100%"
+                    type="text"
+                    placeholder="A short description of the mistake"
+                />
+            </fieldset>
 
             <!-- Mistake type -->
             <fieldset>
-                <legend tabindex="0">Mistake type</legend>
+                <legend id="mistake-type-title" tabindex="0">Mistake type</legend>
 
                 <div class="radio-div">
                     <input
@@ -880,7 +928,7 @@
 
             <!-- Mistake subtype -->
             <fieldset>
-                <legend tabindex="0">Mistake subtype</legend>
+                <legend id="mistake-subtype-title" tabindex="0">Mistake subtype</legend>
 
                 <div class="radio-div">
                     <input
@@ -921,7 +969,9 @@
 
             <!-- Text's meaning -->
             <fieldset>
-                <legend tabindex="0">Text's meaning</legend>
+                <legend id="mistake-text-meaning-title" tabindex="0"
+                    >Text's meaning</legend
+                >
 
                 <div class="radio-div">
                     <input
@@ -958,7 +1008,7 @@
                 </div>
             </fieldset>
 
-            <button id="add-mistake-button" onclick="addMistake()">Add mistake</button>
+            <button id="add-mistake-button">Add mistake</button>
         </div>
 
         <!-- ADDING STUDENTS -->
@@ -1236,73 +1286,88 @@
             // +----------+
             //
             /** @type {HTMLDivElement} */
-            let menu = document.getElementById("menu");
-            /** @type {HTMLDivElement} */
-            let main = document.getElementById("main");
-            /** @type {HTMLDivElement} */
-            let editor = document.getElementById("editor");
-            /** @type {HTMLDivElement} */
-            let settings = document.getElementById("settings");
-            /** @type {HTMLUListElement} */
-            let colours = document.getElementById("colours");
-            /** @type {HTMLDivElement} */
-            let about = document.getElementById("about");
-            /** @type {HTMLInputElement} */
-            let colourLoader = document.getElementById("colour-loader");
-            /** @type {HTMLButtonElement} */
-            let loadColours = document.getElementById("load-colours");
-            /** @type {HTMLAnchorElement} */
-            let saveColours = document.getElementById("save-colours");
-            /** @type {HTMLButtonElement} */
-            let loadProjectButton = document.getElementById("load-project-button");
-            /** @type {HTMLInputElement} */
-            let loadProjectInput = document.getElementById("load-project-input");
-            /** @type {HTMLAnchorElement} */
-            let saveProject = document.getElementById("save-project");
+            const menu = element("menu");
 
-            /** @type {HTMLInputElement} */
-            let volumeInput = document.getElementById("set-volume");
-            /** @type {HTMLInputElement} */
-            let defaultSounds = document.getElementById("set-def-sounds");
-            /** @type {HTMLButtonElement} */
-            let defaultSettings = document.getElementById("default-settings");
-
-            /** @type {HTMLTextAreaElement} */
-            let sourceText = document.getElementById("source-text");
-            /** @type {HTMLTableCellElement} */
-            let sourceParaCountText = document.getElementById("source-para-count");
-            /** @type {HTMLTableSectionElement} */
-            let editorTranslations = document.getElementById("editor-translations-list");
-            /** @type {HTMLTextAreaElement} */
-            let addedStudents = document.getElementById("added-students");
-            /** @type {HTMLHeadingElement} */
-            let deletedStudentName = document.getElementById("deleted-student-name");
-            /** @type {HTMLButtonElement} */
-            let deletingCancelButton = document.getElementById("deleting-cancel");
-            /** @type {HTMLTableSectionElement} */
-            let editorFooter = document.getElementById("editor-footer");
-            /** @type {HTMLSelectElement} */
-            let editorPageSelect = document.getElementById("editor-page-select");
-            /** @type {HTMLInputElement} */
-            let editorItemsPerPageInput = document.getElementById(
-                "editor-students-per-page-input",
-            );
-            /** @type {HTMLInputElement} */
-            let mainItemsPerPageInput = document.getElementById(
-                "main-students-per-page-input",
-            );
-            /** @type {HTMLSelectElement} */
-            let mainParagraphSelect = document.getElementById("main-para-select");
-            /** @type {HTMLTextAreaElement} */
-            let mainSourceParagraph = document.getElementById("main-source-paragraph");
-            /** @type {HTMLTableSectionElement} */
-            let mainTranslations = document.getElementById("main-translations-list");
-            /** @type {HTMLTableSectionElement} */
-            let mainFooter = document.getElementById("main-footer");
-            /** @type {HTMLSelectElement} */
-            let mainPageSelect = document.getElementById("main-page-select");
-            /** @type {HTMLInputElement} */
-            let mistakeCommentInput = document.getElementById("mistake-comment-input");
+            const scenes = {
+                menu: {
+                    /** @type {HTMLDivElement} */
+                    main: element("main"),
+                    /** @type {HTMLDivElement} */
+                    editor: element("editor"),
+                    /** @type {HTMLDivElement} */
+                    settings: element("settings"),
+                    /** @type {HTMLDivElement} */
+                    about: element("about"),
+                    /** @type {HTMLButtonElement} */
+                    loadProjectButton: element("load-project-button"),
+                    /** @type {HTMLInputElement} */
+                    loadProjectInput: element("load-project-input"),
+                    /** @type {HTMLAnchorElement} */
+                    saveProject: element("save-project"),
+                },
+                main: {
+                    /** @type {HTMLInputElement} */
+                    itemsPerPageInput: element("main-students-per-page-input"),
+                    /** @type {HTMLSelectElement} */
+                    paragraphSelect: element("main-para-select"),
+                    /** @type {HTMLTextAreaElement} */
+                    sourceParagraph: element("main-source-paragraph"),
+                    /** @type {HTMLTableSectionElement} */
+                    translations: element("main-translations-list"),
+                    /** @type {HTMLTableSectionElement} */
+                    footer: element("main-footer"),
+                    /** @type {HTMLSelectElement} */
+                    pageSelect: element("main-page-select"),
+                },
+                editor: {
+                    /** @type {HTMLTextAreaElement} */
+                    sourceText: element("source-text"),
+                    /** @type {HTMLTableCellElement} */
+                    sourceParaCountText: element("source-para-count"),
+                    /** @type {HTMLTableSectionElement} */
+                    translations: element("editor-translations-list"),
+                    /** @type {HTMLTableSectionElement} */
+                    footer: element("editor-footer"),
+                    /** @type {HTMLSelectElement} */
+                    pageSelect: element("editor-page-select"),
+                    /** @type {HTMLInputElement} */
+                    itemsPerPageInput: element("editor-students-per-page-input"),
+                },
+                settings: {
+                    /** @type {HTMLUListElement} */
+                    colours: element("colours"),
+                    /** @type {HTMLInputElement} */
+                    colourLoader: element("colour-loader"),
+                    /** @type {HTMLButtonElement} */
+                    loadColours: element("load-colours"),
+                    /** @type {HTMLAnchorElement} */
+                    saveColours: element("save-colours"),
+                    /** @type {HTMLInputElement} */
+                    volumeInput: element("set-volume"),
+                    /** @type {HTMLInputElement} */
+                    defaultSounds: element("set-def-sounds"),
+                    /** @type {HTMLButtonElement} */
+                    defaultSettings: element("default-settings"),
+                },
+                addMistake: {
+                    /** @type {HTMLButtonElement} */
+                    addButton: element("add-mistake-button"),
+                    /** @type {HTMLDivElement} */
+                    mistakeSource: element("mistake-div"),
+                    /** @type {HTMLInputElement} */
+                    mistakeComment: element("mistake-comment-input"),
+                },
+                addStudents: {
+                    /** @type {HTMLTextAreaElement} */
+                    addedList: element("added-students"),
+                },
+                deleteStudent: {
+                    /** @type {HTMLHeadingElement} */
+                    studentName: element("deleted-student-name"),
+                    /** @type {HTMLButtonElement} */
+                    cancelButton: element("deleting-cancel"),
+                },
+            };
 
             // +-------+
             // | Types |
@@ -1328,7 +1393,8 @@
             /** @typedef Project
              * @property {string} source
              * @property {Work[]} translations
-             * @property {number} index
+             * @property {number} paragraph
+             * @property {number} page
              */
 
             // +-----------+
@@ -1362,6 +1428,25 @@
                     {
                         student: "Студент 01",
                         text: "Banks saw threat in new AI models\n\nFinancial Times say that banking and financial officials warned about the risks for international banking system connected with the new AI models. The new AI model Claude Mythos Preview by Anthropic start-up became the main topic of spring meetings of the IMF and the World Bank in Washington.\n\nAndrew Baily – Head of the Bank of England – called the situation «a very serious challenge», stating that the AI is developing faster than the regulatory systems and called out for emergency risk assessment in cybersecurity. According to the Anthropic, the AI model is able to show thousands of critical vulnerabilities in operating systems and browsers, shifting between attacks and defense and automatically spotting and combining vulnerabilities in scales human being can’t comprehend. \n\nHead of the ECB Christine Lagarde warned that such developments may pose a serious threat in the «wrong hands» pointing at the lack of global regulation. Part of the European regulators claimed that they have no access to the AI model and cannot assess its risks yet. Head of the European banking authority Francois-Louis Michaud pointed out that the assertive planning has just started.\n\nHowever, banks do see the potential advantages. Head of JPMorgan Chase Jamie Dimon claimed that the AI model helps showing the vulnerabilities and head of Morgan Stanley Ted Pick called AI an integral part of future financial ecosystem. \n\nExperts warn that coordination of global rules of regulation may be obstructed due to geopolitical tension and reluctance towards boxing prospective technologies. In March, federal department of the US has created a bureau designated fighting AI threats which will assert risks including cyberattacks and space militarization.",
+                        mistakes: [
+                            {
+                                paragraph: 0,
+                                startIndex: 6,
+                                endIndex: 9,
+                                type: "grammar",
+                                subtype: "distortion",
+                                meaning: "retained",
+                                comment: "Stupid grammar mistake",
+                            },
+                            {
+                                paragraph: 0,
+                                startIndex: 10,
+                                endIndex: 16,
+                                type: "vocabulary",
+                                subtype: "distortion",
+                                meaning: "obscured",
+                            },
+                        ],
                     },
                     {
                         student: "Студент 02",
@@ -1400,7 +1485,8 @@
                         text: "Banks see threat in new AI models\n\nThe financial officials and bankers warned of the risk for the world banking system linked to new AI model, the Financial Times reports. The central topic of the spring meetings of the IMF and the World Bank in Washington was a new AI model Claude Mythos Preview developed by startup Anthropic.\n\nThe head of the Bank of England, Andrew Bailey, described the situation as “a very serious challenge” noting that the development of AI is faster than the establishment of regulations. He called to urgently assess the risks of cybersecurity. According to Anthropic, the model is able to detect thousands of vulnerabilities in operation systems and browsers changing the balance between an attack and security automatically finding and combining vulnerabilities on a scale that humans cannot achieve.\n\nThe head of the European Central Bank, Christine Lagarde, warned that such models pose a serious threat in “wrong hands” pointing out the lack of global regulations. The part of European regulators affirmed that there was no access to the model and they could not assess its risks. The head of the European Banking Authority François-Lois Michaud said that the development of the approaches was just beginning.\n\nBanks saw potential benefits as well. The head of JPMorgan Chase, Jamie Dimon, said that the model assisted to detect vulnerabilities. At the same time the head of Morgan Stanley, Ted Pick, called AI an important part of the future financial ecosystems.\n\nExperts warn that the agreement on global regulations can be difficult due to geopolitical tension and reluctance to limit promising technologies. In March the US State Department established the bureau to fight with the threats of AI, which goal is to predict risks including cyberattacks and the militarization of space.",
                     },
                 ],
-                index: 0,
+                paragraph: 0,
+                page: 0,
             };
 
             // +-----------+
@@ -1420,9 +1506,9 @@
             /** @type {number} */
             let mainParagraphIndex = 0;
             /** @type {number} */
-            let mainItemsPerPage = +localStorage.getItem("mainStudentsPerPage") || 8;
+            let mainItemsPerPage = +localStorage.getItem("mainStudentsPerPage") || 5;
             /** @type {number} */
-            let editorItemsPerPage = +localStorage.getItem("editorStudentsPerPage") || 4;
+            let editorItemsPerPage = +localStorage.getItem("editorStudentsPerPage") || 5;
             /** @type {Mistake} */
             let newMistake = {
                 source: "",
@@ -1439,26 +1525,26 @@
             // | Events |
             // +--------+
             //
-            // Settings
-            mainItemsPerPageInput.value = mainItemsPerPage;
-            editorItemsPerPageInput.value = editorItemsPerPage;
-
-            volumeInput.addEventListener("change", function (event) {
-                volumeInput.value = clamp(0, +volumeInput.value, 1);
-                localStorage.setItem("volume", volumeInput.value);
+            scenes.settings.volumeInput.addEventListener("change", function (event) {
+                scenes.settings.volumeInput.value = clamp(
+                    0,
+                    +scenes.settings.volumeInput.value,
+                    1,
+                );
+                localStorage.setItem("volume", scenes.settings.volumeInput.value);
             });
 
-            defaultSounds.addEventListener("change", function (event) {
+            scenes.settings.defaultSounds.addEventListener("change", function (event) {
                 localStorage.setItem("default-sounds", this.checked);
             });
 
-            defaultSettings.addEventListener("click", function (event) {
+            scenes.settings.defaultSettings.addEventListener("click", function (event) {
                 // Volume
-                volumeInput.value = "0.5";
-                localStorage.setItem("volume", volumeInput.value);
+                scenes.settings.volumeInput.value = "0.5";
+                localStorage.setItem("volume", scenes.settings.volumeInput.value);
 
                 // Default sounds
-                defaultSounds.checked = true;
+                scenes.settings.defaultSounds.checked = true;
                 localStorage.setItem("default-sounds", "true");
 
                 // Colours
@@ -1469,36 +1555,36 @@
                 }
             });
 
-            mainParagraphSelect.addEventListener("change", function (event) {
-                mainParagraphIndex = +mainParagraphSelect.value;
+            scenes.main.paragraphSelect.addEventListener("change", function (event) {
+                mainParagraphIndex = +scenes.main.paragraphSelect.value;
                 updateMain();
             });
 
-            mainPageSelect.addEventListener("change", function (event) {
-                mainPageIndex = +mainPageSelect.value;
+            scenes.main.pageSelect.addEventListener("change", function (event) {
+                mainPageIndex = +scenes.main.pageSelect.value;
                 updateMain();
             });
 
-            editorItemsPerPageInput.addEventListener("change", function (event) {
+            scenes.editor.itemsPerPageInput.addEventListener("change", function (event) {
                 editorItemsPerPage = clamp(
                     1,
-                    +editorItemsPerPageInput.value,
-                    +editorItemsPerPageInput.max,
+                    +scenes.editor.itemsPerPageInput.value,
+                    +scenes.editor.itemsPerPageInput.max,
                 );
                 localStorage.setItem("editorStudentsPerPage", editorItemsPerPage);
                 updateEditor();
             });
 
-            editorPageSelect.addEventListener("change", function (event) {
-                editorPageIndex = +editorPageSelect.value;
+            scenes.editor.pageSelect.addEventListener("change", function (event) {
+                editorPageIndex = +scenes.editor.pageSelect.value;
                 updateEditor();
             });
 
-            mainItemsPerPageInput.addEventListener("change", function (event) {
+            scenes.main.itemsPerPageInput.addEventListener("change", function (event) {
                 mainItemsPerPage = clamp(
                     1,
-                    +mainItemsPerPageInput.value,
-                    +mainItemsPerPageInput.max,
+                    +scenes.main.itemsPerPageInput.value,
+                    +scenes.main.itemsPerPageInput.max,
                 );
                 localStorage.setItem("mainStudentsPerPage", mainItemsPerPage);
                 updateMain();
@@ -1513,7 +1599,9 @@
                 );
 
                 /** @type {HTMLLIElement} */
-                let item = colours.appendChild(document.createElement("li"));
+                let item = scenes.settings.colours.appendChild(
+                    document.createElement("li"),
+                );
                 /** @type {HTMLLabelElement} */
                 let label = item.appendChild(document.createElement("label"));
                 /** @type {HTMLInputElement} */
@@ -1544,30 +1632,34 @@
             });
 
             // Loading colours
-            loadColours.addEventListener("click", function (event) {
-                colourLoader.click();
+            scenes.settings.loadColours.addEventListener("click", function (event) {
+                scenes.settings.colourLoader.click();
             });
 
-            colourLoader.addEventListener("change", async function (event) {
-                await colourLoader.files[0].text().then((content) => {
-                    try {
-                        let loadedColours = JSON.parse(content);
-                        saveColours.download = colourLoader.files[0].name;
+            scenes.settings.colourLoader.addEventListener(
+                "change",
+                async function (event) {
+                    await scenes.settings.colourLoader.files[0].text().then((content) => {
+                        try {
+                            let loadedColours = JSON.parse(content);
+                            scenes.settings.saveColours.download =
+                                scenes.settings.colourLoader.files[0].name;
 
-                        for (const c in loadedColours) {
-                            document.body.style.setProperty(c, loadedColours[c]);
-                            document.getElementById(c).value = loadedColours[c];
-                            localStorage.setItem(c, loadedColours[c]);
-                            this.value = "";
+                            for (const c in loadedColours) {
+                                document.body.style.setProperty(c, loadedColours[c]);
+                                document.getElementById(c).value = loadedColours[c];
+                                localStorage.setItem(c, loadedColours[c]);
+                                this.value = "";
+                            }
+                        } catch (error) {
+                            alert(`Error while reading colours file: ${error}`);
                         }
-                    } catch (error) {
-                        alert(`Error while reading colours file: ${error}`);
-                    }
-                });
-            });
+                    });
+                },
+            );
 
             // Saving colours
-            saveColours.addEventListener("click", function (event) {
+            scenes.settings.saveColours.addEventListener("click", function (event) {
                 let savedColours = {};
 
                 Object.keys(allColours).forEach((c) => {
@@ -1592,37 +1684,40 @@
                 .querySelectorAll("button, input, select, textarea, summary, a")
                 .forEach((e) => {
                     e.addEventListener("click", function (event) {
-                        if (!defaultSounds.checked) return;
+                        if (!scenes.settings.defaultSounds.checked) return;
                         playSound("sine", [250, 50, 100], 0.1);
                     });
                 });
 
             // Loading a project
-            loadProjectButton.addEventListener("click", function (event) {
-                loadProjectInput.click();
+            scenes.menu.loadProjectButton.addEventListener("click", function (event) {
+                scenes.menu.loadProjectInput.click();
             });
 
-            loadProjectInput.addEventListener("change", async function (event) {
-                await loadProjectInput.files[0].text().then((content) => {
-                    try {
-                        let name = loadProjectInput.files[0].name;
-                        saveProject.download = `${name}`;
+            scenes.menu.loadProjectInput.addEventListener(
+                "change",
+                async function (event) {
+                    await scenes.menu.loadProjectInput.files[0].text().then((content) => {
+                        try {
+                            let name = scenes.menu.loadProjectInput.files[0].name;
+                            scenes.menu.saveProject.download = `${name}`;
 
-                        project = JSON.parse(content);
-                        saveProject.classList.remove("disabled");
-                        mainPageIndex = 0;
-                        editorPageIndex = 0;
-                        sortStudentsAlphabetically();
-                        updateEditor();
-                        switchScene("menu", "editor");
-                    } catch (error) {
-                        alert(`Error while opening the project: ${error}`);
-                    }
-                });
-            });
+                            project = JSON.parse(content);
+                            scenes.menu.saveProject.classList.remove("disabled");
+                            mainPageIndex = 0;
+                            editorPageIndex = 0;
+                            sortStudentsAlphabetically();
+                            updateEditor();
+                            switchScene("menu", "editor");
+                        } catch (error) {
+                            alert(`Error while opening the project: ${error}`);
+                        }
+                    });
+                },
+            );
 
             // Saving the project
-            saveProject.addEventListener("click", function (event) {
+            scenes.menu.saveProject.addEventListener("click", function (event) {
                 if (this.classList.contains("disabled")) {
                     event.preventDefault();
                     return;
@@ -1632,14 +1727,14 @@
             });
 
             // Source text editing
-            sourceText.addEventListener("change", function (event) {
+            scenes.editor.sourceText.addEventListener("change", function (event) {
                 project.source = this.value;
                 updateMainParagraphsList();
                 updateEditor();
             });
 
             // Cancelling deleting a student
-            deletingCancelButton.addEventListener("click", function (event) {
+            scenes.deleteStudent.cancelButton.addEventListener("click", function (event) {
                 switchScene("deleting-student", "editor");
             });
 
@@ -1656,22 +1751,22 @@
             }
 
             function updateItemsPerPageMax() {
-                mainItemsPerPageInput.max = project.translations.length;
-                editorItemsPerPageInput.max = project.translations.length;
+                scenes.main.itemsPerPageInput.max = project.translations.length;
+                scenes.editor.itemsPerPageInput.max = project.translations.length;
             }
 
             function updateSourceParagraphCounter() {
                 /** @type {number} */
-                sourceParaCount = getParagraphsCount(sourceText.value);
-                sourceParaCountText.textContent = sourceParaCount;
+                sourceParaCount = getParagraphsCount(scenes.editor.sourceText.value);
+                scenes.editor.sourceParaCountText.textContent = sourceParaCount;
             }
 
             function updateEditor() {
                 // Cleanup
-                removeChildNodes(editorTranslations);
+                removeChildNodes(scenes.editor.translations);
 
                 // Source text
-                sourceText.value = project.source || "";
+                scenes.editor.sourceText.value = project.source || "";
                 updateSourceParagraphCounter();
 
                 // Manage pages
@@ -1680,18 +1775,18 @@
 
                 // Show and fill or hide page selector
                 if (maxPage > 0) {
-                    removeChildNodes(editorPageSelect);
+                    removeChildNodes(scenes.editor.pageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
-                        let option = editorPageSelect.appendChild(
+                        let option = scenes.editor.pageSelect.appendChild(
                             document.createElement("option"),
                         );
                         option.value = i;
                         option.textContent = `${i + 1}/${maxPage + 1}`;
                     }
-                    editorPageSelect.value = editorPageIndex;
-                    editorFooter.style.display = "table-footer-group";
+                    scenes.editor.pageSelect.value = editorPageIndex;
+                    scenes.editor.footer.style.display = "table-footer-group";
                 } else {
-                    editorFooter.style.display = "none";
+                    scenes.editor.footer.style.display = "none";
                 }
 
                 // Students & translations list
@@ -1705,7 +1800,7 @@
                 subset.forEach((t, i) => {
                     const studentId = editorPageIndex * editorItemsPerPage + i;
 
-                    let row = editorTranslations.appendChild(
+                    let row = scenes.editor.translations.appendChild(
                         document.createElement("tr"),
                     );
                     row.id = `editor-row${i}`;
@@ -1722,7 +1817,7 @@
                     let studentDelButton = studentDiv.appendChild(
                         document.createElement("button"),
                     );
-                    studentDelButton.classList.add("student-delete-button");
+                    studentDelButton.classList.add("student-button");
                     studentDelButton.textContent = "x";
 
                     let studentName = studentDiv.appendChild(
@@ -1731,7 +1826,7 @@
                     studentName.id = `student${i}`;
                     studentName.value = t.student;
                     studentName.autocomplete = "off";
-                    studentName.classList.add("table-text", "student-name");
+                    studentName.classList.add("table-text", "no-left-border");
 
                     // Translation
                     let translationCell = row.appendChild(document.createElement("td"));
@@ -1784,22 +1879,31 @@
 
                     // Deleting a student
                     studentDelButton.addEventListener("click", function (event) {
-                        deletedStudentName.textContent = studentName.value;
+                        scenes.deleteStudent.studentName.textContent = studentName.value;
                         deletedStudentId = studentId;
                         switchScene("editor", "deleting-student");
                     });
                 });
             }
 
+            /**
+             * @param {string} input
+             */
+            function getRadioInputValue(inputName) {
+                return document.querySelector(`input[name='${inputName}']:checked`).value;
+            }
+
             function addStudents() {
                 // Just exit to the editor if nothing is added
-                if (!addedStudents.value) {
+                if (!scenes.addStudents.addedList.value) {
                     switchScene("adding-students", "editor");
                     return;
                 }
 
-                if (addedStudents.value) {
-                    let list = addedStudents.value.split("\n").filter((s) => s);
+                if (scenes.addStudents.addedList.value) {
+                    let list = scenes.addStudents.addedList.value
+                        .split("\n")
+                        .filter((s) => s);
 
                     list.forEach((s, i) => {
                         project.translations.push({
@@ -1808,7 +1912,7 @@
                             mistakes: [],
                         });
                     });
-                    addedStudents.value = "";
+                    scenes.addStudents.addedList.value = "";
                 }
                 sortStudentsAlphabetically();
                 updateEditor();
@@ -1837,14 +1941,14 @@
 
             function updateMainParagraphsList() {
                 // Clean `select` children elements
-                removeChildNodes(mainParagraphSelect);
+                removeChildNodes(scenes.main.paragraphSelect);
 
                 /** @type {string[]} */
                 let paragraphs = project.source.split("\n").filter((p) => p);
 
                 // Fill paragraphs list
                 paragraphs.forEach((p, i) => {
-                    let option = mainParagraphSelect.appendChild(
+                    let option = scenes.main.paragraphSelect.appendChild(
                         document.createElement("option"),
                     );
                     option.value = i;
@@ -1852,7 +1956,238 @@
                 });
 
                 // Update current value
-                mainParagraphSelect.value = mainParagraphIndex;
+                scenes.main.paragraphSelect.value = mainParagraphIndex;
+            }
+
+            /**
+             * @param {number} studentIndex
+             */
+            function getStudentTranslation(studentIndex) {
+                return project.translations[studentIndex].text
+                    .split("\n")
+                    .filter((p) => p)[mainParagraphIndex];
+            }
+
+            /**
+             * @param {HTMLDivElement} textDiv
+             * @param {string} sourceText
+             * @param {Mistake[]} mistakes
+             * @param {boolean} interactive
+             */
+            function highlightMistakes(textDiv, sourceText, mistakes, interactive) {
+                if (!textDiv) return;
+                if (!sourceText) return;
+                if (!mistakes) return;
+                removeChildNodes(textDiv);
+
+                // Thanks to Google's AI for the hint!
+                /** @type {Set<number>} */
+                const boundaries = new Set([0, sourceText.length]);
+
+                mistakes.forEach((m) => {
+                    boundaries.add(m.startIndex);
+                    boundaries.add(m.endIndex);
+                });
+
+                /** @type {number[]} */
+                const sortedBoundaries = Array.from(boundaries).sort((a, b) => a - b);
+
+                for (let i = 0; i < sortedBoundaries.length - 1; i++) {
+                    /** @type {number} */
+                    const start = sortedBoundaries[i];
+                    /** @type {number} */
+                    const end = sortedBoundaries[i + 1];
+                    /** @type {string} */
+                    const textSlice = sourceText.slice(start, end);
+
+                    /** @type {boolean} */
+                    const containsMistake = mistakes.some(
+                        (m) => start >= m.startIndex && end <= m.endIndex,
+                    );
+
+                    if (containsMistake) {
+                        /** @type {HTMLElement} */
+                        const mistakeMark = textDiv.appendChild(
+                            document.createElement("mark"),
+                        );
+                        mistakeMark.textContent = textSlice;
+                    } else {
+                        /** @type {Text} */
+                        const textNode = textDiv.appendChild(
+                            document.createTextNode(textSlice),
+                        );
+                    }
+                }
+            }
+
+            /**
+             * @param {number} studentIndex
+             */
+            function updateStudentTranslation(studentIndex) {
+                /** @type {HTMLDivElement} */
+                const textDiv = document.getElementById(`student${studentIndex}`);
+                if (!textDiv) return;
+
+                /** @type {Work} */
+                const work = project.translations[studentIndex];
+                if (!work || !work.text) return;
+
+                // Set current translation as default value
+                /** @type {string} */
+                const translation = getStudentTranslation(studentIndex);
+                textDiv.textContent = translation;
+
+                // Add mistakes and highlight them
+                if (!work.mistakes) return;
+                highlightMistakes(
+                    textDiv,
+                    translation,
+                    work.mistakes.filter((m) => m.paragraph === mainParagraphIndex),
+                );
+            }
+
+            /**
+             * @param {number} studentIndex
+             */
+            function addStudentToMainTable(studentIndex) {
+                /** @type {Work} */
+                const work = project.translations[studentIndex];
+                if (!work || !work.student) return;
+
+                /** @type {string} */
+                const translation = getStudentTranslation(studentIndex);
+
+                // Student's name
+                let nameRow = scenes.main.translations.appendChild(
+                    document.createElement("tr"),
+                );
+                let nameCell = nameRow.appendChild(document.createElement("td"));
+                nameCell.classList.add("main-student-name");
+                nameCell.textContent = work.student;
+                nameCell.tabIndex = 0;
+
+                // Row, cell, and container div
+                let textRow = scenes.main.translations.appendChild(
+                    document.createElement("tr"),
+                );
+
+                let cell = textRow.appendChild(document.createElement("td"));
+                cell.classList.add("table-text-container");
+
+                let container = cell.appendChild(document.createElement("div"));
+                container.classList.add("student-div");
+
+                // Button to add a mistake
+                let newMistakeButton = container.appendChild(
+                    document.createElement("button"),
+                );
+                newMistakeButton.classList.add("student-button");
+                newMistakeButton.textContent = "+";
+
+                // Translation
+                let textDiv = container.appendChild(document.createElement("div"));
+                textDiv.id = `student${studentIndex}`;
+                textDiv.classList.add("table-text", "rich-text-div", "no-left-border");
+                textDiv.tabIndex = 0;
+
+                updateStudentTranslation(studentIndex);
+
+                // Events
+                //
+                // Adding a mistake
+                newMistakeButton.addEventListener("click", function (event) {
+                    // Thanks to Google's AI for the hint!
+                    /** @type {Selection} */
+                    const selection = window.getSelection();
+                    if (!selection.rangeCount || selection.isCollapsed) return;
+
+                    /** @type {Range} */
+                    const range = selection.getRangeAt(0);
+
+                    if (
+                        !textDiv.contains(range.startContainer) ||
+                        !textDiv.contains(range.endContainer)
+                    ) {
+                        return;
+                    }
+
+                    /** @type {number} */
+                    let start = range.startOffset;
+                    /** @type {number} */
+                    let end = range.endOffset;
+
+                    // Determine absolute selection offsets relative to the parent
+                    for (let i of textDiv.childNodes) {
+                        if (i === range.startContainer) break;
+                        start += i.textContent.length;
+                    }
+                    for (let i of textDiv.childNodes) {
+                        if (i === range.endContainer) break;
+                        end += i.textContent.length;
+                    }
+
+                    if (start === end) return;
+
+                    newMistake.paragraph = mainParagraphIndex;
+                    newMistake.source = selection.toString();
+                    newMistake.startIndex = start;
+                    newMistake.endIndex = end;
+
+                    // Save window offset
+                    const scroll = {
+                        x: window.scrollX,
+                        y: window.scrollY,
+                    };
+
+                    // Go to adding a new mistake scene
+                    highlightMistakes(
+                        scenes.addMistake.mistakeSource,
+                        translation,
+                        [newMistake],
+                        false,
+                    );
+                    switchScene("main", "adding-mistake");
+                    window.scroll(0, 0);
+
+                    // Change the behaviour of `Add mistake` button
+                    scenes.addMistake.addButton.onclick = function (event) {
+                        newMistake.comment = scenes.addMistake.mistakeComment.value;
+                        newMistake.type = getRadioInputValue("mistake-type");
+                        newMistake.subtype = getRadioInputValue("mistake-subtype");
+                        newMistake.meaning = getRadioInputValue("mistake-text-meaning");
+
+                        if (!work.mistakes) work.mistakes = [];
+
+                        work.mistakes.push({
+                            source: newMistake.source,
+                            comment: newMistake.comment,
+                            paragraph: newMistake.paragraph,
+                            startIndex: newMistake.startIndex,
+                            endIndex: newMistake.endIndex,
+                            type: newMistake.type,
+                            subtype: newMistake.subtype,
+                            meaning: newMistake.meaning,
+                        });
+                        highlightMistakes(
+                            textDiv,
+                            translation,
+                            work.mistakes.filter(
+                                (m) => m.paragraph === mainParagraphIndex,
+                            ),
+                        );
+                        updateStudentTranslation(studentIndex);
+                        switchScene("adding-mistake", "main");
+                        window.scrollTo(scroll.x, scroll.y);
+                    };
+                });
+
+                // Adding a mistake via keyboard (Ctrl+A)
+                textDiv.addEventListener("keydown", function (event) {
+                    if (event.ctrlKey && event.key === "a") {
+                        event.preventDefault();
+                        newMistakeButton.click();
+                    }
+                });
             }
 
             function updateMain() {
@@ -1861,39 +2196,20 @@
 
                 // Set source paragraph and update the list
                 mainParagraphIndex = clamp(0, mainParagraphIndex, paragraphs.length - 1);
-                mainSourceParagraph.value = paragraphs[mainParagraphIndex];
+                scenes.main.sourceParagraph.value = paragraphs[mainParagraphIndex];
 
                 // Clean translations
-                removeChildNodes(mainTranslations);
+                removeChildNodes(scenes.main.translations);
 
                 // Iterate over students' translations and add them
-                /** @type {Work[]} */
-                const subset = getArraySubset(
-                    project.translations,
-                    mainPageIndex,
-                    mainItemsPerPage,
-                );
+                /** @type {number} */
+                const firstIndex = mainPageIndex * mainItemsPerPage;
+                /** @type {number} */
+                const lastIndex = firstIndex + mainItemsPerPage;
 
-                subset.forEach((t, i) => {
-                    /** @type {string[]} */
-                    let text = t.text.split("\n").filter((p) => p)[mainParagraphIndex];
-
-                    let row = mainTranslations.appendChild(document.createElement("tr"));
-
-                    let translationCell = row.appendChild(document.createElement("td"));
-                    translationCell.classList.add("table-text-container");
-
-                    let translation = translationCell.appendChild(
-                        document.createElement("textarea"),
-                    );
-                    translation.classList.add("table-text");
-                    translation.readOnly = true;
-                    translation.value = text;
-
-                    let mistakesCell = row.appendChild(document.createElement("td"));
-
-                    // Events
-                });
+                for (let i = firstIndex; i < lastIndex; i++) {
+                    addStudentToMainTable(i);
+                }
 
                 // Manage pages
                 let maxPage = getMaxPageIndex(project.translations, mainItemsPerPage);
@@ -1901,18 +2217,18 @@
 
                 // Show and fill or hide page selector
                 if (maxPage > 0) {
-                    removeChildNodes(mainPageSelect);
+                    removeChildNodes(scenes.main.pageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
-                        let option = mainPageSelect.appendChild(
+                        let option = scenes.main.pageSelect.appendChild(
                             document.createElement("option"),
                         );
                         option.value = i;
                         option.textContent = `${i + 1}/${maxPage + 1}`;
                     }
-                    mainPageSelect.value = mainPageIndex;
-                    mainFooter.style.display = "table-footer-group";
+                    scenes.main.pageSelect.value = mainPageIndex;
+                    scenes.main.footer.style.display = "table-footer-group";
                 } else {
-                    mainFooter.style.display = "none";
+                    scenes.main.footer.style.display = "none";
                 }
             }
 
@@ -1963,18 +2279,30 @@
                 return document.getElementById(elementName).textContent || elementName;
             }
 
+            /**
+             * Gets an element by its id
+             */
+            function element(id) {
+                return document.getElementById(id);
+            }
+
             function loadSettings() {
                 // Volume
-                volumeInput.value = localStorage.getItem("volume") ?? "0.5";
+                scenes.settings.volumeInput.value =
+                    localStorage.getItem("volume") ?? "0.5";
 
                 // Default sounds
                 if (localStorage.getItem("default-sounds")) {
-                    defaultSounds.checked =
+                    scenes.settings.defaultSounds.checked =
                         localStorage.getItem("default-sounds") === "true";
                 } else {
-                    defaultSounds.checked = true;
+                    scenes.settings.defaultSounds.checked = true;
                     localStorage.setItem("default-sounds", "true");
                 }
+
+                // Max items per page
+                scenes.main.itemsPerPageInput.value = mainItemsPerPage;
+                scenes.editor.itemsPerPageInput.value = editorItemsPerPage;
             }
 
             function switchScene(from, to) {
@@ -2006,7 +2334,7 @@
              * @param {number} duration
              */
             function playSound(type, frequencies, duration) {
-                if (!audio || +volumeInput.value === 0) return;
+                if (!audio || +scenes.settings.volumeInput.value === 0) return;
 
                 /** @type {OscillatorNode} */
                 let oscillator = audio.createOscillator();
@@ -2022,9 +2350,9 @@
                 );
                 oscillator.connect(volume);
 
-                volume.gain.value = +volumeInput.value;
+                volume.gain.value = +scenes.settings.volumeInput.value;
                 volume.gain.setValueCurveAtTime(
-                    [0, +volumeInput.value, 0],
+                    [0, +scenes.settings.volumeInput.value, 0],
                     audio.currentTime,
                     duration,
                 );
