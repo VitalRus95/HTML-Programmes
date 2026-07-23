@@ -41,6 +41,7 @@
                 --colour-hovered-border: #b4b4b4;
                 --colour-disabled-bgr: #afafaf;
                 --colour-disabled-fgr: #1e1e1e;
+                --window-size: 90%;
             }
 
             * {
@@ -86,7 +87,7 @@
                 margin: auto;
                 font-size: 14pt;
                 min-width: 40%;
-                max-width: 90%;
+                max-width: var(--window-size);
                 transition: none;
                 -moz-transition: none;
                 -webkit-transition: none;
@@ -264,6 +265,14 @@
                 flex-grow: 1;
             }
 
+            input[type="radio"]:checked + label {
+                border: 2px inset var(--colour-border);
+                background-color: var(--colour-input);
+                padding: 0px 4px;
+                font-weight: 600;
+                transition: all 0.4s ease;
+            }
+
             kbd {
                 font-family: monospace;
                 font-size: 0.99em;
@@ -284,6 +293,25 @@
                 border-radius: 0px;
                 padding-inline: 2px;
                 cursor: help;
+            }
+
+            mark:focus::after,
+            mark:hover::after {
+                content: attr(data-info);
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border: 2px dashed var(--colour-hovered-border);
+                text-align: center;
+                font-weight: 600;
+                padding: 2px 4px;
+                width: var(--window-size);
+                max-height: 50vh;
+                position: fixed;
+                bottom: 1vh;
+                left: 50%;
+                transform: translateX(-50%);
+                overflow: auto;
+                z-index: 9;
             }
 
             ol,
@@ -531,9 +559,15 @@
                 color: var(--colour-disabled-fgr);
             }
 
-            .table-text-container {
+            .table-element-container {
                 border: none;
                 padding: 0px;
+            }
+
+            .table-element {
+                background: none;
+                margin: 0px;
+                width: 100%;
             }
 
             .table-text {
@@ -543,7 +577,7 @@
                 height: 100%;
                 min-height: 7em;
                 margin: 0px;
-                padding-left: 4px;
+                padding: 4px 6px;
                 resize: none;
             }
 
@@ -567,16 +601,10 @@
                 color: var(--colour-tooltip);
                 border-radius: 4px 0px 0px 4px;
                 margin: 0px;
+                padding: 2px 4px;
                 font-family: monospace;
-                font-size: 1.45em;
+                font-size: 1.4em;
                 font-weight: 900;
-            }
-
-            .student-button:focus,
-            .student-button:hover {
-                background-color: var(--colour-tooltip);
-                color: var(--colour-text);
-                border-color: var(--colour-border);
             }
 
             .no-left-border {
@@ -594,11 +622,12 @@
             .rich-text-div {
                 display: block;
                 border: 2px outset var(--colour-border);
-                padding-block: 4px;
-                line-height: 1.4;
+                padding: 4px 6px;
+                line-height: 1.45;
                 min-height: 4em;
                 max-height: 12em;
                 height: fit-content;
+                width: 100%;
                 overflow: auto;
                 user-select: text;
                 -webkit-user-select: text;
@@ -608,6 +637,10 @@
                 display: flex;
                 column-gap: 4px;
                 align-items: center;
+            }
+
+            .bold-text {
+                font-weight: 600;
             }
 
             /* Elements by ID */
@@ -645,13 +678,9 @@
                 color: var(--colour-hovered-fgr);
             }
 
+            #adding-mistake-fieldset,
             #alignment-fieldset {
                 background-color: var(--colour-tooltip);
-            }
-
-            #alignment-legend {
-                background-color: var(--colour-text);
-                color: var(--colour-tooltip);
             }
 
             #main-para-cell,
@@ -679,28 +708,37 @@
             #main-source-paragraph {
                 display: flex;
                 border: 2px outset var(--colour-text);
+                line-height: 1.4;
                 min-height: 1.75em;
                 height: 1.75em;
+                padding: 1px 6px;
                 overflow: hidden;
                 transition: height 0.5s ease;
             }
 
             #main-source-paragraph:focus,
             #main-source-paragraph:hover {
-                height: 7em;
+                height: 7.5em;
                 overflow: auto;
                 transition: height 0.3s ease;
             }
 
+            #add-mistake-button,
+            #edit-mistake-back {
+                position: sticky;
+                bottom: 0px;
+                opacity: 0.95;
+            }
+
             /* Media queries */
             @media (min-width: 720px) {
-                body {
-                    max-width: 75%;
+                :root {
+                    --window-size: 75%;
                 }
             }
             @media (min-width: 1280px) {
-                body {
-                    max-width: 60%;
+                :root {
+                    --window-size: 60%;
                 }
             }
         </style>
@@ -770,28 +808,54 @@
             <button id="main-back" onclick="switchScene('main', 'menu')">Back</button>
 
             <!-- Adding a new mistake help -->
-            <fieldset>
-                <legend id="adding-mistake-help-title">Adding a mistake</legend>
+            <fieldset id="adding-mistake-fieldset">
+                <legend id="adding-mistake-help-title" tabindex="0"
+                    >Adding a mistake</legend
+                >
 
                 <p id="adding-mistake-help"
                     >To add a mistake, select the text containing it in the student's
-                    translation and then either click the <mark>+</mark> button on the
-                    left or press <kbd>Ctrl</kbd>+<kbd>A</kbd>.</p
+                    translation and then either click the
+                    <button
+                        class="student-button"
+                        style="display: inline; font-size: 1.1em"
+                        >+</button
+                    >
+                    button on the left or press <kbd>Ctrl</kbd>+<kbd>A</kbd>.</p
                 >
             </fieldset>
 
-            <!-- Number of students per page setting -->
-            <div class="setting-div" style="margin-left: 1em"
-                ><label id="main-students-per-page" for="main-students-per-page-input"
-                    >Students per page:</label
-                ><input
-                    id="main-students-per-page-input"
-                    type="number"
-                    min="1"
-                    max="20"
-                    value="8"
-                    autocomplete="off"
-            /></div>
+            <!-- Settings -->
+            <fieldset>
+                <legend id="main-settings" tabindex="0">Settings</legend>
+
+                <!-- Number of students per page setting -->
+                <div class="setting-div" style="margin-left: 1em">
+                    <label id="main-students-per-page" for="main-students-per-page-input"
+                        >Students per page:</label
+                    >
+                    <input
+                        id="main-students-per-page-input"
+                        type="number"
+                        min="1"
+                        max="20"
+                        value="8"
+                        autocomplete="off"
+                    />
+                </div>
+
+                <!-- Showing names settings -->
+                <div class="setting-div" style="margin-left: 1em">
+                    <label id="main-show-names" for="main-show-names-input"
+                        >Show students' names:</label
+                    >
+                    <input
+                        id="main-show-names-input"
+                        type="checkbox"
+                        autocomplete="off"
+                    />
+                </div>
+            </fieldset>
 
             <!-- Table with source and translation paragraph -->
             <table>
@@ -807,7 +871,7 @@
                     </tr>
 
                     <tr>
-                        <th class="table-text-container">
+                        <th class="table-element-container">
                             <textarea
                                 id="main-source-paragraph"
                                 class="table-text"
@@ -848,7 +912,7 @@
             <fieldset>
                 <legend id="mistake-context-title" tabindex="0">Mistake's context</legend>
 
-                <div id="mistake-div" class="table-text rich-text-div" tabindex="0"></div>
+                <div id="mistake-div" class="rich-text-div" tabindex="0"></div>
             </fieldset>
 
             <!-- Comment -->
@@ -861,7 +925,8 @@
                     id="mistake-comment-input"
                     style="width: 100%"
                     type="text"
-                    placeholder="A short description of the mistake"
+                    autocomplete="off"
+                    placeholder="A brief comment on the mistake"
                 />
             </fieldset>
 
@@ -1011,6 +1076,105 @@
             <button id="add-mistake-button">Add mistake</button>
         </div>
 
+        <!-- EDITING MISTAKE -->
+        <div id="edit-mistake" class="scene" tabindex="0">
+            <table style="table-layout: auto">
+                <thead>
+                    <tr>
+                        <th id="edit-mistake-title" colspan="2" tabindex="0"
+                            >Mistake editing</th
+                        >
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td
+                            id="edit-mistake-context-title"
+                            class="bold-text"
+                            tabindex="0"
+                            style="width: 25%"
+                            >Context</td
+                        >
+                        <td class="table-element-container" tabindex="0">
+                            <div id="edit-mistake-context" class="rich-text-div"></div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="edit-mistake-type-title" class="bold-text" tabindex="0"
+                            >Type</td
+                        >
+                        <td class="table-element-container">
+                            <select
+                                id="edit-mistake-type"
+                                class="table-element"
+                                autocomplete="off"
+                            >
+                                <option value="grammar">Grammar</option>
+                                <option value="vocabulary">Vocabulary</option>
+                                <option value="orthography">Orthography</option>
+                                <option value="punctuation">Punctuation</option>
+                                <option value="complex">Complex</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="edit-mistake-subtype-title" class="bold-text" tabindex="0"
+                            >Subtype</td
+                        >
+                        <td class="table-element-container">
+                            <select
+                                id="edit-mistake-subtype"
+                                class="table-element"
+                                autocomplete="off"
+                            >
+                                <option value="addition">Redundant element</option>
+                                <option value="distortion">Incorrect element</option>
+                                <option value="deletion">Lack of element</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="edit-mistake-meaning-title" class="bold-text" tabindex="0"
+                            >Text's meaning</td
+                        >
+                        <td class="table-element-container">
+                            <select
+                                id="edit-mistake-meaning"
+                                class="table-element"
+                                autocomplete="off"
+                            >
+                                <option value="retained">Retained</option>
+                                <option value="obscured">Obscured</option>
+                                <option value="lost">Lost</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="edit-mistake-comment-title" class="bold-text" tabindex="0"
+                            >Comment</td
+                        >
+                        <td class="table-element-container">
+                            <input
+                                type="text"
+                                id="edit-mistake-comment"
+                                class="table-element"
+                                autocomplete="off"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button id="edit-mistake-back" onclick="switchScene('edit-mistake', 'main')"
+                >Back</button
+            >
+        </div>
+
         <!-- ADDING STUDENTS -->
         <div id="adding-students" class="scene" tabindex="0">
             <h2 id="adding-students-title" tabindex="0">Adding students</h2>
@@ -1072,7 +1236,7 @@
                     <tbody>
                         <tr>
                             <td
-                                class="table-text-container"
+                                class="table-element-container"
                                 colspan="2"
                                 style="height: 40vh"
                             >
@@ -1157,6 +1321,12 @@
                         id="add-students"
                         onclick="switchScene('editor', 'adding-students')"
                         >Add students</button
+                    >
+
+                    <button id="fix-source" class="tooltip-parent" onclick="fixSource()"
+                        >Fix source text<span id="fix-source-tooltip" class="tooltip"
+                            >Remove extra whitespaces and line breaks</span
+                        ></button
                     >
 
                     <button
@@ -1308,6 +1478,8 @@
                 main: {
                     /** @type {HTMLInputElement} */
                     itemsPerPageInput: element("main-students-per-page-input"),
+                    /** @type {HTMLInputElement} */
+                    showNames: element("main-show-names-input"),
                     /** @type {HTMLSelectElement} */
                     paragraphSelect: element("main-para-select"),
                     /** @type {HTMLTextAreaElement} */
@@ -1357,6 +1529,18 @@
                     /** @type {HTMLInputElement} */
                     mistakeComment: element("mistake-comment-input"),
                 },
+                editMistake: {
+                    /** @type {HTMLDivElement} */
+                    context: element("edit-mistake-context"),
+                    /** @type {HTMLSelectElement} */
+                    type: element("edit-mistake-type"),
+                    /** @type {HTMLSelectElement} */
+                    subtype: element("edit-mistake-subtype"),
+                    /** @type {HTMLSelectElement} */
+                    meaning: element("edit-mistake-meaning"),
+                    /** @type {HTMLInputElement} */
+                    comment: element("edit-mistake-comment"),
+                },
                 addStudents: {
                     /** @type {HTMLTextAreaElement} */
                     addedList: element("added-students"),
@@ -1394,7 +1578,8 @@
              * @property {string} source
              * @property {Work[]} translations
              * @property {number} paragraph
-             * @property {number} page
+             * @property {number} mainPage
+             * @property {number} editorPage
              */
 
             // +-----------+
@@ -1486,7 +1671,8 @@
                     },
                 ],
                 paragraph: 0,
-                page: 0,
+                mainPage: 0,
+                editorPage: 0,
             };
 
             // +-----------+
@@ -1499,12 +1685,6 @@
             let sourceParaCount = 0;
             /** @type {number} */
             let deletedStudentId = 0;
-            /** @type {number} */
-            let editorPageIndex = 0;
-            /** @type {number} */
-            let mainPageIndex = 0;
-            /** @type {number} */
-            let mainParagraphIndex = 0;
             /** @type {number} */
             let mainItemsPerPage = +localStorage.getItem("mainStudentsPerPage") || 5;
             /** @type {number} */
@@ -1556,12 +1736,12 @@
             });
 
             scenes.main.paragraphSelect.addEventListener("change", function (event) {
-                mainParagraphIndex = +scenes.main.paragraphSelect.value;
+                project.paragraph = +scenes.main.paragraphSelect.value;
                 updateMain();
             });
 
             scenes.main.pageSelect.addEventListener("change", function (event) {
-                mainPageIndex = +scenes.main.pageSelect.value;
+                project.mainPage = +scenes.main.pageSelect.value;
                 updateMain();
             });
 
@@ -1576,17 +1756,18 @@
             });
 
             scenes.editor.pageSelect.addEventListener("change", function (event) {
-                editorPageIndex = +scenes.editor.pageSelect.value;
+                project.editorPage = +scenes.editor.pageSelect.value;
                 updateEditor();
             });
 
             scenes.main.itemsPerPageInput.addEventListener("change", function (event) {
-                mainItemsPerPage = clamp(
-                    1,
-                    +scenes.main.itemsPerPageInput.value,
-                    +scenes.main.itemsPerPageInput.max,
-                );
+                mainItemsPerPage = clamp(1, +this.value, +this.max);
                 localStorage.setItem("mainStudentsPerPage", mainItemsPerPage);
+                updateMain();
+            });
+
+            scenes.main.showNames.addEventListener("change", function (event) {
+                localStorage.setItem("mainShowNames", this.checked);
                 updateMain();
             });
 
@@ -1599,13 +1780,11 @@
                 );
 
                 /** @type {HTMLLIElement} */
-                let item = scenes.settings.colours.appendChild(
-                    document.createElement("li"),
-                );
+                let item = newChild(scenes.settings.colours, "li");
                 /** @type {HTMLLabelElement} */
-                let label = item.appendChild(document.createElement("label"));
+                let label = newChild(item, "label");
                 /** @type {HTMLInputElement} */
-                let input = item.appendChild(document.createElement("input"));
+                let input = newChild(item, "input");
 
                 label.id = `${c}-label`;
                 label.htmlFor = c;
@@ -1623,7 +1802,7 @@
                 if (c === "--colour-tooltip") {
                     item.classList.add("tooltip-parent");
                     /** @type {HTMLSpanElement} */
-                    let tooltip = item.appendChild(document.createElement("span"));
+                    let tooltip = newChild(item, "span");
 
                     tooltip.id = "example-tooltip";
                     tooltip.classList.add("tooltip");
@@ -1704,8 +1883,8 @@
 
                             project = JSON.parse(content);
                             scenes.menu.saveProject.classList.remove("disabled");
-                            mainPageIndex = 0;
-                            editorPageIndex = 0;
+                            project.mainPage = 0;
+                            project.editorPage = 0;
                             sortStudentsAlphabetically();
                             updateEditor();
                             switchScene("menu", "editor");
@@ -1771,19 +1950,17 @@
 
                 // Manage pages
                 let maxPage = getMaxPageIndex(project.translations, editorItemsPerPage);
-                editorPageIndex = clamp(0, editorPageIndex, maxPage);
+                project.editorPage = clamp(0, project.editorPage, maxPage);
 
                 // Show and fill or hide page selector
                 if (maxPage > 0) {
                     removeChildNodes(scenes.editor.pageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
-                        let option = scenes.editor.pageSelect.appendChild(
-                            document.createElement("option"),
-                        );
+                        let option = newChild(scenes.editor.pageSelect, "option");
                         option.value = i;
                         option.textContent = `${i + 1}/${maxPage + 1}`;
                     }
-                    scenes.editor.pageSelect.value = editorPageIndex;
+                    scenes.editor.pageSelect.value = project.editorPage;
                     scenes.editor.footer.style.display = "table-footer-group";
                 } else {
                     scenes.editor.footer.style.display = "none";
@@ -1793,55 +1970,45 @@
                 /** @type {Work[]} */
                 const subset = getArraySubset(
                     project.translations,
-                    editorPageIndex,
+                    project.editorPage,
                     editorItemsPerPage,
                 );
 
                 subset.forEach((t, i) => {
-                    const studentId = editorPageIndex * editorItemsPerPage + i;
+                    const studentId = project.editorPage * editorItemsPerPage + i;
 
-                    let row = scenes.editor.translations.appendChild(
-                        document.createElement("tr"),
-                    );
+                    let row = newChild(scenes.editor.translations, "tr");
                     row.id = `editor-row${i}`;
 
                     // Student
-                    let studentCell = row.appendChild(document.createElement("td"));
-                    studentCell.classList.add("table-text-container");
+                    let studentCell = newChild(row, "td");
+                    studentCell.classList.add("table-element-container");
 
-                    let studentDiv = studentCell.appendChild(
-                        document.createElement("div"),
-                    );
+                    let studentDiv = newChild(studentCell, "div");
                     studentDiv.classList.add("student-div");
 
-                    let studentDelButton = studentDiv.appendChild(
-                        document.createElement("button"),
-                    );
+                    let studentDelButton = newChild(studentDiv, "button");
                     studentDelButton.classList.add("student-button");
                     studentDelButton.textContent = "x";
 
-                    let studentName = studentDiv.appendChild(
-                        document.createElement("textarea"),
-                    );
+                    let studentName = newChild(studentDiv, "textarea");
                     studentName.id = `student${i}`;
                     studentName.value = t.student;
                     studentName.autocomplete = "off";
                     studentName.classList.add("table-text", "no-left-border");
 
                     // Translation
-                    let translationCell = row.appendChild(document.createElement("td"));
-                    translationCell.classList.add("table-text-container");
+                    let translationCell = newChild(row, "td");
+                    translationCell.classList.add("table-element-container");
 
-                    let translationText = translationCell.appendChild(
-                        document.createElement("textarea"),
-                    );
+                    let translationText = newChild(translationCell, "textarea");
                     translationText.id = `translation${i}`;
                     translationText.value = t.text;
                     translationText.autocomplete = "off";
                     translationText.classList.add("table-text");
 
                     // Paragraphs count
-                    let paragraphs = row.appendChild(document.createElement("td"));
+                    let paragraphs = newChild(row, "td");
                     let pars = getParagraphsCount(t.text);
                     paragraphs.tabIndex = 0;
                     paragraphs.style.fontWeight = "600";
@@ -1925,6 +2092,15 @@
                 switchScene("deleting-student", "editor");
             }
 
+            function fixSource() {
+                project.source = project.source
+                    .replace(/\n\s+\n/g, "\n\n")
+                    .replace(/(.)\n(.)/g, "$1\n\n$2")
+                    .trim();
+                updateMainParagraphsList();
+                updateEditor();
+            }
+
             function fixTranslations() {
                 project.translations.forEach((t, i) => {
                     t.text = t.text
@@ -1948,15 +2124,13 @@
 
                 // Fill paragraphs list
                 paragraphs.forEach((p, i) => {
-                    let option = scenes.main.paragraphSelect.appendChild(
-                        document.createElement("option"),
-                    );
+                    let option = newChild(scenes.main.paragraphSelect, "option");
                     option.value = i;
                     option.textContent = `${i + 1}. ${p.slice(0, 63)}...`;
                 });
 
                 // Update current value
-                scenes.main.paragraphSelect.value = mainParagraphIndex;
+                scenes.main.paragraphSelect.value = project.paragraph;
             }
 
             /**
@@ -1965,7 +2139,7 @@
             function getStudentTranslation(studentIndex) {
                 return project.translations[studentIndex].text
                     .split("\n")
-                    .filter((p) => p)[mainParagraphIndex];
+                    .filter((p) => p)[project.paragraph];
             }
 
             /**
@@ -1999,18 +2173,63 @@
                     const end = sortedBoundaries[i + 1];
                     /** @type {string} */
                     const textSlice = sourceText.slice(start, end);
-
-                    /** @type {boolean} */
-                    const containsMistake = mistakes.some(
-                        (m) => start >= m.startIndex && end <= m.endIndex,
+                    /** @type {Mistake} */
+                    const mistake = mistakes.find(
+                        (m) => m.startIndex === start && m.endIndex === end,
                     );
 
-                    if (containsMistake) {
+                    if (mistake) {
                         /** @type {HTMLElement} */
-                        const mistakeMark = textDiv.appendChild(
-                            document.createElement("mark"),
-                        );
+                        const mistakeMark = newChild(textDiv, "mark");
                         mistakeMark.textContent = textSlice;
+
+                        // Show mistake information
+                        if (interactive) {
+                            /** @type {string} */
+                            const info =
+                                getText(`${mistake.type}-label`) +
+                                " | " +
+                                getText(`${mistake.subtype}-label`) +
+                                " | " +
+                                getText("mistake-text-meaning-title") +
+                                ": " +
+                                getText(`${mistake.meaning}-label`).toLowerCase() +
+                                `${mistake.comment ? ` | ${mistake.comment}` : ""}`;
+
+                            mistakeMark.tabIndex = 0;
+                            mistakeMark.ariaLabel = info;
+                            mistakeMark.dataset.info = info;
+
+                            mistakeMark.addEventListener("keydown", function (event) {
+                                if (event.key === " " || event.key === "Enter") {
+                                    event.preventDefault();
+                                    mistakeMark.click();
+                                }
+                            });
+                            mistakeMark.addEventListener("click", function (event) {
+                                highlightMistakes(
+                                    scenes.editMistake.context,
+                                    sourceText,
+                                    [mistake],
+                                    false,
+                                );
+                                scenes.editMistake.type.value = mistake.type;
+                                scenes.editMistake.subtype.value = mistake.subtype;
+                                scenes.editMistake.meaning.value = mistake.meaning;
+                                scenes.editMistake.comment.value = mistake.comment || "";
+
+                                ["type", "subtype", "meaning", "comment"].forEach(
+                                    (p) =>
+                                        (scenes.editMistake[p].oninput = function (
+                                            event,
+                                        ) {
+                                            mistake[p] = this.value;
+                                        }),
+                                );
+
+                                switchScene("main", "edit-mistake");
+                            });
+                        }
                     } else {
                         /** @type {Text} */
                         const textNode = textDiv.appendChild(
@@ -2018,6 +2237,25 @@
                         );
                     }
                 }
+            }
+
+            /**
+             * @param {Node} startNode
+             * @param {Node} endNode
+             * @param {number} offset
+             * @returns {number}
+             */
+            function getTextAbsoluteOffset(startNode, endNode, offset) {
+                /** @type {TreeWalker} */
+                const walker = document.createTreeWalker(
+                    startNode,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                );
+                while (walker.nextNode() && walker.currentNode !== endNode) {
+                    offset += walker.currentNode.textContent.length;
+                }
+                return offset;
             }
 
             /**
@@ -2042,7 +2280,8 @@
                 highlightMistakes(
                     textDiv,
                     translation,
-                    work.mistakes.filter((m) => m.paragraph === mainParagraphIndex),
+                    work.mistakes.filter((m) => m.paragraph === project.paragraph),
+                    true,
                 );
             }
 
@@ -2058,36 +2297,32 @@
                 const translation = getStudentTranslation(studentIndex);
 
                 // Student's name
-                let nameRow = scenes.main.translations.appendChild(
-                    document.createElement("tr"),
-                );
-                let nameCell = nameRow.appendChild(document.createElement("td"));
-                nameCell.classList.add("main-student-name");
-                nameCell.textContent = work.student;
-                nameCell.tabIndex = 0;
+                if (scenes.main.showNames.checked) {
+                    let nameRow = newChild(scenes.main.translations, "tr");
+                    let nameCell = newChild(nameRow, "td");
+                    nameCell.classList.add("main-student-name");
+                    nameCell.textContent = work.student;
+                    nameCell.tabIndex = 0;
+                }
 
                 // Row, cell, and container div
-                let textRow = scenes.main.translations.appendChild(
-                    document.createElement("tr"),
-                );
+                let textRow = newChild(scenes.main.translations, "tr");
 
-                let cell = textRow.appendChild(document.createElement("td"));
-                cell.classList.add("table-text-container");
+                let cell = newChild(textRow, "td");
+                cell.classList.add("table-element-container");
 
-                let container = cell.appendChild(document.createElement("div"));
+                let container = newChild(cell, "div");
                 container.classList.add("student-div");
 
                 // Button to add a mistake
-                let newMistakeButton = container.appendChild(
-                    document.createElement("button"),
-                );
+                let newMistakeButton = newChild(container, "button");
                 newMistakeButton.classList.add("student-button");
                 newMistakeButton.textContent = "+";
 
                 // Translation
-                let textDiv = container.appendChild(document.createElement("div"));
+                let textDiv = newChild(container, "div");
                 textDiv.id = `student${studentIndex}`;
-                textDiv.classList.add("table-text", "rich-text-div", "no-left-border");
+                textDiv.classList.add("rich-text-div", "no-left-border");
                 textDiv.tabIndex = 0;
 
                 updateStudentTranslation(studentIndex);
@@ -2112,26 +2347,32 @@
                     }
 
                     /** @type {number} */
-                    let start = range.startOffset;
+                    let start = getTextAbsoluteOffset(
+                        textDiv,
+                        range.startContainer,
+                        range.startOffset,
+                    );
                     /** @type {number} */
-                    let end = range.endOffset;
+                    let end = getTextAbsoluteOffset(
+                        textDiv,
+                        range.endContainer,
+                        range.endOffset,
+                    );
 
-                    // Determine absolute selection offsets relative to the parent
-                    for (let i of textDiv.childNodes) {
-                        if (i === range.startContainer) break;
-                        start += i.textContent.length;
+                    // Exit conditions
+                    if (
+                        start === end ||
+                        work.mistakes
+                            .filter((m) => m.paragraph === project.paragraph)
+                            .some((m) => start < m.endIndex && m.startIndex < end)
+                    ) {
+                        return;
                     }
-                    for (let i of textDiv.childNodes) {
-                        if (i === range.endContainer) break;
-                        end += i.textContent.length;
-                    }
 
-                    if (start === end) return;
-
-                    newMistake.paragraph = mainParagraphIndex;
+                    newMistake.paragraph = project.paragraph;
                     newMistake.source = selection.toString();
-                    newMistake.startIndex = start;
-                    newMistake.endIndex = end;
+                    newMistake.startIndex = Math.min(start, end);
+                    newMistake.endIndex = Math.max(start, end);
 
                     // Save window offset
                     const scroll = {
@@ -2146,6 +2387,7 @@
                         [newMistake],
                         false,
                     );
+                    scenes.addMistake.mistakeComment.value = "";
                     switchScene("main", "adding-mistake");
                     window.scroll(0, 0);
 
@@ -2172,8 +2414,9 @@
                             textDiv,
                             translation,
                             work.mistakes.filter(
-                                (m) => m.paragraph === mainParagraphIndex,
+                                (m) => m.paragraph === project.paragraph,
                             ),
+                            false,
                         );
                         updateStudentTranslation(studentIndex);
                         switchScene("adding-mistake", "main");
@@ -2195,15 +2438,15 @@
                 let paragraphs = project.source.split("\n").filter((p) => p);
 
                 // Set source paragraph and update the list
-                mainParagraphIndex = clamp(0, mainParagraphIndex, paragraphs.length - 1);
-                scenes.main.sourceParagraph.value = paragraphs[mainParagraphIndex];
+                project.paragraph = clamp(0, project.paragraph, paragraphs.length - 1);
+                scenes.main.sourceParagraph.value = paragraphs[project.paragraph];
 
                 // Clean translations
                 removeChildNodes(scenes.main.translations);
 
                 // Iterate over students' translations and add them
                 /** @type {number} */
-                const firstIndex = mainPageIndex * mainItemsPerPage;
+                const firstIndex = project.mainPage * mainItemsPerPage;
                 /** @type {number} */
                 const lastIndex = firstIndex + mainItemsPerPage;
 
@@ -2213,25 +2456,38 @@
 
                 // Manage pages
                 let maxPage = getMaxPageIndex(project.translations, mainItemsPerPage);
-                mainPageIndex = clamp(0, mainPageIndex, maxPage);
+                project.mainPage = clamp(0, project.mainPage, maxPage);
 
                 // Show and fill or hide page selector
                 if (maxPage > 0) {
                     removeChildNodes(scenes.main.pageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
-                        let option = scenes.main.pageSelect.appendChild(
-                            document.createElement("option"),
-                        );
+                        let option = newChild(scenes.main.pageSelect, "option");
                         option.value = i;
                         option.textContent = `${i + 1}/${maxPage + 1}`;
                     }
-                    scenes.main.pageSelect.value = mainPageIndex;
+                    scenes.main.pageSelect.value = project.mainPage;
                     scenes.main.footer.style.display = "table-footer-group";
                 } else {
                     scenes.main.footer.style.display = "none";
                 }
             }
 
+            function fixProject() {
+                if (!project.source) project.source = "";
+                if (!project.paragraph) project.paragraph = 0;
+                if (!project.mainPage) project.mainPage = 0;
+                if (!project.editorPage) project.editorPage = 0;
+                if (!project.translations) project.translations = [];
+
+                project.translations.forEach((t, i) => {
+                    if (!t.student) t.student = "";
+                    if (!t.text) t.text = "";
+                    if (!t.mistakes) t.mistakes = [];
+                });
+            }
+
+            fixProject();
             updateItemsPerPageMax();
             updateMainParagraphsList();
             updateEditor();
@@ -2286,6 +2542,25 @@
                 return document.getElementById(id);
             }
 
+            /**
+             * @param {keyof HTMLElementTagNameMap} elementTag
+             * @returns {HTMLElement}
+             */
+            function newElement(elementTag) {
+                return document.createElement(elementTag);
+            }
+
+            /**
+             * @param {Node} parent
+             * @param {keyof HTMLElementTagNameMap} childTag
+             * @returns {HTMLElement} child element
+             */
+            function newChild(parent, childTag) {
+                let child = newElement(childTag);
+                parent.appendChild(child);
+                return child;
+            }
+
             function loadSettings() {
                 // Volume
                 scenes.settings.volumeInput.value =
@@ -2301,6 +2576,8 @@
                 }
 
                 // Max items per page
+                scenes.main.showNames.checked =
+                    localStorage.getItem("mainShowNames") === "true";
                 scenes.main.itemsPerPageInput.value = mainItemsPerPage;
                 scenes.editor.itemsPerPageInput.value = editorItemsPerPage;
             }
@@ -2400,7 +2677,7 @@
 
                 for (let l of languages) {
                     /** @type {HTMLOptionElement} */
-                    let option = list.appendChild(document.createElement("option"));
+                    let option = newChild(list, "option");
                     option.value = l.name;
                     option.textContent = l.name;
                 }
