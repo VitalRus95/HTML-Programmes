@@ -393,12 +393,8 @@
             th {
                 border: 2px outset var(--colour-border);
                 padding-inline: 4px;
-                height: 100%;
                 overflow: auto;
-            }
-
-            td {
-                padding-left: 4px;
+                height: 100%;
             }
 
             th {
@@ -408,10 +404,7 @@
             }
 
             tr {
-                column-gap: 2px;
-                margin-block: 2px;
                 height: 100%;
-                width: 100%;
                 animation: row-show 0.7s ease;
             }
 
@@ -561,6 +554,8 @@
             .table-element-container {
                 border: none;
                 padding: 0px;
+                height: 2em;
+                overflow: auto;
             }
 
             .table-full-cell {
@@ -678,7 +673,7 @@
                 color: var(--colour-hovered-fgr);
             }
 
-            #adding-mistake-fieldset,
+            #add-mistake-fieldset,
             #alignment-fieldset {
                 background-color: var(--colour-tooltip);
             }
@@ -701,6 +696,7 @@
                 width: 100%;
             }
 
+            #main-actions-fieldset > button,
             #editor-actions-fieldset > button {
                 width: 100%;
             }
@@ -709,9 +705,9 @@
                 display: flex;
                 border: 2px outset var(--colour-text);
                 line-height: 1.4;
-                min-height: 1.75em;
-                height: 1.75em;
-                padding: 1px 6px;
+                min-height: 2em;
+                height: 2em;
+                padding: 2px 6px;
                 overflow: hidden;
                 transition: height 0.5s ease;
             }
@@ -744,19 +740,15 @@
         </style>
     </head>
     <body>
-        <button id="exportLang" onclick="exportTranslationTemplate()">
-            Export texts for translation
-        </button>
-
         <!-- MENU DIV -->
         <div id="menu" class="scene">
             <h1 id="title" tabindex="1">Aestimo</h1>
 
             <select id="lang" tabindex="0"></select>
 
-            <button id="start-button" tabindex="1" onclick="switchScene('main')"> Start </button>
+            <button id="start-button" tabindex="1" data-scene="main"> Start </button>
 
-            <button id="editor-button" tabindex="1" onclick="switchScene('editor')">Editor</button>
+            <button id="editor-button" tabindex="1" data-scene="editor">Editor</button>
 
             <a
                 id="save-project"
@@ -772,11 +764,9 @@
                 >Load project<span class="tooltip">Open a project (.json)</span>
             </button>
 
-            <button id="settings-button" tabindex="1" onclick="switchScene('settings')"
-                >Settings</button
-            >
+            <button id="settings-button" tabindex="1" data-scene="settings">Settings</button>
 
-            <button id="about-button" tabindex="1" onclick="switchScene('about')">About</button>
+            <button id="about-button" tabindex="1" data-scene="about">About</button>
 
             <!-- Author -->
             <p id="author" tabindex="0" class="tooltip-parent"
@@ -788,20 +778,20 @@
 
         <!-- MAIN DIV -->
         <div id="main" class="scene">
-            <button id="main-back" onclick="switchScene('menu')">Back</button>
+            <button id="main-back" data-scene="menu">Back</button>
 
             <!-- Adding a new mistake help -->
-            <fieldset id="adding-mistake-fieldset">
-                <legend id="adding-mistake-help-title" tabindex="0">Adding a mistake</legend>
+            <fieldset id="add-mistake-fieldset">
+                <legend id="add-mistake-help-title" tabindex="0">Adding a mistake</legend>
 
-                <p id="adding-mistake-help"
+                <p id="add-mistake-help"
                     >To add a mistake, select the text containing it in the student's translation
                     and then either click the
                     <button class="student-button" style="display: inline; font-size: 1.1em"
                         >+</button
                     >
                     button on the left or press <kbd>Ctrl</kbd>+<kbd>A</kbd>.
-                    <b id="adding-mistake-overlap-warning">Mistakes must not overlap!</b></p
+                    <b id="add-mistake-overlap-warning">Mistakes must not overlap!</b></p
                 >
             </fieldset>
 
@@ -868,13 +858,20 @@
                     </tr>
                 </tfoot>
             </table>
+
+            <!-- Actions menu -->
+            <fieldset id="main-actions-fieldset">
+                <legend id="main-actions-menu">Actions menu</legend>
+
+                <button id="main-actions-find" data-scene="find-mistake">Find mistake</button>
+            </fieldset>
         </div>
 
         <!-- ADDING MISTAKE -->
-        <div id="adding-mistake" class="scene">
-            <h2 id="adding-mistake-title" tabindex="0">New mistake</h2>
+        <div id="add-mistake" class="scene">
+            <h2 id="add-mistake-title" tabindex="0">New mistake</h2>
 
-            <button id="adding-mistake-back" onclick="switchScene('main')">Cancel</button>
+            <button id="add-mistake-back" data-scene="main">Cancel</button>
 
             <!-- Mistake -->
             <fieldset>
@@ -1129,9 +1126,111 @@
             </table>
 
             <div class="setting-div">
-                <button id="edit-mistake-delete"> Delete mistake </button>
+                <button id="edit-mistake-delete">Delete mistake </button>
 
-                <button id="edit-mistake-back" onclick="switchScene('main')">Back</button>
+                <button id="edit-mistake-back" data-scene="main">Back</button>
+            </div>
+        </div>
+
+        <!-- FINDING MISTAKE -->
+        <div id="find-mistake" class="scene">
+            <table style="table-layout: auto">
+                <thead>
+                    <tr>
+                        <th id="find-mistake-title" colspan="2" tabindex="0">Searching mistake</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td
+                            id="find-mistake-query"
+                            class="bold-text"
+                            tabindex="0"
+                            style="width: 25%"
+                            >Search query</td
+                        >
+                        <td class="table-element-container">
+                            <input
+                                type="text"
+                                id="find-mistake-query-input"
+                                class="table-full-cell"
+                                autocomplete="off"
+                            />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="find-mistake-type-title" class="bold-text" tabindex="0">Type</td>
+                        <td class="table-element-container">
+                            <select
+                                id="find-mistake-type"
+                                class="table-full-cell"
+                                autocomplete="off"
+                            >
+                                <option value="grammar">Grammar</option>
+                                <option value="vocabulary">Vocabulary</option>
+                                <option value="orthography">Orthography</option>
+                                <option value="punctuation">Punctuation</option>
+                                <option value="complex">Complex</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="find-mistake-subtype-title" class="bold-text" tabindex="0"
+                            >Subtype</td
+                        >
+                        <td class="table-element-container">
+                            <select
+                                id="find-mistake-subtype"
+                                class="table-full-cell"
+                                autocomplete="off"
+                            >
+                                <option value="addition">Redundant element</option>
+                                <option value="distortion">Incorrect element</option>
+                                <option value="deletion">Lack of element</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="find-mistake-meaning-title" class="bold-text" tabindex="0"
+                            >Text's meaning</td
+                        >
+                        <td class="table-element-container">
+                            <select
+                                id="find-mistake-meaning"
+                                class="table-full-cell"
+                                autocomplete="off"
+                            >
+                                <option value="retained">Retained</option>
+                                <option value="obscured">Obscured</option>
+                                <option value="lost">Lost</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td id="find-mistake-comment-title" class="bold-text" tabindex="0"
+                            >Comment</td
+                        >
+                        <td class="table-element-container">
+                            <input
+                                type="text"
+                                id="find-mistake-comment"
+                                class="table-full-cell"
+                                autocomplete="off"
+                            />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="setting-div">
+                <button id="find-mistake-search">Search mistake</button>
+
+                <button id="find-mistake-back" data-scene="main">Back</button>
             </div>
         </div>
 
@@ -1139,7 +1238,7 @@
         <div id="adding-students" class="scene">
             <h2 id="adding-students-title" tabindex="0">Adding students</h2>
 
-            <button id="adding-students-back" onclick="switchScene('editor')">Cancel</button>
+            <button id="adding-students-back" data-scene="editor">Cancel</button>
 
             <textarea
                 id="added-students"
@@ -1148,7 +1247,7 @@
                 placeholder="List of students to add (one per line)"
             ></textarea>
 
-            <button id="adding-students-button" onclick="addStudents()">Confirm</button>
+            <button id="adding-students-button">Confirm</button>
         </div>
 
         <!-- DELETING A STUDENT -->
@@ -1159,9 +1258,9 @@
                 <h3 id="deleted-student-name"></h3>
 
                 <div class="setting-div">
-                    <button id="deleting-cancel">Cancel</button>
+                    <button id="deleting-confirm">Delete</button>
 
-                    <button id="deleting-confirm" onclick="deleteStudent()">Delete</button>
+                    <button id="deleting-cancel">Cancel</button>
                 </div>
             </fieldset>
         </div>
@@ -1170,7 +1269,7 @@
         <div id="editor" class="scene">
             <h2 id="editor-title" tabindex="0">Editor</h2>
 
-            <button id="editor-back" onclick="switchScene('menu')">Back</button>
+            <button id="editor-back" data-scene="menu">Back</button>
 
             <!-- Alignment note -->
             <fieldset id="alignment-fieldset">
@@ -1256,17 +1355,15 @@
                 <fieldset id="editor-actions-fieldset">
                     <legend id="editor-actions-menu">Actions menu</legend>
 
-                    <button id="add-students" onclick="switchScene('adding-students')"
-                        >Add students</button
-                    >
+                    <button id="add-students" data-scene="adding-students">Add students</button>
 
-                    <button id="fix-source" class="tooltip-parent" onclick="fixSource()"
+                    <button id="fix-source" class="tooltip-parent"
                         >Fix source text<span id="fix-source-tooltip" class="tooltip"
                             >Remove extra whitespaces and line breaks</span
                         ></button
                     >
 
-                    <button id="fix-translations" class="tooltip-parent" onclick="fixTranslations()"
+                    <button id="fix-translations" class="tooltip-parent"
                         >Fix translations<span id="fix-translations-tooltip" class="tooltip"
                             >Remove extra whitespaces and line breaks</span
                         ></button
@@ -1279,7 +1376,7 @@
         <div id="settings" class="scene">
             <h2 id="settings-title" tabindex="0">Settings</h2>
 
-            <button id="settings-back" onclick="switchScene('menu')">Back</button>
+            <button id="settings-back" data-scene="menu">Back</button>
 
             <!-- Sound settings -->
             <details>
@@ -1363,7 +1460,7 @@
         <div id="about" class="scene">
             <h2 id="about-title" tabindex="0">About</h2>
 
-            <button id="about-back" onclick="switchScene('menu')">Back</button>
+            <button id="about-back" data-scene="menu">Back</button>
 
             <p>Programme description. To be continued...</p>
         </div>
@@ -1460,6 +1557,20 @@
                     comment: element("edit-mistake-comment"),
                     /** @type {HTMLButtonElement} */
                     delete: element("edit-mistake-delete"),
+                },
+                findMistake: {
+                    /** @type {HTMLInputElement} */
+                    query: element("find-mistake-query-input"),
+                    /** @type {HTMLSelectElement} */
+                    type: element("find-mistake-type"),
+                    /** @type {HTMLSelectElement} */
+                    subtype: element("find-mistake-subtype"),
+                    /** @type {HTMLSelectElement} */
+                    meaning: element("find-mistake-meaning"),
+                    /** @type {HTMLInputElement} */
+                    comment: element("find-mistake-comment"),
+                    /** @type {HTMLButtonElement} */
+                    search: element("find-mistake-search"),
                 },
                 addStudents: {
                     /** @type {HTMLTextAreaElement} */
@@ -1688,6 +1799,74 @@
                 localStorage.setItem("mainShowNames", this.checked);
                 updateMain();
             });
+
+            scenes.findMistake.search.addEventListener("click", function (event) {
+                if (!scenes.findMistake.query.value) return;
+
+                /** @type {RegExp} */
+                const query = new RegExp(scenes.findMistake.query.value);
+
+                /** @type {boolean} */
+                let success = false;
+
+                for (let i = 0; i < project.translations.length; i++) {
+                    /** @type {string} */
+                    const work = getStudentTranslation(i);
+                    /** @type {RegExpMatchArray} */
+                    const result = work.match(query);
+
+                    if (!result || !result.index) continue;
+
+                    /** @type {number} */
+                    const start = result.index;
+                    /** @type {number} */
+                    const end = start + (result[1] ? result[1].length : result[0].length);
+
+                    if (
+                        project.translations[i].mistakes
+                            .filter((m) => m.paragraph === project.paragraph)
+                            .some((m) => start < m.endIndex && m.startIndex < end)
+                    ) {
+                        continue;
+                    }
+
+                    project.translations[i].mistakes.push({
+                        source: result[1] || result[0],
+                        paragraph: project.paragraph,
+                        startIndex: start,
+                        endIndex: end,
+                        type: scenes.findMistake.type.value,
+                        subtype: scenes.findMistake.subtype.value,
+                        meaning: scenes.findMistake.meaning.value,
+                        comment: scenes.findMistake.comment.value,
+                    });
+                    updateStudentTranslation(i);
+                    success = true;
+                }
+
+                if (success) {
+                    switchScene("main");
+                }
+            });
+
+            // Buttons
+            [
+                { id: "adding-students-button", action: addStudents },
+                { id: "deleting-confirm", action: deleteStudent },
+                { id: "fix-source", action: fixSource },
+                { id: "fix-translations", action: fixTranslations },
+            ].forEach((b) => {
+                /** @type {HTMLButtonElement} */
+                let button = element(b.id);
+                if (button) button.onclick = b.action;
+            });
+
+            // Scene transitions
+            for (const button of document.querySelectorAll("[data-scene]")) {
+                button.addEventListener("click", function (event) {
+                    switchScene(this.dataset.scene);
+                });
+            }
 
             // Colour settings
             Object.keys(allColours).forEach((c) => {
@@ -2283,8 +2462,8 @@
                         return;
                     }
 
-                    newMistake.paragraph = project.paragraph;
                     newMistake.source = selection.toString();
+                    newMistake.paragraph = project.paragraph;
                     newMistake.startIndex = Math.min(start, end);
                     newMistake.endIndex = Math.max(start, end);
 
@@ -2297,7 +2476,7 @@
                         false,
                     );
                     scenes.addMistake.mistakeComment.value = "";
-                    switchScene("adding-mistake");
+                    switchScene("add-mistake");
 
                     // Change the behaviour of `Add mistake` button
                     scenes.addMistake.addButton.onclick = function (event) {
