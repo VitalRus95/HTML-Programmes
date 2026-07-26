@@ -291,25 +291,6 @@
                 cursor: help;
             }
 
-            mark:focus::after,
-            mark:hover::after {
-                content: attr(data-info);
-                background-color: var(--colour-hovered-bgr);
-                color: var(--colour-hovered-fgr);
-                border: 2px dashed var(--colour-hovered-border);
-                text-align: center;
-                font-weight: 600;
-                padding: 2px 4px;
-                width: var(--window-size);
-                max-height: 50vh;
-                position: fixed;
-                bottom: 1vh;
-                left: 50%;
-                transform: translateX(-50%);
-                overflow: auto;
-                z-index: 9;
-            }
-
             ol,
             ul {
                 margin-block: 4px;
@@ -523,6 +504,7 @@
                 max-height: 60%;
                 max-width: 50%;
                 cursor: help;
+                font-size: 14pt;
                 font-style: italic;
                 font-weight: 400;
                 text-align: left;
@@ -551,10 +533,16 @@
                 color: var(--colour-disabled-fgr);
             }
 
+            .radio-div {
+                display: flex;
+                column-gap: 4px;
+                align-items: center;
+            }
+
             .table-element-container {
                 border: none;
                 padding: 0px;
-                height: 2em;
+                height: 1.75em;
                 overflow: auto;
             }
 
@@ -576,14 +564,56 @@
                 resize: none;
             }
 
+            .rich-text-div {
+                display: block;
+                border: 2px outset var(--colour-border);
+                padding: 4px 6px;
+                line-height: 1.45;
+                min-height: 4em;
+                max-height: 12em;
+                height: fit-content;
+                width: 100%;
+                overflow: auto;
+                user-select: text;
+                -webkit-user-select: text;
+            }
+
+            .no-left-border {
+                border-radius: 0px 4px 4px 0px;
+                border-left: none;
+            }
+
             .shadow-border {
                 border: none;
                 box-shadow: inset 0px 0px 4px var(--colour-border);
             }
 
+            .bold-text {
+                font-weight: 600;
+            }
+
             .centred-text {
                 text-align: center;
                 align-content: center;
+            }
+
+            .mistake-info:focus::after,
+            .mistake-info:hover::after {
+                content: attr(data-info);
+                background-color: var(--colour-hovered-bgr);
+                color: var(--colour-hovered-fgr);
+                border: 2px dashed var(--colour-hovered-border);
+                text-align: center;
+                font-weight: 600;
+                padding: 2px 4px;
+                width: var(--window-size);
+                max-height: 50vh;
+                position: fixed;
+                bottom: 1vh;
+                left: 50%;
+                transform: translateX(-50%);
+                overflow: auto;
+                z-index: 9;
             }
 
             .student-div {
@@ -602,40 +632,11 @@
                 font-weight: 900;
             }
 
-            .no-left-border {
-                border-radius: 0px 4px 4px 0px;
-                border-left: none;
-            }
-
             .main-student-name {
                 text-align: center;
                 font-style: italic;
                 font-weight: 600;
                 cursor: default;
-            }
-
-            .rich-text-div {
-                display: block;
-                border: 2px outset var(--colour-border);
-                padding: 4px 6px;
-                line-height: 1.45;
-                min-height: 4em;
-                max-height: 12em;
-                height: fit-content;
-                width: 100%;
-                overflow: auto;
-                user-select: text;
-                -webkit-user-select: text;
-            }
-
-            .radio-div {
-                display: flex;
-                column-gap: 4px;
-                align-items: center;
-            }
-
-            .bold-text {
-                font-weight: 600;
             }
 
             /* Elements by ID */
@@ -705,8 +706,8 @@
                 display: flex;
                 border: 2px outset var(--colour-text);
                 line-height: 1.4;
-                min-height: 2em;
-                height: 2em;
+                min-height: 1.75em;
+                height: 1.75em;
                 padding: 2px 6px;
                 overflow: hidden;
                 transition: height 0.5s ease;
@@ -861,7 +862,7 @@
 
             <!-- Actions menu -->
             <fieldset id="main-actions-fieldset">
-                <legend id="main-actions-menu">Actions menu</legend>
+                <legend id="main-actions-menu" tabindex="0">Actions menu</legend>
 
                 <button id="main-actions-find" data-scene="find-mistake">Find mistake</button>
             </fieldset>
@@ -889,7 +890,6 @@
                     style="width: 100%"
                     type="text"
                     autocomplete="off"
-                    placeholder="A brief comment on the mistake"
                 />
             </fieldset>
 
@@ -1037,14 +1037,11 @@
 
         <!-- EDITING MISTAKE -->
         <div id="edit-mistake" class="scene">
-            <table style="table-layout: auto">
-                <thead>
-                    <tr>
-                        <th id="edit-mistake-title" colspan="2" tabindex="0">Mistake editing</th>
-                    </tr>
-                </thead>
+            <h2 id="edit-mistake-title" tabindex="0">Mistake editing</h2>
 
+            <table style="table-layout: auto">
                 <tbody>
+                    <!-- Context -->
                     <tr>
                         <td
                             id="edit-mistake-context-title"
@@ -1058,6 +1055,7 @@
                         </td>
                     </tr>
 
+                    <!-- Type -->
                     <tr>
                         <td id="edit-mistake-type-title" class="bold-text" tabindex="0">Type</td>
                         <td class="table-element-container">
@@ -1075,6 +1073,7 @@
                         </td>
                     </tr>
 
+                    <!-- Subtype -->
                     <tr>
                         <td id="edit-mistake-subtype-title" class="bold-text" tabindex="0"
                             >Subtype</td
@@ -1092,6 +1091,7 @@
                         </td>
                     </tr>
 
+                    <!-- Meaning -->
                     <tr>
                         <td id="edit-mistake-meaning-title" class="bold-text" tabindex="0"
                             >Text's meaning</td
@@ -1109,6 +1109,7 @@
                         </td>
                     </tr>
 
+                    <!-- Comment -->
                     <tr>
                         <td id="edit-mistake-comment-title" class="bold-text" tabindex="0"
                             >Comment</td
@@ -1134,104 +1135,140 @@
 
         <!-- FINDING MISTAKE -->
         <div id="find-mistake" class="scene">
-            <table style="table-layout: auto">
-                <thead>
-                    <tr>
-                        <th id="find-mistake-title" colspan="2" tabindex="0">Searching mistake</th>
-                    </tr>
-                </thead>
+            <h2 id="find-mistake-title" tabindex="0">Mistake search</h2>
 
-                <tbody>
-                    <tr>
-                        <td
-                            id="find-mistake-query"
-                            class="bold-text"
-                            tabindex="0"
-                            style="width: 25%"
-                            >Search query</td
-                        >
-                        <td class="table-element-container">
-                            <input
-                                type="text"
-                                id="find-mistake-query-input"
-                                class="table-full-cell"
-                                autocomplete="off"
-                            />
-                        </td>
-                    </tr>
+            <button id="find-mistake-back" data-scene="main">Back</button>
 
-                    <tr>
-                        <td id="find-mistake-type-title" class="bold-text" tabindex="0">Type</td>
-                        <td class="table-element-container">
-                            <select
-                                id="find-mistake-type"
-                                class="table-full-cell"
-                                autocomplete="off"
+            <!-- Search settings -->
+            <fieldset>
+                <legend id="find-mistake-search-parameters" tabindex="0">Search settings</legend>
+
+                <table style="table-layout: auto">
+                    <tbody>
+                        <!-- Search mode -->
+                        <tr>
+                            <td id="find-mistake-mode-title" class="bold-text" tabindex="0"
+                                >Search mode</td
                             >
-                                <option value="grammar">Grammar</option>
-                                <option value="vocabulary">Vocabulary</option>
-                                <option value="orthography">Orthography</option>
-                                <option value="punctuation">Punctuation</option>
-                                <option value="complex">Complex</option>
-                            </select>
-                        </td>
-                    </tr>
+                            <td class="table-element-container">
+                                <select
+                                    id="find-mistake-mode"
+                                    class="table-full-cell"
+                                    autocomplete="off"
+                                >
+                                    <option value="simple" selected>Simple</option>
+                                    <option value="advanced"
+                                        >Advanced (with regular expressions)</option
+                                    >
+                                </select>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td id="find-mistake-subtype-title" class="bold-text" tabindex="0"
-                            >Subtype</td
-                        >
-                        <td class="table-element-container">
-                            <select
-                                id="find-mistake-subtype"
-                                class="table-full-cell"
-                                autocomplete="off"
+                        <!-- Query -->
+                        <tr>
+                            <td
+                                id="find-mistake-query"
+                                class="bold-text"
+                                tabindex="0"
+                                style="width: 25%"
+                                >Search query</td
                             >
-                                <option value="addition">Redundant element</option>
-                                <option value="distortion">Incorrect element</option>
-                                <option value="deletion">Lack of element</option>
-                            </select>
-                        </td>
-                    </tr>
+                            <td class="table-element-container">
+                                <input
+                                    type="text"
+                                    id="find-mistake-query-input"
+                                    class="table-full-cell"
+                                    autocomplete="off"
+                                />
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td id="find-mistake-meaning-title" class="bold-text" tabindex="0"
-                            >Text's meaning</td
-                        >
-                        <td class="table-element-container">
-                            <select
-                                id="find-mistake-meaning"
-                                class="table-full-cell"
-                                autocomplete="off"
+                        <!-- Type -->
+                        <tr>
+                            <td id="find-mistake-type-title" class="bold-text" tabindex="0"
+                                >Type</td
                             >
-                                <option value="retained">Retained</option>
-                                <option value="obscured">Obscured</option>
-                                <option value="lost">Lost</option>
-                            </select>
-                        </td>
-                    </tr>
+                            <td class="table-element-container">
+                                <select
+                                    id="find-mistake-type"
+                                    class="table-full-cell"
+                                    autocomplete="off"
+                                >
+                                    <option value="grammar">Grammar</option>
+                                    <option value="vocabulary" selected>Vocabulary</option>
+                                    <option value="orthography">Orthography</option>
+                                    <option value="punctuation">Punctuation</option>
+                                    <option value="complex">Complex</option>
+                                </select>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td id="find-mistake-comment-title" class="bold-text" tabindex="0"
-                            >Comment</td
-                        >
-                        <td class="table-element-container">
-                            <input
-                                type="text"
-                                id="find-mistake-comment"
-                                class="table-full-cell"
-                                autocomplete="off"
-                            />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        <!-- Subtype -->
+                        <tr>
+                            <td id="find-mistake-subtype-title" class="bold-text" tabindex="0"
+                                >Subtype</td
+                            >
+                            <td class="table-element-container">
+                                <select
+                                    id="find-mistake-subtype"
+                                    class="table-full-cell"
+                                    autocomplete="off"
+                                >
+                                    <option value="addition">Redundant element</option>
+                                    <option value="distortion" selected>Incorrect element</option>
+                                    <option value="deletion">Lack of element</option>
+                                </select>
+                            </td>
+                        </tr>
 
-            <div class="setting-div">
-                <button id="find-mistake-search">Search mistake</button>
+                        <!-- Meaning -->
+                        <tr>
+                            <td id="find-mistake-meaning-title" class="bold-text" tabindex="0"
+                                >Text's meaning</td
+                            >
+                            <td class="table-element-container">
+                                <select
+                                    id="find-mistake-meaning"
+                                    class="table-full-cell"
+                                    autocomplete="off"
+                                >
+                                    <option value="retained" selected>Retained</option>
+                                    <option value="obscured">Obscured</option>
+                                    <option value="lost">Lost</option>
+                                </select>
+                            </td>
+                        </tr>
 
-                <button id="find-mistake-back" data-scene="main">Back</button>
-            </div>
+                        <!-- Comment -->
+                        <tr>
+                            <td id="find-mistake-comment-title" class="bold-text" tabindex="0"
+                                >Comment</td
+                            >
+                            <td class="table-element-container">
+                                <input
+                                    type="text"
+                                    id="find-mistake-comment"
+                                    class="table-full-cell"
+                                    autocomplete="off"
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+
+            <button id="find-mistake-search">Search</button>
+
+            <!-- Search results -->
+            <fieldset>
+                <legend id="find-mistake-results" tabindex="0">Search results</legend>
+
+                <table id="find-mistake-results">
+                    <tbody id="find-mistake-table-body"></tbody>
+                </table>
+            </fieldset>
+
+            <button id="find-mistake-table-add">Add found mistakes</button>
         </div>
 
         <!-- ADDING STUDENTS -->
@@ -1253,12 +1290,12 @@
         <!-- DELETING A STUDENT -->
         <div id="deleting-student" class="scene">
             <fieldset>
-                <legend id="deleting-student-title">Delete this student?</legend>
+                <legend id="deleting-student-title" tabindex="0">Delete this student?</legend>
 
                 <h3 id="deleted-student-name"></h3>
 
                 <div class="setting-div">
-                    <button id="deleting-confirm">Delete</button>
+                    <button id="deleting-confirm">Delete student</button>
 
                     <button id="deleting-cancel">Cancel</button>
                 </div>
@@ -1353,7 +1390,7 @@
 
                 <!-- Actions menu -->
                 <fieldset id="editor-actions-fieldset">
-                    <legend id="editor-actions-menu">Actions menu</legend>
+                    <legend id="editor-actions-menu" tabindex="0">Actions menu</legend>
 
                     <button id="add-students" data-scene="adding-students">Add students</button>
 
@@ -1559,6 +1596,8 @@
                     delete: element("edit-mistake-delete"),
                 },
                 findMistake: {
+                    /** @type {HTMLSelectElement} */
+                    mode: element("find-mistake-mode"),
                     /** @type {HTMLInputElement} */
                     query: element("find-mistake-query-input"),
                     /** @type {HTMLSelectElement} */
@@ -1570,7 +1609,11 @@
                     /** @type {HTMLInputElement} */
                     comment: element("find-mistake-comment"),
                     /** @type {HTMLButtonElement} */
-                    search: element("find-mistake-search"),
+                    searchButton: element("find-mistake-search"),
+                    /** @type {HTMLTableSectionElement} */
+                    table: element("find-mistake-table-body"),
+                    /** @type {HTMLButtonElement} */
+                    addButton: element("find-mistake-table-add"),
                 },
                 addStudents: {
                     /** @type {HTMLTextAreaElement} */
@@ -1588,6 +1631,11 @@
             // | Types |
             // +-------+
             //
+            /** @typedef Offset
+             * @property {number} x
+             * @property {number} y
+             */
+
             /** @typedef Mistake
              * @property {string} source
              * @property {string} comment
@@ -1597,6 +1645,12 @@
              * @property {string} type
              * @property {string} subtype
              * @property {string} meaning
+             */
+
+            /** @typedef MistakeSearchResult
+             * @property {Mistake} mistake
+             * @property {number} studentIndex
+             * @property {boolean} shouldBeAdded
              */
 
             /** @typedef Work
@@ -1644,27 +1698,6 @@
                     {
                         student: "Студент 01",
                         text: "Banks saw threat in new AI models\n\nFinancial Times say that banking and financial officials warned about the risks for international banking system connected with the new AI models. The new AI model Claude Mythos Preview by Anthropic start-up became the main topic of spring meetings of the IMF and the World Bank in Washington.\n\nAndrew Baily – Head of the Bank of England – called the situation «a very serious challenge», stating that the AI is developing faster than the regulatory systems and called out for emergency risk assessment in cybersecurity. According to the Anthropic, the AI model is able to show thousands of critical vulnerabilities in operating systems and browsers, shifting between attacks and defense and automatically spotting and combining vulnerabilities in scales human being can’t comprehend. \n\nHead of the ECB Christine Lagarde warned that such developments may pose a serious threat in the «wrong hands» pointing at the lack of global regulation. Part of the European regulators claimed that they have no access to the AI model and cannot assess its risks yet. Head of the European banking authority Francois-Louis Michaud pointed out that the assertive planning has just started.\n\nHowever, banks do see the potential advantages. Head of JPMorgan Chase Jamie Dimon claimed that the AI model helps showing the vulnerabilities and head of Morgan Stanley Ted Pick called AI an integral part of future financial ecosystem. \n\nExperts warn that coordination of global rules of regulation may be obstructed due to geopolitical tension and reluctance towards boxing prospective technologies. In March, federal department of the US has created a bureau designated fighting AI threats which will assert risks including cyberattacks and space militarization.",
-                        mistakes: [
-                            {
-                                paragraph: 0,
-                                startIndex: 6,
-                                endIndex: 9,
-                                source: "saw",
-                                type: "grammar",
-                                subtype: "distortion",
-                                meaning: "retained",
-                                comment: "Stupid grammar mistake",
-                            },
-                            {
-                                paragraph: 0,
-                                startIndex: 10,
-                                endIndex: 16,
-                                source: "threat",
-                                type: "vocabulary",
-                                subtype: "distortion",
-                                meaning: "obscured",
-                            },
-                        ],
                     },
                     {
                         student: "Студент 02",
@@ -1707,6 +1740,8 @@
                 mainPage: 0,
                 editorPage: 0,
             };
+            /** @type {Object.<string, Offset>} */
+            let sceneOffsets = {};
 
             // +-----------+
             // | Variables |
@@ -1714,6 +1749,10 @@
             //
             /** @type {AudioContext} */
             let audio = new (window.AudioContext || window.webkitAudioContext)();
+            /** @type {string} */
+            let currentScene = "menu";
+            /** @type {string} */
+            let previousScene = undefined;
             /** @type {number} */
             let sourceParaCount = 0;
             /** @type {number} */
@@ -1766,6 +1805,7 @@
 
             scenes.main.paragraphSelect.addEventListener("change", function (event) {
                 project.paragraph = +scenes.main.paragraphSelect.value;
+                project.mainPage = 0;
                 updateMain();
             });
 
@@ -1800,28 +1840,48 @@
                 updateMain();
             });
 
-            scenes.findMistake.search.addEventListener("click", function (event) {
+            scenes.findMistake.searchButton.addEventListener("click", function (event) {
                 if (!scenes.findMistake.query.value) return;
+                removeChildNodes(scenes.findMistake.table);
+                scenes.findMistake.addButton.style.display = "none";
 
-                /** @type {RegExp} */
-                const query = new RegExp(scenes.findMistake.query.value);
+                /** @type {MistakeSearchResult[]} */
+                let mistakes = [];
 
                 /** @type {boolean} */
-                let success = false;
+                const isSimpleSearch = scenes.findMistake.mode.value === "simple";
 
+                /** @type {RegExp | string} */
+                const query = isSimpleSearch
+                    ? scenes.findMistake.query.value
+                    : new RegExp(scenes.findMistake.query.value);
+
+                // Look for mistakes, add them to a temporary array, fill the results table
                 for (let i = 0; i < project.translations.length; i++) {
                     /** @type {string} */
-                    const work = getStudentTranslation(i);
-                    /** @type {RegExpMatchArray} */
-                    const result = work.match(query);
+                    const translation = getStudentTranslation(i);
+                    /** @type {RegExpMatchArray | number} */
+                    const result = isSimpleSearch
+                        ? translation.indexOf(query)
+                        : translation.match(query);
 
-                    if (!result || !result.index) continue;
+                    if (!result || result === -1) continue;
+                    if (!isSimpleSearch && !result.index) continue;
 
                     /** @type {number} */
-                    const start = result.index;
+                    const start = isSimpleSearch
+                        ? result // A plain-text search
+                        : result[1] // Regular expression with or without a capturing group
+                          ? result.index + result[0].indexOf(result[1])
+                          : result.index;
                     /** @type {number} */
-                    const end = start + (result[1] ? result[1].length : result[0].length);
+                    const end = isSimpleSearch
+                        ? start + query.length // A plain-text search
+                        : result[1] // Regular expression with or without a capturing group
+                          ? start + result[1].length
+                          : start + result[0].length;
 
+                    // Add the mistake to the array if it's new
                     if (
                         project.translations[i].mistakes
                             .filter((m) => m.paragraph === project.paragraph)
@@ -1830,22 +1890,76 @@
                         continue;
                     }
 
-                    project.translations[i].mistakes.push({
-                        source: result[1] || result[0],
-                        paragraph: project.paragraph,
-                        startIndex: start,
-                        endIndex: end,
-                        type: scenes.findMistake.type.value,
-                        subtype: scenes.findMistake.subtype.value,
-                        meaning: scenes.findMistake.meaning.value,
-                        comment: scenes.findMistake.comment.value,
+                    /** @type {number} */
+                    const lastFoundMistakeId =
+                        mistakes.push({
+                            mistake: {
+                                source: isSimpleSearch ? query : result[1] || result[0],
+                                paragraph: project.paragraph,
+                                startIndex: start,
+                                endIndex: end,
+                                type: scenes.findMistake.type.value,
+                                subtype: scenes.findMistake.subtype.value,
+                                meaning: scenes.findMistake.meaning.value,
+                                comment: scenes.findMistake.comment.value,
+                            },
+                            studentIndex: i,
+                            shouldBeAdded: true,
+                        }) - 1;
+
+                    // Fill the results table
+                    /** @type {HTMLTableRowElement} */
+                    let row = newChild(scenes.findMistake.table, "tr");
+
+                    /** @type {HTMLTableCellElement} */
+                    let cell = newChild(row, "td");
+                    cell.classList.add("table-element-container");
+
+                    /** @type {HTMLDivElement} */
+                    let cellDiv = newChild(cell, "div");
+                    cellDiv.classList.add("student-div");
+
+                    /** @type {HTMLButtonElement} */
+                    let deleteButton = newChild(cellDiv, "button");
+                    deleteButton.classList.add("student-button", "tooltip-parent");
+                    deleteButton.textContent = "x";
+
+                    /** @type {HTMLSpanElement} */
+                    let deleteTooltip = newChild(deleteButton, "span");
+                    deleteTooltip.classList.add("tooltip");
+                    deleteTooltip.textContent = getText("edit-mistake-delete");
+
+                    /** @type {HTMLDivElement} */
+                    let textDiv = newChild(cellDiv, "div");
+                    textDiv.classList.add("rich-text-div", "no-left-border");
+                    textDiv.tabIndex = 0;
+                    highlightMistakes(
+                        textDiv,
+                        translation,
+                        [mistakes[lastFoundMistakeId].mistake],
+                        mistakes[lastFoundMistakeId].studentIndex,
+                        false,
+                    );
+
+                    // Events
+                    deleteButton.addEventListener("click", function (event) {
+                        mistakes[lastFoundMistakeId].shouldBeAdded = false;
+                        row.remove();
                     });
-                    updateStudentTranslation(i);
-                    success = true;
                 }
 
-                if (success) {
-                    switchScene("main");
+                // Check if at least one mistake is found
+                if (mistakes.length > 0) {
+                    scenes.findMistake.addButton.style.display = "flex";
+
+                    scenes.findMistake.addButton.onclick = function (event) {
+                        mistakes
+                            .filter((m) => m.shouldBeAdded)
+                            .forEach((m) => {
+                                project.translations[m.studentIndex].mistakes.push(m.mistake);
+                            });
+                        switchScene("main");
+                    };
                 }
             });
 
@@ -1867,6 +1981,13 @@
                     switchScene(this.dataset.scene);
                 });
             }
+
+            // Switching to last scene on pressing Escape
+            window.addEventListener("keydown", function (event) {
+                if (event.key !== "Escape") return;
+                if (!previousScene) return;
+                switchScene(previousScene);
+            });
 
             // Colour settings
             Object.keys(allColours).forEach((c) => {
@@ -1967,7 +2088,10 @@
                         scenes.menu.saveProject.classList.remove("disabled");
                         project.mainPage = 0;
                         project.editorPage = 0;
+                        fixProject();
                         sortStudentsAlphabetically();
+                        updateItemsPerPageMax();
+                        updateMainParagraphsList();
                         updateEditor();
                         switchScene("editor");
                     } catch (error) {
@@ -2062,16 +2186,25 @@
                     row.id = `editor-row${i}`;
 
                     // Student
+                    /** @type {HTMLTableCellElement} */
                     let studentCell = newChild(row, "td");
                     studentCell.classList.add("table-element-container");
 
+                    /** @type {HTMLDivElement} */
                     let studentDiv = newChild(studentCell, "div");
                     studentDiv.classList.add("student-div");
 
+                    /** @type {HTMLButtonElement} */
                     let studentDelButton = newChild(studentDiv, "button");
-                    studentDelButton.classList.add("student-button");
+                    studentDelButton.classList.add("student-button", "tooltip-parent");
                     studentDelButton.textContent = "x";
 
+                    /** @type {HTMLSpanElement} */
+                    let studentDelTooltip = newChild(studentDelButton, "span");
+                    studentDelTooltip.classList.add("tooltip");
+                    studentDelTooltip.textContent = getText("deleting-confirm");
+
+                    /** @type {HTMLTextAreaElement} */
                     let studentName = newChild(studentDiv, "textarea");
                     studentName.id = `student${i}`;
                     studentName.value = t.student;
@@ -2261,9 +2394,11 @@
                     if (mistake) {
                         /** @type {HTMLElement} */
                         const mistakeMark = newChild(textDiv, "mark");
-                        mistakeMark.textContent = textSlice;
 
-                        // Show mistake information
+                        mistakeMark.textContent = textSlice;
+                        mistakeMark.tabIndex = 0;
+
+                        // Mistake information and editing
                         if (interactive) {
                             /** @type {string} */
                             const info =
@@ -2276,9 +2411,9 @@
                                 getText(`${mistake.meaning}-label`).toLowerCase() +
                                 `${mistake.comment ? ` | ${mistake.comment}` : ""}`;
 
-                            mistakeMark.tabIndex = 0;
-                            mistakeMark.ariaLabel = info;
+                            mistakeMark.classList.add("mistake-info");
                             mistakeMark.dataset.info = info;
+                            mistakeMark.ariaLabel = info;
 
                             mistakeMark.addEventListener("keydown", function (event) {
                                 if (event.key === " " || event.key === "Enter") {
@@ -2395,7 +2530,10 @@
 
                 // Student's name
                 if (scenes.main.showNames.checked) {
+                    /** @type {HTMLTableRowElement} */
                     let nameRow = newChild(scenes.main.translations, "tr");
+
+                    /** @type {HTMLTableCellElement} */
                     let nameCell = newChild(nameRow, "td");
                     nameCell.classList.add("main-student-name");
                     nameCell.textContent = work.student;
@@ -2403,20 +2541,30 @@
                 }
 
                 // Row, cell, and container div
+                /** @type {HTMLTableRowElement} */
                 let textRow = newChild(scenes.main.translations, "tr");
 
+                /** @type {HTMLTableCellElement} */
                 let cell = newChild(textRow, "td");
                 cell.classList.add("table-element-container");
 
+                /** @type {HTMLDivElement} */
                 let container = newChild(cell, "div");
                 container.classList.add("student-div");
 
                 // Button to add a mistake
+                /** @type {HTMLButtonElement} */
                 let newMistakeButton = newChild(container, "button");
-                newMistakeButton.classList.add("student-button");
+                newMistakeButton.classList.add("student-button", "tooltip-parent");
                 newMistakeButton.textContent = "+";
 
+                /** @type {HTMLSpanElement} */
+                let newMistakeTooltip = newChild(newMistakeButton, "span");
+                newMistakeTooltip.classList.add("tooltip");
+                newMistakeTooltip.textContent = getText("add-mistake-button");
+
                 // Translation
+                /** @type {HTMLDivElement} */
                 let textDiv = newChild(container, "div");
                 textDiv.id = `student${studentIndex}`;
                 textDiv.classList.add("rich-text-div", "no-left-border");
@@ -2485,8 +2633,6 @@
                         newMistake.subtype = getRadioInputValue("mistake-subtype");
                         newMistake.meaning = getRadioInputValue("mistake-text-meaning");
 
-                        if (!work.mistakes) work.mistakes = [];
-
                         work.mistakes.push({
                             source: newMistake.source,
                             comment: newMistake.comment,
@@ -2497,14 +2643,6 @@
                             subtype: newMistake.subtype,
                             meaning: newMistake.meaning,
                         });
-                        highlightMistakes(
-                            textDiv,
-                            translation,
-                            work.mistakes.filter((m) => m.paragraph === project.paragraph),
-                            studentIndex,
-                            false,
-                        );
-                        updateStudentTranslation(studentIndex);
                         switchScene("main");
                     };
                 });
@@ -2529,16 +2667,6 @@
                 // Clean translations
                 removeChildNodes(scenes.main.translations);
 
-                // Iterate over students' translations and add them
-                /** @type {number} */
-                const firstIndex = project.mainPage * mainItemsPerPage;
-                /** @type {number} */
-                const lastIndex = firstIndex + mainItemsPerPage;
-
-                for (let i = firstIndex; i < lastIndex; i++) {
-                    addStudentToMainTable(i);
-                }
-
                 // Manage pages
                 let maxPage = getMaxPageIndex(project.translations, mainItemsPerPage);
                 project.mainPage = clamp(0, project.mainPage, maxPage);
@@ -2555,6 +2683,16 @@
                     scenes.main.footer.style.display = "table-footer-group";
                 } else {
                     scenes.main.footer.style.display = "none";
+                }
+
+                // Iterate over students' translations and add them
+                /** @type {number} */
+                const firstIndex = project.mainPage * mainItemsPerPage;
+                /** @type {number} */
+                const lastIndex = firstIndex + mainItemsPerPage;
+
+                for (let i = firstIndex; i < lastIndex; i++) {
+                    addStudentToMainTable(i);
                 }
             }
 
@@ -2669,16 +2807,44 @@
              * @param {HTMLDivElement} target
              */
             function switchScene(targetSceneId) {
+                // Save current window offset
+                sceneOffsets[currentScene] = {
+                    x: window.scrollX,
+                    y: window.scrollY,
+                };
+
+                // Manage scenes' visibility
                 for (const scene of document.querySelectorAll(".scene")) {
                     if (scene.id === targetSceneId) {
                         scene.style.display = "flex";
                     } else {
                         scene.style.display = "none";
                     }
+                }
 
-                    if (targetSceneId === "main") {
+                // Try to restore a previously saved offset
+                if (sceneOffsets[targetSceneId]) {
+                    window.scroll(
+                        sceneOffsets[targetSceneId].x || 0,
+                        sceneOffsets[targetSceneId].y || 0,
+                    );
+                }
+
+                // Keep track of the last and current scenes
+                previousScene = currentScene;
+                currentScene = targetSceneId;
+
+                // Additional actions
+                switch (targetSceneId) {
+                    case "main":
                         updateMain();
-                    }
+                        break;
+                    case "find-mistake":
+                        removeChildNodes(scenes.findMistake.table);
+                        scenes.findMistake.query.value = "";
+                        scenes.findMistake.comment.value = "";
+                        scenes.findMistake.addButton.style.display = "none";
+                        break;
                 }
             }
 
