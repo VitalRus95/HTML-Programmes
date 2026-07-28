@@ -19,13 +19,6 @@
                 }
             }
 
-            @keyframes row-show {
-                from {
-                    opacity: 0;
-                    transform: translateX(10%);
-                }
-            }
-
             /* All elements */
             :root {
                 --colour-bgr-1: #ff9696;
@@ -63,8 +56,6 @@
                     "Helvetica Neue",
                     sans-serif;
                 transition: background-color 0.4s ease;
-                -moz-transition: background-color 0.4s ease;
-                -webkit-transition: background-color 0.4s ease;
             }
 
             /* Elements by tag */
@@ -89,8 +80,6 @@
                 min-width: 40%;
                 max-width: var(--window-size);
                 transition: none;
-                -moz-transition: none;
-                -webkit-transition: none;
             }
 
             a {
@@ -196,8 +185,6 @@
                 );
                 color: var(--colour-text);
                 transition: background-color 0.7s ease;
-                -moz-transition: background-color 0.7s ease;
-                -webkit-transition: background-color 0.7s ease;
             }
 
             details[open] > summary::marker {
@@ -386,7 +373,6 @@
 
             tr {
                 height: 100%;
-                animation: row-show 0.7s ease;
             }
 
             tr:nth-of-type(even) > td:not(.disabled) {
@@ -439,8 +425,6 @@
                 color: var(--colour-hovered-fgr);
                 border-color: var(--colour-hovered-border);
                 transition: background-color 0.4s ease;
-                -moz-transition: background-color 0.4s ease;
-                -webkit-transition: background-color 0.4s ease;
             }
 
             /* Classes */
@@ -710,7 +694,7 @@
                 height: 1.75em;
                 padding: 2px 6px;
                 overflow: hidden;
-                transition: height 0.5s ease;
+                transition: height 0.35s ease;
             }
 
             #main-source-paragraph:focus,
@@ -743,16 +727,17 @@
     <body>
         <!-- MENU DIV -->
         <div id="menu" class="scene">
-            <h1 id="title" tabindex="1">Aestimo</h1>
+            <h1 data-tk="title" tabindex="1">Aestimo</h1>
 
             <select id="lang" tabindex="0"></select>
 
-            <button id="start-button" tabindex="1" data-scene="main"> Start </button>
+            <button data-tk="start-button" tabindex="1" data-scene="main">Start</button>
 
-            <button id="editor-button" tabindex="1" data-scene="editor">Editor</button>
+            <button data-tk="editor-button" tabindex="1" data-scene="editor">Editor</button>
 
             <a
                 id="save-project"
+                data-tk="save-project"
                 href=""
                 tabindex="1"
                 download="Project.json"
@@ -761,48 +746,58 @@
             >
 
             <input type="file" id="load-project-input" accept=".json" style="display: none" />
-            <button id="load-project-button" tabindex="1" class="tooltip-parent"
+            <button
+                id="load-project-button"
+                data-tk="load-project-button"
+                tabindex="1"
+                class="tooltip-parent"
+                tabindex="1"
+                class="tooltip-parent"
                 >Load project<span class="tooltip">Open a project (.json)</span>
             </button>
 
-            <button id="settings-button" tabindex="1" data-scene="settings">Settings</button>
+            <button data-tk="settings-button" tabindex="1" data-scene="settings">Settings</button>
 
-            <button id="about-button" tabindex="1" data-scene="about">About</button>
+            <button data-tk="about-button" tabindex="1" data-scene="about">About</button>
 
             <!-- Author -->
-            <p id="author" tabindex="0" class="tooltip-parent"
-                >Made by<a href="https://github.com/VitalRus95" target="_blank"
+            <p id="author" data-tk="author" tabindex="0" class="tooltip-parent"
+                >Made by
+                <a href="https://github.com/VitalRus95" target="_blank"
                     >Vitaly Pavlovich Ulyanov (Vital)</a
                 >.<span class="tooltip">Learn more on my GitHub page!</span>
             </p>
+
+            <!-- EXPORT TRANSLATION TEMPLATE -->
+            <button onclick="exportLanguage()">Export translation template</button>
         </div>
 
         <!-- MAIN DIV -->
         <div id="main" class="scene">
-            <button id="main-back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene="menu">Back</button>
 
             <!-- Adding a new mistake help -->
             <fieldset id="add-mistake-fieldset">
-                <legend id="add-mistake-help-title" tabindex="0">Adding a mistake</legend>
+                <legend data-tk="add-mistake-help-title" tabindex="0">Adding a mistake</legend>
 
-                <p id="add-mistake-help"
+                <p data-tk="add-mistake-help"
                     >To add a mistake, select the text containing it in the student's translation
                     and then either click the
                     <button class="student-button" style="display: inline; font-size: 1.1em"
                         >+</button
                     >
                     button on the left or press <kbd>Ctrl</kbd>+<kbd>A</kbd>.
-                    <b id="add-mistake-overlap-warning">Mistakes must not overlap!</b></p
+                    <b>Mistakes must not overlap!</b></p
                 >
             </fieldset>
 
             <!-- Settings -->
             <fieldset>
-                <legend id="main-settings" tabindex="0">Settings</legend>
+                <legend data-tk="main-settings" tabindex="0">Settings</legend>
 
                 <!-- Number of students per page setting -->
                 <div class="setting-div" style="margin-left: 1em">
-                    <label id="main-students-per-page" for="main-students-per-page-input"
+                    <label data-tk="students-per-page" for="main-students-per-page-input"
                         >Students per page:</label
                     >
                     <input
@@ -817,7 +812,7 @@
 
                 <!-- Showing names settings -->
                 <div class="setting-div" style="margin-left: 1em">
-                    <label id="main-show-names" for="main-show-names-input"
+                    <label data-tk="main-show-names" for="main-show-names-input"
                         >Show students' names:</label
                     >
                     <input id="main-show-names-input" type="checkbox" autocomplete="off" />
@@ -830,7 +825,9 @@
                 <thead>
                     <tr>
                         <th id="main-para-cell" class="tooltip-parent">
-                            <span id="main-para-tooltip" class="tooltip">Paragraph selection</span>
+                            <span data-tk="main-para-tooltip" class="tooltip"
+                                >Paragraph selection</span
+                            >
                             <select id="main-para-select"></select>
                         </th>
                     </tr>
@@ -853,7 +850,7 @@
                 <tfoot id="main-footer">
                     <tr>
                         <td id="main-page-cell" class="tooltip-parent">
-                            <span id="main-page-tooltip" class="tooltip">Page selection</span>
+                            <span data-tk="page-selection" class="tooltip">Page selection</span>
                             <select id="main-page-select"></select>
                         </td>
                     </tr>
@@ -862,28 +859,28 @@
 
             <!-- Actions menu -->
             <fieldset id="main-actions-fieldset">
-                <legend id="main-actions-menu" tabindex="0">Actions menu</legend>
+                <legend data-tk="actions-menu" tabindex="0">Actions menu</legend>
 
-                <button id="main-actions-find" data-scene="find-mistake">Find mistake</button>
+                <button data-tk="main-actions-find" data-scene="find-mistake">Find mistake</button>
             </fieldset>
         </div>
 
         <!-- ADDING MISTAKE -->
         <div id="add-mistake" class="scene">
-            <h2 id="add-mistake-title" tabindex="0">New mistake</h2>
+            <h2 data-tk="add-mistake-title" tabindex="0">New mistake</h2>
 
-            <button id="add-mistake-back" data-scene="main">Cancel</button>
+            <button data-tk="cancel" data-scene="main">Cancel</button>
 
             <!-- Mistake -->
             <fieldset>
-                <legend id="mistake-context-title" tabindex="0">Mistake's context</legend>
+                <legend data-tk="mistake-context-title" tabindex="0">Mistake's context</legend>
 
                 <div id="mistake-div" class="rich-text-div" tabindex="0"></div>
             </fieldset>
 
             <!-- Comment -->
             <fieldset>
-                <legend id="mistake-comment-title" tabindex="0">Comment (optional)</legend>
+                <legend data-tk="mistake-comment-title" tabindex="0">Comment (optional)</legend>
 
                 <input
                     id="mistake-comment-input"
@@ -895,7 +892,7 @@
 
             <!-- Mistake type -->
             <fieldset>
-                <legend id="mistake-type-title" tabindex="0">Mistake type</legend>
+                <legend data-tk="mistake-type-title" tabindex="0">Mistake type</legend>
 
                 <div class="radio-div">
                     <input
@@ -905,7 +902,7 @@
                         value="grammar"
                         autocomplete="off"
                     />
-                    <label id="grammar-label" for="grammar">Grammar</label>
+                    <label data-tk="grammar" for="grammar">Grammar</label>
                 </div>
 
                 <div class="radio-div">
@@ -917,7 +914,7 @@
                         autocomplete="off"
                         checked
                     />
-                    <label id="vocabulary-label" for="vocabulary">Vocabulary</label>
+                    <label data-tk="vocabulary" for="vocabulary">Vocabulary</label>
                 </div>
 
                 <div class="radio-div">
@@ -928,7 +925,7 @@
                         value="orthography"
                         autocomplete="off"
                     />
-                    <label id="orthography-label" for="orthography">Orthography</label>
+                    <label data-tk="orthography" for="orthography">Orthography</label>
                 </div>
 
                 <div class="radio-div">
@@ -939,7 +936,7 @@
                         value="punctuation"
                         autocomplete="off"
                     />
-                    <label id="punctuation-label" for="punctuation">Punctuation</label>
+                    <label data-tk="punctuation" for="punctuation">Punctuation</label>
                 </div>
 
                 <div class="radio-div">
@@ -950,13 +947,13 @@
                         value="complex"
                         autocomplete="off"
                     />
-                    <label id="complex-label" for="complex">Complex</label>
+                    <label data-tk="complex" for="complex">Complex</label>
                 </div>
             </fieldset>
 
             <!-- Mistake subtype -->
             <fieldset>
-                <legend id="mistake-subtype-title" tabindex="0">Mistake subtype</legend>
+                <legend data-tk="mistake-subtype-title" tabindex="0">Mistake subtype</legend>
 
                 <div class="radio-div">
                     <input
@@ -966,7 +963,7 @@
                         value="addition"
                         autocomplete="off"
                     />
-                    <label id="addition-label" for="addition">Redundant element</label>
+                    <label data-tk="addition" for="addition">Redundant element</label>
                 </div>
 
                 <div class="radio-div">
@@ -978,7 +975,7 @@
                         autocomplete="off"
                         checked
                     />
-                    <label id="distortion-label" for="distortion">Incorrect element</label>
+                    <label data-tk="distortion" for="distortion">Incorrect element</label>
                 </div>
 
                 <div class="radio-div">
@@ -989,13 +986,13 @@
                         value="deletion"
                         autocomplete="off"
                     />
-                    <label id="deletion-label" for="deletion">Lack of element</label>
+                    <label data-tk="deletion" for="deletion">Lack of element</label>
                 </div>
             </fieldset>
 
             <!-- Text's meaning -->
             <fieldset>
-                <legend id="mistake-text-meaning-title" tabindex="0">Text's meaning</legend>
+                <legend data-tk="mistake-text-meaning-title" tabindex="0">Text's meaning</legend>
 
                 <div class="radio-div">
                     <input
@@ -1006,7 +1003,7 @@
                         autocomplete="off"
                         checked
                     />
-                    <label id="retained-label" for="retained">Retained</label>
+                    <label data-tk="retained" for="retained">Retained</label>
                 </div>
 
                 <div class="radio-div">
@@ -1017,7 +1014,7 @@
                         value="obscured"
                         autocomplete="off"
                     />
-                    <label id="obscured-label" for="obscured">Obscured</label>
+                    <label data-tk="obscured" for="obscured">Obscured</label>
                 </div>
 
                 <div class="radio-div">
@@ -1028,23 +1025,23 @@
                         value="lost"
                         autocomplete="off"
                     />
-                    <label id="lost-label" for="lost">Lost</label>
+                    <label data-tk="lost" for="lost">Lost</label>
                 </div>
             </fieldset>
 
-            <button id="add-mistake-button">Add mistake</button>
+            <button id="add-mistake-button" data-tk="add-mistake-button">Add mistake</button>
         </div>
 
         <!-- EDITING MISTAKE -->
         <div id="edit-mistake" class="scene">
-            <h2 id="edit-mistake-title" tabindex="0">Mistake editing</h2>
+            <h2 data-tk="edit-mistake-title" tabindex="0">Mistake editing</h2>
 
             <table style="table-layout: auto">
                 <tbody>
                     <!-- Context -->
                     <tr>
                         <td
-                            id="edit-mistake-context-title"
+                            data-tk="mistake-context-title"
                             class="bold-text"
                             tabindex="0"
                             style="width: 25%"
@@ -1057,25 +1054,31 @@
 
                     <!-- Type -->
                     <tr>
-                        <td id="edit-mistake-type-title" class="bold-text" tabindex="0">Type</td>
+                        <td data-tk="mistake-type-title" class="bold-text" tabindex="0">Type</td>
                         <td class="table-element-container">
                             <select
                                 id="edit-mistake-type"
                                 class="table-full-cell"
                                 autocomplete="off"
                             >
-                                <option value="grammar">Grammar</option>
-                                <option value="vocabulary">Vocabulary</option>
-                                <option value="orthography">Orthography</option>
-                                <option value="punctuation">Punctuation</option>
-                                <option value="complex">Complex</option>
+                                <option data-tk="grammar" value="grammar">Grammar</option>
+                                <option data-tk="vocabulary" value="vocabulary" selected
+                                    >Vocabulary</option
+                                >
+                                <option data-tk="orthography" value="orthography"
+                                    >Orthography</option
+                                >
+                                <option data-tk="punctuation" value="punctuation"
+                                    >Punctuation</option
+                                >
+                                <option data-tk="complex" value="complex">Complex</option>
                             </select>
                         </td>
                     </tr>
 
                     <!-- Subtype -->
                     <tr>
-                        <td id="edit-mistake-subtype-title" class="bold-text" tabindex="0"
+                        <td data-tk="mistake-subtype-title" class="bold-text" tabindex="0"
                             >Subtype</td
                         >
                         <td class="table-element-container">
@@ -1084,16 +1087,20 @@
                                 class="table-full-cell"
                                 autocomplete="off"
                             >
-                                <option value="addition">Redundant element</option>
-                                <option value="distortion">Incorrect element</option>
-                                <option value="deletion">Lack of element</option>
+                                <option data-tk="addition" value="addition"
+                                    >Redundant element</option
+                                >
+                                <option data-tk="distortion" value="distortion" selected
+                                    >Incorrect element</option
+                                >
+                                <option data-tk="deletion" value="deletion">Lack of element</option>
                             </select>
                         </td>
                     </tr>
 
                     <!-- Meaning -->
                     <tr>
-                        <td id="edit-mistake-meaning-title" class="bold-text" tabindex="0"
+                        <td data-tk="mistake-text-meaning-title" class="bold-text" tabindex="0"
                             >Text's meaning</td
                         >
                         <td class="table-element-container">
@@ -1102,16 +1109,18 @@
                                 class="table-full-cell"
                                 autocomplete="off"
                             >
-                                <option value="retained">Retained</option>
-                                <option value="obscured">Obscured</option>
-                                <option value="lost">Lost</option>
+                                <option data-tk="retained" value="retained" selected
+                                    >Retained</option
+                                >
+                                <option data-tk="obscured" value="obscured">Obscured</option>
+                                <option data-tk="lost" value="lost">Lost</option>
                             </select>
                         </td>
                     </tr>
 
                     <!-- Comment -->
                     <tr>
-                        <td id="edit-mistake-comment-title" class="bold-text" tabindex="0"
+                        <td data-tk="mistake-comment-title" class="bold-text" tabindex="0"
                             >Comment</td
                         >
                         <td class="table-element-container">
@@ -1127,32 +1136,35 @@
             </table>
 
             <div class="setting-div">
-                <button id="edit-mistake-delete">Delete mistake </button>
+                <button id="edit-mistake-delete" data-tk="mistake-delete">Delete mistake</button>
 
-                <button id="edit-mistake-back" data-scene="main">Back</button>
+                <button data-tk="back" data-scene="main">Back</button>
             </div>
         </div>
 
         <!-- FINDING MISTAKE -->
         <div id="find-mistake" class="scene">
-            <h2 id="find-mistake-title" tabindex="0">Mistake search</h2>
+            <h2 data-tk="find-mistake-title" tabindex="0">Mistake search</h2>
 
-            <button id="find-mistake-back" data-scene="main">Back</button>
+            <button data-tk="back" data-scene="main">Back</button>
 
             <!-- Search settings -->
             <fieldset>
-                <legend id="find-mistake-search-parameters" tabindex="0">Search settings</legend>
+                <legend data-tk="find-mistake-search-parameters" tabindex="0"
+                    >Search settings</legend
+                >
 
                 <table style="table-layout: auto">
                     <tbody>
                         <!-- Search mode -->
                         <tr>
-                            <td id="find-mistake-mode-title" class="bold-text" tabindex="0"
+                            <td data-tk="find-mistake-mode-title" class="bold-text" tabindex="0"
                                 >Search mode</td
                             >
                             <td class="table-element-container">
                                 <select
                                     id="find-mistake-mode"
+                                    data-tk="find-mistake-mode"
                                     class="table-full-cell"
                                     autocomplete="off"
                                 >
@@ -1167,7 +1179,7 @@
                         <!-- Query -->
                         <tr>
                             <td
-                                id="find-mistake-query"
+                                data-tk="find-mistake-query"
                                 class="bold-text"
                                 tabindex="0"
                                 style="width: 25%"
@@ -1185,7 +1197,7 @@
 
                         <!-- Type -->
                         <tr>
-                            <td id="find-mistake-type-title" class="bold-text" tabindex="0"
+                            <td data-tk="mistake-type-title" class="bold-text" tabindex="0"
                                 >Type</td
                             >
                             <td class="table-element-container">
@@ -1194,18 +1206,24 @@
                                     class="table-full-cell"
                                     autocomplete="off"
                                 >
-                                    <option value="grammar">Grammar</option>
-                                    <option value="vocabulary" selected>Vocabulary</option>
-                                    <option value="orthography">Orthography</option>
-                                    <option value="punctuation">Punctuation</option>
-                                    <option value="complex">Complex</option>
+                                    <option data-tk="grammar" value="grammar">Grammar</option>
+                                    <option data-tk="vocabulary" value="vocabulary" selected
+                                        >Vocabulary</option
+                                    >
+                                    <option data-tk="orthography" value="orthography"
+                                        >Orthography</option
+                                    >
+                                    <option data-tk="punctuation" value="punctuation"
+                                        >Punctuation</option
+                                    >
+                                    <option data-tk="complex" value="complex">Complex</option>
                                 </select>
                             </td>
                         </tr>
 
                         <!-- Subtype -->
                         <tr>
-                            <td id="find-mistake-subtype-title" class="bold-text" tabindex="0"
+                            <td data-tk="mistake-subtype-title" class="bold-text" tabindex="0"
                                 >Subtype</td
                             >
                             <td class="table-element-container">
@@ -1214,16 +1232,22 @@
                                     class="table-full-cell"
                                     autocomplete="off"
                                 >
-                                    <option value="addition">Redundant element</option>
-                                    <option value="distortion" selected>Incorrect element</option>
-                                    <option value="deletion">Lack of element</option>
+                                    <option data-tk="addition" value="addition"
+                                        >Redundant element</option
+                                    >
+                                    <option data-tk="distortion" value="distortion" selected
+                                        >Incorrect element</option
+                                    >
+                                    <option data-tk="deletion" value="deletion"
+                                        >Lack of element</option
+                                    >
                                 </select>
                             </td>
                         </tr>
 
                         <!-- Meaning -->
                         <tr>
-                            <td id="find-mistake-meaning-title" class="bold-text" tabindex="0"
+                            <td data-tk="mistake-text-meaning-title" class="bold-text" tabindex="0"
                                 >Text's meaning</td
                             >
                             <td class="table-element-container">
@@ -1232,16 +1256,18 @@
                                     class="table-full-cell"
                                     autocomplete="off"
                                 >
-                                    <option value="retained" selected>Retained</option>
-                                    <option value="obscured">Obscured</option>
-                                    <option value="lost">Lost</option>
+                                    <option data-tk="retained" value="retained" selected
+                                        >Retained</option
+                                    >
+                                    <option data-tk="obscured" value="obscured">Obscured</option>
+                                    <option data-tk="lost" value="lost">Lost</option>
                                 </select>
                             </td>
                         </tr>
 
                         <!-- Comment -->
                         <tr>
-                            <td id="find-mistake-comment-title" class="bold-text" tabindex="0"
+                            <td data-tk="mistake-comment-title" class="bold-text" tabindex="0"
                                 >Comment</td
                             >
                             <td class="table-element-container">
@@ -1257,61 +1283,64 @@
                 </table>
             </fieldset>
 
-            <button id="find-mistake-search">Search</button>
+            <button id="find-mistake-search" data-tk="find-mistake-search">Search</button>
 
             <!-- Search results -->
             <fieldset>
-                <legend id="find-mistake-results" tabindex="0">Search results</legend>
+                <legend data-tk="find-mistake-results" tabindex="0">Search results</legend>
 
-                <table id="find-mistake-results">
+                <table>
                     <tbody id="find-mistake-table-body"></tbody>
                 </table>
             </fieldset>
 
-            <button id="find-mistake-table-add">Add found mistakes</button>
+            <button id="find-mistake-table-add" data-tk="find-mistake-table-add"
+                >Add found mistakes</button
+            >
         </div>
 
         <!-- ADDING STUDENTS -->
         <div id="adding-students" class="scene">
-            <h2 id="adding-students-title" tabindex="0">Adding students</h2>
+            <h2 data-tk="adding-students-title" tabindex="0">Adding students</h2>
 
-            <button id="adding-students-back" data-scene="editor">Cancel</button>
+            <button data-tk="cancel" data-scene="editor">Cancel</button>
 
             <textarea
                 id="added-students"
+                data-tk="added-students"
                 autocomplete="off"
                 style="height: 50vh; resize: none"
                 placeholder="List of students to add (one per line)"
             ></textarea>
 
-            <button id="adding-students-button">Confirm</button>
+            <button id="adding-students-button" data-tk="adding-students-button">Confirm</button>
         </div>
 
         <!-- DELETING A STUDENT -->
         <div id="deleting-student" class="scene">
             <fieldset>
-                <legend id="deleting-student-title" tabindex="0">Delete this student?</legend>
+                <legend data-tk="deleting-student-title" tabindex="0">Delete this student?</legend>
 
                 <h3 id="deleted-student-name"></h3>
 
                 <div class="setting-div">
-                    <button id="deleting-confirm">Delete student</button>
+                    <button id="deleting-confirm" data-tk="deleting-confirm">Delete student</button>
 
-                    <button id="deleting-cancel">Cancel</button>
+                    <button data-tk="cancel" data-scene="editor">Cancel</button>
                 </div>
             </fieldset>
         </div>
 
         <!-- EDITOR DIV -->
         <div id="editor" class="scene">
-            <h2 id="editor-title" tabindex="0">Editor</h2>
+            <h2 data-tk="editor-button" tabindex="0">Editor</h2>
 
-            <button id="editor-back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene="menu">Back</button>
 
             <!-- Alignment note -->
             <fieldset id="alignment-fieldset">
-                <legend id="alignment-legend" tabindex="0">Align the texts</legend
-                ><p id="alignment-text" tabindex="0"
+                <legend data-tk="alignment-legend" tabindex="0">Align the texts</legend>
+                <p data-tk="alignment-text" tabindex="0"
                     >For the programme to work properly, the source text and students' translations
                     should be aligned, i.e. have the same number and order of paragraphs.</p
                 >
@@ -1319,7 +1348,7 @@
 
             <!-- Source text -->
             <fieldset>
-                <legend id="source-title" tabindex="0">Source text</legend>
+                <legend data-tk="source-title" tabindex="0">Source text</legend>
 
                 <table>
                     <tbody>
@@ -1335,7 +1364,7 @@
 
                     <tfoot>
                         <tr>
-                            <td id="source-para-title" class="centred-text" tabindex="0"
+                            <td data-tk="para-count" class="centred-text" tabindex="0"
                                 >Paragraphs</td
                             >
                             <td id="source-para-count" class="centred-text" tabindex="0">0</td>
@@ -1346,11 +1375,11 @@
 
             <!-- Students and translations -->
             <fieldset>
-                <legend id="translations-title" tabindex="0">Students and translations</legend>
+                <legend data-tk="translations-title" tabindex="0">Students and translations</legend>
 
                 <!-- Number of students per page setting -->
                 <div class="setting-div" style="margin-left: 1em"
-                    ><label id="editor-students-per-page" for="editor-students-per-page-input"
+                    ><label data-tk="students-per-page" for="editor-students-per-page-input"
                         >Students per page:</label
                     ><input
                         id="editor-students-per-page-input"
@@ -1366,11 +1395,11 @@
                     <!-- Header -->
                     <thead>
                         <tr>
-                            <th id="table-student" tabindex="0" style="width: 25%">Student</th>
-                            <th id="table-translation" tabindex="0" style="width: 55%"
+                            <th data-tk="table-student" tabindex="0" style="width: 25%">Student</th>
+                            <th data-tk="table-translation" tabindex="0" style="width: 55%"
                                 >Translation</th
                             >
-                            <th id="table-paragraphs" tabindex="0">Paragraphs</th>
+                            <th data-tk="para-count" tabindex="0">Paragraphs</th>
                         </tr>
                     </thead>
 
@@ -1381,7 +1410,7 @@
                     <tfoot id="editor-footer">
                         <tr>
                             <td id="editor-page-cell" class="tooltip-parent" colspan="3">
-                                <span id="editor-page-tooltip" class="tooltip">Page selection</span>
+                                <span data-tk="page-selection" class="tooltip">Page selection</span>
                                 <select id="editor-page-select"></select>
                             </td>
                         </tr>
@@ -1390,18 +1419,20 @@
 
                 <!-- Actions menu -->
                 <fieldset id="editor-actions-fieldset">
-                    <legend id="editor-actions-menu" tabindex="0">Actions menu</legend>
+                    <legend data-tk="actions-menu" tabindex="0">Actions menu</legend>
 
-                    <button id="add-students" data-scene="adding-students">Add students</button>
+                    <button data-tk="add-students" data-scene="adding-students"
+                        >Add students</button
+                    >
 
-                    <button id="fix-source" class="tooltip-parent"
-                        >Fix source text<span id="fix-source-tooltip" class="tooltip"
+                    <button id="fix-source" data-tk="fix-source" class="tooltip-parent"
+                        >Fix source text<span class="tooltip"
                             >Remove extra whitespaces and line breaks</span
                         ></button
                     >
 
-                    <button id="fix-translations" class="tooltip-parent"
-                        >Fix translations<span id="fix-translations-tooltip" class="tooltip"
+                    <button id="fix-translations" data-tk="fix-translations" class="tooltip-parent"
+                        >Fix translations<span class="tooltip"
                             >Remove extra whitespaces and line breaks</span
                         ></button
                     >
@@ -1411,18 +1442,18 @@
 
         <!-- SETTINGS DIV -->
         <div id="settings" class="scene">
-            <h2 id="settings-title" tabindex="0">Settings</h2>
+            <h2 data-tk="settings-button" tabindex="0">Settings</h2>
 
-            <button id="settings-back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene="menu">Back</button>
 
             <!-- Sound settings -->
             <details>
-                <summary id="sound-settings">Sound</summary>
+                <summary data-tk="sound-settings">Sound</summary>
 
                 <ul class="settings-list">
                     <!-- Volume -->
                     <li>
-                        <label for="set-volume" id="volume-label">Sound volume</label>
+                        <label for="set-volume" data-tk="volume">Sound volume</label>
                         <input
                             type="number"
                             id="set-volume"
@@ -1436,7 +1467,7 @@
                     <!-- Default sounds (buttons, inputs, etc.) -->
                     <li>
                         <div class="setting-div">
-                            <label for="set-def-sounds" id="def-sounds-label"
+                            <label for="set-def-sounds" data-tk="def-sounds"
                                 >Default sounds (buttons, inputs, etc.)</label
                             >
                             <input type="checkbox" id="set-def-sounds" checked />
@@ -1447,12 +1478,17 @@
 
             <!-- Colour scheme settings -->
             <details>
-                <summary id="colour-settings">Colours</summary>
+                <summary data-tk="colour-settings">Colours</summary>
 
                 <div class="button-container">
                     <input type="file" id="colour-loader" accept=".json" style="display: none" />
-                    <button id="load-colours">Load colours</button>
-                    <a id="save-colours" href="" download="Colours.json" class="pseudo-button"
+                    <button id="load-colours" data-tk="load-colours">Load colours</button>
+                    <a
+                        id="save-colours"
+                        data-tk="save-colours"
+                        href=""
+                        download="Colours.json"
+                        class="pseudo-button"
                         >Save colours</a
                     >
                 </div>
@@ -1460,28 +1496,30 @@
                 <ul id="colours" class="settings-list"></ul>
 
                 <div class="button-container">
-                    <button id="example-button">Button example</button>
-                    <button id="example-disabled-button" disabled>Disabled button example</button>
+                    <button data-tk="example-button">Button example</button>
+                    <button data-tk="example-disabled-button" disabled
+                        >Disabled button example</button
+                    >
                     <input
                         type="text"
-                        id="example-input"
+                        data-tk="example-input"
                         placeholder="Input example"
                         value="12345 ABCDE"
                     />
                 </div>
 
                 <blockquote>
-                    <p id="example-buttons"
+                    <p data-tk="example-buttons"
                         >Text example with keyboard buttons (such as <kbd>Enter</kbd>) and
                         programmes' interface buttons (for example, <samp>Apply</samp>).</p
                     >
-                    <p id="example-formatting"
+                    <p data-tk="example-formatting"
                         >Examples of <strong>important</strong>, <b>boldface</b>, <i>italicised</i>,
                         and <u>underlined</u> text.</p
                     >
                 </blockquote>
                 <span class="codeblock">
-                    <pre id="example-code">Пример кода</pre>
+                    <pre data-tk="example-code">Code example</pre>
                     <pre>print("Hello, world!")</pre>
                     <br />
                     <pre>if (a > b) {</pre>
@@ -1490,14 +1528,16 @@
                 </span>
             </details>
 
-            <button id="default-settings">Restore default settings</button>
+            <button id="default-settings" data-tk="default-settings"
+                >Restore default settings</button
+            >
         </div>
 
         <!-- ABOUT DIV -->
         <div id="about" class="scene">
-            <h2 id="about-title" tabindex="0">About</h2>
+            <h2 data-tk="about-button" tabindex="0">About</h2>
 
-            <button id="about-back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene="menu">Back</button>
 
             <p>Programme description. To be continued...</p>
         </div>
@@ -1507,123 +1547,134 @@
             // | Elements |
             // +----------+
             //
-            /** @type {HTMLDivElement} */
-            const menu = element("menu");
-
             const scenes = {
                 menu: {
                     /** @type {HTMLDivElement} */
-                    main: element("main"),
-                    /** @type {HTMLDivElement} */
-                    editor: element("editor"),
-                    /** @type {HTMLDivElement} */
-                    settings: element("settings"),
-                    /** @type {HTMLDivElement} */
-                    about: element("about"),
+                    self: element("#menu"),
+                    /** @type {HTMLSelectElement} */
+                    languageSelect: element("#lang"),
                     /** @type {HTMLButtonElement} */
-                    loadProjectButton: element("load-project-button"),
+                    loadProjectButton: element("#load-project-button"),
                     /** @type {HTMLInputElement} */
-                    loadProjectInput: element("load-project-input"),
+                    loadProjectInput: element("#load-project-input"),
                     /** @type {HTMLAnchorElement} */
-                    saveProject: element("save-project"),
+                    saveProject: element("#save-project"),
                 },
                 main: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#main"),
                     /** @type {HTMLInputElement} */
-                    itemsPerPageInput: element("main-students-per-page-input"),
+                    itemsPerPageInput: element("#main-students-per-page-input"),
                     /** @type {HTMLInputElement} */
-                    showNames: element("main-show-names-input"),
+                    showNames: element("#main-show-names-input"),
                     /** @type {HTMLSelectElement} */
-                    paragraphSelect: element("main-para-select"),
+                    paragraphSelect: element("#main-para-select"),
                     /** @type {HTMLTextAreaElement} */
-                    sourceParagraph: element("main-source-paragraph"),
+                    sourceParagraph: element("#main-source-paragraph"),
                     /** @type {HTMLTableSectionElement} */
-                    translations: element("main-translations-list"),
+                    translations: element("#main-translations-list"),
                     /** @type {HTMLTableSectionElement} */
-                    footer: element("main-footer"),
+                    footer: element("#main-footer"),
                     /** @type {HTMLSelectElement} */
-                    pageSelect: element("main-page-select"),
+                    pageSelect: element("#main-page-select"),
                 },
                 editor: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#editor"),
                     /** @type {HTMLTextAreaElement} */
-                    sourceText: element("source-text"),
+                    sourceText: element("#source-text"),
                     /** @type {HTMLTableCellElement} */
-                    sourceParaCountText: element("source-para-count"),
+                    sourceParaCountText: element("#source-para-count"),
                     /** @type {HTMLTableSectionElement} */
-                    translations: element("editor-translations-list"),
+                    translations: element("#editor-translations-list"),
                     /** @type {HTMLTableSectionElement} */
-                    footer: element("editor-footer"),
+                    footer: element("#editor-footer"),
                     /** @type {HTMLSelectElement} */
-                    pageSelect: element("editor-page-select"),
+                    pageSelect: element("#editor-page-select"),
                     /** @type {HTMLInputElement} */
-                    itemsPerPageInput: element("editor-students-per-page-input"),
+                    itemsPerPageInput: element("#editor-students-per-page-input"),
                 },
                 settings: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#settings"),
                     /** @type {HTMLUListElement} */
-                    colours: element("colours"),
+                    colours: element("#colours"),
                     /** @type {HTMLInputElement} */
-                    colourLoader: element("colour-loader"),
+                    colourLoader: element("#colour-loader"),
                     /** @type {HTMLButtonElement} */
-                    loadColours: element("load-colours"),
+                    loadColours: element("#load-colours"),
                     /** @type {HTMLAnchorElement} */
-                    saveColours: element("save-colours"),
+                    saveColours: element("#save-colours"),
                     /** @type {HTMLInputElement} */
-                    volumeInput: element("set-volume"),
+                    volumeInput: element("#set-volume"),
                     /** @type {HTMLInputElement} */
-                    defaultSounds: element("set-def-sounds"),
+                    defaultSounds: element("#set-def-sounds"),
                     /** @type {HTMLButtonElement} */
-                    defaultSettings: element("default-settings"),
+                    defaultSettings: element("#default-settings"),
                 },
                 addMistake: {
-                    /** @type {HTMLButtonElement} */
-                    addButton: element("add-mistake-button"),
                     /** @type {HTMLDivElement} */
-                    mistakeSource: element("mistake-div"),
+                    self: element("#add-mistake"),
+                    /** @type {HTMLButtonElement} */
+                    addButton: element("#add-mistake-button"),
+                    /** @type {HTMLDivElement} */
+                    mistakeSource: element("#mistake-div"),
                     /** @type {HTMLInputElement} */
-                    mistakeComment: element("mistake-comment-input"),
+                    mistakeComment: element("#mistake-comment-input"),
                 },
                 editMistake: {
                     /** @type {HTMLDivElement} */
-                    context: element("edit-mistake-context"),
+                    self: element("#edit-mistake"),
+                    /** @type {HTMLDivElement} */
+                    context: element("#edit-mistake-context"),
                     /** @type {HTMLSelectElement} */
-                    type: element("edit-mistake-type"),
+                    type: element("#edit-mistake-type"),
                     /** @type {HTMLSelectElement} */
-                    subtype: element("edit-mistake-subtype"),
+                    subtype: element("#edit-mistake-subtype"),
                     /** @type {HTMLSelectElement} */
-                    meaning: element("edit-mistake-meaning"),
+                    meaning: element("#edit-mistake-meaning"),
                     /** @type {HTMLInputElement} */
-                    comment: element("edit-mistake-comment"),
+                    comment: element("#edit-mistake-comment"),
                     /** @type {HTMLButtonElement} */
-                    delete: element("edit-mistake-delete"),
+                    delete: element("#edit-mistake-delete"),
                 },
                 findMistake: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#find-mistake"),
                     /** @type {HTMLSelectElement} */
-                    mode: element("find-mistake-mode"),
+                    mode: element("#find-mistake-mode"),
                     /** @type {HTMLInputElement} */
-                    query: element("find-mistake-query-input"),
+                    query: element("#find-mistake-query-input"),
                     /** @type {HTMLSelectElement} */
-                    type: element("find-mistake-type"),
+                    type: element("#find-mistake-type"),
                     /** @type {HTMLSelectElement} */
-                    subtype: element("find-mistake-subtype"),
+                    subtype: element("#find-mistake-subtype"),
                     /** @type {HTMLSelectElement} */
-                    meaning: element("find-mistake-meaning"),
+                    meaning: element("#find-mistake-meaning"),
                     /** @type {HTMLInputElement} */
-                    comment: element("find-mistake-comment"),
+                    comment: element("#find-mistake-comment"),
                     /** @type {HTMLButtonElement} */
-                    searchButton: element("find-mistake-search"),
+                    searchButton: element("#find-mistake-search"),
                     /** @type {HTMLTableSectionElement} */
-                    table: element("find-mistake-table-body"),
+                    table: element("#find-mistake-table-body"),
                     /** @type {HTMLButtonElement} */
-                    addButton: element("find-mistake-table-add"),
+                    addButton: element("#find-mistake-table-add"),
                 },
                 addStudents: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#adding-students"),
                     /** @type {HTMLTextAreaElement} */
-                    addedList: element("added-students"),
+                    addedList: element("#added-students"),
                 },
                 deleteStudent: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#deleting-student"),
                     /** @type {HTMLHeadingElement} */
-                    studentName: element("deleted-student-name"),
-                    /** @type {HTMLButtonElement} */
-                    cancelButton: element("deleting-cancel"),
+                    studentName: element("#deleted-student-name"),
+                },
+                about: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#about"),
                 },
             };
 
@@ -1631,6 +1682,13 @@
             // | Types |
             // +-------+
             //
+            /** @typedef Language
+             * @property {string} name
+             * @property {string[]} langTags
+             * @property {Object.<string, string[]>} texts
+             * @property {Object.<string, string>} placeholders
+             */
+
             /** @typedef Offset
              * @property {number} x
              * @property {number} y
@@ -1753,6 +1811,293 @@
             let currentScene = "menu";
             /** @type {string} */
             let previousScene = undefined;
+            /** @type {Language[]} */
+            let languages = [
+                {
+                    name: "English [Vitaly Ulyanov]",
+                    langTags: [
+                        "en",
+                        "en-AU",
+                        "en-BZ",
+                        "en-CA",
+                        "en-CB",
+                        "en-GB",
+                        "en-IE",
+                        "en-JM",
+                        "en-NZ",
+                        "en-PH",
+                        "en-TT",
+                        "en-US",
+                        "en-ZA",
+                        "en-ZW",
+                    ],
+                    texts: {
+                        title: ["Aestimo"],
+                        "start-button": ["Start"],
+                        "editor-button": ["Editor"],
+                        "save-project": ["Save project"],
+                        "load-project-button": ["Load project", "Open a project (.json)"],
+                        "settings-button": ["Settings"],
+                        "about-button": ["About"],
+                        author: [
+                            "Made by ",
+                            "Vitaly Pavlovich Ulyanov (Vital)",
+                            ".",
+                            "Learn more on my GitHub page!",
+                        ],
+                        back: ["Back"],
+                        "add-mistake-help-title": ["Adding a mistake"],
+                        "add-mistake-help": [
+                            "To add a mistake, select the text containing it in the student's translation and then either click the ",
+                            "+",
+                            " button on the left or press ",
+                            "Ctrl",
+                            "+",
+                            "A",
+                            ". ",
+                            "Mistakes must not overlap!",
+                        ],
+                        "main-settings": ["Settings"],
+                        "students-per-page": ["Students per page:"],
+                        "main-show-names": ["Show students' names:"],
+                        "main-para-tooltip": ["Paragraph selection"],
+                        "page-selection": ["Page selection"],
+                        "actions-menu": ["Actions menu"],
+                        "main-actions-find": ["Find mistake"],
+                        "add-mistake-title": ["New mistake"],
+                        cancel: ["Cancel"],
+                        "mistake-context-title": ["Mistake's context"],
+                        "mistake-comment-title": ["Comment (optional)"],
+                        "mistake-type-title": ["Mistake type"],
+                        grammar: ["Grammar"],
+                        vocabulary: ["Vocabulary"],
+                        orthography: ["Orthography"],
+                        punctuation: ["Punctuation"],
+                        complex: ["Complex"],
+                        "mistake-subtype-title": ["Mistake subtype"],
+                        addition: ["Redundant element"],
+                        distortion: ["Incorrect element"],
+                        deletion: ["Lack of element"],
+                        "mistake-text-meaning-title": ["Text's meaning"],
+                        retained: ["Retained"],
+                        obscured: ["Obscured"],
+                        lost: ["Lost"],
+                        "add-mistake-button": ["Add mistake"],
+                        "edit-mistake-title": ["Mistake editing"],
+                        "mistake-delete": ["Delete mistake"],
+                        "find-mistake-title": ["Mistake search"],
+                        "find-mistake-search-parameters": ["Search settings"],
+                        "find-mistake-mode-title": ["Search mode"],
+                        "find-mistake-mode": ["Simple", "Advanced (with regular expressions)"],
+                        "find-mistake-query": ["Search query"],
+                        "find-mistake-search": ["Search"],
+                        "find-mistake-results": ["Search results"],
+                        "find-mistake-table-add": ["Add found mistakes"],
+                        "adding-students-title": ["Adding students"],
+                        "adding-students-button": ["Confirm"],
+                        "deleting-student-title": ["Delete this student?"],
+                        "deleting-confirm": ["Delete student"],
+                        "alignment-legend": ["Align the texts"],
+                        "alignment-text": [
+                            "For the programme to work properly, the source text and students' translations should be aligned, i.e. have the same number and order of paragraphs.",
+                        ],
+                        "source-title": ["Source text"],
+                        "para-count": ["Paragraphs"],
+                        "translations-title": ["Students and translations"],
+                        "table-student": ["Student"],
+                        "table-translation": ["Translation"],
+                        "add-students": ["Add students"],
+                        "fix-source": [
+                            "Fix source text",
+                            "Remove extra whitespaces and line breaks",
+                        ],
+                        "fix-translations": [
+                            "Fix translations",
+                            "Remove extra whitespaces and line breaks",
+                        ],
+                        "sound-settings": ["Sound"],
+                        volume: ["Sound volume"],
+                        "def-sounds": ["Default sounds (buttons, inputs, etc.)"],
+                        "colour-settings": ["Colours"],
+                        "load-colours": ["Load colours"],
+                        "save-colours": ["Save colours"],
+                        "--colour-bgr-1": ["Background (left)"],
+                        "--colour-bgr-2": ["Background (centre)"],
+                        "--colour-bgr-3": ["Background (right)"],
+                        "--colour-text": ["Text"],
+                        "--colour-button": ["Buttons"],
+                        "--colour-border": ["Borders"],
+                        "--colour-input": ["Inputs"],
+                        "--colour-tooltip": ["Tooltip's background"],
+                        "--colour-hovered-bgr": ["Hovered element's background"],
+                        "--colour-hovered-fgr": ["Hovered element's text"],
+                        "--colour-hovered-border": ["Hovered element's border"],
+                        "--colour-disabled-bgr": ["Disabled element's background"],
+                        "--colour-disabled-fgr": ["Disabled element's text"],
+                        "example-button": ["Button example"],
+                        "example-disabled-button": ["Disabled button example"],
+                        "example-buttons": [
+                            "Text example with keyboard buttons (such as ",
+                            "Enter",
+                            ") and programmes' interface buttons (for example, ",
+                            "Apply",
+                            ").",
+                        ],
+                        "example-formatting": [
+                            "Examples of ",
+                            "important",
+                            ", ",
+                            "boldface",
+                            ", ",
+                            "italicised",
+                            ", and ",
+                            "underlined",
+                            " text.",
+                        ],
+                        "example-code": ["Code example"],
+                        "default-settings": ["Restore default settings"],
+                    },
+                    placeholders: {
+                        "added-students": "List of students to add (one per line)",
+                        "example-input": "Input example",
+                    },
+                },
+                {
+                    name: "Русский [Виталий Ульянов]",
+                    langTags: ["ru", "ru-RU"],
+                    texts: {
+                        title: ["Aestimo"],
+                        "start-button": ["Начать"],
+                        "editor-button": ["Редактор"],
+                        "save-project": ["Сохранить проект"],
+                        "load-project-button": ["Загрузить проект", "Открыть проект (.json)"],
+                        "settings-button": ["Настройки"],
+                        "about-button": ["О программе"],
+                        author: [
+                            "Автор — ",
+                            "Виталий Павлович Ульянов (Vital)",
+                            ".",
+                            "Узнайте больше на GitHub!",
+                        ],
+                        back: ["Назад"],
+                        "add-mistake-help-title": ["Добавление ошибки"],
+                        "add-mistake-help": [
+                            "Чтобы добавить ошибку, выделите содержащий её текст в переводе учащегося и нажмите на кнопку ",
+                            "+",
+                            " слева или используйте сочетание ",
+                            "Ctrl",
+                            "+",
+                            "A",
+                            ". ",
+                            "Ошибки не должны пересекаться!",
+                        ],
+                        "main-settings": ["Настройки"],
+                        "students-per-page": ["Учащихся на странице:"],
+                        "main-show-names": ["Показать имена учащихся:"],
+                        "main-para-tooltip": ["Выбор абзаца"],
+                        "page-selection": ["Выбор страницы"],
+                        "actions-menu": ["Меню действий"],
+                        "main-actions-find": ["Найти ошибку"],
+                        "add-mistake-title": ["Новая ошибка"],
+                        cancel: ["Отмена"],
+                        "mistake-context-title": ["Контекст ошибки"],
+                        "mistake-comment-title": ["Пояснение (необязательно)"],
+                        "mistake-type-title": ["Вид ошибки"],
+                        grammar: ["Грамматическая"],
+                        vocabulary: ["Лексическая"],
+                        orthography: ["Орфографическая"],
+                        punctuation: ["Пунктуационная"],
+                        complex: ["Комплексная"],
+                        "mistake-subtype-title": ["Подвид ошибки"],
+                        addition: ["Лишний элемент"],
+                        distortion: ["Неверный элемент"],
+                        deletion: ["Отсутствие элемента"],
+                        "mistake-text-meaning-title": ["Понимание текста"],
+                        retained: ["Не затруднено"],
+                        obscured: ["Затруднено"],
+                        lost: ["Невозможно"],
+                        "add-mistake-button": ["Добавить ошибку"],
+                        "edit-mistake-title": ["Изменение ошибки"],
+                        "mistake-delete": ["Удалить ошибку"],
+                        "find-mistake-title": ["Поиск ошибки"],
+                        "find-mistake-search-parameters": ["Настройки поиска"],
+                        "find-mistake-mode-title": ["Режим поиска"],
+                        "find-mistake-mode": ["Простой", "Продвинутый (с регулярными выражениями)"],
+                        "find-mistake-query": ["Поисковый запрос"],
+                        "find-mistake-search": ["Искать"],
+                        "find-mistake-results": ["Результаты поиска"],
+                        "find-mistake-table-add": ["Добавить найденные ошибки"],
+                        "adding-students-title": ["Добавление учащихся"],
+                        "adding-students-button": ["Подтвердить"],
+                        "deleting-student-title": ["Удалить этого учащегося?"],
+                        "deleting-confirm": ["Удалить учащегося"],
+                        "alignment-legend": ["Выравнивание текстов"],
+                        "alignment-text": [
+                            "Для правильной работы программы текст оригинала и переводы учащихся должны быть выравнены, то есть иметь одинаковые количество и порядок абзацев.",
+                        ],
+                        "source-title": ["Текст оригинала"],
+                        "para-count": ["Абзацы"],
+                        "translations-title": ["Учащиеся и переводы"],
+                        "table-student": ["Учащийся"],
+                        "table-translation": ["Перевод"],
+                        "add-students": ["Добавить учащихся"],
+                        "fix-source": [
+                            "Починить текст оригинала",
+                            "Убрать лишние пробелы и переносы строк",
+                        ],
+                        "fix-translations": [
+                            "Починить переводы",
+                            "Убрать лишние пробелы и переносы строк",
+                        ],
+                        "sound-settings": ["Звук"],
+                        volume: ["Громкость звука"],
+                        "def-sounds": ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
+                        "colour-settings": ["Цвета"],
+                        "load-colours": ["Загрузить цвета"],
+                        "save-colours": ["Сохранить цвета"],
+                        "--colour-bgr-1": ["Фон (левая часть)"],
+                        "--colour-bgr-2": ["Фон (средняя часть)"],
+                        "--colour-bgr-3": ["Фон (правая часть)"],
+                        "--colour-text": ["Текст"],
+                        "--colour-button": ["Кнопки"],
+                        "--colour-border": ["Рамки"],
+                        "--colour-input": ["Поля ввода"],
+                        "--colour-tooltip": ["Фон подсказок"],
+                        "--colour-hovered-bgr": ["Фон элемента при наведении"],
+                        "--colour-hovered-fgr": ["Текст элемента при наведении"],
+                        "--colour-hovered-border": ["Рамки элемента при наведении"],
+                        "--colour-disabled-bgr": ["Фон отключённого элемента"],
+                        "--colour-disabled-fgr": ["Текст отключённого элемента"],
+                        "example-button": ["Пример кнопки"],
+                        "example-disabled-button": ["Пример отключённой кнопки"],
+                        "example-buttons": [
+                            "Пример текста с кнопками клавиатуры (например, ",
+                            "Enter",
+                            ") и интерфейса программ (например, ",
+                            "Применить",
+                            ").",
+                        ],
+                        "example-formatting": [
+                            "Пример ",
+                            "важного",
+                            ", ",
+                            "полужирного",
+                            ", ",
+                            "курсивного",
+                            " и ",
+                            "подчёркнутого",
+                            " текста.",
+                        ],
+                        "example-code": ["Пример кода"],
+                        "default-settings": ["Сбросить все настройки"],
+                    },
+                    placeholders: {
+                        "added-students": "Добавляемые учащиеся (по одному на строке)",
+                        "example-input": "Пример поля ввода",
+                    },
+                },
+            ];
+
             /** @type {number} */
             let sourceParaCount = 0;
             /** @type {number} */
@@ -1777,6 +2122,11 @@
             // | Events |
             // +--------+
             //
+            scenes.menu.languageSelect.addEventListener("change", function (event) {
+                localStorage.setItem("lang", this.value);
+                changeLanguage();
+            });
+
             scenes.settings.volumeInput.addEventListener("change", function (event) {
                 scenes.settings.volumeInput.value = clamp(0, +scenes.settings.volumeInput.value, 1);
                 localStorage.setItem("volume", scenes.settings.volumeInput.value);
@@ -1798,7 +2148,7 @@
                 // Colours
                 for (const c in allColours) {
                     document.body.style.setProperty(c, allColours[c]);
-                    document.getElementById(c).value = allColours[c];
+                    element(`#${c}`).value = allColours[c];
                     localStorage.setItem(c, allColours[c]);
                 }
             });
@@ -1922,12 +2272,12 @@
                     /** @type {HTMLButtonElement} */
                     let deleteButton = newChild(cellDiv, "button");
                     deleteButton.classList.add("student-button", "tooltip-parent");
-                    deleteButton.textContent = "x";
+                    deleteButton.textContent = "-";
 
                     /** @type {HTMLSpanElement} */
                     let deleteTooltip = newChild(deleteButton, "span");
                     deleteTooltip.classList.add("tooltip");
-                    deleteTooltip.textContent = getText("edit-mistake-delete");
+                    deleteTooltip.textContent = getText("mistake-delete");
 
                     /** @type {HTMLDivElement} */
                     let textDiv = newChild(cellDiv, "div");
@@ -1965,10 +2315,10 @@
 
             // Buttons
             [
-                { id: "adding-students-button", action: addStudents },
-                { id: "deleting-confirm", action: deleteStudent },
-                { id: "fix-source", action: fixSource },
-                { id: "fix-translations", action: fixTranslations },
+                { id: "#adding-students-button", action: addStudents },
+                { id: "#deleting-confirm", action: deleteStudent },
+                { id: "#fix-source", action: fixSource },
+                { id: "#fix-translations", action: fixTranslations },
             ].forEach((b) => {
                 /** @type {HTMLButtonElement} */
                 let button = element(b.id);
@@ -1986,6 +2336,8 @@
             window.addEventListener("keydown", function (event) {
                 if (event.key !== "Escape") return;
                 if (!previousScene) return;
+                if (["deleting-student"].includes(previousScene)) return;
+
                 switchScene(previousScene);
             });
 
@@ -2003,12 +2355,11 @@
                 /** @type {HTMLInputElement} */
                 let input = newChild(item, "input");
 
-                label.id = `${c}-label`;
+                label.dataset["tk"] = `${c}`;
                 label.htmlFor = c;
                 label.textContent = c;
                 label.style.marginRight = "4px";
 
-                input.id = c;
                 input.type = "color";
                 input.value = document.body.style.getPropertyValue(c);
                 input.addEventListener("input", function (event) {
@@ -2021,9 +2372,8 @@
                     /** @type {HTMLSpanElement} */
                     let tooltip = newChild(item, "span");
 
-                    tooltip.id = "example-tooltip";
                     tooltip.classList.add("tooltip");
-                    tooltip.textContent = "Tooltip example";
+                    tooltip.textContent = getElementText('[data-tk="title"]');
                 }
             });
 
@@ -2041,7 +2391,7 @@
 
                         for (const c in loadedColours) {
                             document.body.style.setProperty(c, loadedColours[c]);
-                            document.getElementById(c).value = loadedColours[c];
+                            element(`#${c}`).value = loadedColours[c];
                             localStorage.setItem(c, loadedColours[c]);
                             this.value = "";
                         }
@@ -2117,14 +2467,11 @@
                 updateEditor();
             });
 
-            // Cancelling deleting a student
-            scenes.deleteStudent.cancelButton.addEventListener("click", function (event) {
-                switchScene("editor");
-            });
-
             // +-----------+
             // | Functions |
             // +-----------+
+            loadSettings();
+
             /**
              * Gets the number of paragraphs in the specified text
              * @param {string} text
@@ -2197,7 +2544,7 @@
                     /** @type {HTMLButtonElement} */
                     let studentDelButton = newChild(studentDiv, "button");
                     studentDelButton.classList.add("student-button", "tooltip-parent");
-                    studentDelButton.textContent = "x";
+                    studentDelButton.textContent = "-";
 
                     /** @type {HTMLSpanElement} */
                     let studentDelTooltip = newChild(studentDelButton, "span");
@@ -2402,13 +2749,13 @@
                         if (interactive) {
                             /** @type {string} */
                             const info =
-                                getText(`${mistake.type}-label`) +
+                                getText(mistake.type) +
                                 " | " +
-                                getText(`${mistake.subtype}-label`) +
+                                getText(mistake.subtype) +
                                 " | " +
                                 getText("mistake-text-meaning-title") +
                                 ": " +
-                                getText(`${mistake.meaning}-label`).toLowerCase() +
+                                getText(mistake.meaning).toLowerCase() +
                                 `${mistake.comment ? ` | ${mistake.comment}` : ""}`;
 
                             mistakeMark.classList.add("mistake-info");
@@ -2494,7 +2841,7 @@
              */
             function updateStudentTranslation(studentIndex) {
                 /** @type {HTMLDivElement} */
-                const textDiv = document.getElementById(`student${studentIndex}`);
+                const textDiv = element(`#student${studentIndex}`);
                 if (!textDiv) return;
 
                 /** @type {Work} */
@@ -2710,11 +3057,6 @@
                 });
             }
 
-            fixProject();
-            updateItemsPerPageMax();
-            updateMainParagraphsList();
-            updateEditor();
-
             /**
              * Gets the last page index (from 0) of an array
              * @param {any[]} array
@@ -2751,18 +3093,44 @@
 
             /**
              * Gets the text content of the specified element
-             * @param {string} elementName
+             * @param {string} query
              * @returns {string}
              */
-            function getText(elementName) {
-                return document.getElementById(elementName).textContent || elementName;
+            function getElementText(query) {
+                /** @type {HTMLElement} */
+                let el = element(query);
+                return el ? el.textContent || query : query;
             }
 
             /**
-             * Gets an element by its id
+             * Gets the text from currently used language by its key
+             * @param {string} key
+             * @returns {string}
              */
-            function element(id) {
-                return document.getElementById(id);
+            function getText(key) {
+                /** @type {Language} */
+                const language = getCurrentLanguage();
+
+                if (!language.texts[key]) return key;
+
+                return language.texts[key].join("");
+            }
+
+            /**
+             * Gets an element matching the query
+             * @param {string} query
+             * @returns {HTMLElement}
+             */
+            function element(query) {
+                return document.querySelector(query);
+            }
+
+            /**
+             * Gets all element matching the query
+             * @returns {NodeList}
+             */
+            function elements(query) {
+                return document.querySelectorAll(query);
             }
 
             /**
@@ -2796,6 +3164,9 @@
                     scenes.settings.defaultSounds.checked = true;
                     localStorage.setItem("default-sounds", "true");
                 }
+
+                // Language
+                setUpLanguages();
 
                 // Max items per page
                 scenes.main.showNames.checked = localStorage.getItem("mainShowNames") === "true";
@@ -2898,575 +3269,124 @@
                 return value < min ? min : value > max ? max : value;
             }
 
-            /**
-             * @typedef {Object} Translation
-             * @property {string} name
-             * @property {string[]} langTags
-             * @property {LangElement[]} elements
-             */
-            /**
-             * @param {Translation[]} languages
-             */
-            function generateLanguagesList(languages) {
-                /** @type {HTMLSelectElement} */
-                let list = document.getElementById("lang");
-                list.addEventListener("change", function (event) {
-                    selectLanguage(languages, true);
-                });
-
+            function setUpLanguages() {
+                // Fill language selection options
                 for (const l of languages) {
                     /** @type {HTMLOptionElement} */
-                    let option = newChild(list, "option");
+                    let option = newChild(scenes.menu.languageSelect, "option");
                     option.value = l.name;
                     option.textContent = l.name;
                 }
 
-                selectLanguage(languages, false);
+                // Determine current language
+                if (localStorage.getItem("lang")) {
+                    scenes.menu.languageSelect.value = localStorage.getItem("lang");
+                } else if (navigator.language) {
+                    /** @type {Language} */
+                    const match = languages.find((l) => l.langTags.includes(navigator.language));
+
+                    if (match) {
+                        scenes.menu.languageSelect.value = match.name;
+                        localStorage.setItem("lang", match.name);
+                    }
+                }
+
+                // Set language
+                changeLanguage();
             }
 
             /**
-             * @param {Translation[]} languages
-             * @param {boolean} fromMenu
+             * Gets currently selected language
+             * @returns {Language}
              */
-            function selectLanguage(languages, fromMenu) {
-                /** @type {HTMLSelectElement} */
-                let menu = document.getElementById("lang");
-                /** @type {string} */
-                let selection = null;
+            function getCurrentLanguage() {
+                return languages.find((l) => l.name === scenes.menu.languageSelect.value);
+            }
 
-                if (!fromMenu) {
-                    if (localStorage.getItem("lang")) {
-                        selection = localStorage.getItem("lang");
-                        menu.value = selection;
-                    } else if (navigator.language) {
-                        // Iterate over translations
-                        for (const l of languages) {
-                            // If the valid option is finally found, exit
-                            if (selection) {
-                                break;
-                            } else if (l.langTags) {
-                                // Otherwise iterate over the tags and
-                                // compare them to the browser language
-                                for (const t of l.langTags) {
-                                    if (navigator.language === t) {
-                                        menu.value = l.name;
-                                        selection = l.name;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    selection = menu.value;
+            function changeLanguage() {
+                /** @type {Language} */
+                const language = getCurrentLanguage();
+
+                // Translate placeholders
+                for (p in language.placeholders) {
+                    /** @type {HTMLElement} */
+                    const el = element(`[data-tk="${p}"]`);
+                    if (!el) continue;
+
+                    el.placeholder = language.placeholders[p];
                 }
 
-                if (selection) {
-                    /** @type {Translation} */
-                    let translation = {};
+                // Translate texts
+                for (t in language.texts) {
+                    /** @type {NodeList} */
+                    const els = elements(`[data-tk="${t}"]`);
+                    if (!els) continue;
 
-                    for (const l of languages) {
-                        if (l.name === selection) {
-                            translation = l;
-                            break;
-                        }
-                    }
+                    for (const e of els) {
+                        /** @type {TreeWalker} */
+                        const walker = document.createTreeWalker(e, NodeFilter.SHOW_TEXT, null);
+                        /** @type {number} */
+                        let i = 0;
 
-                    if (translation) {
-                        localStorage.setItem("lang", selection);
+                        do {
+                            if (walker.currentNode.nodeType !== Node.TEXT_NODE) continue;
+                            if (!walker.currentNode.textContent.trim()) continue;
 
-                        for (const e of translation.elements) {
-                            let target = document.getElementById(e.id);
-
-                            if (target) {
-                                if (e.textContent) {
-                                    target.textContent = e.textContent;
-                                }
-
-                                if (e.placeholder) {
-                                    target.placeholder = e.placeholder;
-                                }
-
-                                if (e.childNodesTexts) {
-                                    /** @type {number} */
-                                    let index = 0;
-
-                                    for (const c of target.childNodes) {
-                                        if (
-                                            c.textContent &&
-                                            c.textContent.trim() !== "" &&
-                                            e.childNodesTexts[index]
-                                        ) {
-                                            c.textContent = e.childNodesTexts[index];
-                                            index++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                            walker.currentNode.textContent = language.texts[t][i] || "";
+                            i++;
+                        } while (walker.nextNode());
                     }
                 }
             }
 
-            /**
-             * @typedef {Object} LangElement
-             * @property {string} id
-             * @property {string} textContent
-             * @property {string} placeholder
-             * @property {string[]} childNodesTexts
-             */
-            function exportTranslationTemplate() {
-                /** @type {LangElement[]} */
-                let elements = [];
+            function exportLanguage() {
+                /** @type {Language} */
+                const language = getCurrentLanguage();
+                /** @type {Language} */
+                let template = {};
 
-                document.querySelectorAll("body *").forEach((e) => {
-                    if (
-                        e.tagName !== "DIV" &&
-                        e.tagName !== "DETAILS" &&
-                        e.tagName !== "TABLE" &&
-                        e.id &&
-                        e.id !== "lang"
-                    ) {
-                        /** @type {LangElement} */
-                        let newEl = {};
+                template.name = language.name;
+                template.langTags = language.langTags;
+                template.texts = {};
+                template.placeholders = {};
 
-                        newEl.id = e.id;
-
-                        if (e.childNodes) {
-                            newEl.childNodesTexts = [];
-
-                            for (const n of e.childNodes) {
-                                if (n.textContent && n.textContent.trim() !== "") {
-                                    newEl.childNodesTexts.push(n.textContent.trim());
-                                }
-                            }
-                        } else {
-                            if (e.textContent) {
-                                newEl.textContent = e.textContent;
-                            }
-                        }
-
-                        if (e.placeholder) {
-                            newEl.placeholder = e.placeholder;
-                        }
-
-                        if (
-                            newEl.textContent ||
-                            newEl.placeholder ||
-                            (newEl.childNodesTexts && newEl.childNodesTexts.length > 0)
-                        ) {
-                            elements.push(newEl);
-                        }
+                // Texts
+                for (const e of document.querySelectorAll("[data-tk]")) {
+                    // Save placeholders
+                    if (e.placeholder) {
+                        template.placeholders[e.dataset["tk"]] = e.placeholder.replace(
+                            /\n\s+/g,
+                            " ",
+                        );
                     }
-                });
 
-                navigator.clipboard.writeText(JSON.stringify(elements, null, 4));
+                    // Continue if there are no texts inside
+                    if (!e.hasChildNodes()) continue;
+
+                    /** @type {TreeWalker} */
+                    const walker = document.createTreeWalker(e, NodeFilter.SHOW_TEXT, null);
+                    /** @type {string[]} */
+                    let texts = [];
+
+                    // Save texts from all child nodes
+                    do {
+                        if (walker.currentNode.nodeType !== Node.TEXT_NODE) continue;
+                        if (!walker.currentNode.textContent.trim()) continue;
+
+                        texts.push(walker.currentNode.textContent.replace(/\n\s{2,}/g, " "));
+                    } while (walker.nextNode());
+
+                    template.texts[e.dataset["tk"]] = texts;
+                }
+
+                navigator.clipboard.writeText(JSON.stringify(template, null, 4));
                 alert("Translation template copied to clipboard!");
             }
 
-            // Resetting some elements & loading settings
-            loadSettings();
-            generateLanguagesList([
-                {
-                    name: "English [Vitaly Ulyanov]",
-                    langTags: [
-                        "en",
-                        "en-AU",
-                        "en-BZ",
-                        "en-CA",
-                        "en-CB",
-                        "en-GB",
-                        "en-IE",
-                        "en-JM",
-                        "en-NZ",
-                        "en-PH",
-                        "en-TT",
-                        "en-US",
-                        "en-ZA",
-                        "en-ZW",
-                    ],
-                    elements: [
-                        {
-                            id: "exportLang",
-                            childNodesTexts: ["Export texts for translation"],
-                        },
-                        {
-                            id: "title",
-                            childNodesTexts: ["Aestimo"],
-                        },
-                        {
-                            id: "start-button",
-                            childNodesTexts: ["Start"],
-                        },
-                        {
-                            id: "editor-button",
-                            childNodesTexts: ["Editor"],
-                        },
-                        {
-                            id: "settings-button",
-                            childNodesTexts: ["Settings"],
-                        },
-                        {
-                            id: "about-button",
-                            childNodesTexts: ["About"],
-                        },
-                        {
-                            id: "author",
-                            childNodesTexts: [
-                                "Made by ",
-                                "Vitaly Pavlovich Ulyanov (Vital)",
-                                ".",
-                                "Learn more on my GitHub page!",
-                            ],
-                        },
-                        {
-                            id: "main-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "editor-title",
-                            childNodesTexts: ["Editor"],
-                        },
-                        {
-                            id: "editor-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "settings-title",
-                            childNodesTexts: ["Settings"],
-                        },
-                        {
-                            id: "settings-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "sound-settings",
-                            childNodesTexts: ["Sound"],
-                        },
-                        {
-                            id: "volume-label",
-                            childNodesTexts: ["Sound volume"],
-                        },
-                        {
-                            id: "def-sounds-label",
-                            childNodesTexts: ["Default sounds (buttons, inputs, etc.)"],
-                        },
-                        {
-                            id: "colour-settings",
-                            childNodesTexts: ["Colours"],
-                        },
-                        {
-                            id: "load-colours",
-                            childNodesTexts: ["Load colours"],
-                        },
-                        {
-                            id: "save-colours",
-                            childNodesTexts: ["Save colours"],
-                        },
-                        {
-                            id: "--colour-bgr-1-label",
-                            childNodesTexts: ["Background (left)"],
-                        },
-                        {
-                            id: "--colour-bgr-2-label",
-                            childNodesTexts: ["Background (centre)"],
-                        },
-                        {
-                            id: "--colour-bgr-3-label",
-                            childNodesTexts: ["Background (right)"],
-                        },
-                        {
-                            id: "--colour-text-label",
-                            childNodesTexts: ["Text"],
-                        },
-                        {
-                            id: "--colour-button-label",
-                            childNodesTexts: ["Buttons"],
-                        },
-                        {
-                            id: "--colour-border-label",
-                            childNodesTexts: ["Borders"],
-                        },
-                        {
-                            id: "--colour-input-label",
-                            childNodesTexts: ["Inputs"],
-                        },
-                        {
-                            id: "--colour-tooltip-label",
-                            childNodesTexts: ["Tooltip's background"],
-                        },
-                        {
-                            id: "--colour-hovered-bgr-label",
-                            childNodesTexts: ["Hovered element's background"],
-                        },
-                        {
-                            id: "--colour-hovered-fgr-label",
-                            childNodesTexts: ["Hovered element's text"],
-                        },
-                        {
-                            id: "--colour-hovered-border-label",
-                            childNodesTexts: ["Hovered element's border"],
-                        },
-                        {
-                            id: "--colour-disabled-bgr-label",
-                            childNodesTexts: ["Disabled element's background"],
-                        },
-                        {
-                            id: "--colour-disabled-fgr-label",
-                            childNodesTexts: ["Disabled element's text"],
-                        },
-                        {
-                            id: "example-button",
-                            childNodesTexts: ["Button example"],
-                        },
-                        {
-                            id: "example-tooltip",
-                            childNodesTexts: ["Tooltip example"],
-                        },
-                        {
-                            id: "example-disabled-button",
-                            childNodesTexts: ["Disabled button example"],
-                        },
-                        {
-                            id: "example-input",
-                            childNodesTexts: [],
-                            placeholder: "Input example",
-                        },
-                        {
-                            id: "example-buttons",
-                            childNodesTexts: [
-                                "Text example with keyboard buttons (such as ",
-                                "Enter",
-                                ") and programmes' interface buttons (for example, ",
-                                "Apply",
-                                ").",
-                            ],
-                        },
-                        {
-                            id: "example-formatting",
-                            childNodesTexts: [
-                                "Examples of ",
-                                "important",
-                                ", ",
-                                "boldface",
-                                ", ",
-                                "italicised",
-                                ", and ",
-                                "underlined",
-                                " text.",
-                            ],
-                        },
-                        {
-                            id: "example-code",
-                            childNodesTexts: ["Code example"],
-                        },
-                        {
-                            id: "default-settings",
-                            childNodesTexts: ["Restore default settings"],
-                        },
-                        {
-                            id: "about-title",
-                            childNodesTexts: ["About"],
-                        },
-                        {
-                            id: "about-back",
-                            childNodesTexts: ["Back"],
-                        },
-                    ],
-                },
-                {
-                    name: "Русский [Виталий Ульянов]",
-                    langTags: ["ru", "ru-RU"],
-                    elements: [
-                        {
-                            id: "exportLang",
-                            childNodesTexts: ["Экспорт текстов для перевода"],
-                        },
-                        {
-                            id: "title",
-                            childNodesTexts: ["Aestimo"],
-                        },
-                        {
-                            id: "start-button",
-                            childNodesTexts: ["Начать"],
-                        },
-                        {
-                            id: "editor-button",
-                            childNodesTexts: ["Редактор"],
-                        },
-                        {
-                            id: "settings-button",
-                            childNodesTexts: ["Настройки"],
-                        },
-                        {
-                            id: "about-button",
-                            childNodesTexts: ["О программе"],
-                        },
-                        {
-                            id: "author",
-                            childNodesTexts: [
-                                "Автор — ",
-                                "Виталий Павлович Ульянов (Vital)",
-                                ".",
-                                "Узнайте больше на GitHub!",
-                            ],
-                        },
-                        {
-                            id: "main-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "editor-title",
-                            childNodesTexts: ["Редактор"],
-                        },
-                        {
-                            id: "editor-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "settings-title",
-                            childNodesTexts: ["Настройки"],
-                        },
-                        {
-                            id: "settings-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "sound-settings",
-                            childNodesTexts: ["Звук"],
-                        },
-                        {
-                            id: "volume-label",
-                            childNodesTexts: ["Громкость звука"],
-                        },
-                        {
-                            id: "def-sounds-label",
-                            childNodesTexts: ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
-                        },
-                        {
-                            id: "colour-settings",
-                            childNodesTexts: ["Цвета"],
-                        },
-                        {
-                            id: "load-colours",
-                            childNodesTexts: ["Загрузить цвета"],
-                        },
-                        {
-                            id: "save-colours",
-                            childNodesTexts: ["Сохранить цвета"],
-                        },
-                        {
-                            id: "--colour-bgr-1-label",
-                            childNodesTexts: ["Фон (левая часть)"],
-                        },
-                        {
-                            id: "--colour-bgr-2-label",
-                            childNodesTexts: ["Фон (средняя часть)"],
-                        },
-                        {
-                            id: "--colour-bgr-3-label",
-                            childNodesTexts: ["Фон (правая часть)"],
-                        },
-                        {
-                            id: "--colour-text-label",
-                            childNodesTexts: ["Текст"],
-                        },
-                        {
-                            id: "--colour-button-label",
-                            childNodesTexts: ["Кнопки"],
-                        },
-                        {
-                            id: "--colour-border-label",
-                            childNodesTexts: ["Рамки"],
-                        },
-                        {
-                            id: "--colour-input-label",
-                            childNodesTexts: ["Поля ввода"],
-                        },
-                        {
-                            id: "--colour-tooltip-label",
-                            childNodesTexts: ["Фон подсказок"],
-                        },
-                        {
-                            id: "--colour-hovered-bgr-label",
-                            childNodesTexts: ["Фон элемента при наведении"],
-                        },
-                        {
-                            id: "--colour-hovered-fgr-label",
-                            childNodesTexts: ["Текст элемента при наведении"],
-                        },
-                        {
-                            id: "--colour-hovered-border-label",
-                            childNodesTexts: ["Рамки элемента при наведении"],
-                        },
-                        {
-                            id: "--colour-disabled-bgr-label",
-                            childNodesTexts: ["Фон отключённого элемента"],
-                        },
-                        {
-                            id: "--colour-disabled-fgr-label",
-                            childNodesTexts: ["Текст отключённого элемента"],
-                        },
-                        {
-                            id: "example-button",
-                            childNodesTexts: ["Пример кнопки"],
-                        },
-                        {
-                            id: "example-tooltip",
-                            childNodesTexts: ["Пример подсказки"],
-                        },
-                        {
-                            id: "example-disabled-button",
-                            childNodesTexts: ["Пример отключённой кнопки"],
-                        },
-                        {
-                            id: "example-input",
-                            childNodesTexts: [],
-                            placeholder: "Пример поля ввода",
-                        },
-                        {
-                            id: "example-buttons",
-                            childNodesTexts: [
-                                "Пример текста с кнопками клавиатуры (например, ",
-                                "Enter",
-                                ") и\n интерфейса программ (например, ",
-                                "Применить",
-                                ").",
-                            ],
-                        },
-                        {
-                            id: "example-formatting",
-                            childNodesTexts: [
-                                "Пример ",
-                                "важного",
-                                ", ",
-                                "полужирного",
-                                ", ",
-                                "курсивного",
-                                " и ",
-                                "подчёркнутого",
-                                " текста.",
-                            ],
-                        },
-                        {
-                            id: "example-code",
-                            childNodesTexts: ["Пример кода"],
-                        },
-                        {
-                            id: "default-settings",
-                            childNodesTexts: ["Сбросить все настройки"],
-                        },
-                        {
-                            id: "about-title",
-                            childNodesTexts: ["О программе"],
-                        },
-                        {
-                            id: "about-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                    ],
-                },
-            ]);
+            fixProject();
+            updateItemsPerPageMax();
+            updateMainParagraphsList();
+            updateEditor();
         </script>
     </body>
 </html>
