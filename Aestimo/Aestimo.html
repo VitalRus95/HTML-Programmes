@@ -270,14 +270,6 @@
                 margin-block: 2px;
             }
 
-            mark {
-                background-color: var(--colour-tooltip);
-                border: 2px solid var(--colour-text);
-                border-radius: 0px;
-                padding-inline: 2px;
-                cursor: help;
-            }
-
             ol,
             ul {
                 margin-block: 4px;
@@ -394,8 +386,6 @@
             kbd:hover,
             legend:focus,
             legend:hover,
-            mark:focus,
-            mark:hover,
             samp:focus,
             samp:hover,
             select:focus,
@@ -581,6 +571,14 @@
                 align-content: center;
             }
 
+            .mistake-text {
+                background-color: var(--colour-tooltip);
+                border: 2px solid var(--colour-text);
+                border-radius: 0px;
+                padding-inline: 2px;
+                cursor: help;
+            }
+
             .mistake-info:focus::after,
             .mistake-info:hover::after {
                 content: attr(data-info);
@@ -625,7 +623,7 @@
 
             /* Elements by ID */
             #lang {
-                margin-bottom: 10px;
+                text-align: center;
             }
 
             #menu {
@@ -727,49 +725,45 @@
     <body>
         <!-- MENU DIV -->
         <div id="menu" class="scene">
-            <h1 data-tk="title" tabindex="1">Aestimo</h1>
+            <h1 data-tk="title">Aestimo</h1>
 
-            <select id="lang" tabindex="0"></select>
+            <button data-tk="start-button" data-scene="main">Start</button>
 
-            <button data-tk="start-button" tabindex="1" data-scene="main">Start</button>
-
-            <button data-tk="editor-button" tabindex="1" data-scene="editor">Editor</button>
+            <button data-tk="editor-button" data-scene="editor">Editor</button>
 
             <a
                 id="save-project"
                 data-tk="save-project"
                 href=""
-                tabindex="1"
                 download="Project.json"
                 class="pseudo-button disabled"
                 >Save project</a
             >
 
             <input type="file" id="load-project-input" accept=".json" style="display: none" />
-            <button
-                id="load-project-button"
-                data-tk="load-project-button"
-                tabindex="1"
-                class="tooltip-parent"
-                tabindex="1"
-                class="tooltip-parent"
+            <button id="load-project-button" data-tk="load-project-button" class="tooltip-parent"
                 >Load project<span class="tooltip">Open a project (.json)</span>
             </button>
 
-            <button data-tk="settings-button" tabindex="1" data-scene="settings">Settings</button>
+            <button data-tk="settings-button" data-scene="settings">Settings</button>
 
-            <button data-tk="about-button" tabindex="1" data-scene="about">About</button>
+            <button data-tk="about-button" data-scene="about">About</button>
 
             <!-- Author -->
-            <p id="author" data-tk="author" tabindex="0" class="tooltip-parent"
+            <p id="author" data-tk="author" class="tooltip-parent"
                 >Made by
                 <a href="https://github.com/VitalRus95" target="_blank"
                     >Vitaly Pavlovich Ulyanov (Vital)</a
                 >.<span class="tooltip">Learn more on my GitHub page!</span>
             </p>
 
-            <!-- EXPORT TRANSLATION TEMPLATE -->
-            <button onclick="exportLanguage()">Export translation template</button>
+            <!-- Language selection -->
+            <select id="lang"></select>
+
+            <!-- Export language -->
+            <button data-tk="export-lang" onclick="exportLanguage()"
+                >Export current language</button
+            >
         </div>
 
         <!-- MAIN DIV -->
@@ -778,22 +772,25 @@
 
             <!-- Adding a new mistake help -->
             <fieldset id="add-mistake-fieldset">
-                <legend data-tk="add-mistake-help-title" tabindex="0">Adding a mistake</legend>
+                <legend data-tk="add-mistake-help-title">Adding a mistake</legend>
 
                 <p data-tk="add-mistake-help"
                     >To add a mistake, select the text containing it in the student's translation
                     and then either click the
-                    <button class="student-button" style="display: inline; font-size: 1.1em"
+                    <button
+                        class="student-button"
+                        tabindex="-1"
+                        style="display: inline; font-size: 1.1em"
                         >+</button
                     >
-                    button on the left or press <kbd>Ctrl</kbd>+<kbd>A</kbd>.
+                    button on the left or press <kbd>Enter</kbd>.
                     <b>Mistakes must not overlap!</b></p
                 >
             </fieldset>
 
             <!-- Settings -->
             <fieldset>
-                <legend data-tk="main-settings" tabindex="0">Settings</legend>
+                <legend data-tk="settings-button">Settings</legend>
 
                 <!-- Number of students per page setting -->
                 <div class="setting-div" style="margin-left: 1em">
@@ -859,7 +856,7 @@
 
             <!-- Actions menu -->
             <fieldset id="main-actions-fieldset">
-                <legend data-tk="actions-menu" tabindex="0">Actions menu</legend>
+                <legend data-tk="actions-menu">Actions menu</legend>
 
                 <button data-tk="main-actions-find" data-scene="find-mistake">Find mistake</button>
             </fieldset>
@@ -867,32 +864,20 @@
 
         <!-- ADDING MISTAKE -->
         <div id="add-mistake" class="scene">
-            <h2 data-tk="add-mistake-title" tabindex="0">New mistake</h2>
+            <h2 data-tk="add-mistake-title">New mistake</h2>
 
             <button data-tk="cancel" data-scene="main">Cancel</button>
 
             <!-- Mistake -->
             <fieldset>
-                <legend data-tk="mistake-context-title" tabindex="0">Mistake's context</legend>
+                <legend data-tk="mistake-context-title">Mistake's context</legend>
 
-                <div id="mistake-div" class="rich-text-div" tabindex="0"></div>
-            </fieldset>
-
-            <!-- Comment -->
-            <fieldset>
-                <legend data-tk="mistake-comment-title" tabindex="0">Comment (optional)</legend>
-
-                <input
-                    id="mistake-comment-input"
-                    style="width: 100%"
-                    type="text"
-                    autocomplete="off"
-                />
+                <div id="mistake-div" class="rich-text-div"></div>
             </fieldset>
 
             <!-- Mistake type -->
             <fieldset>
-                <legend data-tk="mistake-type-title" tabindex="0">Mistake type</legend>
+                <legend data-tk="mistake-type-title">Mistake type</legend>
 
                 <div class="radio-div">
                     <input
@@ -953,7 +938,7 @@
 
             <!-- Mistake subtype -->
             <fieldset>
-                <legend data-tk="mistake-subtype-title" tabindex="0">Mistake subtype</legend>
+                <legend data-tk="mistake-subtype-title">Mistake subtype</legend>
 
                 <div class="radio-div">
                     <input
@@ -992,7 +977,7 @@
 
             <!-- Text's meaning -->
             <fieldset>
-                <legend data-tk="mistake-text-meaning-title" tabindex="0">Text's meaning</legend>
+                <legend data-tk="mistake-text-meaning-title">Text's meaning</legend>
 
                 <div class="radio-div">
                     <input
@@ -1029,32 +1014,40 @@
                 </div>
             </fieldset>
 
+            <!-- Comment -->
+            <fieldset>
+                <legend data-tk="mistake-comment-title">Comment (optional)</legend>
+
+                <input
+                    id="mistake-comment-input"
+                    style="width: 100%"
+                    type="text"
+                    autocomplete="off"
+                />
+            </fieldset>
+
             <button id="add-mistake-button" data-tk="add-mistake-button">Add mistake</button>
         </div>
 
         <!-- EDITING MISTAKE -->
         <div id="edit-mistake" class="scene">
-            <h2 data-tk="edit-mistake-title" tabindex="0">Mistake editing</h2>
+            <h2 data-tk="edit-mistake-title">Mistake editing</h2>
 
             <table style="table-layout: auto">
                 <tbody>
                     <!-- Context -->
                     <tr>
-                        <td
-                            data-tk="mistake-context-title"
-                            class="bold-text"
-                            tabindex="0"
-                            style="width: 25%"
+                        <td data-tk="mistake-context-title" class="bold-text" style="width: 25%"
                             >Context</td
                         >
-                        <td class="table-element-container" tabindex="0">
+                        <td class="table-element-container">
                             <div id="edit-mistake-context" class="rich-text-div"></div>
                         </td>
                     </tr>
 
                     <!-- Type -->
                     <tr>
-                        <td data-tk="mistake-type-title" class="bold-text" tabindex="0">Type</td>
+                        <td data-tk="mistake-type-title" class="bold-text">Type</td>
                         <td class="table-element-container">
                             <select
                                 id="edit-mistake-type"
@@ -1078,9 +1071,7 @@
 
                     <!-- Subtype -->
                     <tr>
-                        <td data-tk="mistake-subtype-title" class="bold-text" tabindex="0"
-                            >Subtype</td
-                        >
+                        <td data-tk="mistake-subtype-title" class="bold-text">Subtype</td>
                         <td class="table-element-container">
                             <select
                                 id="edit-mistake-subtype"
@@ -1100,7 +1091,7 @@
 
                     <!-- Meaning -->
                     <tr>
-                        <td data-tk="mistake-text-meaning-title" class="bold-text" tabindex="0"
+                        <td data-tk="mistake-text-meaning-title" class="bold-text"
                             >Text's meaning</td
                         >
                         <td class="table-element-container">
@@ -1120,9 +1111,7 @@
 
                     <!-- Comment -->
                     <tr>
-                        <td data-tk="mistake-comment-title" class="bold-text" tabindex="0"
-                            >Comment</td
-                        >
+                        <td data-tk="mistake-comment-title" class="bold-text">Comment</td>
                         <td class="table-element-container">
                             <input
                                 type="text"
@@ -1144,23 +1133,19 @@
 
         <!-- FINDING MISTAKE -->
         <div id="find-mistake" class="scene">
-            <h2 data-tk="find-mistake-title" tabindex="0">Mistake search</h2>
+            <h2 data-tk="find-mistake-title">Mistake search</h2>
 
             <button data-tk="back" data-scene="main">Back</button>
 
             <!-- Search settings -->
             <fieldset>
-                <legend data-tk="find-mistake-search-parameters" tabindex="0"
-                    >Search settings</legend
-                >
+                <legend data-tk="find-mistake-search-settings">Search settings</legend>
 
                 <table style="table-layout: auto">
                     <tbody>
                         <!-- Search mode -->
                         <tr>
-                            <td data-tk="find-mistake-mode-title" class="bold-text" tabindex="0"
-                                >Search mode</td
-                            >
+                            <td data-tk="find-mistake-mode-title" class="bold-text">Search mode</td>
                             <td class="table-element-container">
                                 <select
                                     id="find-mistake-mode"
@@ -1178,11 +1163,7 @@
 
                         <!-- Query -->
                         <tr>
-                            <td
-                                data-tk="find-mistake-query"
-                                class="bold-text"
-                                tabindex="0"
-                                style="width: 25%"
+                            <td data-tk="find-mistake-query" class="bold-text" style="width: 25%"
                                 >Search query</td
                             >
                             <td class="table-element-container">
@@ -1197,9 +1178,7 @@
 
                         <!-- Type -->
                         <tr>
-                            <td data-tk="mistake-type-title" class="bold-text" tabindex="0"
-                                >Type</td
-                            >
+                            <td data-tk="mistake-type-title" class="bold-text">Type</td>
                             <td class="table-element-container">
                                 <select
                                     id="find-mistake-type"
@@ -1223,9 +1202,7 @@
 
                         <!-- Subtype -->
                         <tr>
-                            <td data-tk="mistake-subtype-title" class="bold-text" tabindex="0"
-                                >Subtype</td
-                            >
+                            <td data-tk="mistake-subtype-title" class="bold-text">Subtype</td>
                             <td class="table-element-container">
                                 <select
                                     id="find-mistake-subtype"
@@ -1247,7 +1224,7 @@
 
                         <!-- Meaning -->
                         <tr>
-                            <td data-tk="mistake-text-meaning-title" class="bold-text" tabindex="0"
+                            <td data-tk="mistake-text-meaning-title" class="bold-text"
                                 >Text's meaning</td
                             >
                             <td class="table-element-container">
@@ -1267,9 +1244,7 @@
 
                         <!-- Comment -->
                         <tr>
-                            <td data-tk="mistake-comment-title" class="bold-text" tabindex="0"
-                                >Comment</td
-                            >
+                            <td data-tk="mistake-comment-title" class="bold-text">Comment</td>
                             <td class="table-element-container">
                                 <input
                                     type="text"
@@ -1287,21 +1262,21 @@
 
             <!-- Search results -->
             <fieldset>
-                <legend data-tk="find-mistake-results" tabindex="0">Search results</legend>
+                <legend data-tk="find-mistake-results">Search results</legend>
 
                 <table>
                     <tbody id="find-mistake-table-body"></tbody>
                 </table>
             </fieldset>
 
-            <button id="find-mistake-table-add" data-tk="find-mistake-table-add"
+            <button id="find-mistake-table-add" data-tk="find-mistake-add-found"
                 >Add found mistakes</button
             >
         </div>
 
         <!-- ADDING STUDENTS -->
         <div id="adding-students" class="scene">
-            <h2 data-tk="adding-students-title" tabindex="0">Adding students</h2>
+            <h2 data-tk="adding-students-title">Adding students</h2>
 
             <button data-tk="cancel" data-scene="editor">Cancel</button>
 
@@ -1319,12 +1294,14 @@
         <!-- DELETING A STUDENT -->
         <div id="deleting-student" class="scene">
             <fieldset>
-                <legend data-tk="deleting-student-title" tabindex="0">Delete this student?</legend>
+                <legend data-tk="deleting-student-title">Delete this student?</legend>
 
                 <h3 id="deleted-student-name"></h3>
 
                 <div class="setting-div">
-                    <button id="deleting-confirm" data-tk="deleting-confirm">Delete student</button>
+                    <button id="deleting-student-confirm" data-tk="deleting-student-confirm"
+                        >Delete student</button
+                    >
 
                     <button data-tk="cancel" data-scene="editor">Cancel</button>
                 </div>
@@ -1333,14 +1310,14 @@
 
         <!-- EDITOR DIV -->
         <div id="editor" class="scene">
-            <h2 data-tk="editor-button" tabindex="0">Editor</h2>
+            <h2 data-tk="editor-button">Editor</h2>
 
             <button data-tk="back" data-scene="menu">Back</button>
 
             <!-- Alignment note -->
             <fieldset id="alignment-fieldset">
-                <legend data-tk="alignment-legend" tabindex="0">Align the texts</legend>
-                <p data-tk="alignment-text" tabindex="0"
+                <legend data-tk="alignment-info-title">Align the texts</legend>
+                <p data-tk="alignment-info"
                     >For the programme to work properly, the source text and students' translations
                     should be aligned, i.e. have the same number and order of paragraphs.</p
                 >
@@ -1348,7 +1325,7 @@
 
             <!-- Source text -->
             <fieldset>
-                <legend data-tk="source-title" tabindex="0">Source text</legend>
+                <legend data-tk="source-title">Source text</legend>
 
                 <table>
                     <tbody>
@@ -1364,10 +1341,8 @@
 
                     <tfoot>
                         <tr>
-                            <td data-tk="para-count" class="centred-text" tabindex="0"
-                                >Paragraphs</td
-                            >
-                            <td id="source-para-count" class="centred-text" tabindex="0">0</td>
+                            <td data-tk="para-count" class="centred-text">Paragraphs</td>
+                            <td id="source-para-count" class="centred-text">0</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -1375,7 +1350,7 @@
 
             <!-- Students and translations -->
             <fieldset>
-                <legend data-tk="translations-title" tabindex="0">Students and translations</legend>
+                <legend data-tk="translations-title">Students and translations</legend>
 
                 <!-- Number of students per page setting -->
                 <div class="setting-div" style="margin-left: 1em"
@@ -1395,11 +1370,9 @@
                     <!-- Header -->
                     <thead>
                         <tr>
-                            <th data-tk="table-student" tabindex="0" style="width: 25%">Student</th>
-                            <th data-tk="table-translation" tabindex="0" style="width: 55%"
-                                >Translation</th
-                            >
-                            <th data-tk="para-count" tabindex="0">Paragraphs</th>
+                            <th data-tk="table-student" style="width: 25%">Student</th>
+                            <th data-tk="table-translation" style="width: 55%">Translation</th>
+                            <th data-tk="para-count">Paragraphs</th>
                         </tr>
                     </thead>
 
@@ -1419,7 +1392,7 @@
 
                 <!-- Actions menu -->
                 <fieldset id="editor-actions-fieldset">
-                    <legend data-tk="actions-menu" tabindex="0">Actions menu</legend>
+                    <legend data-tk="actions-menu">Actions menu</legend>
 
                     <button data-tk="add-students" data-scene="adding-students"
                         >Add students</button
@@ -1442,7 +1415,7 @@
 
         <!-- SETTINGS DIV -->
         <div id="settings" class="scene">
-            <h2 data-tk="settings-button" tabindex="0">Settings</h2>
+            <h2 data-tk="settings-button">Settings</h2>
 
             <button data-tk="back" data-scene="menu">Back</button>
 
@@ -1467,7 +1440,7 @@
                     <!-- Default sounds (buttons, inputs, etc.) -->
                     <li>
                         <div class="setting-div">
-                            <label for="set-def-sounds" data-tk="def-sounds"
+                            <label for="set-def-sounds" data-tk="default-sounds"
                                 >Default sounds (buttons, inputs, etc.)</label
                             >
                             <input type="checkbox" id="set-def-sounds" checked />
@@ -1535,11 +1508,94 @@
 
         <!-- ABOUT DIV -->
         <div id="about" class="scene">
-            <h2 data-tk="about-button" tabindex="0">About</h2>
+            <h2 data-tk="about-button">About</h2>
 
             <button data-tk="back" data-scene="menu">Back</button>
 
-            <p>Programme description. To be continued...</p>
+            <p data-tk="about-info"
+                >Named after a Latin word meaning ‘I estimate’, <b>Aestimo</b> is a powerful tool
+                for translation teachers which makes checking students' translations faster, easier,
+                and more accurate. First of all, open the editor to provide the programme with the
+                source text, the list of students, and their translations. Then press
+                <button data-tk="start-button" tabindex="-1" style="display: inline">Start</button>
+                button in the main menu to begin checking the works. The check itself is designed to
+                be performed on a <i>paragraph-by-paragraph</i> basis, that is working with one
+                source paragraph and all of its translations at a time instead of dealing with whole
+                texts. This simplifies comparison and mistake search (don't hesitate to try out the
+                <button data-tk="main-actions-find" tabindex="-1" style="display: inline"
+                    >Find mistake</button
+                >
+                feature to automatise the process!) and thus lowers the risk of missing out
+                something important. Apart from that, the programme automatically calculates the
+                resulting marks, while taking into account the source text's length using a special
+                multiplier<sup>1</sup>.</p
+            >
+
+            <hr />
+
+            <h3 data-tk="about-classification-title">Classification of mistakes</h3>
+
+            <ol data-tk="about-classification">
+                <li><b>Type</b>:</li>
+                <ul>
+                    <li
+                        ><b>Grammar</b>: a mistake while conveying the meaning of a grammatical form
+                        (a wrong tense, article, declension, etc.).</li
+                    >
+                    <li
+                        ><b>Vocabulary</b>: a mistake while conveying the meaning of a word (a wrong
+                        word, collocation, style, etc.).</li
+                    >
+                    <li><b>Orthography</b>: a wrong spelling of a word.</li>
+                    <li><b>Punctuation</b>: an incorrect usage of punctuation marks.</li>
+                    <li
+                        ><b>Complex</b>: a mistake, usually a serious one, in a text unit larger
+                        than a character or a word (e.g., a phrase or a sentence).</li
+                    >
+                </ul>
+
+                <li><b>Subtype</b>:</li>
+                <ul>
+                    <li><b>Redundant element</b>: a wrong extra element is inserted.</li>
+                    <li
+                        ><b>Incorrect element</b>: a correct element is replaced with a wrong
+                        one.</li
+                    >
+                    <li><b>Lack of element</b>: a correct element is absent.</li>
+                </ul>
+
+                <li><b>Text's meaning</b>:</li>
+                <ul>
+                    <li
+                        ><b>Retained</b>: the mistake does not make understanding the text
+                        harder.</li
+                    >
+                    <li
+                        ><b>Obscured</b>: the text's meaning can be understood only with the help of
+                        the immediate context<sup>2</sup>.</li
+                    >
+                    <li
+                        ><b>Lost</b>: the text's meaning is severely distorted and cannot be
+                        understood even with the help of the immediate context<sup>2</sup>.</li
+                    >
+                </ul>
+            </ol>
+
+            <fieldset data-tk="about-notes">
+                <legend>Notes</legend>
+
+                <ol>
+                    <li
+                        ><b>Text length multiplier</b> = 1800 / total number of characters in the
+                        original text.</li
+                    >
+
+                    <li
+                        ><b>Immediate context</b> = everything before the analysed sentence + this
+                        sentence + one sentence after it.</li
+                    >
+                </ol>
+            </fieldset>
         </div>
 
         <script>
@@ -1671,6 +1727,8 @@
                     self: element("#deleting-student"),
                     /** @type {HTMLHeadingElement} */
                     studentName: element("#deleted-student-name"),
+                    /** @type {HTMLButtonElement} */
+                    deleteButton: element("#deleting-student-confirm"),
                 },
                 about: {
                     /** @type {HTMLDivElement} */
@@ -1847,16 +1905,6 @@
                         ],
                         back: ["Back"],
                         "add-mistake-help-title": ["Adding a mistake"],
-                        "add-mistake-help": [
-                            "To add a mistake, select the text containing it in the student's translation and then either click the ",
-                            "+",
-                            " button on the left or press ",
-                            "Ctrl",
-                            "+",
-                            "A",
-                            ". ",
-                            "Mistakes must not overlap!",
-                        ],
                         "main-settings": ["Settings"],
                         "students-per-page": ["Students per page:"],
                         "main-show-names": ["Show students' names:"],
@@ -1896,7 +1944,7 @@
                         "adding-students-title": ["Adding students"],
                         "adding-students-button": ["Confirm"],
                         "deleting-student-title": ["Delete this student?"],
-                        "deleting-confirm": ["Delete student"],
+                        "deleting-student-confirm": ["Delete student"],
                         "alignment-legend": ["Align the texts"],
                         "alignment-text": [
                             "For the programme to work properly, the source text and students' translations should be aligned, i.e. have the same number and order of paragraphs.",
@@ -1981,16 +2029,6 @@
                         ],
                         back: ["Назад"],
                         "add-mistake-help-title": ["Добавление ошибки"],
-                        "add-mistake-help": [
-                            "Чтобы добавить ошибку, выделите содержащий её текст в переводе учащегося и нажмите на кнопку ",
-                            "+",
-                            " слева или используйте сочетание ",
-                            "Ctrl",
-                            "+",
-                            "A",
-                            ". ",
-                            "Ошибки не должны пересекаться!",
-                        ],
                         "main-settings": ["Настройки"],
                         "students-per-page": ["Учащихся на странице:"],
                         "main-show-names": ["Показать имена учащихся:"],
@@ -2030,7 +2068,7 @@
                         "adding-students-title": ["Добавление учащихся"],
                         "adding-students-button": ["Подтвердить"],
                         "deleting-student-title": ["Удалить этого учащегося?"],
-                        "deleting-confirm": ["Удалить учащегося"],
+                        "deleting-student-confirm": ["Удалить учащегося"],
                         "alignment-legend": ["Выравнивание текстов"],
                         "alignment-text": [
                             "Для правильной работы программы текст оригинала и переводы учащихся должны быть выравнены, то есть иметь одинаковые количество и порядок абзацев.",
@@ -2100,8 +2138,6 @@
 
             /** @type {number} */
             let sourceParaCount = 0;
-            /** @type {number} */
-            let deletedStudentId = 0;
             /** @type {number} */
             let mainItemsPerPage = +localStorage.getItem("mainStudentsPerPage") || 5;
             /** @type {number} */
@@ -2282,7 +2318,6 @@
                     /** @type {HTMLDivElement} */
                     let textDiv = newChild(cellDiv, "div");
                     textDiv.classList.add("rich-text-div", "no-left-border");
-                    textDiv.tabIndex = 0;
                     highlightMistakes(
                         textDiv,
                         translation,
@@ -2316,7 +2351,6 @@
             // Buttons
             [
                 { id: "#adding-students-button", action: addStudents },
-                { id: "#deleting-confirm", action: deleteStudent },
                 { id: "#fix-source", action: fixSource },
                 { id: "#fix-translations", action: fixTranslations },
             ].forEach((b) => {
@@ -2339,42 +2373,6 @@
                 if (["deleting-student"].includes(previousScene)) return;
 
                 switchScene(previousScene);
-            });
-
-            // Colour settings
-            Object.keys(allColours).forEach((c) => {
-                document.body.style.setProperty(
-                    c,
-                    localStorage.getItem(c) ?? getComputedStyle(document.body).getPropertyValue(c),
-                );
-
-                /** @type {HTMLLIElement} */
-                let item = newChild(scenes.settings.colours, "li");
-                /** @type {HTMLLabelElement} */
-                let label = newChild(item, "label");
-                /** @type {HTMLInputElement} */
-                let input = newChild(item, "input");
-
-                label.dataset["tk"] = `${c}`;
-                label.htmlFor = c;
-                label.textContent = c;
-                label.style.marginRight = "4px";
-
-                input.type = "color";
-                input.value = document.body.style.getPropertyValue(c);
-                input.addEventListener("input", function (event) {
-                    document.body.style.setProperty(c, this.value);
-                    localStorage.setItem(c, this.value);
-                });
-
-                if (c === "--colour-tooltip") {
-                    item.classList.add("tooltip-parent");
-                    /** @type {HTMLSpanElement} */
-                    let tooltip = newChild(item, "span");
-
-                    tooltip.classList.add("tooltip");
-                    tooltip.textContent = getElementText('[data-tk="title"]');
-                }
             });
 
             // Loading colours
@@ -2549,7 +2547,7 @@
                     /** @type {HTMLSpanElement} */
                     let studentDelTooltip = newChild(studentDelButton, "span");
                     studentDelTooltip.classList.add("tooltip");
-                    studentDelTooltip.textContent = getText("deleting-confirm");
+                    studentDelTooltip.textContent = getText("deleting-student-confirm");
 
                     /** @type {HTMLTextAreaElement} */
                     let studentName = newChild(studentDiv, "textarea");
@@ -2571,7 +2569,6 @@
                     // Paragraphs count
                     let paragraphs = newChild(row, "td");
                     let pars = getParagraphsCount(t.text);
-                    paragraphs.tabIndex = 0;
                     paragraphs.style.fontWeight = "600";
                     paragraphs.classList.add("centred-text");
                     paragraphs.textContent = pars;
@@ -2608,7 +2605,11 @@
                     // Deleting a student
                     studentDelButton.addEventListener("click", function (event) {
                         scenes.deleteStudent.studentName.textContent = studentName.value;
-                        deletedStudentId = studentId;
+                        scenes.deleteStudent.deleteButton.onclick = function (event) {
+                            project.translations.splice(studentId, 1);
+                            updateEditor();
+                            switchScene("editor");
+                        };
                         switchScene("deleting-student");
                     });
                 });
@@ -2641,12 +2642,6 @@
                     scenes.addStudents.addedList.value = "";
                 }
                 sortStudentsAlphabetically();
-                updateEditor();
-                switchScene("editor");
-            }
-
-            function deleteStudent() {
-                project.translations.splice(deletedStudentId, 1);
                 updateEditor();
                 switchScene("editor");
             }
@@ -2739,11 +2734,11 @@
                     );
 
                     if (mistake) {
-                        /** @type {HTMLElement} */
-                        const mistakeMark = newChild(textDiv, "mark");
+                        /** @type {HTMLAnchorElement} */
+                        const mistakeText = newChild(textDiv, "a");
 
-                        mistakeMark.textContent = textSlice;
-                        mistakeMark.tabIndex = 0;
+                        mistakeText.classList.add("mistake-text");
+                        mistakeText.textContent = textSlice;
 
                         // Mistake information and editing
                         if (interactive) {
@@ -2758,18 +2753,18 @@
                                 getText(mistake.meaning).toLowerCase() +
                                 `${mistake.comment ? ` | ${mistake.comment}` : ""}`;
 
-                            mistakeMark.classList.add("mistake-info");
-                            mistakeMark.dataset.info = info;
-                            mistakeMark.ariaLabel = info;
+                            mistakeText.classList.add("mistake-info");
+                            mistakeText.dataset.info = info;
+                            mistakeText.ariaLabel = info;
 
-                            mistakeMark.addEventListener("keydown", function (event) {
+                            mistakeText.addEventListener("keydown", function (event) {
                                 if (event.key === " " || event.key === "Enter") {
                                     event.preventDefault();
-                                    mistakeMark.click();
+                                    mistakeText.click();
                                 }
                             });
 
-                            mistakeMark.addEventListener("click", function (event) {
+                            mistakeText.addEventListener("click", function (event) {
                                 highlightMistakes(
                                     scenes.editMistake.context,
                                     sourceText,
@@ -2884,7 +2879,6 @@
                     let nameCell = newChild(nameRow, "td");
                     nameCell.classList.add("main-student-name");
                     nameCell.textContent = work.student;
-                    nameCell.tabIndex = 0;
                 }
 
                 // Row, cell, and container div
@@ -2915,7 +2909,6 @@
                 let textDiv = newChild(container, "div");
                 textDiv.id = `student${studentIndex}`;
                 textDiv.classList.add("rich-text-div", "no-left-border");
-                textDiv.tabIndex = 0;
 
                 updateStudentTranslation(studentIndex);
 
@@ -2994,9 +2987,10 @@
                     };
                 });
 
-                // Adding a mistake via keyboard (Ctrl+A)
+                // Adding a mistake via keyboard (Enter)
+                textDiv.tabIndex = 0;
                 textDiv.addEventListener("keydown", function (event) {
-                    if (event.ctrlKey && event.key === "a") {
+                    if (event.key === "Enter") {
                         event.preventDefault();
                         newMistakeButton.click();
                     }
@@ -3104,16 +3098,16 @@
 
             /**
              * Gets the text from currently used language by its key
-             * @param {string} key
+             * @param {string} textKey
              * @returns {string}
              */
-            function getText(key) {
+            function getText(textKey) {
                 /** @type {Language} */
                 const language = getCurrentLanguage();
 
-                if (!language.texts[key]) return key;
+                if (!language || !language.texts[textKey]) return textKey;
 
-                return language.texts[key].join("");
+                return language.texts[textKey].join("");
             }
 
             /**
@@ -3154,7 +3148,45 @@
 
             function loadSettings() {
                 // Volume
-                scenes.settings.volumeInput.value = localStorage.getItem("volume") ?? "0.5";
+                scenes.settings.volumeInput.value = localStorage.getItem("volume") || "0.5";
+
+                // Colour settings
+                for (const c in allColours) {
+                    document.body.style.setProperty(
+                        c,
+                        localStorage.getItem(c) ||
+                            getComputedStyle(document.body).getPropertyValue(c),
+                    );
+
+                    /** @type {HTMLLIElement} */
+                    let item = newChild(scenes.settings.colours, "li");
+                    /** @type {HTMLLabelElement} */
+                    let label = newChild(item, "label");
+                    /** @type {HTMLInputElement} */
+                    let input = newChild(item, "input");
+
+                    label.dataset["tk"] = `${c}`;
+                    label.htmlFor = c;
+                    label.textContent = getText(c);
+                    label.style.marginRight = "4px";
+
+                    input.id = c;
+                    input.type = "color";
+                    input.value = document.body.style.getPropertyValue(c);
+                    input.addEventListener("input", function (event) {
+                        document.body.style.setProperty(c, this.value);
+                        localStorage.setItem(c, this.value);
+                    });
+
+                    if (c === "--colour-tooltip") {
+                        item.classList.add("tooltip-parent");
+                        /** @type {HTMLSpanElement} */
+                        let tooltip = newChild(item, "span");
+
+                        tooltip.classList.add("tooltip");
+                        tooltip.textContent = getElementText('[data-tk="title"]');
+                    }
+                }
 
                 // Default sounds
                 if (localStorage.getItem("default-sounds")) {
