@@ -129,6 +129,13 @@
                 cursor: not-allowed;
             }
 
+            button:focus:active:not(:disabled),
+            .pseudo-button:focus:active:not(.disabled) {
+                border: 2px inset var(--colour-input);
+                box-shadow: 0px 0px 0px 2px var(--colour-text);
+                transition: all 0s ease;
+            }
+
             caption {
                 font-size: 1.1em;
                 font-style: italic;
@@ -209,13 +216,12 @@
             h1,
             h2,
             h3 {
+                font-variant-caps: small-caps;
                 text-align: center;
-                margin-block: 4px;
+                margin-block: 6px;
             }
 
             h1 {
-                border-bottom: 3px inset var(--colour-border);
-                border-radius: 0px;
                 font-size: 1.9em;
             }
 
@@ -228,9 +234,10 @@
             }
 
             hr {
-                border-style: none;
-                border-top: 4px double var(--colour-border);
-                margin-block: 4px;
+                border: none;
+                border-top: 4px inset var(--colour-border);
+                border-radius: 0px;
+                margin-block: 6px;
                 width: 100%;
             }
 
@@ -408,6 +415,8 @@
             .pseudo-button:hover,
             .disabled:focus,
             .disabled:hover,
+            .mistake-text:focus,
+            .mistake-text:hover,
             .rich-text-div:focus,
             .rich-text-div:hover {
                 background-color: var(--colour-hovered-bgr);
@@ -572,10 +581,14 @@
             }
 
             .mistake-text {
+                display: inline;
                 background-color: var(--colour-tooltip);
-                border: 2px solid var(--colour-text);
+                border: 2px inset var(--colour-text);
+                min-height: fit-content;
                 border-radius: 0px;
-                padding-inline: 2px;
+                font-weight: 400;
+                padding: 0px 2px;
+                margin: 0px;
                 cursor: help;
             }
 
@@ -604,8 +617,8 @@
             }
 
             .student-button {
-                background-color: var(--colour-text);
-                color: var(--colour-tooltip);
+                background-color: var(--colour-hovered-fgr);
+                color: var(--colour-hovered-bgr);
                 border-radius: 4px 0px 0px 4px;
                 margin: 0px;
                 padding: 2px 4px;
@@ -638,7 +651,6 @@
                 text-indent: 0px;
                 font-size: 1em;
                 margin-block: 2px;
-                margin-top: 10px;
                 padding: 2px;
                 cursor: help;
                 width: 100%;
@@ -727,27 +739,34 @@
         <div id="menu" class="scene">
             <h1 data-tk="title">Aestimo</h1>
 
-            <button data-tk="start-button" data-scene="main">Start</button>
+            <fieldset style="display: flex; flex-direction: column">
+                <legend data-tk="main-menu-title">Main menu</legend>
 
-            <button data-tk="editor-button" data-scene="editor">Editor</button>
+                <button data-tk="start-button" data-scene="main">Start</button>
 
-            <a
-                id="save-project"
-                data-tk="save-project"
-                href=""
-                download="Project.json"
-                class="pseudo-button disabled"
-                >Save project</a
-            >
+                <button data-tk="editor-button" data-scene="editor">Editor</button>
 
-            <input type="file" id="load-project-input" accept=".json" style="display: none" />
-            <button id="load-project-button" data-tk="load-project-button" class="tooltip-parent"
-                >Load project<span class="tooltip">Open a project (.json)</span>
-            </button>
+                <a
+                    id="save-project"
+                    data-tk="save-project"
+                    href=""
+                    download="Project.json"
+                    class="pseudo-button disabled"
+                    >Save project</a
+                >
 
-            <button data-tk="settings-button" data-scene="settings">Settings</button>
+                <input type="file" id="load-project-input" accept=".json" style="display: none" />
+                <button
+                    id="load-project-button"
+                    data-tk="load-project-button"
+                    class="tooltip-parent"
+                    >Load project<span class="tooltip">Open a project (.json)</span>
+                </button>
 
-            <button data-tk="about-button" data-scene="about">About</button>
+                <button data-tk="settings-button" data-scene="settings">Settings</button>
+
+                <button data-tk="about-button" data-scene="about">About</button>
+            </fieldset>
 
             <!-- Author -->
             <p id="author" data-tk="author" class="tooltip-parent"
@@ -783,7 +802,7 @@
                         style="display: inline; font-size: 1.1em"
                         >+</button
                     >
-                    button on the left or press <kbd>Enter</kbd>.
+                    button on the left or press <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
                     <b>Mistakes must not overlap!</b></p
                 >
             </fieldset>
@@ -1516,18 +1535,19 @@
                 >Named after a Latin word meaning ‘I estimate’, <b>Aestimo</b> is a powerful tool
                 for translation teachers which makes checking students' translations faster, easier,
                 and more accurate. First of all, open the editor to provide the programme with the
-                source text, the list of students, and their translations. Then press
+                source text, the list of students, and their translations. Then press the
                 <button data-tk="start-button" tabindex="-1" style="display: inline">Start</button>
                 button in the main menu to begin checking the works. The check itself is designed to
                 be performed on a <i>paragraph-by-paragraph</i> basis, that is working with one
                 source paragraph and all of its translations at a time instead of dealing with whole
-                texts. This simplifies comparison and mistake search (don't hesitate to try out the
+                texts. This simplifies translations comparison and mistake search (don't hesitate to
+                try out the
                 <button data-tk="main-actions-find" tabindex="-1" style="display: inline"
                     >Find mistake</button
                 >
-                feature to automatise the process!) and thus lowers the risk of missing out
-                something important. Apart from that, the programme automatically calculates the
-                resulting marks, while taking into account the source text's length using a special
+                feature to automatise the process!) and thus lowers the risk of missing something
+                important. Apart from that, the programme automatically calculates the resulting
+                marks, while taking into account the source text's length using a special
                 multiplier<sup>1</sup>.</p
             >
 
@@ -1891,6 +1911,7 @@
                     ],
                     texts: {
                         title: ["Aestimo"],
+                        "main-menu-title": ["Main menu"],
                         "start-button": ["Start"],
                         "editor-button": ["Editor"],
                         "save-project": ["Save project"],
@@ -1903,9 +1924,19 @@
                             ".",
                             "Learn more on my GitHub page!",
                         ],
+                        "export-lang": ["Export current language"],
                         back: ["Back"],
                         "add-mistake-help-title": ["Adding a mistake"],
-                        "main-settings": ["Settings"],
+                        "add-mistake-help": [
+                            "To add a mistake, select the text containing it in the student's translation and then either click the ",
+                            "+",
+                            " button on the left or press ",
+                            "Ctrl",
+                            "+",
+                            "Enter",
+                            ". ",
+                            "Mistakes must not overlap!",
+                        ],
                         "students-per-page": ["Students per page:"],
                         "main-show-names": ["Show students' names:"],
                         "main-para-tooltip": ["Paragraph selection"],
@@ -1915,7 +1946,6 @@
                         "add-mistake-title": ["New mistake"],
                         cancel: ["Cancel"],
                         "mistake-context-title": ["Mistake's context"],
-                        "mistake-comment-title": ["Comment (optional)"],
                         "mistake-type-title": ["Mistake type"],
                         grammar: ["Grammar"],
                         vocabulary: ["Vocabulary"],
@@ -1930,23 +1960,24 @@
                         retained: ["Retained"],
                         obscured: ["Obscured"],
                         lost: ["Lost"],
+                        "mistake-comment-title": ["Comment (optional)"],
                         "add-mistake-button": ["Add mistake"],
                         "edit-mistake-title": ["Mistake editing"],
                         "mistake-delete": ["Delete mistake"],
                         "find-mistake-title": ["Mistake search"],
-                        "find-mistake-search-parameters": ["Search settings"],
+                        "find-mistake-search-settings": ["Search settings"],
                         "find-mistake-mode-title": ["Search mode"],
                         "find-mistake-mode": ["Simple", "Advanced (with regular expressions)"],
                         "find-mistake-query": ["Search query"],
                         "find-mistake-search": ["Search"],
                         "find-mistake-results": ["Search results"],
-                        "find-mistake-table-add": ["Add found mistakes"],
+                        "find-mistake-add-found": ["Add found mistakes"],
                         "adding-students-title": ["Adding students"],
                         "adding-students-button": ["Confirm"],
                         "deleting-student-title": ["Delete this student?"],
                         "deleting-student-confirm": ["Delete student"],
-                        "alignment-legend": ["Align the texts"],
-                        "alignment-text": [
+                        "alignment-info-title": ["Align the texts"],
+                        "alignment-info": [
                             "For the programme to work properly, the source text and students' translations should be aligned, i.e. have the same number and order of paragraphs.",
                         ],
                         "source-title": ["Source text"],
@@ -1965,7 +1996,7 @@
                         ],
                         "sound-settings": ["Sound"],
                         volume: ["Sound volume"],
-                        "def-sounds": ["Default sounds (buttons, inputs, etc.)"],
+                        "default-sounds": ["Default sounds (buttons, inputs, etc.)"],
                         "colour-settings": ["Colours"],
                         "load-colours": ["Load colours"],
                         "save-colours": ["Save colours"],
@@ -2004,6 +2035,61 @@
                         ],
                         "example-code": ["Code example"],
                         "default-settings": ["Restore default settings"],
+                        "about-info": [
+                            "Named after a Latin word meaning ‘I estimate’, ",
+                            "Aestimo",
+                            " is a powerful tool for translation teachers which makes checking students' translations faster, easier, and more accurate. First of all, open the editor to provide the programme with the source text, the list of students, and their translations. Then press the ",
+                            "Start",
+                            " button in the main menu to begin checking the works. The check itself is designed to be performed on a ",
+                            "paragraph-by-paragraph",
+                            " basis, that is working with one source paragraph and all of its translations at a time instead of dealing with whole texts. This simplifies translations comparison and mistake search (don't hesitate to try out the ",
+                            "Find mistake",
+                            " feature to automatise the process!) and thus lowers the risk of missing something important. Apart from that, the programme automatically calculates the resulting marks, while taking into account the source text's length using a special multiplier",
+                            "1",
+                            ".",
+                        ],
+                        "about-classification-title": ["Classification of mistakes"],
+                        "about-classification": [
+                            "Type",
+                            ":",
+                            "Grammar",
+                            ": a mistake while conveying the meaning of a grammatical form (a wrong tense, article, declension, etc.).",
+                            "Vocabulary",
+                            ": a mistake while conveying the meaning of a word (a wrong word, collocation, style, etc.).",
+                            "Orthography",
+                            ": a wrong spelling of a word.",
+                            "Punctuation",
+                            ": an incorrect usage of punctuation marks.",
+                            "Complex",
+                            ": a mistake, usually a serious one, in a text unit larger than a character or a word (e.g., a phrase or a sentence).",
+                            "Subtype",
+                            ":",
+                            "Redundant element",
+                            ": a wrong extra element is inserted.",
+                            "Incorrect element",
+                            ": a correct element is replaced with a wrong one.",
+                            "Lack of element",
+                            ": a correct element is absent.",
+                            "Text's meaning",
+                            ":",
+                            "Retained",
+                            ": the mistake does not make understanding the text harder.",
+                            "Obscured",
+                            ": the text's meaning can be understood only with the help of the immediate context",
+                            "2",
+                            ".",
+                            "Lost",
+                            ": the text's meaning is severely distorted and cannot be understood even with the help of the immediate context",
+                            "2",
+                            ".",
+                        ],
+                        "about-notes": [
+                            "Notes",
+                            "Text length multiplier",
+                            " = 1800 / total number of characters in the original text.",
+                            "Immediate context",
+                            " = everything before the analysed sentence + this sentence + one sentence after it.",
+                        ],
                     },
                     placeholders: {
                         "added-students": "List of students to add (one per line)",
@@ -2015,6 +2101,7 @@
                     langTags: ["ru", "ru-RU"],
                     texts: {
                         title: ["Aestimo"],
+                        "main-menu-title": ["Главное меню"],
                         "start-button": ["Начать"],
                         "editor-button": ["Редактор"],
                         "save-project": ["Сохранить проект"],
@@ -2027,9 +2114,19 @@
                             ".",
                             "Узнайте больше на GitHub!",
                         ],
+                        "export-lang": ["Экспорт текущего языка"],
                         back: ["Назад"],
                         "add-mistake-help-title": ["Добавление ошибки"],
-                        "main-settings": ["Настройки"],
+                        "add-mistake-help": [
+                            "Чтобы добавить ошибку, выделите содержащий её текст в переводе учащегося и либо нажмите кнопку ",
+                            "+",
+                            " слева, либо используйте сочетание ",
+                            "Ctrl",
+                            "+",
+                            "Enter",
+                            ". ",
+                            "Ошибки не должны пересекаться!",
+                        ],
                         "students-per-page": ["Учащихся на странице:"],
                         "main-show-names": ["Показать имена учащихся:"],
                         "main-para-tooltip": ["Выбор абзаца"],
@@ -2039,7 +2136,6 @@
                         "add-mistake-title": ["Новая ошибка"],
                         cancel: ["Отмена"],
                         "mistake-context-title": ["Контекст ошибки"],
-                        "mistake-comment-title": ["Пояснение (необязательно)"],
                         "mistake-type-title": ["Вид ошибки"],
                         grammar: ["Грамматическая"],
                         vocabulary: ["Лексическая"],
@@ -2054,23 +2150,24 @@
                         retained: ["Не затруднено"],
                         obscured: ["Затруднено"],
                         lost: ["Невозможно"],
+                        "mistake-comment-title": ["Пояснение (необязательно)"],
                         "add-mistake-button": ["Добавить ошибку"],
                         "edit-mistake-title": ["Изменение ошибки"],
                         "mistake-delete": ["Удалить ошибку"],
                         "find-mistake-title": ["Поиск ошибки"],
-                        "find-mistake-search-parameters": ["Настройки поиска"],
+                        "find-mistake-search-settings": ["Настройки поиска"],
                         "find-mistake-mode-title": ["Режим поиска"],
                         "find-mistake-mode": ["Простой", "Продвинутый (с регулярными выражениями)"],
                         "find-mistake-query": ["Поисковый запрос"],
                         "find-mistake-search": ["Искать"],
                         "find-mistake-results": ["Результаты поиска"],
-                        "find-mistake-table-add": ["Добавить найденные ошибки"],
+                        "find-mistake-add-found": ["Добавить найденные ошибки"],
                         "adding-students-title": ["Добавление учащихся"],
                         "adding-students-button": ["Подтвердить"],
                         "deleting-student-title": ["Удалить этого учащегося?"],
                         "deleting-student-confirm": ["Удалить учащегося"],
-                        "alignment-legend": ["Выравнивание текстов"],
-                        "alignment-text": [
+                        "alignment-info-title": ["Выравнивание текстов"],
+                        "alignment-info": [
                             "Для правильной работы программы текст оригинала и переводы учащихся должны быть выравнены, то есть иметь одинаковые количество и порядок абзацев.",
                         ],
                         "source-title": ["Текст оригинала"],
@@ -2089,7 +2186,7 @@
                         ],
                         "sound-settings": ["Звук"],
                         volume: ["Громкость звука"],
-                        "def-sounds": ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
+                        "default-sounds": ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
                         "colour-settings": ["Цвета"],
                         "load-colours": ["Загрузить цвета"],
                         "save-colours": ["Сохранить цвета"],
@@ -2128,6 +2225,61 @@
                         ],
                         "example-code": ["Пример кода"],
                         "default-settings": ["Сбросить все настройки"],
+                        "about-info": [
+                            "Названная латинским словом, означающим «я оцениваю», программа ",
+                            "Aestimo",
+                            " — это мощный инструмент для преподавателей перевода, делающий проверку студенческих переводов быстрее, проще и точнее. Перед началом работы откройте редактор: программе понадобятся текст оригинала, список учащихся и их переводы. Затем нажмите кнопку ",
+                            "Начать",
+                            " в главном меню, чтобы начать проверку. Сама проверка производится ",
+                            "поабзацно",
+                            ", то есть работа идёт поочерёдно с каждым абзацем оригинала и всеми его переводами, а не с цельными текстами. Это упрощает сравнение переводов и поиск ошибок (обязательно попробуйте функцию ",
+                            "Найти ошибку",
+                            " для автоматизации процесса!), тем самым снижая вероятность упустить важные детали. Кроме того, программа сама подсчитывает итоговые баллы, при этом учитывая объём исходного текста с помощью специального множителя",
+                            "1",
+                            ".",
+                        ],
+                        "about-classification-title": ["Классификация ошибок"],
+                        "about-classification": [
+                            "Вид",
+                            ":",
+                            "Грамматическая",
+                            " — ошибка в передаче значения грамматической формы (неверное время, склонение, спряжение, артикль и т.п.).",
+                            "Лексическая",
+                            " — ошибка в передаче значения слова (неверное слово, сочетаемость, стиль и т.п.).",
+                            "Орфографическая",
+                            " — ошибка в написании слова.",
+                            "Пунктуационная",
+                            " — ошибка в расстановке знаков препинания.",
+                            "Комплексная",
+                            " — ошибка, обычно грубая, при переводе большей, чем знак или слово, единицы текста (словосочетания, предложения).",
+                            "Подвид",
+                            ":",
+                            "Лишний элемент",
+                            " — привнесение ненужного элемента.",
+                            "Неверный элемент",
+                            " — замена правильного элемента неправильным.",
+                            "Отсутствие элемента",
+                            " — недостаток нужного элемента.",
+                            "Понимание текста",
+                            ":",
+                            "Не затруднено",
+                            " — ошибка не усложняет понимание текста.",
+                            "Затруднено",
+                            " — понимание текста возможно только при обращении к ближайшему контексту",
+                            "2",
+                            ".",
+                            "Невозможно",
+                            " — смысл сильно искажён, понимание текста невозможно даже при обращении к ближайшему контексту",
+                            "2",
+                            ".",
+                        ],
+                        "about-notes": [
+                            "Примечания",
+                            "Множитель объёма текста",
+                            " = 1800 / общее число знаков в исходном тексте.",
+                            "Ближайший контекст",
+                            " = всё до анализируемого предложения + это предложение + одно предложение после него.",
+                        ],
                     },
                     placeholders: {
                         "added-students": "Добавляемые учащиеся (по одному на строке)",
@@ -2240,7 +2392,7 @@
                 /** @type {RegExp | string} */
                 const query = isSimpleSearch
                     ? scenes.findMistake.query.value
-                    : new RegExp(scenes.findMistake.query.value);
+                    : new RegExp(scenes.findMistake.query.value, "u");
 
                 // Look for mistakes, add them to a temporary array, fill the results table
                 for (let i = 0; i < project.translations.length; i++) {
@@ -2734,8 +2886,8 @@
                     );
 
                     if (mistake) {
-                        /** @type {HTMLAnchorElement} */
-                        const mistakeText = newChild(textDiv, "a");
+                        /** @type {HTMLButtonElement} */
+                        const mistakeText = newChild(textDiv, "button");
 
                         mistakeText.classList.add("mistake-text");
                         mistakeText.textContent = textSlice;
@@ -2756,13 +2908,6 @@
                             mistakeText.classList.add("mistake-info");
                             mistakeText.dataset.info = info;
                             mistakeText.ariaLabel = info;
-
-                            mistakeText.addEventListener("keydown", function (event) {
-                                if (event.key === " " || event.key === "Enter") {
-                                    event.preventDefault();
-                                    mistakeText.click();
-                                }
-                            });
 
                             mistakeText.addEventListener("click", function (event) {
                                 highlightMistakes(
@@ -2808,6 +2953,9 @@
 
                                 switchScene("edit-mistake");
                             });
+                        } else {
+                            // Non-interactive mistake text
+                            mistakeText.tabIndex = -1;
                         }
                     } else {
                         /** @type {Text} */
@@ -2987,10 +3135,10 @@
                     };
                 });
 
-                // Adding a mistake via keyboard (Enter)
+                // Adding a mistake via keyboard (Ctrl+Enter)
                 textDiv.tabIndex = 0;
                 textDiv.addEventListener("keydown", function (event) {
-                    if (event.key === "Enter") {
+                    if (event.ctrlKey && event.key === "Enter") {
                         event.preventDefault();
                         newMistakeButton.click();
                     }
