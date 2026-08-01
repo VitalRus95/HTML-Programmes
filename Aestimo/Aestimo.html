@@ -222,15 +222,15 @@
             }
 
             h1 {
-                font-size: 1.9em;
+                font-size: 2em;
             }
 
             h2 {
-                font-size: 1.5em;
+                font-size: 1.6em;
             }
 
             h3 {
-                font-size: 1.25em;
+                font-size: 1.4em;
             }
 
             hr {
@@ -587,6 +587,7 @@
                 min-height: fit-content;
                 border-radius: 0px;
                 font-weight: 400;
+                white-space: pre-wrap;
                 padding: 0px 2px;
                 margin: 0px;
                 cursor: help;
@@ -751,7 +752,7 @@
                     data-tk="save-project"
                     href=""
                     download="Project.json"
-                    class="pseudo-button disabled"
+                    class="pseudo-button"
                     >Save project</a
                 >
 
@@ -787,6 +788,8 @@
 
         <!-- MAIN DIV -->
         <div id="main" class="scene">
+            <h2 data-tk="check-title">Check</h2>
+
             <button data-tk="back" data-scene="menu">Back</button>
 
             <!-- Adding a new mistake help -->
@@ -1925,6 +1928,7 @@
                             "Learn more on my GitHub page!",
                         ],
                         "export-lang": ["Export current language"],
+                        "check-title": ["Check"],
                         back: ["Back"],
                         "add-mistake-help-title": ["Adding a mistake"],
                         "add-mistake-help": [
@@ -2115,6 +2119,7 @@
                             "Узнайте больше на GitHub!",
                         ],
                         "export-lang": ["Экспорт текущего языка"],
+                        "check-title": ["Проверка"],
                         back: ["Назад"],
                         "add-mistake-help-title": ["Добавление ошибки"],
                         "add-mistake-help": [
@@ -2290,10 +2295,6 @@
 
             /** @type {number} */
             let sourceParaCount = 0;
-            /** @type {number} */
-            let mainItemsPerPage = +localStorage.getItem("mainStudentsPerPage") || 5;
-            /** @type {number} */
-            let editorItemsPerPage = +localStorage.getItem("editorStudentsPerPage") || 5;
             /** @type {Mistake} */
             let newMistake = {
                 source: "",
@@ -2310,196 +2311,6 @@
             // | Events |
             // +--------+
             //
-            scenes.menu.languageSelect.addEventListener("change", function (event) {
-                localStorage.setItem("lang", this.value);
-                changeLanguage();
-            });
-
-            scenes.settings.volumeInput.addEventListener("change", function (event) {
-                scenes.settings.volumeInput.value = clamp(0, +scenes.settings.volumeInput.value, 1);
-                localStorage.setItem("volume", scenes.settings.volumeInput.value);
-            });
-
-            scenes.settings.defaultSounds.addEventListener("change", function (event) {
-                localStorage.setItem("default-sounds", this.checked);
-            });
-
-            scenes.settings.defaultSettings.addEventListener("click", function (event) {
-                // Volume
-                scenes.settings.volumeInput.value = "0.5";
-                localStorage.setItem("volume", scenes.settings.volumeInput.value);
-
-                // Default sounds
-                scenes.settings.defaultSounds.checked = true;
-                localStorage.setItem("default-sounds", "true");
-
-                // Colours
-                for (const c in allColours) {
-                    document.body.style.setProperty(c, allColours[c]);
-                    element(`#${c}`).value = allColours[c];
-                    localStorage.setItem(c, allColours[c]);
-                }
-            });
-
-            scenes.main.paragraphSelect.addEventListener("change", function (event) {
-                project.paragraph = +scenes.main.paragraphSelect.value;
-                project.mainPage = 0;
-                updateMain();
-            });
-
-            scenes.main.pageSelect.addEventListener("change", function (event) {
-                project.mainPage = +scenes.main.pageSelect.value;
-                updateMain();
-            });
-
-            scenes.editor.itemsPerPageInput.addEventListener("change", function (event) {
-                editorItemsPerPage = clamp(
-                    1,
-                    +scenes.editor.itemsPerPageInput.value,
-                    +scenes.editor.itemsPerPageInput.max,
-                );
-                localStorage.setItem("editorStudentsPerPage", editorItemsPerPage);
-                updateEditor();
-            });
-
-            scenes.editor.pageSelect.addEventListener("change", function (event) {
-                project.editorPage = +scenes.editor.pageSelect.value;
-                updateEditor();
-            });
-
-            scenes.main.itemsPerPageInput.addEventListener("change", function (event) {
-                mainItemsPerPage = clamp(1, +this.value, +this.max);
-                localStorage.setItem("mainStudentsPerPage", mainItemsPerPage);
-                updateMain();
-            });
-
-            scenes.main.showNames.addEventListener("change", function (event) {
-                localStorage.setItem("mainShowNames", this.checked);
-                updateMain();
-            });
-
-            scenes.findMistake.searchButton.addEventListener("click", function (event) {
-                if (!scenes.findMistake.query.value) return;
-                removeChildNodes(scenes.findMistake.table);
-                scenes.findMistake.addButton.style.display = "none";
-
-                /** @type {MistakeSearchResult[]} */
-                let mistakes = [];
-
-                /** @type {boolean} */
-                const isSimpleSearch = scenes.findMistake.mode.value === "simple";
-
-                /** @type {RegExp | string} */
-                const query = isSimpleSearch
-                    ? scenes.findMistake.query.value
-                    : new RegExp(scenes.findMistake.query.value, "u");
-
-                // Look for mistakes, add them to a temporary array, fill the results table
-                for (let i = 0; i < project.translations.length; i++) {
-                    /** @type {string} */
-                    const translation = getStudentTranslation(i);
-                    /** @type {RegExpMatchArray | number} */
-                    const result = isSimpleSearch
-                        ? translation.indexOf(query)
-                        : translation.match(query);
-
-                    if (!result || result === -1) continue;
-                    if (!isSimpleSearch && !result.index) continue;
-
-                    /** @type {number} */
-                    const start = isSimpleSearch
-                        ? result // A plain-text search
-                        : result[1] // Regular expression with or without a capturing group
-                          ? result.index + result[0].indexOf(result[1])
-                          : result.index;
-                    /** @type {number} */
-                    const end = isSimpleSearch
-                        ? start + query.length // A plain-text search
-                        : result[1] // Regular expression with or without a capturing group
-                          ? start + result[1].length
-                          : start + result[0].length;
-
-                    // Add the mistake to the array if it's new
-                    if (
-                        project.translations[i].mistakes
-                            .filter((m) => m.paragraph === project.paragraph)
-                            .some((m) => start < m.endIndex && m.startIndex < end)
-                    ) {
-                        continue;
-                    }
-
-                    /** @type {number} */
-                    const lastFoundMistakeId =
-                        mistakes.push({
-                            mistake: {
-                                source: isSimpleSearch ? query : result[1] || result[0],
-                                paragraph: project.paragraph,
-                                startIndex: start,
-                                endIndex: end,
-                                type: scenes.findMistake.type.value,
-                                subtype: scenes.findMistake.subtype.value,
-                                meaning: scenes.findMistake.meaning.value,
-                                comment: scenes.findMistake.comment.value,
-                            },
-                            studentIndex: i,
-                            shouldBeAdded: true,
-                        }) - 1;
-
-                    // Fill the results table
-                    /** @type {HTMLTableRowElement} */
-                    let row = newChild(scenes.findMistake.table, "tr");
-
-                    /** @type {HTMLTableCellElement} */
-                    let cell = newChild(row, "td");
-                    cell.classList.add("table-element-container");
-
-                    /** @type {HTMLDivElement} */
-                    let cellDiv = newChild(cell, "div");
-                    cellDiv.classList.add("student-div");
-
-                    /** @type {HTMLButtonElement} */
-                    let deleteButton = newChild(cellDiv, "button");
-                    deleteButton.classList.add("student-button", "tooltip-parent");
-                    deleteButton.textContent = "-";
-
-                    /** @type {HTMLSpanElement} */
-                    let deleteTooltip = newChild(deleteButton, "span");
-                    deleteTooltip.classList.add("tooltip");
-                    deleteTooltip.textContent = getText("mistake-delete");
-
-                    /** @type {HTMLDivElement} */
-                    let textDiv = newChild(cellDiv, "div");
-                    textDiv.classList.add("rich-text-div", "no-left-border");
-                    highlightMistakes(
-                        textDiv,
-                        translation,
-                        [mistakes[lastFoundMistakeId].mistake],
-                        mistakes[lastFoundMistakeId].studentIndex,
-                        false,
-                    );
-
-                    // Events
-                    deleteButton.addEventListener("click", function (event) {
-                        mistakes[lastFoundMistakeId].shouldBeAdded = false;
-                        row.remove();
-                    });
-                }
-
-                // Check if at least one mistake is found
-                if (mistakes.length > 0) {
-                    scenes.findMistake.addButton.style.display = "flex";
-
-                    scenes.findMistake.addButton.onclick = function (event) {
-                        mistakes
-                            .filter((m) => m.shouldBeAdded)
-                            .forEach((m) => {
-                                project.translations[m.studentIndex].mistakes.push(m.mistake);
-                            });
-                        switchScene("main");
-                    };
-                }
-            });
-
             // Buttons
             [
                 { id: "#adding-students-button", action: addStudents },
@@ -2518,13 +2329,23 @@
                 });
             }
 
-            // Switching to last scene on pressing Escape
+            // Global window hotkeys
             window.addEventListener("keydown", function (event) {
-                if (event.key !== "Escape") return;
-                if (!previousScene) return;
-                if (["deleting-student"].includes(previousScene)) return;
+                switch (event.key) {
+                    case "Escape":
+                        if (!previousScene) return;
+                        if (["deleting-student"].some((s) => s === previousScene)) return;
 
-                switchScene(previousScene);
+                        switchScene(previousScene);
+                        break;
+                    case "s":
+                    case "S":
+                        if (!event.ctrlKey && !event.metaKey) return;
+
+                        event.preventDefault();
+                        scenes.menu.saveProject.click();
+                        break;
+                }
             });
 
             // Loading colours
@@ -2585,7 +2406,6 @@
                         scenes.menu.saveProject.download = `${name}`;
 
                         project = JSON.parse(content);
-                        scenes.menu.saveProject.classList.remove("disabled");
                         project.mainPage = 0;
                         project.editorPage = 0;
                         fixProject();
@@ -2602,12 +2422,196 @@
 
             // Saving the project
             scenes.menu.saveProject.addEventListener("click", function (event) {
-                if (this.classList.contains("disabled")) {
-                    event.preventDefault();
-                    return;
-                }
                 let data = encodeURIComponent(JSON.stringify(project, undefined, 4));
                 this.href = `data:text/plain;charset=utf-8,${data}`;
+            });
+
+            scenes.menu.languageSelect.addEventListener("change", function (event) {
+                localStorage.setItem("lang", this.value);
+                changeLanguage();
+            });
+
+            scenes.settings.volumeInput.addEventListener("change", function (event) {
+                scenes.settings.volumeInput.value = clamp(0, +scenes.settings.volumeInput.value, 1);
+                localStorage.setItem("volume", scenes.settings.volumeInput.value);
+            });
+
+            scenes.settings.defaultSounds.addEventListener("change", function (event) {
+                localStorage.setItem("default-sounds", this.checked);
+            });
+
+            scenes.settings.defaultSettings.addEventListener("click", function (event) {
+                // Volume
+                scenes.settings.volumeInput.value = "0.5";
+                localStorage.setItem("volume", scenes.settings.volumeInput.value);
+
+                // Default sounds
+                scenes.settings.defaultSounds.checked = true;
+                localStorage.setItem("default-sounds", "true");
+
+                // Colours
+                for (const c in allColours) {
+                    document.body.style.setProperty(c, allColours[c]);
+                    element(`#${c}`).value = allColours[c];
+                    localStorage.setItem(c, allColours[c]);
+                }
+            });
+
+            scenes.main.paragraphSelect.addEventListener("change", function (event) {
+                project.paragraph = +scenes.main.paragraphSelect.value;
+                project.mainPage = 0;
+                updateMain();
+            });
+
+            scenes.main.pageSelect.addEventListener("change", function (event) {
+                project.mainPage = +scenes.main.pageSelect.value;
+                updateMain();
+            });
+
+            scenes.editor.itemsPerPageInput.addEventListener("change", function (event) {
+                clampInputNumber(this);
+                localStorage.setItem(
+                    "editorStudentsPerPage",
+                    scenes.editor.itemsPerPageInput.value,
+                );
+                updateEditor();
+            });
+
+            scenes.editor.pageSelect.addEventListener("change", function (event) {
+                project.editorPage = +scenes.editor.pageSelect.value;
+                updateEditor();
+            });
+
+            scenes.main.itemsPerPageInput.addEventListener("change", function (event) {
+                clampInputNumber(this);
+                localStorage.setItem("mainStudentsPerPage", +scenes.main.itemsPerPageInput.value);
+                updateMain();
+            });
+
+            scenes.main.showNames.addEventListener("change", function (event) {
+                localStorage.setItem("mainShowNames", this.checked);
+                updateMain();
+            });
+
+            scenes.findMistake.searchButton.addEventListener("click", function (event) {
+                if (!scenes.findMistake.query.value) return;
+                removeChildNodes(scenes.findMistake.table);
+                scenes.findMistake.addButton.style.display = "none";
+
+                /** @type {MistakeSearchResult[]} */
+                let mistakes = [];
+
+                /** @type {boolean} */
+                const isSimpleSearch = scenes.findMistake.mode.value === "simple";
+
+                /** @type {RegExp | string} */
+                const query = isSimpleSearch
+                    ? scenes.findMistake.query.value
+                    : new RegExp(scenes.findMistake.query.value, "u");
+
+                // Look for mistakes, add them to a temporary array, fill the results table
+                for (let i = 0; i < project.translations.length; i++) {
+                    /** @type {string} */
+                    const translation = getStudentTranslation(i);
+                    /** @type {RegExpMatchArray | number} */
+                    const result = isSimpleSearch
+                        ? translation.indexOf(query)
+                        : translation.match(query);
+
+                    if (result === null || result === -1) continue;
+
+                    /** @type {number} */
+                    const start = isSimpleSearch
+                        ? result // A plain-text search
+                        : result[1] // Regular expression with or without a capturing group
+                          ? result.index + result[0].indexOf(result[1])
+                          : result.index;
+                    /** @type {number} */
+                    const end = isSimpleSearch
+                        ? start + query.length // A plain-text search
+                        : result[1] // Regular expression with or without a capturing group
+                          ? start + result[1].length
+                          : start + result[0].length;
+
+                    // Add the mistake to the array if it's new
+                    if (
+                        project.translations[i].mistakes
+                            .filter((m) => m.paragraph === project.paragraph)
+                            .some((m) => start < m.endIndex && m.startIndex < end)
+                    ) {
+                        continue;
+                    }
+
+                    /** @type {number} */
+                    const lastFoundMistakeId =
+                        mistakes.push({
+                            mistake: {
+                                source: isSimpleSearch ? query : result[1] || result[0],
+                                paragraph: project.paragraph,
+                                startIndex: start,
+                                endIndex: end,
+                            },
+                            studentIndex: i,
+                            shouldBeAdded: true,
+                        }) - 1;
+
+                    // Fill the results table
+                    /** @type {HTMLTableRowElement} */
+                    let row = newChild(scenes.findMistake.table, "tr");
+
+                    /** @type {HTMLTableCellElement} */
+                    let cell = newChild(row, "td");
+                    cell.classList.add("table-element-container");
+
+                    /** @type {HTMLDivElement} */
+                    let cellDiv = newChild(cell, "div");
+                    cellDiv.classList.add("student-div");
+
+                    /** @type {HTMLButtonElement} */
+                    let deleteButton = newChild(cellDiv, "button");
+                    deleteButton.classList.add("student-button", "tooltip-parent");
+                    deleteButton.textContent = "-";
+
+                    /** @type {HTMLSpanElement} */
+                    let deleteTooltip = newChild(deleteButton, "span");
+                    deleteTooltip.classList.add("tooltip");
+                    deleteTooltip.textContent = getText("mistake-delete");
+
+                    /** @type {HTMLDivElement} */
+                    let textDiv = newChild(cellDiv, "div");
+                    textDiv.classList.add("rich-text-div", "no-left-border");
+                    highlightMistakes(
+                        textDiv,
+                        translation,
+                        [mistakes[lastFoundMistakeId].mistake],
+                        mistakes[lastFoundMistakeId].studentIndex,
+                        false,
+                    );
+
+                    // Events
+                    deleteButton.addEventListener("click", function (event) {
+                        mistakes[lastFoundMistakeId].shouldBeAdded = false;
+                        row.remove();
+                    });
+                }
+
+                // Check if at least one mistake is found
+                if (mistakes.length > 0) {
+                    scenes.findMistake.addButton.style.display = "flex";
+
+                    scenes.findMistake.addButton.onclick = function (event) {
+                        mistakes
+                            .filter((m) => m.shouldBeAdded)
+                            .forEach((m) => {
+                                m.mistake.type = scenes.findMistake.type.value;
+                                m.mistake.subtype = scenes.findMistake.subtype.value;
+                                m.mistake.meaning = scenes.findMistake.meaning.value;
+                                m.mistake.comment = scenes.findMistake.comment.value;
+                                project.translations[m.studentIndex].mistakes.push(m.mistake);
+                            });
+                        switchScene("main");
+                    };
+                }
             });
 
             // Source text editing
@@ -2632,8 +2636,10 @@
             }
 
             function updateItemsPerPageMax() {
-                scenes.main.itemsPerPageInput.max = project.translations.length;
-                scenes.editor.itemsPerPageInput.max = project.translations.length;
+                [scenes.main.itemsPerPageInput, scenes.editor.itemsPerPageInput].forEach((i) => {
+                    i.max = project.translations.length;
+                    clampInputNumber(i);
+                });
             }
 
             function updateSourceParagraphCounter() {
@@ -2651,7 +2657,10 @@
                 updateSourceParagraphCounter();
 
                 // Manage pages
-                let maxPage = getMaxPageIndex(project.translations, editorItemsPerPage);
+                let maxPage = getMaxPageIndex(
+                    project.translations,
+                    +scenes.editor.itemsPerPageInput.value,
+                );
                 project.editorPage = clamp(0, project.editorPage, maxPage);
 
                 // Show and fill or hide page selector
@@ -2673,11 +2682,12 @@
                 const subset = getArraySubset(
                     project.translations,
                     project.editorPage,
-                    editorItemsPerPage,
+                    +scenes.editor.itemsPerPageInput.value,
                 );
 
                 subset.forEach((t, i) => {
-                    const studentId = project.editorPage * editorItemsPerPage + i;
+                    const studentId =
+                        project.editorPage * +scenes.editor.itemsPerPageInput.value + i;
 
                     let row = newChild(scenes.editor.translations, "tr");
                     row.id = `editor-row${i}`;
@@ -2759,6 +2769,7 @@
                         scenes.deleteStudent.studentName.textContent = studentName.value;
                         scenes.deleteStudent.deleteButton.onclick = function (event) {
                             project.translations.splice(studentId, 1);
+                            updateItemsPerPageMax();
                             updateEditor();
                             switchScene("editor");
                         };
@@ -2794,6 +2805,7 @@
                     scenes.addStudents.addedList.value = "";
                 }
                 sortStudentsAlphabetically();
+                updateItemsPerPageMax();
                 updateEditor();
                 switchScene("editor");
             }
@@ -3157,7 +3169,10 @@
                 removeChildNodes(scenes.main.translations);
 
                 // Manage pages
-                let maxPage = getMaxPageIndex(project.translations, mainItemsPerPage);
+                let maxPage = getMaxPageIndex(
+                    project.translations,
+                    +scenes.main.itemsPerPageInput.value,
+                );
                 project.mainPage = clamp(0, project.mainPage, maxPage);
 
                 // Show and fill or hide page selector
@@ -3176,9 +3191,9 @@
 
                 // Iterate over students' translations and add them
                 /** @type {number} */
-                const firstIndex = project.mainPage * mainItemsPerPage;
+                const firstIndex = project.mainPage * +scenes.main.itemsPerPageInput.value;
                 /** @type {number} */
-                const lastIndex = firstIndex + mainItemsPerPage;
+                const lastIndex = +scenes.main.itemsPerPageInput.value + firstIndex;
 
                 for (let i = firstIndex; i < lastIndex; i++) {
                     addStudentToMainTable(i);
@@ -3197,6 +3212,18 @@
                     if (!t.text) t.text = "";
                     if (!t.mistakes) t.mistakes = [];
                 });
+            }
+
+            /**
+             * Clamps an input element using its own min and max values
+             * @param {HTMLInputElement} inputElement
+             */
+            function clampInputNumber(inputElement) {
+                inputElement.value = clamp(
+                    +inputElement.min,
+                    +inputElement.value,
+                    +inputElement.max,
+                );
             }
 
             /**
@@ -3350,8 +3377,10 @@
 
                 // Max items per page
                 scenes.main.showNames.checked = localStorage.getItem("mainShowNames") === "true";
-                scenes.main.itemsPerPageInput.value = mainItemsPerPage;
-                scenes.editor.itemsPerPageInput.value = editorItemsPerPage;
+                scenes.main.itemsPerPageInput.value =
+                    +localStorage.getItem("mainStudentsPerPage") || 5;
+                scenes.editor.itemsPerPageInput.value =
+                    +localStorage.getItem("editorStudentsPerPage") || 5;
             }
 
             /**
@@ -3390,11 +3419,19 @@
                     case "main":
                         updateMain();
                         break;
+                    case "add-mistake":
+                        /** @type {HTMLInputElement} */
+                        const selectedInput = document.querySelector(
+                            "input[name='mistake-type']:checked",
+                        );
+                        selectedInput.focus();
+                        break;
                     case "find-mistake":
                         removeChildNodes(scenes.findMistake.table);
                         scenes.findMistake.query.value = "";
                         scenes.findMistake.comment.value = "";
                         scenes.findMistake.addButton.style.display = "none";
+                        scenes.findMistake.query.focus();
                         break;
                 }
             }
@@ -3463,7 +3500,9 @@
                     scenes.menu.languageSelect.value = localStorage.getItem("lang");
                 } else if (navigator.language) {
                     /** @type {Language} */
-                    const match = languages.find((l) => l.langTags.includes(navigator.language));
+                    const match = languages.find((l) =>
+                        l.langTags.some((t) => t === navigator.language),
+                    );
 
                     if (match) {
                         scenes.menu.languageSelect.value = match.name;
