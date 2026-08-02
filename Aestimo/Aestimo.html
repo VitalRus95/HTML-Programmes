@@ -881,6 +881,10 @@
                 <legend data-tk="actions-menu">Actions menu</legend>
 
                 <button data-tk="main-actions-find" data-scene="find-mistake">Find mistake</button>
+
+                <button data-tk="main-actions-cancel-last" data-scene="cancel-mistake"
+                    >Undo last mistakes</button
+                >
             </fieldset>
         </div>
 
@@ -1293,6 +1297,26 @@
 
             <button id="find-mistake-table-add" data-tk="find-mistake-add-found"
                 >Add found mistakes</button
+            >
+        </div>
+
+        <!-- CANCELLING MISTAKE -->
+        <div id="cancel-mistake" class="scene">
+            <h2 data-tk="cacnel-mistake-title">Undo last mistakes</h2>
+
+            <button data-tk="back" data-scene="main">Back</button>
+
+            <!-- Last mistake list -->
+            <fieldset>
+                <legend data-tk="cancel-mistake-results">Mistakes to undo</legend>
+
+                <table>
+                    <tbody id="cancel-mistake-table-body"></tbody>
+                </table>
+            </fieldset>
+
+            <button id="cancel-mistake-table-cancel" data-tk="cancel-mistake-cancel-found"
+                >Undo found mistakes</button
             >
         </div>
 
@@ -1739,6 +1763,14 @@
                     /** @type {HTMLButtonElement} */
                     addButton: element("#find-mistake-table-add"),
                 },
+                cancelMistake: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#cancel-mistake"),
+                    /** @type {HTMLTableSectionElement} */
+                    table: element("#cancel-mistake-table-body"),
+                    /** @type {HTMLButtonElement} */
+                    cancelButton: element("#cancel-mistake-table-cancel"),
+                },
                 addStudents: {
                     /** @type {HTMLDivElement} */
                     self: element("#adding-students"),
@@ -1947,6 +1979,7 @@
                         "page-selection": ["Page selection"],
                         "actions-menu": ["Actions menu"],
                         "main-actions-find": ["Find mistake"],
+                        "main-actions-cancel-last": ["Undo last mistakes"],
                         "add-mistake-title": ["New mistake"],
                         cancel: ["Cancel"],
                         "mistake-context-title": ["Mistake's context"],
@@ -1976,6 +2009,9 @@
                         "find-mistake-search": ["Search"],
                         "find-mistake-results": ["Search results"],
                         "find-mistake-add-found": ["Add found mistakes"],
+                        "cacnel-mistake-title": ["Undo last mistakes"],
+                        "cancel-mistake-results": ["Mistakes to undo"],
+                        "cancel-mistake-cancel-found": ["Undo found mistakes"],
                         "adding-students-title": ["Adding students"],
                         "adding-students-button": ["Confirm"],
                         "deleting-student-title": ["Delete this student?"],
@@ -2138,6 +2174,7 @@
                         "page-selection": ["Выбор страницы"],
                         "actions-menu": ["Меню действий"],
                         "main-actions-find": ["Найти ошибку"],
+                        "main-actions-cancel-last": ["Отменить последние ошибки"],
                         "add-mistake-title": ["Новая ошибка"],
                         cancel: ["Отмена"],
                         "mistake-context-title": ["Контекст ошибки"],
@@ -2167,6 +2204,9 @@
                         "find-mistake-search": ["Искать"],
                         "find-mistake-results": ["Результаты поиска"],
                         "find-mistake-add-found": ["Добавить найденные ошибки"],
+                        "cacnel-mistake-title": ["Отмена последних ошибок"],
+                        "cancel-mistake-results": ["Отменяемые ошибки"],
+                        "cancel-mistake-cancel-found": ["Отменить найденные ошибки"],
                         "adding-students-title": ["Добавление учащихся"],
                         "adding-students-button": ["Подтвердить"],
                         "deleting-student-title": ["Удалить этого учащегося?"],
@@ -2510,7 +2550,7 @@
                     : new RegExp(scenes.findMistake.query.value, "u");
 
                 // Look for mistakes, add them to a temporary array, fill the results table
-                for (let i = 0; i < project.translations.length; i++) {
+                project.translations.forEach((t, i) => {
                     /** @type {string} */
                     const translation = getStudentTranslation(i);
                     /** @type {RegExpMatchArray | number} */
@@ -2518,7 +2558,7 @@
                         ? translation.indexOf(query)
                         : translation.match(query);
 
-                    if (result === null || result === -1) continue;
+                    if (result === null || result === -1) return;
 
                     /** @type {number} */
                     const start = isSimpleSearch
@@ -2535,11 +2575,11 @@
 
                     // Add the mistake to the array if it's new
                     if (
-                        project.translations[i].mistakes
+                        t.mistakes
                             .filter((m) => m.paragraph === project.paragraph)
                             .some((m) => start < m.endIndex && m.startIndex < end)
                     ) {
-                        continue;
+                        return;
                     }
 
                     /** @type {number} */
@@ -2586,6 +2626,7 @@
                         [mistakes[lastFoundMistakeId].mistake],
                         mistakes[lastFoundMistakeId].studentIndex,
                         false,
+                        false,
                     );
 
                     // Events
@@ -2593,25 +2634,24 @@
                         mistakes[lastFoundMistakeId].shouldBeAdded = false;
                         row.remove();
                     });
-                }
+                });
 
                 // Check if at least one mistake is found
-                if (mistakes.length > 0) {
-                    scenes.findMistake.addButton.style.display = "flex";
+                if (mistakes.length === 0) return;
 
-                    scenes.findMistake.addButton.onclick = function (event) {
-                        mistakes
-                            .filter((m) => m.shouldBeAdded)
-                            .forEach((m) => {
-                                m.mistake.type = scenes.findMistake.type.value;
-                                m.mistake.subtype = scenes.findMistake.subtype.value;
-                                m.mistake.meaning = scenes.findMistake.meaning.value;
-                                m.mistake.comment = scenes.findMistake.comment.value;
-                                project.translations[m.studentIndex].mistakes.push(m.mistake);
-                            });
-                        switchScene("main");
-                    };
-                }
+                scenes.findMistake.addButton.style.display = "flex";
+                scenes.findMistake.addButton.onclick = function (event) {
+                    mistakes
+                        .filter((m) => m.shouldBeAdded)
+                        .forEach((m) => {
+                            m.mistake.type = scenes.findMistake.type.value;
+                            m.mistake.subtype = scenes.findMistake.subtype.value;
+                            m.mistake.meaning = scenes.findMistake.meaning.value;
+                            m.mistake.comment = scenes.findMistake.comment.value;
+                            project.translations[m.studentIndex].mistakes.push(m.mistake);
+                        });
+                    switchScene("main");
+                };
             });
 
             // Source text editing
@@ -2865,9 +2905,17 @@
              * @param {string} sourceText
              * @param {Mistake[]} mistakes
              * @param {number} studentIndex
-             * @param {boolean} interactive
+             * @param {boolean} showInfo
+             * @param {boolean} isEditable
              */
-            function highlightMistakes(textDiv, sourceText, mistakes, studentIndex, interactive) {
+            function highlightMistakes(
+                textDiv,
+                sourceText,
+                mistakes,
+                studentIndex,
+                showInfo,
+                isEditable,
+            ) {
                 if (!textDiv) return;
                 if (!sourceText) return;
                 if (!mistakes) return;
@@ -2897,15 +2945,22 @@
                         (m) => m.startIndex === start && m.endIndex === end,
                     );
 
+                    // Determine if it's a mistake or normal text
                     if (mistake) {
+                        // This is a mistake
                         /** @type {HTMLButtonElement} */
                         const mistakeText = newChild(textDiv, "button");
 
                         mistakeText.classList.add("mistake-text");
                         mistakeText.textContent = textSlice;
 
+                        // Mistake button's tabbing
+                        if (!showInfo && !isEditable) {
+                            mistakeText.tabIndex = -1;
+                        }
+
                         // Mistake information and editing
-                        if (interactive) {
+                        if (showInfo) {
                             /** @type {string} */
                             const info =
                                 getText(mistake.type) +
@@ -2920,13 +2975,17 @@
                             mistakeText.classList.add("mistake-info");
                             mistakeText.dataset.info = info;
                             mistakeText.ariaLabel = info;
+                        }
 
+                        if (isEditable) {
+                            // Prepare mistake editing scene and switch to it
                             mistakeText.addEventListener("click", function (event) {
                                 highlightMistakes(
                                     scenes.editMistake.context,
                                     sourceText,
                                     [mistake],
                                     studentIndex,
+                                    false,
                                     false,
                                 );
                                 scenes.editMistake.type.value = mistake.type;
@@ -2952,24 +3011,15 @@
                                             mistakeIndex,
                                             1,
                                         );
-                                        highlightMistakes(
-                                            textDiv,
-                                            sourceText,
-                                            mistakes,
-                                            studentIndex,
-                                            interactive,
-                                        );
                                         switchScene("main");
                                     }
                                 };
 
                                 switchScene("edit-mistake");
                             });
-                        } else {
-                            // Non-interactive mistake text
-                            mistakeText.tabIndex = -1;
                         }
                     } else {
+                        // This is a normal text
                         /** @type {Text} */
                         const textNode = textDiv.appendChild(document.createTextNode(textSlice));
                     }
@@ -3015,6 +3065,7 @@
                     translation,
                     work.mistakes.filter((m) => m.paragraph === project.paragraph),
                     studentIndex,
+                    true,
                     true,
                 );
             }
@@ -3122,6 +3173,7 @@
                         [newMistake],
                         studentIndex,
                         false,
+                        false,
                     );
                     scenes.addMistake.mistakeComment.value = "";
                     switchScene("add-mistake");
@@ -3200,6 +3252,92 @@
                 }
             }
 
+            function updateUndoMistakes() {
+                /** @type {MistakeSearchResult[]} */
+                let mistakes = [];
+
+                // Fill the temporary array
+                project.translations.forEach((t, i) => {
+                    /** @type {Mistake[]} */
+                    const paragraphMistakes = t.mistakes.filter(
+                        (m) => m.paragraph === project.paragraph,
+                    );
+
+                    if (paragraphMistakes.length > 0) {
+                        mistakes.push({
+                            mistake: paragraphMistakes[paragraphMistakes.length - 1],
+                            studentIndex: i,
+                            shouldBeAdded: true,
+                        });
+                    }
+                });
+
+                // Exit if there's no last mistake
+                if (mistakes.length === 0) return;
+
+                // Fill the table
+                mistakes.forEach((m, i) => {
+                    /** @type {string} */
+                    const translation = getStudentTranslation(m.studentIndex);
+
+                    /** @type {HTMLTableRowElement} */
+                    let row = newChild(scenes.cancelMistake.table, "tr");
+
+                    /** @type {HTMLTableCellElement} */
+                    let cell = newChild(row, "td");
+                    cell.classList.add("table-element-container");
+
+                    /** @type {HTMLDivElement} */
+                    let cellDiv = newChild(cell, "div");
+                    cellDiv.classList.add("student-div");
+
+                    /** @type {HTMLButtonElement} */
+                    let deleteButton = newChild(cellDiv, "button");
+                    deleteButton.classList.add("student-button", "tooltip-parent");
+                    deleteButton.textContent = "-";
+
+                    /** @type {HTMLSpanElement} */
+                    let deleteTooltip = newChild(deleteButton, "span");
+                    deleteTooltip.classList.add("tooltip");
+                    deleteTooltip.textContent = getText("mistake-delete");
+
+                    /** @type {HTMLDivElement} */
+                    let textDiv = newChild(cellDiv, "div");
+                    textDiv.classList.add("rich-text-div", "no-left-border");
+                    highlightMistakes(
+                        textDiv,
+                        translation,
+                        [mistakes[i].mistake],
+                        mistakes[i].studentIndex,
+                        true,
+                        false,
+                    );
+
+                    // Events
+                    deleteButton.addEventListener("click", function (event) {
+                        mistakes[i].shouldBeAdded = false;
+                        row.remove();
+                    });
+                });
+
+                // Set cancel button's behaviour
+                scenes.cancelMistake.cancelButton.style.display = "flex";
+                scenes.cancelMistake.cancelButton.onclick = function (event) {
+                    mistakes
+                        .filter((m) => m.shouldBeAdded)
+                        .forEach((m) => {
+                            /** @type {number} */
+                            const index = project.translations[m.studentIndex].mistakes.indexOf(
+                                m.mistake,
+                            );
+                            project.translations[m.studentIndex].mistakes.splice(index, 1);
+                        });
+                    removeChildNodes(scenes.cancelMistake.table);
+                    scenes.cancelMistake.cancelButton.style.display = "none";
+                    switchScene("main");
+                };
+            }
+
             function fixProject() {
                 if (!project.source) project.source = "";
                 if (!project.paragraph) project.paragraph = 0;
@@ -3212,6 +3350,17 @@
                     if (!t.text) t.text = "";
                     if (!t.mistakes) t.mistakes = [];
                 });
+            }
+
+            /**
+             * Gets the source text length multiplier used in mark calculation
+             * @returns {number}
+             */
+            function getLengthMultiplier() {
+                /** @type {number} */
+                const sourceLength = project.source.length;
+
+                return sourceLength > 0 ? 1800 / sourceLength : 1;
             }
 
             /**
@@ -3414,7 +3563,7 @@
                 previousScene = currentScene;
                 currentScene = targetSceneId;
 
-                // Additional actions
+                // Scene-specific actions
                 switch (targetSceneId) {
                     case "main":
                         updateMain();
@@ -3424,7 +3573,9 @@
                         const selectedInput = document.querySelector(
                             "input[name='mistake-type']:checked",
                         );
-                        selectedInput.focus();
+                        if (selectedInput) {
+                            selectedInput.focus();
+                        }
                         break;
                     case "find-mistake":
                         removeChildNodes(scenes.findMistake.table);
@@ -3432,6 +3583,11 @@
                         scenes.findMistake.comment.value = "";
                         scenes.findMistake.addButton.style.display = "none";
                         scenes.findMistake.query.focus();
+                        break;
+                    case "cancel-mistake":
+                        removeChildNodes(scenes.cancelMistake.table);
+                        scenes.cancelMistake.cancelButton.style.display = "none";
+                        updateUndoMistakes();
                         break;
                 }
             }
