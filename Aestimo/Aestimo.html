@@ -202,6 +202,8 @@
                 border: 3px groove var(--colour-border);
                 margin: 4px 0px;
                 padding: 4px;
+                max-height: calc(100vh - 8px);
+                overflow: auto;
             }
 
             legend {
@@ -211,6 +213,7 @@
                 font-weight: 600;
                 margin-inline: 0.5em;
                 padding-inline: 4px;
+                cursor: pointer;
             }
 
             h1,
@@ -338,22 +341,13 @@
                 width: 100%;
             }
 
-            thead {
-                position: sticky;
-                top: 0px;
-                z-index: 8;
-            }
-
-            tfoot {
-                position: sticky;
-                bottom: 0px;
-                z-index: 8;
-            }
-
             tfoot > tr > td,
             tfoot > tr > th {
                 background-color: var(--colour-input);
                 font-weight: 600;
+                position: sticky;
+                bottom: 0px;
+                z-index: 8;
             }
 
             td,
@@ -368,6 +362,9 @@
                 background-color: var(--colour-tooltip);
                 font-weight: 600;
                 text-align: center;
+                position: sticky;
+                top: 0px;
+                z-index: 8;
             }
 
             tr {
@@ -418,7 +415,9 @@
             .mistake-text:focus,
             .mistake-text:hover,
             .rich-text-div:focus,
-            .rich-text-div:hover {
+            .rich-text-div:hover,
+            #results-stats-div:focus > span,
+            #results-stats-div:hover > span {
                 background-color: var(--colour-hovered-bgr);
                 background-image: none;
                 color: var(--colour-hovered-fgr);
@@ -467,10 +466,6 @@
                 flex-direction: column;
                 margin-block: 4px;
                 row-gap: 2px;
-            }
-
-            .tooltip-parent {
-                position: relative;
             }
 
             .tooltip-parent:focus > .tooltip,
@@ -551,7 +546,7 @@
                 display: block;
                 border: 2px outset var(--colour-border);
                 padding: 4px 6px;
-                line-height: 1.45;
+                line-height: 1.6;
                 min-height: 4em;
                 max-height: 12em;
                 height: fit-content;
@@ -584,9 +579,9 @@
                 display: inline;
                 background-color: var(--colour-tooltip);
                 border: 2px inset var(--colour-text);
-                min-height: fit-content;
                 border-radius: 0px;
                 font-weight: 400;
+                text-decoration: none;
                 white-space: pre-wrap;
                 padding: 0px 2px;
                 margin: 0px;
@@ -635,6 +630,12 @@
                 cursor: default;
             }
 
+            .mark-cell {
+                text-align: center;
+                font-family: monospace;
+                cursor: pointer;
+            }
+
             /* Elements by ID */
             #lang {
                 text-align: center;
@@ -670,13 +671,14 @@
             }
 
             #add-mistake-fieldset,
-            #alignment-fieldset {
+            #editor-notes-fieldset {
                 background-color: var(--colour-tooltip);
             }
 
             #main-para-cell,
             #main-page-cell,
-            #editor-page-cell {
+            #editor-page-cell,
+            #results-student-cell {
                 background: none;
                 border: none;
                 padding: 0;
@@ -685,7 +687,8 @@
 
             #main-para-select,
             #main-page-select,
-            #editor-page-select {
+            #editor-page-select,
+            #results-individual-student-select {
                 text-align: center;
                 font-weight: 600;
                 margin: 0;
@@ -698,7 +701,6 @@
             }
 
             #main-source-paragraph {
-                display: flex;
                 border: 2px outset var(--colour-text);
                 line-height: 1.4;
                 min-height: 1.75em;
@@ -720,6 +722,30 @@
                 position: sticky;
                 bottom: 0px;
                 opacity: 0.95;
+            }
+
+            #results-stats-div {
+                display: flex;
+                flex-direction: column;
+                row-gap: 4px;
+                padding: 4px;
+                height: 1.7em;
+                overflow: hidden;
+                cursor: default;
+                transition: height 0.35s ease;
+            }
+
+            #results-stats-div:focus,
+            #results-stats-div:hover {
+                height: 6.5em;
+                overflow: auto;
+                transition: height 0.3s ease;
+            }
+
+            #results-stats-div .results-span {
+                background-color: var(--colour-input);
+                border: 2px inset var(--colour-border);
+                padding-inline: 2px 2px;
             }
 
             /* Media queries */
@@ -746,6 +772,8 @@
                 <button data-tk="start-button" data-scene="main">Start</button>
 
                 <button data-tk="editor-button" data-scene="editor">Editor</button>
+
+                <button data-tk="results-button" data-scene="results">Results</button>
 
                 <a
                     id="save-project"
@@ -774,7 +802,7 @@
                 >Made by
                 <a href="https://github.com/VitalRus95" target="_blank"
                     >Vitaly Pavlovich Ulyanov (Vital)</a
-                >.<span class="tooltip">Learn more on my GitHub page!</span>
+                ><span class="tooltip">Learn more on my GitHub page!</span>
             </p>
 
             <!-- Language selection -->
@@ -790,7 +818,7 @@
         <div id="main" class="scene">
             <h2 data-tk="check-title">Check</h2>
 
-            <button data-tk="back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene=".">Back</button>
 
             <!-- Adding a new mistake help -->
             <fieldset id="add-mistake-fieldset">
@@ -839,42 +867,46 @@
             </fieldset>
 
             <!-- Table with source and translation paragraph -->
-            <table>
-                <!-- Header -->
-                <thead>
-                    <tr>
-                        <th id="main-para-cell" class="tooltip-parent">
-                            <span data-tk="main-para-tooltip" class="tooltip"
-                                >Paragraph selection</span
-                            >
-                            <select id="main-para-select"></select>
-                        </th>
-                    </tr>
+            <fieldset>
+                <legend data-tk="main-translations-fieldset">Translations</legend>
 
-                    <tr>
-                        <th class="table-element-container">
-                            <textarea
-                                id="main-source-paragraph"
-                                class="table-text"
-                                readonly
-                            ></textarea>
-                        </th>
-                    </tr>
-                </thead>
+                <table>
+                    <!-- Header -->
+                    <thead>
+                        <tr>
+                            <th id="main-para-cell" class="tooltip-parent">
+                                <span data-tk="main-para-tooltip" class="tooltip"
+                                    >Paragraph selection</span
+                                >
+                                <select id="main-para-select"></select>
+                            </th>
+                        </tr>
 
-                <!-- Main part -->
-                <tbody id="main-translations-list"></tbody>
+                        <tr>
+                            <th class="table-element-container" style="top: 1.8em">
+                                <textarea
+                                    id="main-source-paragraph"
+                                    class="table-text"
+                                    readonly
+                                ></textarea>
+                            </th>
+                        </tr>
+                    </thead>
 
-                <!-- Footer -->
-                <tfoot id="main-footer">
-                    <tr>
-                        <td id="main-page-cell" class="tooltip-parent">
-                            <span data-tk="page-selection" class="tooltip">Page selection</span>
-                            <select id="main-page-select"></select>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+                    <!-- Main part -->
+                    <tbody id="main-translations-list"></tbody>
+
+                    <!-- Footer -->
+                    <tfoot id="main-footer">
+                        <tr>
+                            <td id="main-page-cell" class="tooltip-parent">
+                                <span data-tk="page-selection" class="tooltip">Page selection</span>
+                                <select id="main-page-select"></select>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </fieldset>
 
             <!-- Actions menu -->
             <fieldset id="main-actions-fieldset">
@@ -892,7 +924,7 @@
         <div id="add-mistake" class="scene">
             <h2 data-tk="add-mistake-title">New mistake</h2>
 
-            <button data-tk="cancel" data-scene="main">Cancel</button>
+            <button data-tk="cancel" data-scene=".">Cancel</button>
 
             <!-- Mistake -->
             <fieldset>
@@ -1153,7 +1185,7 @@
             <div class="setting-div">
                 <button id="edit-mistake-delete" data-tk="mistake-delete">Delete mistake</button>
 
-                <button data-tk="back" data-scene="main">Back</button>
+                <button data-tk="back" data-scene=".">Back</button>
             </div>
         </div>
 
@@ -1161,7 +1193,7 @@
         <div id="find-mistake" class="scene">
             <h2 data-tk="find-mistake-title">Mistake search</h2>
 
-            <button data-tk="back" data-scene="main">Back</button>
+            <button data-tk="back" data-scene=".">Back</button>
 
             <!-- Search settings -->
             <fieldset>
@@ -1304,7 +1336,7 @@
         <div id="cancel-mistake" class="scene">
             <h2 data-tk="cacnel-mistake-title">Undo last mistakes</h2>
 
-            <button data-tk="back" data-scene="main">Back</button>
+            <button data-tk="back" data-scene=".">Back</button>
 
             <!-- Last mistake list -->
             <fieldset>
@@ -1324,7 +1356,7 @@
         <div id="adding-students" class="scene">
             <h2 data-tk="adding-students-title">Adding students</h2>
 
-            <button data-tk="cancel" data-scene="editor">Cancel</button>
+            <button data-tk="cancel" data-scene=".">Cancel</button>
 
             <textarea
                 id="added-students"
@@ -1349,7 +1381,7 @@
                         >Delete student</button
                     >
 
-                    <button data-tk="cancel" data-scene="editor">Cancel</button>
+                    <button data-tk="cancel" data-scene=".">Cancel</button>
                 </div>
             </fieldset>
         </div>
@@ -1358,15 +1390,24 @@
         <div id="editor" class="scene">
             <h2 data-tk="editor-button">Editor</h2>
 
-            <button data-tk="back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene=".">Back</button>
 
-            <!-- Alignment note -->
-            <fieldset id="alignment-fieldset">
-                <legend data-tk="alignment-info-title">Align the texts</legend>
-                <p data-tk="alignment-info"
-                    >For the programme to work properly, the source text and students' translations
-                    should be aligned, i.e. have the same number and order of paragraphs.</p
-                >
+            <!-- Editor notes -->
+            <fieldset id="editor-notes-fieldset" data-tk="editor-notes">
+                <legend>Important</legend>
+
+                <ol>
+                    <li
+                        >For the programme to work properly, the source text and students'
+                        translations should be aligned, i.e. have the same number and order of
+                        paragraphs.</li
+                    >
+
+                    <li
+                        >Any changes to the source text and translations should be made
+                        <b>before</b> checking the works!</li
+                    >
+                </ol>
             </fieldset>
 
             <!-- Source text -->
@@ -1435,27 +1476,109 @@
                         </tr>
                     </tfoot>
                 </table>
+            </fieldset>
 
-                <!-- Actions menu -->
-                <fieldset id="editor-actions-fieldset">
-                    <legend data-tk="actions-menu">Actions menu</legend>
+            <!-- Actions menu -->
+            <fieldset id="editor-actions-fieldset">
+                <legend data-tk="actions-menu">Actions menu</legend>
 
-                    <button data-tk="add-students" data-scene="adding-students"
-                        >Add students</button
-                    >
+                <button data-tk="add-students" data-scene="adding-students">Add students</button>
 
-                    <button id="fix-source" data-tk="fix-source" class="tooltip-parent"
-                        >Fix source text<span class="tooltip"
-                            >Remove extra whitespaces and line breaks</span
-                        ></button
-                    >
+                <button id="fix-source" data-tk="fix-source" class="tooltip-parent"
+                    >Fix source text<span class="tooltip"
+                        >Remove extra whitespaces and line breaks</span
+                    ></button
+                >
 
-                    <button id="fix-translations" data-tk="fix-translations" class="tooltip-parent"
-                        >Fix translations<span class="tooltip"
-                            >Remove extra whitespaces and line breaks</span
-                        ></button
-                    >
-                </fieldset>
+                <button id="fix-translations" data-tk="fix-translations" class="tooltip-parent"
+                    >Fix translations<span class="tooltip"
+                        >Remove extra whitespaces and line breaks</span
+                    ></button
+                >
+            </fieldset>
+        </div>
+
+        <!-- RESULTS DIV -->
+        <div id="results" class="scene">
+            <h2 data-tk="results-button">Results</h2>
+
+            <button data-tk="back" data-scene=".">Back</button>
+
+            <!-- Group results -->
+            <fieldset>
+                <legend data-tk="results-group">Group results</legend>
+
+                <table style="table-layout: auto">
+                    <thead data-tk="results-group-table-header">
+                        <tr>
+                            <th>Student</th>
+                            <th class="tooltip-parent"
+                                >Mark<span class="tooltip"
+                                    >Click a cell to copy the mark to the clipboard</span
+                                ></th
+                            >
+                        </tr>
+                    </thead>
+
+                    <tbody id="results-group-table"></tbody>
+                </table>
+            </fieldset>
+
+            <!-- Individual results -->
+            <fieldset>
+                <legend data-tk="results-individual">Individual results</legend>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="results-student-cell">
+                                <select id="results-individual-student-select"></select>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="results-individual-translation"></tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td data-tk="results-individual-stats" style="opacity: 0.95">
+                                <div id="results-stats-div">
+                                    <span
+                                        >Text length multiplier:
+                                        <span
+                                            class="results-span"
+                                            id="results-individual-length-mult"
+                                        ></span
+                                    ></span>
+
+                                    <span
+                                        >Number of mistakes:
+                                        <span
+                                            class="results-span"
+                                            id="results-individual-mistakes-number"
+                                        ></span
+                                    ></span>
+
+                                    <span
+                                        >Weight of mistakes:
+                                        <span
+                                            class="results-span"
+                                            id="results-individual-mistakes-weight"
+                                        ></span
+                                    ></span>
+
+                                    <span
+                                        >Mark:
+                                        <span
+                                            class="results-span"
+                                            id="results-individual-mark"
+                                        ></span
+                                    ></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
             </fieldset>
         </div>
 
@@ -1463,7 +1586,7 @@
         <div id="settings" class="scene">
             <h2 data-tk="settings-button">Settings</h2>
 
-            <button data-tk="back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene=".">Back</button>
 
             <!-- Sound settings -->
             <details>
@@ -1556,7 +1679,7 @@
         <div id="about" class="scene">
             <h2 data-tk="about-button">About</h2>
 
-            <button data-tk="back" data-scene="menu">Back</button>
+            <button data-tk="back" data-scene=".">Back</button>
 
             <p data-tk="about-info"
                 >Named after a Latin word meaning ‘I estimate’, <b>Aestimo</b> is a powerful tool
@@ -1662,6 +1785,8 @@
                     loadProjectInput: element("#load-project-input"),
                     /** @type {HTMLAnchorElement} */
                     saveProject: element("#save-project"),
+                    /** @type {HTMLParagraphElement} */
+                    author: element("#author"),
                 },
                 main: {
                     /** @type {HTMLDivElement} */
@@ -1696,6 +1821,24 @@
                     pageSelect: element("#editor-page-select"),
                     /** @type {HTMLInputElement} */
                     itemsPerPageInput: element("#editor-students-per-page-input"),
+                },
+                results: {
+                    /** @type {HTMLDivElement} */
+                    self: element("#results"),
+                    /** @type {HTMLTableSectionElement} */
+                    groupTable: element("#results-group-table"),
+                    /** @type {HTMLSelectElement} */
+                    studentSelect: element("#results-individual-student-select"),
+                    /** @type {HTMLTableSectionElement} */
+                    translation: element("#results-individual-translation"),
+                    /** @type {HTMLSpanElement} */
+                    lengthMultiplier: element("#results-individual-length-mult"),
+                    /** @type {HTMLSpanElement} */
+                    mistakesNumber: element("#results-individual-mistakes-number"),
+                    /** @type {HTMLSpanElement} */
+                    mistakesWeight: element("#results-individual-mistakes-weight"),
+                    /** @type {HTMLSpanElement} */
+                    mark: element("#results-individual-mark"),
                 },
                 settings: {
                     /** @type {HTMLDivElement} */
@@ -1838,15 +1981,18 @@
              * @property {number} editorPage
              */
 
+            /** @typedef Mark
+             * @property {number} mistakesCount
+             * @property {number} mistakesWeight
+             * @property {number} number
+             * @property {string} letter
+             */
+
             // +-----------+
             // | Constants |
             // +-----------+
             //
-
-            // +---------+
-            // | Objects |
-            // +---------+
-            //
+            /** @type {Object.<string, string>} */
             const allColours = {
                 "--colour-bgr-1": "#ff9696",
                 "--colour-bgr-2": "#fff5d2",
@@ -1862,70 +2008,8 @@
                 "--colour-disabled-bgr": "#afafaf",
                 "--colour-disabled-fgr": "#1e1e1e",
             };
-            /** @type {Project} */
-            let project = {
-                source: "Банки увидели угрозу в новых ИИ-моделях\n\nФинансовые чиновники и банкиры предупредили о рисках для мировой банковской системы, связанных с новыми моделями ИИ, пишет Financial Times. Центральной темой весенних встреч МВФ и Всемирного банка в Вашингтоне стала новая модель Claude Mythos Preview от стартапа Anthropic.\n\nГлава Банка Англии Эндрю Бейли назвал ситуацию «очень серьезным вызовом», отметив, что ИИ развивается быстрее регулирования, и призвал срочно оценить риски кибербезопасности. По данным Anthropic, модель способна выявлять тысячи критических уязвимостей в операционных системах и браузерах, меняя баланс между атакой и защитой, автоматически находя и комбинируя уязвимости в масштабах, недоступных человеку.\n\nГлава ЕЦБ Кристин Лагард предупредила, что такие разработки в «неправильных руках» представляют серьезную угрозу, указав на отсутствие глобального регулирования. Часть европейских регуляторов заявила, что пока не имеет доступа к модели и не может оценить ее риски. Руководитель Европейского банковского управления Франсуа-Луи Мишо отметил, что выработка подходов только начинается.\n\nБанки видят и потенциальные преимущества. Глава JPMorgan Chase Джейми Даймон заявил, что модель помогает выявлять уязвимости, а руководитель Morgan Stanley Тед Пик назвал ИИ важной частью будущей финансовой экосистемы.\n\nЭксперты предупреждают, что согласование глобальных правил регулирования может быть затруднено из-за геополитической напряженности и нежелания ограничивать перспективные технологии. В марте госдепартамент США создал бюро по борьбе с угрозами ИИ, которое будет заниматься прогнозированием рисков, включая кибератаки и милитаризацию космоса.",
-                translations: [
-                    {
-                        student: "Студент 01",
-                        text: "Banks saw threat in new AI models\n\nFinancial Times say that banking and financial officials warned about the risks for international banking system connected with the new AI models. The new AI model Claude Mythos Preview by Anthropic start-up became the main topic of spring meetings of the IMF and the World Bank in Washington.\n\nAndrew Baily – Head of the Bank of England – called the situation «a very serious challenge», stating that the AI is developing faster than the regulatory systems and called out for emergency risk assessment in cybersecurity. According to the Anthropic, the AI model is able to show thousands of critical vulnerabilities in operating systems and browsers, shifting between attacks and defense and automatically spotting and combining vulnerabilities in scales human being can’t comprehend. \n\nHead of the ECB Christine Lagarde warned that such developments may pose a serious threat in the «wrong hands» pointing at the lack of global regulation. Part of the European regulators claimed that they have no access to the AI model and cannot assess its risks yet. Head of the European banking authority Francois-Louis Michaud pointed out that the assertive planning has just started.\n\nHowever, banks do see the potential advantages. Head of JPMorgan Chase Jamie Dimon claimed that the AI model helps showing the vulnerabilities and head of Morgan Stanley Ted Pick called AI an integral part of future financial ecosystem. \n\nExperts warn that coordination of global rules of regulation may be obstructed due to geopolitical tension and reluctance towards boxing prospective technologies. In March, federal department of the US has created a bureau designated fighting AI threats which will assert risks including cyberattacks and space militarization.",
-                    },
-                    {
-                        student: "Студент 02",
-                        text: "Banks see a threat in new AI models\n\nFinancial officials and representatives of banking system warned about the risks for the world banking sector, related with the new AI models, notes Financial Times. The central topic of spring meetings of IMF (International Monetary Fund) and the World Bank in Washington was the new model Claude Mythos Preview created by start-up Anthropic.\n\nThe Head of the Bank of England Andrew Beiley called the situation “a very serious challenge”, emphasized that AI is developing faster then regulatory system. He called for urgent assessment of cybersecurity risks. According to Anthropic, the model is capable to identify thousands of vulnerabilities in the operational systems and browsers. The model is able to change a balance between attacks and defense, automatically find and combine vulnerabilities at a scale, that are not available for people.\n\nThe Head of the European Central Bank Christine Lagarde warned that these developments can be in “the wrong hands” and it will lead to sever threat and pointed the lack of global regulatory system. The part of european regulators said that they do not have an access to the model and cannot assess its risks. The Head of European Banking Authority François-Louis Michaud noted that creating of approaches is started now.\n\nBanks see the potential benefits. CEO JPMorgan Chase Jamie Dimon claimed that the model assists to identify the vulnerabilities while CEO Morgan Stanley Ted Pick called AI an essential part of future financial ecosystem.\n\nSome experts warn that the coordination of global rule regulation may be difficult due to geopolitical tension and reluctance to limit perspective technologies. In March, State Department of USA created a bureau for the control AI threats. This bureau will forecast some risks, including cyberattacks and space militarization.",
-                    },
-                    {
-                        student: "Студент 03",
-                        text: "Banks see threat posed by fresh AI models\n\nFinancial officials and representatives of the banking system warned about the risks for the world banking sector, connected with the new AI (artificial intelligence) models, it was reported by The Financial Times. The central theme of the spring meetings of IMF (International Monetary Fund) and World Bank in Washington became the fresh model Claude Mythos Preview created by the start-up Anthropic.  \n\nThe Head of the Bank of England, Andrew Bailey, called the situation “very serious challenge” and noted that AI is developing faster than regulatory system. He called to evaluate cyber-security risks urgently. According to the Anthropic, the model identifies thousands of vulnerabilities in operating system and browsers. It can change the balance between attack and defense, automatically finding and combining the vulnerabilities at a scale that is not available for specialist in this sphere. \n\nThe Head of the European Central Bank, Christine Lagarde, warned that such developments can fall into “the wrong hands” and it will lead to severe aftermaths. She also pointed out the lack of global regulation. The part of the European regulators claimed that they do not have access to the model and they cannot evaluate its risks. The Head of the European Banking Authority François-Louis Michaud said, that the development of approaches is only emerging. \n\nBanks also note the potential benefits. The JPMorgan Chase CEO Jamie Dimon and the director of the Morgan Stanley Ted Pick claimed that AI is a significant component of the future financial ecosystem. \n\nExperts warn that the development of global regulation norms might be challenged due to geopolitical tension and reluctance to limit the cutting-edge technologies. In March, The State Department of the United States created a bureau against AI threats that will foresee the possible risks, including cyber-attacks and militarization of space.",
-                    },
-                    {
-                        student: "Студент 04",
-                        text: "Banks see threat in new AI models\n\nFinancial officials and bankers have warned about the risks for the world banking system, connected with new AI models, Financial Times reports. The central theme of the spring meetings of IMF and World bank in Washington became a new Claude Mythos Preview model from the Anthropic startup.\n\nThe Head of the Bank of England Andrew Bailey called the situation “a very serious challenge” and pointed out that AI is developing much faster than it can be regulated. He called for urgent evaluation of cyber safety risks. According to Anthropic, the model is able to identify thousands of critical vulnerabilities in operational systems and browsers by changing the balance between attack and defense, automatically finding and combining vulnerabilities in amounts, that humans cannot comprehend.\n\nThe Head of The European Central Bank Christine Lagarde warned, that such developments can cause a serious threat in “the wrong hands”, pointing out the lack of global regulation. A part of European regulators said that they don’t yet have the access to the model and cannot evaluate its risks. The Governor of the European Banking Authority François- Louis Michaud said that the development of approaches is only getting started.\n\nBanks see potential benefits. The Head of JPMorgan Chase Jamie Dimon stated, that the model helps finding the vulnerabilities. The CEO of Morgan Stanley Ted Pick called AI an important part of the future financial ecosystem.\n\nExperts warn that the agreement of global rule regulation might be difficult due to geopolitical tension and reluctance to limit cutting-edge technologies. In march The State Department of USA created a bureau against AI threats, that will prognose the risks, including cyber- attacks and space militarization.",
-                    },
-                    {
-                        student: "Студент 05",
-                        text: "Banks see threat in new AI models\n\nFinancial officials and bankers warned of the risks for the global banking system related to the new AI models, according to Financial Times. The new Ai model Claude Mythos Preview by the start-up Anthropic has become the central topic of spring meetings of the IMF and the World Bank in Washington.\n\nThe head of the Bank of England described the situation as “a very serious challenge” and noted that AI is developing faster than regulatory norms. He called for urgent assessment of cybersecurity risks. According to Anthropic data, the model is able to identify thousands of critical vulnerabilities in operational systems and browsers, it can automatically find and combine vulnerabilities in a scale impossible for a human. This fact changes the balance between attack and defense. \n\nThe Head of the European Central Bank Christine Lagarde pointed to the lack of global regulatory norms and warned that such developments in “wrong hands” may present a serious threat. The part of the european regulators said that they do not have an access to the model yet and they can’t assess its’ risks. The Head of the European Banking Authority François-Louis Michaud noted that the development of approaches is just getting started.\n\nHowever, banks see potential benefits. The JPMorgan Chase CEO Jamie Dimon claimed that the model helps to identify vulnerabilities, and The Morgan Stanley director Ted Pick called the AI an important part of the future financial ecosystem. \n\nExperts warn, that the development of global regulatory rules may be difficult because of geopolitical tensions and the reluctance to limit promising future technologies. In March, The US Department of State founded a bureau against the AI threats, which will forecast risks, including cyberattacks and the militarization of space.",
-                    },
-                    {
-                        student: "Студент 06",
-                        text: "Banks see threat in new AI models\n\nFinancial officials and bankers have warned of risks for the World Banking system connected with the new AI models, Financial Times reports. The new model Claude Mythos Preview by Anthropic startup became an agenda on the spring meetings of IMF and the World Bank in Washington.\n\nThe Head of England Bank Andrew Baily characterized the situation, as a very serious challenge, pointed out that AI has advanced faster, than regulating and call to assess risks for cybersecurity immediately. According to Anthropic, the model is able to expose thousands of critical vulnerabilities in operational systems or in browsers: it changes the balance between an attack and a defense, automatically finds and combines vulnerabilities in the inaccessible for people scales.\n\nThe Head of ECB Christine Lagarde warned, that such technologies may cause a serious threat in “the wrong hands”, pointed out the absence of the global regulations. Some European regulators claimed, that they have no access to the model and cannot assess it risks yet. The Head of the Europe banking authority François-Louis Michaud noted, the development of approaches has just started.\n\n However, the banks see some potential advantages. The President of the JPMorgan Chase Jamie Dimon said, the model helps to expose the vulnerabilities. And the Head of the Morgan Stanley Ted Pick called AI as the important part of the future financial ecosystem.\n\nThe Experts warns, the global rulings regulations agreement is hard to reach due to the geopolitical tension and the unwillingness to limit long-range technologies. The US State Department organized the office to fight AI threats. It will assess risks, including cyberattacks and space militarization.",
-                    },
-                    {
-                        student: "Студент 07",
-                        text: "Banks see threat in new AI-models\n\nFinancial officials and bankers have warned about the risks to the global banking system associated with the new AI-models, the Financial Times reports. Claude Mythos Preview, a new model by startup Anthropic, became the key topic of spring meetings of the IMF and the World Bank in Washington. \n\nHead of the Bank of England Andrew Bailey called this situation “a great challenge”, noting that AI is pacing regulations, and called to assess cybersecurity risks. According to Anthropic, the model is capable of identifying thousands of critical vulnerabilities in operational systems and browsers, altering the balance between attack and defense, automatically specifying and combining vulnerabilities at a scale unachievable by people. \n\nHead of the European Central Bank Christine Lagarde has warned that such developments in “the wrong hands” could pose a serious threat, noted that there is a lack of global regulations. Part of the European regulators stated that it has no access to the model and cannot assess its risks yet. Head of the European Banking Authority François-Louis Michaud noted that the development of the approaches has just started. \n\nBanks do see potential benefits. JPMorgan Chase CEO Jamie Dimon declared that the model helps to discover vulnerabilities, and Morgan Stanley CEO Ted Pick called AI an essential part of the future financial ecosystem. \n\nExperts warns that aligning of global rules of regulation could be difficult due to geopolitical tension and a reluctance to limit promising technologies. In March, the US State Department established a bureau associated with AI-threats. It will focus on forecasting of risks, including cyberattacks and militarization of cosmos.",
-                    },
-                    {
-                        student: "Студент 08",
-                        text: "Banks see a threat in new AI models\n\nThe finance officials and bankers warned about risks in global economic system, connected with cutting edge AI models, Financial Times says. The core theme of the spring meetings of International Monetary Fund and International Bank in Washington D.C. became the new model of Claude Mythos Preview from Anthropic startup.\n\nThe head of the Bank of England, Andrew Bailey describes the situation as “a really serious challenge”, remarking that AI is developing faster than the regulation measures and called to evaluate the risks of cybersecurity. According to Anthropic, the model is capable of eliciting thousands of critical vulnerabilities in operational systems and browsers, balancing on the attack and defense, automatically locating and combining invulnerabilities in scale beyond human possibilities.\n\nThe head of European Central Bank Cristine Lagarde, warned that such innovations might become a grave threat in “wrong hands”, alluding to the lack of the global regulation. Part of European regulator said, that they have no access to the ai model and can’t evaluate its risks. The head of the European bank management Francois-Lois Michaud, pointed out that the development of approaches is in the beginning phase.\n\nBanks see potential advantages. The head of JPMorgan Chase, Jamie Dimon said, that the model helps to elicit vulnerabilities, and the head of Morgan Stanley, Ted Pick, said that AI is the considerable part of the financial eco-system.\n\nExperts warn that conciliation of the global rules of regulation may be complicated due to geopolitical tension and disclination to limit perspective technologies. In March, Government Department of USA founded the burau, dedicated to deflect AI threats, which will prognosticate risks including cybersecurity and space militarization.",
-                    },
-                    {
-                        student: "Студент 09",
-                        text: "Banks see threat in new AI-models\n\nFinancial officials and representatives of the banking warned about risks for world banking system connected to new AI models, Financial Times reports. The main topic of spring International Monetary Fund and World Bank meeting in Washington was a new model of Claude Mythos Preview by Anthropic startup. \n\nGovernor of the Bank of England, Andrew Baily, described the situation as a «very serious challenge», underlined that AI develops faster than the regulatory mechanisms and called for cybersecurity risks evaluation immediately. According to Anthropic, the model is capable to identify the thousands of vulnerabilities in operational systems and browsers changing balance between attack and defense and automatically finding and combining vulnerabilities in scale that human cannot. \n\nPresident of ECB Christine Laggard warned that such technologies could pose a serious threat if they fall into «the wrong hands» and pointed at the absence of global regulation. Some European regulators said that they still don’t have an access to the model and cannot evaluate its risks. Francois-Louis Michaud, head of European Banking Authority, noted that the development of approaches is only beginning. \n\nBanks see the potential advantages as well. Jamie Dimon, CEO of JPMorgan Chase, said that the model helps to identify vulnerabilities and Morgan Stanley Ted Pick called AI an important part of the future financial ecosystem. \n\nExperts warn that agreeing on global regulatory rules may prove difficult amid geopolitical tensions reluctance to restrict the development promising technologies. In March, the United States Department created a new bureau to combat threats related to AI which will focus on forecasting risks including cyberattacks and militarization of space.",
-                    },
-                    {
-                        student: "Студент 10",
-                        text: "Banks see threat in new AI models\n\nThe financial officials and bankers warned of the risk for the world banking system linked to new AI model, the Financial Times reports. The central topic of the spring meetings of the IMF and the World Bank in Washington was a new AI model Claude Mythos Preview developed by startup Anthropic.\n\nThe head of the Bank of England, Andrew Bailey, described the situation as “a very serious challenge” noting that the development of AI is faster than the establishment of regulations. He called to urgently assess the risks of cybersecurity. According to Anthropic, the model is able to detect thousands of vulnerabilities in operation systems and browsers changing the balance between an attack and security automatically finding and combining vulnerabilities on a scale that humans cannot achieve.\n\nThe head of the European Central Bank, Christine Lagarde, warned that such models pose a serious threat in “wrong hands” pointing out the lack of global regulations. The part of European regulators affirmed that there was no access to the model and they could not assess its risks. The head of the European Banking Authority François-Lois Michaud said that the development of the approaches was just beginning.\n\nBanks saw potential benefits as well. The head of JPMorgan Chase, Jamie Dimon, said that the model assisted to detect vulnerabilities. At the same time the head of Morgan Stanley, Ted Pick, called AI an important part of the future financial ecosystems.\n\nExperts warn that the agreement on global regulations can be difficult due to geopolitical tension and reluctance to limit promising technologies. In March the US State Department established the bureau to fight with the threats of AI, which goal is to predict risks including cyberattacks and the militarization of space.",
-                    },
-                ],
-                paragraph: 0,
-                mainPage: 0,
-                editorPage: 0,
-            };
-            /** @type {Object.<string, Offset>} */
-            let sceneOffsets = {};
-
-            // +-----------+
-            // | Variables |
-            // +-----------+
-            //
-            /** @type {AudioContext} */
-            let audio = new (window.AudioContext || window.webkitAudioContext)();
-            /** @type {string} */
-            let currentScene = "menu";
-            /** @type {string} */
-            let previousScene = undefined;
             /** @type {Language[]} */
-            let languages = [
+            const languages = [
                 {
                     name: "English [Vitaly Ulyanov]",
                     langTags: [
@@ -1949,6 +2033,7 @@
                         "main-menu-title": ["Main menu"],
                         "start-button": ["Start"],
                         "editor-button": ["Editor"],
+                        "results-button": ["Results"],
                         "save-project": ["Save project"],
                         "load-project-button": ["Load project", "Open a project (.json)"],
                         "settings-button": ["Settings"],
@@ -1956,7 +2041,6 @@
                         author: [
                             "Made by ",
                             "Vitaly Pavlovich Ulyanov (Vital)",
-                            ".",
                             "Learn more on my GitHub page!",
                         ],
                         "export-lang": ["Export current language"],
@@ -1975,6 +2059,7 @@
                         ],
                         "students-per-page": ["Students per page:"],
                         "main-show-names": ["Show students' names:"],
+                        "main-translations-fieldset": ["Translations"],
                         "main-para-tooltip": ["Paragraph selection"],
                         "page-selection": ["Page selection"],
                         "actions-menu": ["Actions menu"],
@@ -2016,9 +2101,12 @@
                         "adding-students-button": ["Confirm"],
                         "deleting-student-title": ["Delete this student?"],
                         "deleting-student-confirm": ["Delete student"],
-                        "alignment-info-title": ["Align the texts"],
-                        "alignment-info": [
+                        "editor-notes": [
+                            "Important",
                             "For the programme to work properly, the source text and students' translations should be aligned, i.e. have the same number and order of paragraphs.",
+                            "Any changes to the source text and translations should be made ",
+                            "before",
+                            " checking the works!",
                         ],
                         "source-title": ["Source text"],
                         "para-count": ["Paragraphs"],
@@ -2033,6 +2121,19 @@
                         "fix-translations": [
                             "Fix translations",
                             "Remove extra whitespaces and line breaks",
+                        ],
+                        "results-group": ["Group results"],
+                        "results-group-table-header": [
+                            "Student",
+                            "Mark",
+                            "Click a cell to copy the mark to the clipboard",
+                        ],
+                        "results-individual": ["Individual results"],
+                        "results-individual-stats": [
+                            "Text length multiplier: ",
+                            "Number of mistakes: ",
+                            "Weight of mistakes: ",
+                            "Mark: ",
                         ],
                         "sound-settings": ["Sound"],
                         volume: ["Sound volume"],
@@ -2144,6 +2245,7 @@
                         "main-menu-title": ["Главное меню"],
                         "start-button": ["Начать"],
                         "editor-button": ["Редактор"],
+                        "results-button": ["Результаты"],
                         "save-project": ["Сохранить проект"],
                         "load-project-button": ["Загрузить проект", "Открыть проект (.json)"],
                         "settings-button": ["Настройки"],
@@ -2151,7 +2253,6 @@
                         author: [
                             "Автор — ",
                             "Виталий Павлович Ульянов (Vital)",
-                            ".",
                             "Узнайте больше на GitHub!",
                         ],
                         "export-lang": ["Экспорт текущего языка"],
@@ -2170,6 +2271,7 @@
                         ],
                         "students-per-page": ["Учащихся на странице:"],
                         "main-show-names": ["Показать имена учащихся:"],
+                        "main-translations-fieldset": ["Переводы"],
                         "main-para-tooltip": ["Выбор абзаца"],
                         "page-selection": ["Выбор страницы"],
                         "actions-menu": ["Меню действий"],
@@ -2211,9 +2313,12 @@
                         "adding-students-button": ["Подтвердить"],
                         "deleting-student-title": ["Удалить этого учащегося?"],
                         "deleting-student-confirm": ["Удалить учащегося"],
-                        "alignment-info-title": ["Выравнивание текстов"],
-                        "alignment-info": [
-                            "Для правильной работы программы текст оригинала и переводы учащихся должны быть выравнены, то есть иметь одинаковые количество и порядок абзацев.",
+                        "editor-notes": [
+                            "Важно",
+                            "Для правильной работы программы текст оригинала и переводы учащихся должны быть выравнены, то есть иметь одинаковые число и порядок абзацев.",
+                            "Любые изменения оригинала и переводов должны быть сделаны ",
+                            "перед",
+                            " проверкой работ!",
                         ],
                         "source-title": ["Текст оригинала"],
                         "para-count": ["Абзацы"],
@@ -2228,6 +2333,19 @@
                         "fix-translations": [
                             "Починить переводы",
                             "Убрать лишние пробелы и переносы строк",
+                        ],
+                        "results-group": ["Итоги группы"],
+                        "results-group-table-header": [
+                            "Учащийся",
+                            "Оценка",
+                            "Нажмите на клетку для копирования оценки в буфер обмена",
+                        ],
+                        "results-individual": ["Личные итоги"],
+                        "results-individual-stats": [
+                            "Множитель объёма текста: ",
+                            "Число ошибок: ",
+                            "Вес ошибок: ",
+                            "Оценка: ",
                         ],
                         "sound-settings": ["Звук"],
                         volume: ["Громкость звука"],
@@ -2332,9 +2450,83 @@
                     },
                 },
             ];
+            /** @type {Object.<string, number>} */
+            const mistakeTypeWeight = {
+                grammar: 4,
+                vocabulary: 3.5,
+                orthography: 3.25,
+                punctuation: 2.75,
+                complex: 6.5,
+            };
 
+            // +-----------+
+            // | Variables |
+            // +-----------+
+            //
+            /** @type {Object.<string, Offset>} */
+            let sceneOffsets = {};
+            /** @type {string[]} */
+            let visitedScenes = ["menu"];
+            /** @type {string} */
+            let currentScene = "menu";
+            /** @type {NumberFormat} */
+            let numberFormatter = undefined;
+            /** @type {AudioContext} */
+            let audio = new (window.AudioContext || window.webkitAudioContext)();
+
+            /** @type {Project} */
+            let project = {
+                source: "Банки увидели угрозу в новых ИИ-моделях\n\nФинансовые чиновники и банкиры предупредили о рисках для мировой банковской системы, связанных с новыми моделями ИИ, пишет Financial Times. Центральной темой весенних встреч МВФ и Всемирного банка в Вашингтоне стала новая модель Claude Mythos Preview от стартапа Anthropic.\n\nГлава Банка Англии Эндрю Бейли назвал ситуацию «очень серьезным вызовом», отметив, что ИИ развивается быстрее регулирования, и призвал срочно оценить риски кибербезопасности. По данным Anthropic, модель способна выявлять тысячи критических уязвимостей в операционных системах и браузерах, меняя баланс между атакой и защитой, автоматически находя и комбинируя уязвимости в масштабах, недоступных человеку.\n\nГлава ЕЦБ Кристин Лагард предупредила, что такие разработки в «неправильных руках» представляют серьезную угрозу, указав на отсутствие глобального регулирования. Часть европейских регуляторов заявила, что пока не имеет доступа к модели и не может оценить ее риски. Руководитель Европейского банковского управления Франсуа-Луи Мишо отметил, что выработка подходов только начинается.\n\nБанки видят и потенциальные преимущества. Глава JPMorgan Chase Джейми Даймон заявил, что модель помогает выявлять уязвимости, а руководитель Morgan Stanley Тед Пик назвал ИИ важной частью будущей финансовой экосистемы.\n\nЭксперты предупреждают, что согласование глобальных правил регулирования может быть затруднено из-за геополитической напряженности и нежелания ограничивать перспективные технологии. В марте госдепартамент США создал бюро по борьбе с угрозами ИИ, которое будет заниматься прогнозированием рисков, включая кибератаки и милитаризацию космоса.",
+                translations: [
+                    {
+                        student: "Студент 01",
+                        text: "Banks saw threat in new AI models\n\nFinancial Times say that banking and financial officials warned about the risks for international banking system connected with the new AI models. The new AI model Claude Mythos Preview by Anthropic start-up became the main topic of spring meetings of the IMF and the World Bank in Washington.\n\nAndrew Baily – Head of the Bank of England – called the situation «a very serious challenge», stating that the AI is developing faster than the regulatory systems and called out for emergency risk assessment in cybersecurity. According to the Anthropic, the AI model is able to show thousands of critical vulnerabilities in operating systems and browsers, shifting between attacks and defense and automatically spotting and combining vulnerabilities in scales human being can’t comprehend. \n\nHead of the ECB Christine Lagarde warned that such developments may pose a serious threat in the «wrong hands» pointing at the lack of global regulation. Part of the European regulators claimed that they have no access to the AI model and cannot assess its risks yet. Head of the European banking authority Francois-Louis Michaud pointed out that the assertive planning has just started.\n\nHowever, banks do see the potential advantages. Head of JPMorgan Chase Jamie Dimon claimed that the AI model helps showing the vulnerabilities and head of Morgan Stanley Ted Pick called AI an integral part of future financial ecosystem. \n\nExperts warn that coordination of global rules of regulation may be obstructed due to geopolitical tension and reluctance towards boxing prospective technologies. In March, federal department of the US has created a bureau designated fighting AI threats which will assert risks including cyberattacks and space militarization.",
+                    },
+                    {
+                        student: "Студент 02",
+                        text: "Banks see a threat in new AI models\n\nFinancial officials and representatives of banking system warned about the risks for the world banking sector, related with the new AI models, notes Financial Times. The central topic of spring meetings of IMF (International Monetary Fund) and the World Bank in Washington was the new model Claude Mythos Preview created by start-up Anthropic.\n\nThe Head of the Bank of England Andrew Beiley called the situation “a very serious challenge”, emphasized that AI is developing faster then regulatory system. He called for urgent assessment of cybersecurity risks. According to Anthropic, the model is capable to identify thousands of vulnerabilities in the operational systems and browsers. The model is able to change a balance between attacks and defense, automatically find and combine vulnerabilities at a scale, that are not available for people.\n\nThe Head of the European Central Bank Christine Lagarde warned that these developments can be in “the wrong hands” and it will lead to sever threat and pointed the lack of global regulatory system. The part of european regulators said that they do not have an access to the model and cannot assess its risks. The Head of European Banking Authority François-Louis Michaud noted that creating of approaches is started now.\n\nBanks see the potential benefits. CEO JPMorgan Chase Jamie Dimon claimed that the model assists to identify the vulnerabilities while CEO Morgan Stanley Ted Pick called AI an essential part of future financial ecosystem.\n\nSome experts warn that the coordination of global rule regulation may be difficult due to geopolitical tension and reluctance to limit perspective technologies. In March, State Department of USA created a bureau for the control AI threats. This bureau will forecast some risks, including cyberattacks and space militarization.",
+                    },
+                    {
+                        student: "Студент 03",
+                        text: "Banks see threat posed by fresh AI models\n\nFinancial officials and representatives of the banking system warned about the risks for the world banking sector, connected with the new AI (artificial intelligence) models, it was reported by The Financial Times. The central theme of the spring meetings of IMF (International Monetary Fund) and World Bank in Washington became the fresh model Claude Mythos Preview created by the start-up Anthropic.  \n\nThe Head of the Bank of England, Andrew Bailey, called the situation “very serious challenge” and noted that AI is developing faster than regulatory system. He called to evaluate cyber-security risks urgently. According to the Anthropic, the model identifies thousands of vulnerabilities in operating system and browsers. It can change the balance between attack and defense, automatically finding and combining the vulnerabilities at a scale that is not available for specialist in this sphere. \n\nThe Head of the European Central Bank, Christine Lagarde, warned that such developments can fall into “the wrong hands” and it will lead to severe aftermaths. She also pointed out the lack of global regulation. The part of the European regulators claimed that they do not have access to the model and they cannot evaluate its risks. The Head of the European Banking Authority François-Louis Michaud said, that the development of approaches is only emerging. \n\nBanks also note the potential benefits. The JPMorgan Chase CEO Jamie Dimon and the director of the Morgan Stanley Ted Pick claimed that AI is a significant component of the future financial ecosystem. \n\nExperts warn that the development of global regulation norms might be challenged due to geopolitical tension and reluctance to limit the cutting-edge technologies. In March, The State Department of the United States created a bureau against AI threats that will foresee the possible risks, including cyber-attacks and militarization of space.",
+                    },
+                    {
+                        student: "Студент 04",
+                        text: "Banks see threat in new AI models\n\nFinancial officials and bankers have warned about the risks for the world banking system, connected with new AI models, Financial Times reports. The central theme of the spring meetings of IMF and World bank in Washington became a new Claude Mythos Preview model from the Anthropic startup.\n\nThe Head of the Bank of England Andrew Bailey called the situation “a very serious challenge” and pointed out that AI is developing much faster than it can be regulated. He called for urgent evaluation of cyber safety risks. According to Anthropic, the model is able to identify thousands of critical vulnerabilities in operational systems and browsers by changing the balance between attack and defense, automatically finding and combining vulnerabilities in amounts, that humans cannot comprehend.\n\nThe Head of The European Central Bank Christine Lagarde warned, that such developments can cause a serious threat in “the wrong hands”, pointing out the lack of global regulation. A part of European regulators said that they don’t yet have the access to the model and cannot evaluate its risks. The Governor of the European Banking Authority François- Louis Michaud said that the development of approaches is only getting started.\n\nBanks see potential benefits. The Head of JPMorgan Chase Jamie Dimon stated, that the model helps finding the vulnerabilities. The CEO of Morgan Stanley Ted Pick called AI an important part of the future financial ecosystem.\n\nExperts warn that the agreement of global rule regulation might be difficult due to geopolitical tension and reluctance to limit cutting-edge technologies. In march The State Department of USA created a bureau against AI threats, that will prognose the risks, including cyber- attacks and space militarization.",
+                    },
+                    {
+                        student: "Студент 05",
+                        text: "Banks see threat in new AI models\n\nFinancial officials and bankers warned of the risks for the global banking system related to the new AI models, according to Financial Times. The new Ai model Claude Mythos Preview by the start-up Anthropic has become the central topic of spring meetings of the IMF and the World Bank in Washington.\n\nThe head of the Bank of England described the situation as “a very serious challenge” and noted that AI is developing faster than regulatory norms. He called for urgent assessment of cybersecurity risks. According to Anthropic data, the model is able to identify thousands of critical vulnerabilities in operational systems and browsers, it can automatically find and combine vulnerabilities in a scale impossible for a human. This fact changes the balance between attack and defense. \n\nThe Head of the European Central Bank Christine Lagarde pointed to the lack of global regulatory norms and warned that such developments in “wrong hands” may present a serious threat. The part of the european regulators said that they do not have an access to the model yet and they can’t assess its’ risks. The Head of the European Banking Authority François-Louis Michaud noted that the development of approaches is just getting started.\n\nHowever, banks see potential benefits. The JPMorgan Chase CEO Jamie Dimon claimed that the model helps to identify vulnerabilities, and The Morgan Stanley director Ted Pick called the AI an important part of the future financial ecosystem. \n\nExperts warn, that the development of global regulatory rules may be difficult because of geopolitical tensions and the reluctance to limit promising future technologies. In March, The US Department of State founded a bureau against the AI threats, which will forecast risks, including cyberattacks and the militarization of space.",
+                    },
+                    {
+                        student: "Студент 06",
+                        text: "Banks see threat in new AI models\n\nFinancial officials and bankers have warned of risks for the World Banking system connected with the new AI models, Financial Times reports. The new model Claude Mythos Preview by Anthropic startup became an agenda on the spring meetings of IMF and the World Bank in Washington.\n\nThe Head of England Bank Andrew Baily characterized the situation, as a very serious challenge, pointed out that AI has advanced faster, than regulating and call to assess risks for cybersecurity immediately. According to Anthropic, the model is able to expose thousands of critical vulnerabilities in operational systems or in browsers: it changes the balance between an attack and a defense, automatically finds and combines vulnerabilities in the inaccessible for people scales.\n\nThe Head of ECB Christine Lagarde warned, that such technologies may cause a serious threat in “the wrong hands”, pointed out the absence of the global regulations. Some European regulators claimed, that they have no access to the model and cannot assess it risks yet. The Head of the Europe banking authority François-Louis Michaud noted, the development of approaches has just started.\n\n However, the banks see some potential advantages. The President of the JPMorgan Chase Jamie Dimon said, the model helps to expose the vulnerabilities. And the Head of the Morgan Stanley Ted Pick called AI as the important part of the future financial ecosystem.\n\nThe Experts warns, the global rulings regulations agreement is hard to reach due to the geopolitical tension and the unwillingness to limit long-range technologies. The US State Department organized the office to fight AI threats. It will assess risks, including cyberattacks and space militarization.",
+                    },
+                    {
+                        student: "Студент 07",
+                        text: "Banks see threat in new AI-models\n\nFinancial officials and bankers have warned about the risks to the global banking system associated with the new AI-models, the Financial Times reports. Claude Mythos Preview, a new model by startup Anthropic, became the key topic of spring meetings of the IMF and the World Bank in Washington. \n\nHead of the Bank of England Andrew Bailey called this situation “a great challenge”, noting that AI is pacing regulations, and called to assess cybersecurity risks. According to Anthropic, the model is capable of identifying thousands of critical vulnerabilities in operational systems and browsers, altering the balance between attack and defense, automatically specifying and combining vulnerabilities at a scale unachievable by people. \n\nHead of the European Central Bank Christine Lagarde has warned that such developments in “the wrong hands” could pose a serious threat, noted that there is a lack of global regulations. Part of the European regulators stated that it has no access to the model and cannot assess its risks yet. Head of the European Banking Authority François-Louis Michaud noted that the development of the approaches has just started. \n\nBanks do see potential benefits. JPMorgan Chase CEO Jamie Dimon declared that the model helps to discover vulnerabilities, and Morgan Stanley CEO Ted Pick called AI an essential part of the future financial ecosystem. \n\nExperts warns that aligning of global rules of regulation could be difficult due to geopolitical tension and a reluctance to limit promising technologies. In March, the US State Department established a bureau associated with AI-threats. It will focus on forecasting of risks, including cyberattacks and militarization of cosmos.",
+                    },
+                    {
+                        student: "Студент 08",
+                        text: "Banks see a threat in new AI models\n\nThe finance officials and bankers warned about risks in global economic system, connected with cutting edge AI models, Financial Times says. The core theme of the spring meetings of International Monetary Fund and International Bank in Washington D.C. became the new model of Claude Mythos Preview from Anthropic startup.\n\nThe head of the Bank of England, Andrew Bailey describes the situation as “a really serious challenge”, remarking that AI is developing faster than the regulation measures and called to evaluate the risks of cybersecurity. According to Anthropic, the model is capable of eliciting thousands of critical vulnerabilities in operational systems and browsers, balancing on the attack and defense, automatically locating and combining invulnerabilities in scale beyond human possibilities.\n\nThe head of European Central Bank Cristine Lagarde, warned that such innovations might become a grave threat in “wrong hands”, alluding to the lack of the global regulation. Part of European regulator said, that they have no access to the ai model and can’t evaluate its risks. The head of the European bank management Francois-Lois Michaud, pointed out that the development of approaches is in the beginning phase.\n\nBanks see potential advantages. The head of JPMorgan Chase, Jamie Dimon said, that the model helps to elicit vulnerabilities, and the head of Morgan Stanley, Ted Pick, said that AI is the considerable part of the financial eco-system.\n\nExperts warn that conciliation of the global rules of regulation may be complicated due to geopolitical tension and disclination to limit perspective technologies. In March, Government Department of USA founded the burau, dedicated to deflect AI threats, which will prognosticate risks including cybersecurity and space militarization.",
+                    },
+                    {
+                        student: "Студент 09",
+                        text: "Banks see threat in new AI-models\n\nFinancial officials and representatives of the banking warned about risks for world banking system connected to new AI models, Financial Times reports. The main topic of spring International Monetary Fund and World Bank meeting in Washington was a new model of Claude Mythos Preview by Anthropic startup. \n\nGovernor of the Bank of England, Andrew Baily, described the situation as a «very serious challenge», underlined that AI develops faster than the regulatory mechanisms and called for cybersecurity risks evaluation immediately. According to Anthropic, the model is capable to identify the thousands of vulnerabilities in operational systems and browsers changing balance between attack and defense and automatically finding and combining vulnerabilities in scale that human cannot. \n\nPresident of ECB Christine Laggard warned that such technologies could pose a serious threat if they fall into «the wrong hands» and pointed at the absence of global regulation. Some European regulators said that they still don’t have an access to the model and cannot evaluate its risks. Francois-Louis Michaud, head of European Banking Authority, noted that the development of approaches is only beginning. \n\nBanks see the potential advantages as well. Jamie Dimon, CEO of JPMorgan Chase, said that the model helps to identify vulnerabilities and Morgan Stanley Ted Pick called AI an important part of the future financial ecosystem. \n\nExperts warn that agreeing on global regulatory rules may prove difficult amid geopolitical tensions reluctance to restrict the development promising technologies. In March, the United States Department created a new bureau to combat threats related to AI which will focus on forecasting risks including cyberattacks and militarization of space.",
+                    },
+                    {
+                        student: "Студент 10",
+                        text: "Banks see threat in new AI models\n\nThe financial officials and bankers warned of the risk for the world banking system linked to new AI model, the Financial Times reports. The central topic of the spring meetings of the IMF and the World Bank in Washington was a new AI model Claude Mythos Preview developed by startup Anthropic.\n\nThe head of the Bank of England, Andrew Bailey, described the situation as “a very serious challenge” noting that the development of AI is faster than the establishment of regulations. He called to urgently assess the risks of cybersecurity. According to Anthropic, the model is able to detect thousands of vulnerabilities in operation systems and browsers changing the balance between an attack and security automatically finding and combining vulnerabilities on a scale that humans cannot achieve.\n\nThe head of the European Central Bank, Christine Lagarde, warned that such models pose a serious threat in “wrong hands” pointing out the lack of global regulations. The part of European regulators affirmed that there was no access to the model and they could not assess its risks. The head of the European Banking Authority François-Lois Michaud said that the development of the approaches was just beginning.\n\nBanks saw potential benefits as well. The head of JPMorgan Chase, Jamie Dimon, said that the model assisted to detect vulnerabilities. At the same time the head of Morgan Stanley, Ted Pick, called AI an important part of the future financial ecosystems.\n\nExperts warn that the agreement on global regulations can be difficult due to geopolitical tension and reluctance to limit promising technologies. In March the US State Department established the bureau to fight with the threats of AI, which goal is to predict risks including cyberattacks and the militarization of space.",
+                    },
+                ],
+                paragraph: 0,
+                mainPage: 0,
+                editorPage: 0,
+            };
             /** @type {number} */
             let sourceParaCount = 0;
+            /** @type {number} */
+            let resultStudentIndex = 0;
             /** @type {Mistake} */
             let newMistake = {
                 source: "",
@@ -2342,7 +2534,7 @@
                 paragraph: 0,
                 startIndex: 0,
                 endIndex: 0,
-                type: "grammar",
+                type: "vocabulary",
                 subtype: "distortion",
                 meaning: "retained",
             };
@@ -2362,6 +2554,14 @@
                 if (button) button.onclick = b.action;
             });
 
+            // Fieldsets
+            for (const f of elements("legend")) {
+                f.addEventListener("click", function (event) {
+                    this.scrollIntoView();
+                    window.scroll(window.scrollX, window.scrollY - 4);
+                });
+            }
+
             // Scene transitions
             for (const button of document.querySelectorAll("[data-scene]")) {
                 button.addEventListener("click", function (event) {
@@ -2373,10 +2573,11 @@
             window.addEventListener("keydown", function (event) {
                 switch (event.key) {
                     case "Escape":
-                        if (!previousScene) return;
-                        if (["deleting-student"].some((s) => s === previousScene)) return;
-
-                        switchScene(previousScene);
+                        if (currentScene === "menu") {
+                            if (visitedScenes.length > 1) visitedScenes = ["menu"];
+                            return;
+                        }
+                        switchScene(".");
                         break;
                     case "s":
                     case "S":
@@ -2495,6 +2696,15 @@
                     element(`#${c}`).value = allColours[c];
                     localStorage.setItem(c, allColours[c]);
                 }
+            });
+
+            scenes.results.studentSelect.addEventListener("change", function (event) {
+                resultStudentIndex = clamp(
+                    0,
+                    +scenes.results.studentSelect.value,
+                    project.translations.length - 1,
+                );
+                updateIndividualResults();
             });
 
             scenes.main.paragraphSelect.addEventListener("change", function (event) {
@@ -2650,7 +2860,7 @@
                             m.mistake.comment = scenes.findMistake.comment.value;
                             project.translations[m.studentIndex].mistakes.push(m.mistake);
                         });
-                    switchScene("main");
+                    switchScene(".");
                 };
             });
 
@@ -2811,7 +3021,7 @@
                             project.translations.splice(studentId, 1);
                             updateItemsPerPageMax();
                             updateEditor();
-                            switchScene("editor");
+                            switchScene(".");
                         };
                         switchScene("deleting-student");
                     });
@@ -2828,7 +3038,7 @@
             function addStudents() {
                 // Just exit to the editor if nothing is added
                 if (!scenes.addStudents.addedList.value) {
-                    switchScene("editor");
+                    switchScene(".");
                     return;
                 }
 
@@ -2847,7 +3057,7 @@
                 sortStudentsAlphabetically();
                 updateItemsPerPageMax();
                 updateEditor();
-                switchScene("editor");
+                switchScene(".");
             }
 
             function fixSource() {
@@ -2948,11 +3158,12 @@
                     // Determine if it's a mistake or normal text
                     if (mistake) {
                         // This is a mistake
-                        /** @type {HTMLButtonElement} */
-                        const mistakeText = newChild(textDiv, "button");
+                        /** @type {HTMLAnchorElement} */
+                        const mistakeText = newChild(textDiv, "a");
 
                         mistakeText.classList.add("mistake-text");
                         mistakeText.textContent = textSlice;
+                        mistakeText.href = "";
 
                         // Mistake button's tabbing
                         if (!showInfo && !isEditable) {
@@ -2980,6 +3191,7 @@
                         if (isEditable) {
                             // Prepare mistake editing scene and switch to it
                             mistakeText.addEventListener("click", function (event) {
+                                event.preventDefault();
                                 highlightMistakes(
                                     scenes.editMistake.context,
                                     sourceText,
@@ -3011,7 +3223,7 @@
                                             mistakeIndex,
                                             1,
                                         );
-                                        switchScene("main");
+                                        switchScene(".");
                                     }
                                 };
 
@@ -3195,7 +3407,7 @@
                             subtype: newMistake.subtype,
                             meaning: newMistake.meaning,
                         });
-                        switchScene("main");
+                        switchScene(".");
                     };
                 });
 
@@ -3334,8 +3546,99 @@
                         });
                     removeChildNodes(scenes.cancelMistake.table);
                     scenes.cancelMistake.cancelButton.style.display = "none";
-                    switchScene("main");
+                    switchScene(".");
                 };
+            }
+
+            function updateResultsSelect() {
+                removeChildNodes(scenes.results.studentSelect);
+
+                project.translations.forEach((t, i) => {
+                    /** @type {HTMLOptionElement} */
+                    let option = newChild(scenes.results.studentSelect, "option");
+
+                    option.value = i;
+                    option.textContent = `${i + 1}. ${t.student}`;
+                });
+            }
+
+            function updateGroupResults() {
+                removeChildNodes(scenes.results.groupTable);
+
+                project.translations.forEach((t) => {
+                    /** @type {Mark} */
+                    const mark = getMark(t.mistakes);
+
+                    /** @type {HTMLTableRowElement} */
+                    let row = newChild(scenes.results.groupTable, "tr");
+
+                    /** @type {HTMLTableCellElement} */
+                    let studentCell = newChild(row, "td");
+                    studentCell.textContent = t.student;
+
+                    /** @type {HTMLTableCellElement} */
+                    let markCell = newChild(row, "td");
+                    markCell.classList.add("mark-cell");
+                    markCell.textContent = `${mark.number} (${mark.letter})`;
+                    markCell.addEventListener("click", function (event) {
+                        navigator.clipboard.writeText(mark.number);
+                    });
+                });
+            }
+
+            function updateIndividualResults() {
+                removeChildNodes(scenes.results.translation);
+
+                /** @type {Work} */
+                const work = project.translations[resultStudentIndex];
+                if (!work) return;
+
+                /** @type {string[]} */
+                const paragraphs = work.text.split("\n").filter((p) => p);
+
+                paragraphs.forEach((p, i) => {
+                    /** @type {Mistake[]} */
+                    const mistakes = work.mistakes.filter((m) => m.paragraph === i);
+
+                    /** @type {HTMLTableRowElement} */
+                    let row = newChild(scenes.results.translation, "tr");
+
+                    /** @type {HTMLTableCellElement} */
+                    let textCell = newChild(row, "td");
+                    textCell.classList.add("table-element-container");
+
+                    /** @type {HTMLDivElement} */
+                    let textDiv = newChild(textCell, "div");
+                    textDiv.classList.add("rich-text-div");
+
+                    highlightMistakes(textDiv, p, mistakes, resultStudentIndex, true, true);
+                });
+
+                /** @type {Mark} */
+                const mark = getMark(work.mistakes);
+                /** @type {Language} */
+                const lang = getCurrentLanguage();
+
+                scenes.results.mistakesNumber.textContent = mark.mistakesCount;
+                scenes.results.mark.textContent = `${mark.number} (${mark.letter})`;
+
+                try {
+                    scenes.results.lengthMultiplier.textContent =
+                        numberFormatter.format(getLengthMultiplier());
+                    scenes.results.mistakesWeight.textContent = numberFormatter.format(
+                        mark.mistakesWeight,
+                    );
+                } catch (error) {
+                    scenes.results.lengthMultiplier.textContent = getLengthMultiplier().toFixed(2);
+                    scenes.results.mistakesWeight.textContent = mark.mistakesWeight.toFixed(2);
+                    console.log(error);
+                }
+            }
+
+            function updateResults() {
+                updateResultsSelect();
+                updateGroupResults();
+                updateIndividualResults();
             }
 
             function fixProject() {
@@ -3361,6 +3664,50 @@
                 const sourceLength = project.source.length;
 
                 return sourceLength > 0 ? 1800 / sourceLength : 1;
+            }
+
+            /**
+             * Calculates the mark, taking into account the specified array of mistakes
+             * @param {Mistake[]} mistakes
+             * @returns {Mark}
+             */
+            function getMark(mistakes) {
+                /** @type {Mark} */
+                let mark = {
+                    mistakesCount: mistakes.length,
+                    mistakesWeight: 0,
+                    number: 100,
+                    letter: "A",
+                };
+
+                /** @type {number} */
+                const lengthMult = getLengthMultiplier();
+
+                mistakes.forEach((m) => {
+                    /** @type {number} */
+                    let weight = mistakeTypeWeight[m.type] || 0;
+
+                    if (m.meaning === "obscured") weight *= 1.5;
+                    else if (m.meaning === "lost") weight *= 1.5;
+
+                    mark.mistakesWeight += weight;
+                });
+
+                // Determine the number
+                mark.number = Math.round(
+                    clamp(0, mark.number - mark.mistakesWeight * lengthMult, 100),
+                );
+
+                // Determine the letter
+                if (mark.number > 94) mark.letter = "A";
+                else if (mark.number > 82) mark.letter = "B";
+                else if (mark.number > 67) mark.letter = "C";
+                else if (mark.number > 55) mark.letter = "D";
+                else if (mark.number > 49) mark.letter = "E";
+                else if (mark.number > 19) mark.letter = "FX";
+                else letter = "F";
+
+                return mark;
             }
 
             /**
@@ -3533,9 +3880,32 @@
             }
 
             /**
-             * @param {HTMLDivElement} target
+             * Transitions to the specified scene. Use "." to return to the previous one.
+             * @param {string} requestedScene
              */
-            function switchScene(targetSceneId) {
+            function switchScene(requestedScene) {
+                // Check going to the previous one
+                if (requestedScene === ".") {
+                    visitedScenes.pop();
+
+                    // Check if the queue is empty
+                    if (visitedScenes.length === 0) {
+                        visitedScenes.push("menu");
+                    }
+                } else {
+                    visitedScenes.push(requestedScene);
+                }
+
+                // Set the target scene to the last in the array
+                /** @type {string} */
+                const targetScene = visitedScenes[visitedScenes.length - 1];
+
+                // Check if the scene exists
+                if (!element("#" + targetScene)) {
+                    switchScene(".");
+                    return;
+                }
+
                 // Save current window offset
                 sceneOffsets[currentScene] = {
                     x: window.scrollX,
@@ -3544,7 +3914,7 @@
 
                 // Manage scenes' visibility
                 for (const scene of document.querySelectorAll(".scene")) {
-                    if (scene.id === targetSceneId) {
+                    if (scene.id === targetScene) {
                         scene.style.display = "flex";
                     } else {
                         scene.style.display = "none";
@@ -3552,19 +3922,18 @@
                 }
 
                 // Try to restore a previously saved offset
-                if (sceneOffsets[targetSceneId]) {
+                if (sceneOffsets[targetScene]) {
                     window.scroll(
-                        sceneOffsets[targetSceneId].x || 0,
-                        sceneOffsets[targetSceneId].y || 0,
+                        sceneOffsets[targetScene].x || 0,
+                        sceneOffsets[targetScene].y || 0,
                     );
                 }
 
-                // Keep track of the last and current scenes
-                previousScene = currentScene;
-                currentScene = targetSceneId;
+                // Keep track of the current scene
+                currentScene = targetScene;
 
                 // Scene-specific actions
-                switch (targetSceneId) {
+                switch (targetScene) {
                     case "main":
                         updateMain();
                         break;
@@ -3588,6 +3957,9 @@
                         removeChildNodes(scenes.cancelMistake.table);
                         scenes.cancelMistake.cancelButton.style.display = "none";
                         updateUndoMistakes();
+                        break;
+                    case "results":
+                        updateResults();
                         break;
                 }
             }
@@ -3681,6 +4053,16 @@
             function changeLanguage() {
                 /** @type {Language} */
                 const language = getCurrentLanguage();
+
+                // Set number formatting
+                try {
+                    numberFormatter = new Intl.NumberFormat(language.langTags, {
+                        maximumFractionDigits: 2,
+                        roundingMode: "halfExpand",
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
 
                 // Translate placeholders
                 for (p in language.placeholders) {
