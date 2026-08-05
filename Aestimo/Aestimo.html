@@ -2316,7 +2316,7 @@
                         "editor-notes": [
                             "Важно",
                             "Для правильной работы программы текст оригинала и переводы учащихся должны быть выравнены, то есть иметь одинаковые число и порядок абзацев.",
-                            "Любые изменения оригинала и переводов должны быть сделаны ",
+                            "Любые изменения оригинала и переводов должны быть внесены ",
                             "перед",
                             " проверкой работ!",
                         ],
@@ -2464,15 +2464,15 @@
             // +-----------+
             //
             /** @type {Object.<string, Offset>} */
-            let sceneOffsets = {};
+            const sceneOffsets = {};
             /** @type {string[]} */
-            let visitedScenes = ["menu"];
+            const visitedScenes = ["menu"];
             /** @type {string} */
             let currentScene = "menu";
             /** @type {NumberFormat} */
             let numberFormatter = undefined;
             /** @type {AudioContext} */
-            let audio = new (window.AudioContext || window.webkitAudioContext)();
+            const audio = new (window.AudioContext || window.webkitAudioContext)();
 
             /** @type {Project} */
             let project = {
@@ -2526,9 +2526,11 @@
             /** @type {number} */
             let sourceParaCount = 0;
             /** @type {number} */
+            let mainLastStudentIndex = undefined;
+            /** @type {number} */
             let resultStudentIndex = 0;
             /** @type {Mistake} */
-            let newMistake = {
+            const newMistake = {
                 source: "",
                 comment: "",
                 paragraph: 0,
@@ -2550,7 +2552,7 @@
                 { id: "#fix-translations", action: fixTranslations },
             ].forEach((b) => {
                 /** @type {HTMLButtonElement} */
-                let button = element(b.id);
+                const button = element(b.id);
                 if (button) button.onclick = b.action;
             });
 
@@ -2597,7 +2599,8 @@
             scenes.settings.colourLoader.addEventListener("change", async function (event) {
                 await scenes.settings.colourLoader.files[0].text().then((content) => {
                     try {
-                        let loadedColours = JSON.parse(content);
+                        /** @type {Object.<string, string>} */
+                        const loadedColours = JSON.parse(content);
                         scenes.settings.saveColours.download =
                             scenes.settings.colourLoader.files[0].name;
 
@@ -2615,13 +2618,15 @@
 
             // Saving colours
             scenes.settings.saveColours.addEventListener("click", function (event) {
-                let savedColours = {};
+                /** @type {Object.<string, string>} */
+                const savedColours = {};
 
                 Object.keys(allColours).forEach((c) => {
                     savedColours[c] = document.body.style.getPropertyValue(c);
                 });
 
-                let data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
+                /** @type {string} */
+                const data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
                 this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
@@ -2643,7 +2648,8 @@
             scenes.menu.loadProjectInput.addEventListener("change", async function (event) {
                 await scenes.menu.loadProjectInput.files[0].text().then((content) => {
                     try {
-                        let name = scenes.menu.loadProjectInput.files[0].name;
+                        /** @type {string} */
+                        const name = scenes.menu.loadProjectInput.files[0].name;
                         scenes.menu.saveProject.download = `${name}`;
 
                         project = JSON.parse(content);
@@ -2663,7 +2669,8 @@
 
             // Saving the project
             scenes.menu.saveProject.addEventListener("click", function (event) {
-                let data = encodeURIComponent(JSON.stringify(project, undefined, 4));
+                /** @type {string} */
+                const data = encodeURIComponent(JSON.stringify(project, undefined, 4));
                 this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
@@ -2749,7 +2756,7 @@
                 scenes.findMistake.addButton.style.display = "none";
 
                 /** @type {MistakeSearchResult[]} */
-                let mistakes = [];
+                const mistakes = [];
 
                 /** @type {boolean} */
                 const isSimpleSearch = scenes.findMistake.mode.value === "simple";
@@ -2807,28 +2814,28 @@
 
                     // Fill the results table
                     /** @type {HTMLTableRowElement} */
-                    let row = newChild(scenes.findMistake.table, "tr");
+                    const row = newChild(scenes.findMistake.table, "tr");
 
                     /** @type {HTMLTableCellElement} */
-                    let cell = newChild(row, "td");
+                    const cell = newChild(row, "td");
                     cell.classList.add("table-element-container");
 
                     /** @type {HTMLDivElement} */
-                    let cellDiv = newChild(cell, "div");
+                    const cellDiv = newChild(cell, "div");
                     cellDiv.classList.add("student-div");
 
                     /** @type {HTMLButtonElement} */
-                    let deleteButton = newChild(cellDiv, "button");
+                    const deleteButton = newChild(cellDiv, "button");
                     deleteButton.classList.add("student-button", "tooltip-parent");
                     deleteButton.textContent = "-";
 
                     /** @type {HTMLSpanElement} */
-                    let deleteTooltip = newChild(deleteButton, "span");
+                    const deleteTooltip = newChild(deleteButton, "span");
                     deleteTooltip.classList.add("tooltip");
                     deleteTooltip.textContent = getText("mistake-delete");
 
                     /** @type {HTMLDivElement} */
-                    let textDiv = newChild(cellDiv, "div");
+                    const textDiv = newChild(cellDiv, "div");
                     textDiv.classList.add("rich-text-div", "no-left-border");
                     highlightMistakes(
                         textDiv,
@@ -2907,7 +2914,8 @@
                 updateSourceParagraphCounter();
 
                 // Manage pages
-                let maxPage = getMaxPageIndex(
+                /** @type {number} */
+                const maxPage = getMaxPageIndex(
                     project.translations,
                     +scenes.editor.itemsPerPageInput.value,
                 );
@@ -2917,7 +2925,8 @@
                 if (maxPage > 0) {
                     removeChildNodes(scenes.editor.pageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
-                        let option = newChild(scenes.editor.pageSelect, "option");
+                        /** @type {HTMLOptionElement} */
+                        const option = newChild(scenes.editor.pageSelect, "option");
                         option.value = i;
                         option.textContent = `${i + 1}/${maxPage + 1}`;
                     }
@@ -2936,51 +2945,58 @@
                 );
 
                 subset.forEach((t, i) => {
+                    /** @type {number} */
                     const studentId =
                         project.editorPage * +scenes.editor.itemsPerPageInput.value + i;
 
-                    let row = newChild(scenes.editor.translations, "tr");
+                    /** @type {HTMLTableRowElement} */
+                    const row = newChild(scenes.editor.translations, "tr");
                     row.id = `editor-row${i}`;
 
                     // Student
                     /** @type {HTMLTableCellElement} */
-                    let studentCell = newChild(row, "td");
+                    const studentCell = newChild(row, "td");
                     studentCell.classList.add("table-element-container");
 
                     /** @type {HTMLDivElement} */
-                    let studentDiv = newChild(studentCell, "div");
+                    const studentDiv = newChild(studentCell, "div");
                     studentDiv.classList.add("student-div");
 
                     /** @type {HTMLButtonElement} */
-                    let studentDelButton = newChild(studentDiv, "button");
+                    const studentDelButton = newChild(studentDiv, "button");
                     studentDelButton.classList.add("student-button", "tooltip-parent");
                     studentDelButton.textContent = "-";
 
                     /** @type {HTMLSpanElement} */
-                    let studentDelTooltip = newChild(studentDelButton, "span");
+                    const studentDelTooltip = newChild(studentDelButton, "span");
                     studentDelTooltip.classList.add("tooltip");
                     studentDelTooltip.textContent = getText("deleting-student-confirm");
 
                     /** @type {HTMLTextAreaElement} */
-                    let studentName = newChild(studentDiv, "textarea");
+                    const studentName = newChild(studentDiv, "textarea");
                     studentName.id = `student${i}`;
                     studentName.value = t.student;
                     studentName.autocomplete = "off";
                     studentName.classList.add("table-text", "no-left-border");
 
                     // Translation
-                    let translationCell = newChild(row, "td");
+                    /** @type {HTMLTableCellElement} */
+                    const translationCell = newChild(row, "td");
                     translationCell.classList.add("table-element-container");
 
-                    let translationText = newChild(translationCell, "textarea");
+                    /** @type {HTMLTextAreaElement} */
+                    const translationText = newChild(translationCell, "textarea");
                     translationText.id = `translation${i}`;
                     translationText.value = t.text;
                     translationText.autocomplete = "off";
                     translationText.classList.add("table-text");
 
                     // Paragraphs count
-                    let paragraphs = newChild(row, "td");
-                    let pars = getParagraphsCount(t.text);
+                    /** @type {HTMLTableCellElement} */
+                    const paragraphs = newChild(row, "td");
+                    /** @type {number} */
+                    const pars = getParagraphsCount(t.text);
+
                     paragraphs.style.fontWeight = "600";
                     paragraphs.classList.add("centred-text");
                     paragraphs.textContent = pars;
@@ -2997,7 +3013,8 @@
                         project.translations[studentId].text = this.value;
 
                         // Recalculate paragraphs number
-                        let pars = getParagraphsCount(this.value);
+                        /** @type {number} */
+                        const pars = getParagraphsCount(this.value);
                         paragraphs.textContent = pars;
 
                         if (pars !== sourceParaCount) {
@@ -3043,7 +3060,8 @@
                 }
 
                 if (scenes.addStudents.addedList.value) {
-                    let list = scenes.addStudents.addedList.value.split("\n").filter((s) => s);
+                    /** @type {string[]} */
+                    const list = scenes.addStudents.addedList.value.split("\n").filter((s) => s);
 
                     list.forEach((s, i) => {
                         project.translations.push({
@@ -3088,11 +3106,12 @@
                 removeChildNodes(scenes.main.paragraphSelect);
 
                 /** @type {string[]} */
-                let paragraphs = project.source.split("\n").filter((p) => p);
+                const paragraphs = project.source.split("\n").filter((p) => p);
 
                 // Fill paragraphs list
                 paragraphs.forEach((p, i) => {
-                    let option = newChild(scenes.main.paragraphSelect, "option");
+                    /** @type {HTMLOptionElement} */
+                    const option = newChild(scenes.main.paragraphSelect, "option");
                     option.value = i;
                     option.textContent = `${i + 1}. ${p.slice(0, 63)}...`;
                 });
@@ -3158,12 +3177,13 @@
                     // Determine if it's a mistake or normal text
                     if (mistake) {
                         // This is a mistake
-                        /** @type {HTMLAnchorElement} */
-                        const mistakeText = newChild(textDiv, "a");
+                        /** @type {HTMLSpanElement} */
+                        const mistakeText = newChild(textDiv, "span");
 
                         mistakeText.classList.add("mistake-text");
                         mistakeText.textContent = textSlice;
-                        mistakeText.href = "";
+                        mistakeText.tabIndex = 0;
+                        mistakeText.role = "button";
 
                         // Mistake button's tabbing
                         if (!showInfo && !isEditable) {
@@ -3190,8 +3210,8 @@
 
                         if (isEditable) {
                             // Prepare mistake editing scene and switch to it
-                            mistakeText.addEventListener("click", function (event) {
-                                event.preventDefault();
+                            /** @type {Function} */
+                            const editMistakeEvent = function () {
                                 highlightMistakes(
                                     scenes.editMistake.context,
                                     sourceText,
@@ -3214,7 +3234,8 @@
 
                                 // Deleting the mistake
                                 scenes.editMistake.delete.onclick = function (event) {
-                                    let mistakeIndex = project.translations[
+                                    /** @type {number} */
+                                    const mistakeIndex = project.translations[
                                         studentIndex
                                     ].mistakes.findIndex((m) => m === mistake);
 
@@ -3228,6 +3249,18 @@
                                 };
 
                                 switchScene("edit-mistake");
+                            };
+
+                            mistakeText.addEventListener("click", function (event) {
+                                event.preventDefault();
+                                editMistakeEvent();
+                            });
+
+                            mistakeText.addEventListener("keydown", function (event) {
+                                if (event.key === "Enter" || event.key === " ") {
+                                    event.preventDefault();
+                                    editMistakeEvent();
+                                }
                             });
                         }
                     } else {
@@ -3296,40 +3329,40 @@
                 // Student's name
                 if (scenes.main.showNames.checked) {
                     /** @type {HTMLTableRowElement} */
-                    let nameRow = newChild(scenes.main.translations, "tr");
+                    const nameRow = newChild(scenes.main.translations, "tr");
 
                     /** @type {HTMLTableCellElement} */
-                    let nameCell = newChild(nameRow, "td");
+                    const nameCell = newChild(nameRow, "td");
                     nameCell.classList.add("main-student-name");
                     nameCell.textContent = work.student;
                 }
 
                 // Row, cell, and container div
                 /** @type {HTMLTableRowElement} */
-                let textRow = newChild(scenes.main.translations, "tr");
+                const textRow = newChild(scenes.main.translations, "tr");
 
                 /** @type {HTMLTableCellElement} */
-                let cell = newChild(textRow, "td");
+                const cell = newChild(textRow, "td");
                 cell.classList.add("table-element-container");
 
                 /** @type {HTMLDivElement} */
-                let container = newChild(cell, "div");
+                const container = newChild(cell, "div");
                 container.classList.add("student-div");
 
                 // Button to add a mistake
                 /** @type {HTMLButtonElement} */
-                let newMistakeButton = newChild(container, "button");
+                const newMistakeButton = newChild(container, "button");
                 newMistakeButton.classList.add("student-button", "tooltip-parent");
                 newMistakeButton.textContent = "+";
 
                 /** @type {HTMLSpanElement} */
-                let newMistakeTooltip = newChild(newMistakeButton, "span");
+                const newMistakeTooltip = newChild(newMistakeButton, "span");
                 newMistakeTooltip.classList.add("tooltip");
                 newMistakeTooltip.textContent = getText("add-mistake-button");
 
                 // Translation
                 /** @type {HTMLDivElement} */
-                let textDiv = newChild(container, "div");
+                const textDiv = newChild(container, "div");
                 textDiv.id = `student${studentIndex}`;
                 textDiv.classList.add("rich-text-div", "no-left-border");
 
@@ -3337,8 +3370,8 @@
 
                 // Events
                 //
-                // Adding a mistake
-                newMistakeButton.addEventListener("click", function (event) {
+                /** @type {Function} */
+                const addMistakeEvent = function () {
                     // Thanks to Google's AI for the hint!
                     /** @type {Selection} */
                     const selection = window.getSelection();
@@ -3355,13 +3388,13 @@
                     }
 
                     /** @type {number} */
-                    let start = getTextAbsoluteOffset(
+                    const start = getTextAbsoluteOffset(
                         textDiv,
                         range.startContainer,
                         range.startOffset,
                     );
                     /** @type {number} */
-                    let end = getTextAbsoluteOffset(textDiv, range.endContainer, range.endOffset);
+                    const end = getTextAbsoluteOffset(textDiv, range.endContainer, range.endOffset);
 
                     // Exit conditions
                     if (
@@ -3409,21 +3442,56 @@
                         });
                         switchScene(".");
                     };
-                });
+                };
+
+                // Adding a mistake by clicking
+                newMistakeButton.addEventListener("click", addMistakeEvent);
 
                 // Adding a mistake via keyboard (Ctrl+Enter)
-                textDiv.tabIndex = 0;
+                textDiv.contentEditable = true;
                 textDiv.addEventListener("keydown", function (event) {
                     if (event.ctrlKey && event.key === "Enter") {
                         event.preventDefault();
-                        newMistakeButton.click();
+                        addMistakeEvent();
+                    } else if (
+                        ![
+                            "Tab",
+                            "ArrowLeft",
+                            "ArrowRight",
+                            "ArrowUp",
+                            "ArrowDown",
+                            "Home",
+                            "End",
+                            "c",
+                            "C",
+                        ].includes(event.key)
+                    ) {
+                        event.preventDefault();
                     }
                 });
+
+                // Disabling pasting and dropping
+                textDiv.addEventListener("paste", function (event) {
+                    event.preventDefault();
+                });
+                textDiv.addEventListener("drop", function (event) {
+                    event.preventDefault();
+                });
+
+                // Updating the last student index
+                textDiv.addEventListener("focus", function (event) {
+                    mainLastStudentIndex = studentIndex;
+                });
+
+                // Autofocusing the last student
+                if (studentIndex === mainLastStudentIndex) {
+                    textDiv.focus();
+                }
             }
 
             function updateMain() {
                 /** @type {string[]} */
-                let paragraphs = project.source.split("\n").filter((p) => p);
+                const paragraphs = project.source.split("\n").filter((p) => p);
 
                 // Set source paragraph and update the list
                 project.paragraph = clamp(0, project.paragraph, paragraphs.length - 1);
@@ -3433,7 +3501,8 @@
                 removeChildNodes(scenes.main.translations);
 
                 // Manage pages
-                let maxPage = getMaxPageIndex(
+                /** @type {number} */
+                const maxPage = getMaxPageIndex(
                     project.translations,
                     +scenes.main.itemsPerPageInput.value,
                 );
@@ -3443,7 +3512,8 @@
                 if (maxPage > 0) {
                     removeChildNodes(scenes.main.pageSelect);
                     for (let i = 0; i < maxPage + 1; i++) {
-                        let option = newChild(scenes.main.pageSelect, "option");
+                        /** @type {HTMLOptionElement} */
+                        const option = newChild(scenes.main.pageSelect, "option");
                         option.value = i;
                         option.textContent = `${i + 1}/${maxPage + 1}`;
                     }
@@ -3466,7 +3536,7 @@
 
             function updateUndoMistakes() {
                 /** @type {MistakeSearchResult[]} */
-                let mistakes = [];
+                const mistakes = [];
 
                 // Fill the temporary array
                 project.translations.forEach((t, i) => {
@@ -3493,28 +3563,28 @@
                     const translation = getStudentTranslation(m.studentIndex);
 
                     /** @type {HTMLTableRowElement} */
-                    let row = newChild(scenes.cancelMistake.table, "tr");
+                    const row = newChild(scenes.cancelMistake.table, "tr");
 
                     /** @type {HTMLTableCellElement} */
-                    let cell = newChild(row, "td");
+                    const cell = newChild(row, "td");
                     cell.classList.add("table-element-container");
 
                     /** @type {HTMLDivElement} */
-                    let cellDiv = newChild(cell, "div");
+                    const cellDiv = newChild(cell, "div");
                     cellDiv.classList.add("student-div");
 
                     /** @type {HTMLButtonElement} */
-                    let deleteButton = newChild(cellDiv, "button");
+                    const deleteButton = newChild(cellDiv, "button");
                     deleteButton.classList.add("student-button", "tooltip-parent");
                     deleteButton.textContent = "-";
 
                     /** @type {HTMLSpanElement} */
-                    let deleteTooltip = newChild(deleteButton, "span");
+                    const deleteTooltip = newChild(deleteButton, "span");
                     deleteTooltip.classList.add("tooltip");
                     deleteTooltip.textContent = getText("mistake-delete");
 
                     /** @type {HTMLDivElement} */
-                    let textDiv = newChild(cellDiv, "div");
+                    const textDiv = newChild(cellDiv, "div");
                     textDiv.classList.add("rich-text-div", "no-left-border");
                     highlightMistakes(
                         textDiv,
@@ -3555,7 +3625,7 @@
 
                 project.translations.forEach((t, i) => {
                     /** @type {HTMLOptionElement} */
-                    let option = newChild(scenes.results.studentSelect, "option");
+                    const option = newChild(scenes.results.studentSelect, "option");
 
                     option.value = i;
                     option.textContent = `${i + 1}. ${t.student}`;
@@ -3570,14 +3640,14 @@
                     const mark = getMark(t.mistakes);
 
                     /** @type {HTMLTableRowElement} */
-                    let row = newChild(scenes.results.groupTable, "tr");
+                    const row = newChild(scenes.results.groupTable, "tr");
 
                     /** @type {HTMLTableCellElement} */
-                    let studentCell = newChild(row, "td");
+                    const studentCell = newChild(row, "td");
                     studentCell.textContent = t.student;
 
                     /** @type {HTMLTableCellElement} */
-                    let markCell = newChild(row, "td");
+                    const markCell = newChild(row, "td");
                     markCell.classList.add("mark-cell");
                     markCell.textContent = `${mark.number} (${mark.letter})`;
                     markCell.addEventListener("click", function (event) {
@@ -3601,14 +3671,14 @@
                     const mistakes = work.mistakes.filter((m) => m.paragraph === i);
 
                     /** @type {HTMLTableRowElement} */
-                    let row = newChild(scenes.results.translation, "tr");
+                    const row = newChild(scenes.results.translation, "tr");
 
                     /** @type {HTMLTableCellElement} */
-                    let textCell = newChild(row, "td");
+                    const textCell = newChild(row, "td");
                     textCell.classList.add("table-element-container");
 
                     /** @type {HTMLDivElement} */
-                    let textDiv = newChild(textCell, "div");
+                    const textDiv = newChild(textCell, "div");
                     textDiv.classList.add("rich-text-div");
 
                     highlightMistakes(textDiv, p, mistakes, resultStudentIndex, true, true);
@@ -3673,7 +3743,7 @@
              */
             function getMark(mistakes) {
                 /** @type {Mark} */
-                let mark = {
+                const mark = {
                     mistakesCount: mistakes.length,
                     mistakesWeight: 0,
                     number: 100,
@@ -3741,7 +3811,9 @@
              * @returns {any[]}
              */
             function getArraySubset(array, pageIndex, itemsPerPage) {
+                /** @type {number} */
                 const firstIndex = pageIndex * itemsPerPage;
+                /** @type {number} */
                 const lastIndex = firstIndex + itemsPerPage;
 
                 return array.slice(firstIndex, lastIndex);
@@ -3763,7 +3835,7 @@
              */
             function getElementText(query) {
                 /** @type {HTMLElement} */
-                let el = element(query);
+                const el = element(query);
                 return el ? el.textContent || query : query;
             }
 
@@ -3812,7 +3884,8 @@
              * @returns {HTMLElement} child element
              */
             function newChild(parent, childTag) {
-                let child = newElement(childTag);
+                /** @type {HTMLElement} */
+                const child = newElement(childTag);
                 parent.appendChild(child);
                 return child;
             }
@@ -3830,11 +3903,11 @@
                     );
 
                     /** @type {HTMLLIElement} */
-                    let item = newChild(scenes.settings.colours, "li");
+                    const item = newChild(scenes.settings.colours, "li");
                     /** @type {HTMLLabelElement} */
-                    let label = newChild(item, "label");
+                    const label = newChild(item, "label");
                     /** @type {HTMLInputElement} */
-                    let input = newChild(item, "input");
+                    const input = newChild(item, "input");
 
                     label.dataset["tk"] = `${c}`;
                     label.htmlFor = c;
@@ -3852,7 +3925,7 @@
                     if (c === "--colour-tooltip") {
                         item.classList.add("tooltip-parent");
                         /** @type {HTMLSpanElement} */
-                        let tooltip = newChild(item, "span");
+                        const tooltip = newChild(item, "span");
 
                         tooltip.classList.add("tooltip");
                         tooltip.textContent = getElementText('[data-tk="title"]');
@@ -3973,9 +4046,9 @@
                 if (!audio || +scenes.settings.volumeInput.value === 0) return;
 
                 /** @type {OscillatorNode} */
-                let oscillator = audio.createOscillator();
+                const oscillator = audio.createOscillator();
                 /** @type {GainNode} */
-                let volume = audio.createGain();
+                const volume = audio.createGain();
 
                 oscillator.type = type;
                 oscillator.frequency.value = frequencies[0];
@@ -4018,7 +4091,7 @@
                 // Fill language selection options
                 for (const l of languages) {
                     /** @type {HTMLOptionElement} */
-                    let option = newChild(scenes.menu.languageSelect, "option");
+                    const option = newChild(scenes.menu.languageSelect, "option");
                     option.value = l.name;
                     option.textContent = l.name;
                 }
@@ -4100,7 +4173,7 @@
                 /** @type {Language} */
                 const language = getCurrentLanguage();
                 /** @type {Language} */
-                let template = {};
+                const template = {};
 
                 template.name = language.name;
                 template.langTags = language.langTags;
@@ -4123,7 +4196,7 @@
                     /** @type {TreeWalker} */
                     const walker = document.createTreeWalker(e, NodeFilter.SHOW_TEXT, null);
                     /** @type {string[]} */
-                    let texts = [];
+                    const texts = [];
 
                     // Save texts from all child nodes
                     do {
