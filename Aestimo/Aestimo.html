@@ -250,6 +250,7 @@
                 border: 2px outset var(--colour-border);
                 font-size: 1em;
                 margin-block: 2px;
+                padding-inline: 4px;
                 min-height: 1.7em;
             }
 
@@ -748,7 +749,7 @@
 
             #results-stats-div:focus,
             #results-stats-div:hover {
-                height: 6.5em;
+                height: 6.8em;
                 overflow: auto;
                 transition: height 0.3s ease;
             }
@@ -1836,6 +1837,10 @@
                     pageSelect: element("#editor-page-select"),
                     /** @type {HTMLInputElement} */
                     itemsPerPageInput: element("#editor-students-per-page-input"),
+                    /** @type {HTMLButtonElement} */
+                    fixSource: element("#fix-source"),
+                    /** @type {HTMLButtonElement} */
+                    fixTranslations: element("#fix-translations"),
                 },
                 results: {
                     /** @type {HTMLDivElement} */
@@ -1934,6 +1939,8 @@
                     self: element("#adding-students"),
                     /** @type {HTMLTextAreaElement} */
                     addedList: element("#added-students"),
+                    /** @type {HTMLButtonElement} */
+                    addButton: element("#adding-students-button"),
                 },
                 deleteStudent: {
                     /** @type {HTMLDivElement} */
@@ -2001,6 +2008,25 @@
              * @property {number} mistakesWeight
              * @property {number} number
              * @property {string} letter
+             */
+
+            /** @typedef AddMistakeInfo
+             * @property {HTMLTextAreaElement} textDiv
+             * @property {Work} work
+             * @property {string} translation
+             * @property {number} studentIndex
+             */
+
+            /** @typedef EditMistakeInfo
+             * @property {HTMLDivElement} textDiv
+             * @property {string} sourceText
+             * @property {Mistake} mistake
+             * @property {number} studentIndex
+             */
+
+            /** @typedef RemoveMistakeFromTableInfo
+             * @property {MistakeSearchResult} foundMistake
+             * @property {HTMLTableRowElement} deletedRow
              */
 
             // +-----------+
@@ -2473,6 +2499,302 @@
                     },
                 },
             ];
+            const functions = {
+                saveColours: function () {
+                    /** @type {Object.<string, string>} */
+                    const savedColours = {};
+
+                    Object.keys(allColours).forEach((c) => {
+                        savedColours[c] = document.body.style.getPropertyValue(c);
+                    });
+
+                    /** @type {string} */
+                    const data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
+                    scenes.settings.saveColours.href = `data:text/plain;charset=utf-8,${data}`;
+                },
+                saveProject: function () {
+                    /** @type {string} */
+                    const data = encodeURIComponent(JSON.stringify(project, undefined, 4));
+                    scenes.menu.saveProject.href = `data:text/plain;charset=utf-8,${data}`;
+                },
+                defaultSettings: function () {
+                    // Volume
+                    scenes.settings.volumeInput.value = "0.5";
+                    localStorage.setItem("volume", scenes.settings.volumeInput.value);
+
+                    // Default sounds
+                    scenes.settings.defaultSounds.checked = true;
+                    localStorage.setItem("default-sounds", "true");
+
+                    // Colours
+                    for (const c in allColours) {
+                        document.body.style.setProperty(c, allColours[c]);
+                        element(`#${c}`).value = allColours[c];
+                        localStorage.setItem(c, allColours[c]);
+                    }
+                },
+                findMistake: function () {
+                    if (!scenes.findMistake.query.value) return;
+                    removeChildNodes(scenes.findMistake.table);
+                    scenes.findMistake.addButton.style.display = "none";
+
+                    /** @type {MistakeSearchResult[]} */
+                    const mistakes = [];
+
+                    /** @type {boolean} */
+                    const isSimpleSearch = scenes.findMistake.mode.value === "simple";
+
+                    /** @type {RegExp | string} */
+                    const query = isSimpleSearch
+                        ? scenes.findMistake.query.value
+                        : new RegExp(scenes.findMistake.query.value, "u");
+
+                    // Look for mistakes, add them to a temporary array, fill the results table
+                    project.translations.forEach((t, i) => {
+                        /** @type {string} */
+                        const translation = getStudentTranslation(i);
+                        /** @type {RegExpMatchArray | number} */
+                        const result = isSimpleSearch
+                            ? translation.indexOf(query)
+                            : translation.match(query);
+
+                        if (result === null || result === -1) return;
+
+                        /** @type {number} */
+                        const start = isSimpleSearch
+                            ? result // A plain-text search
+                            : result[1] // Regular expression with or without a capturing group
+                              ? result.index + result[0].indexOf(result[1])
+                              : result.index;
+                        /** @type {number} */
+                        const end = isSimpleSearch
+                            ? start + query.length // A plain-text search
+                            : result[1] // Regular expression with or without a capturing group
+                              ? start + result[1].length
+                              : start + result[0].length;
+
+                        // Add the mistake to the array if it's new
+                        if (
+                            t.mistakes
+                                .filter((m) => m.paragraph === project.paragraph)
+                                .some((m) => start < m.endIndex && m.startIndex < end)
+                        ) {
+                            return;
+                        }
+
+                        /** @type {number} */
+                        const lastFoundMistakeId =
+                            mistakes.push({
+                                mistake: {
+                                    source: isSimpleSearch ? query : result[1] || result[0],
+                                    paragraph: project.paragraph,
+                                    startIndex: start,
+                                    endIndex: end,
+                                },
+                                studentIndex: i,
+                                shouldBeAdded: true,
+                            }) - 1;
+
+                        // Fill the results table
+                        /** @type {HTMLTableRowElement} */
+                        const row = newChild(scenes.findMistake.table, "tr");
+
+                        /** @type {HTMLTableCellElement} */
+                        const cell = newChild(row, "td");
+                        cell.classList.add("table-element-container");
+
+                        /** @type {HTMLDivElement} */
+                        const cellDiv = newChild(cell, "div");
+                        cellDiv.classList.add("student-div");
+
+                        /** @type {HTMLButtonElement} */
+                        const deleteButton = newChild(cellDiv, "button");
+                        deleteButton.classList.add("student-button", "tooltip-parent");
+                        deleteButton.textContent = "-";
+
+                        /** @type {HTMLSpanElement} */
+                        const deleteTooltip = newChild(deleteButton, "span");
+                        deleteTooltip.classList.add("tooltip");
+                        deleteTooltip.textContent = getText("mistake-delete");
+
+                        /** @type {HTMLDivElement} */
+                        const textDiv = newChild(cellDiv, "div");
+                        textDiv.classList.add("rich-text-div", "no-left-border");
+                        highlightMistakes(
+                            textDiv,
+                            translation,
+                            [mistakes[lastFoundMistakeId].mistake],
+                            mistakes[lastFoundMistakeId].studentIndex,
+                            false,
+                            false,
+                        );
+
+                        /** @type {RemoveMistakeFromTableInfo} */
+                        const info = {
+                            foundMistake: mistakes[lastFoundMistakeId],
+                            deletedRow: row,
+                        };
+                        scriptData.set(deleteButton, info);
+                        deleteButton.dataset.role = "delete-mistake-from-table";
+                    });
+
+                    // Check if at least one mistake is found
+                    if (mistakes.length === 0) return;
+
+                    scenes.findMistake.addButton.style.display = "flex";
+                    scenes.findMistake.addButton.onclick = function (event) {
+                        mistakes
+                            .filter((m) => m.shouldBeAdded)
+                            .forEach((m) => {
+                                m.mistake.type = scenes.findMistake.type.value;
+                                m.mistake.subtype = scenes.findMistake.subtype.value;
+                                m.mistake.meaning = scenes.findMistake.meaning.value;
+                                m.mistake.comment = scenes.findMistake.comment.value;
+                                project.translations[m.studentIndex].mistakes.push(m.mistake);
+                                updateStudentTranslation(m.studentIndex);
+                            });
+                        switchScene(".");
+                    };
+                },
+                addMistake: function () {
+                    /** @type {AddMistakeInfo} */
+                    const data = scriptData.get(scenes.addMistake.addButton);
+
+                    newMistake.comment = scenes.addMistake.mistakeComment.value;
+                    newMistake.type = getRadioInputValue("mistake-type");
+                    newMistake.subtype = getRadioInputValue("mistake-subtype");
+                    newMistake.meaning = getRadioInputValue("mistake-text-meaning");
+
+                    data.work.mistakes.push({
+                        source: newMistake.source,
+                        comment: newMistake.comment,
+                        paragraph: newMistake.paragraph,
+                        startIndex: newMistake.startIndex,
+                        endIndex: newMistake.endIndex,
+                        type: newMistake.type,
+                        subtype: newMistake.subtype,
+                        meaning: newMistake.meaning,
+                    });
+                    updateStudentTranslation(data.studentIndex);
+                    switchScene(".");
+                },
+                /** * @param {HTMLElement} element */
+                newMistake: function (element) {
+                    // Thanks to Google's AI for the hint!
+                    /** @type {Selection} */
+                    const selection = window.getSelection();
+                    if (!selection.rangeCount || selection.isCollapsed) return;
+
+                    /** @type {AddMistakeInfo} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
+                    /** @type {Range} */
+                    const range = selection.getRangeAt(0);
+
+                    if (
+                        !data.textDiv.contains(range.startContainer) ||
+                        !data.textDiv.contains(range.endContainer)
+                    ) {
+                        return;
+                    }
+
+                    /** @type {number} */
+                    const start = getTextAbsoluteOffset(
+                        data.textDiv,
+                        range.startContainer,
+                        range.startOffset,
+                    );
+                    /** @type {number} */
+                    const end = getTextAbsoluteOffset(
+                        data.textDiv,
+                        range.endContainer,
+                        range.endOffset,
+                    );
+
+                    // Exit conditions
+                    if (
+                        start === end ||
+                        data.work.mistakes
+                            .filter((m) => m.paragraph === project.paragraph)
+                            .some((m) => start < m.endIndex && m.startIndex < end)
+                    ) {
+                        return;
+                    }
+
+                    newMistake.source = selection.toString();
+                    newMistake.paragraph = project.paragraph;
+                    newMistake.startIndex = Math.min(start, end);
+                    newMistake.endIndex = Math.max(start, end);
+
+                    // Go to adding a new mistake scene
+                    highlightMistakes(
+                        scenes.addMistake.mistakeSource,
+                        data.translation,
+                        [newMistake],
+                        data.studentIndex,
+                        false,
+                        false,
+                    );
+                    scriptData.set(scenes.addMistake.addButton, data);
+                    scenes.addMistake.mistakeComment.value = "";
+                    switchScene("add-mistake");
+                },
+                /** * @param {HTMLElement} element */
+                editMistake: function (element) {
+                    /** @type {EditMistakeInfo} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
+                    highlightMistakes(
+                        scenes.editMistake.context,
+                        data.sourceText,
+                        [data.mistake],
+                        data.studentIndex,
+                        false,
+                        false,
+                    );
+                    scenes.editMistake.type.value = data.mistake.type;
+                    scenes.editMistake.subtype.value = data.mistake.subtype;
+                    scenes.editMistake.meaning.value = data.mistake.meaning;
+                    scenes.editMistake.comment.value = data.mistake.comment || "";
+
+                    // Editing the mistake's parameters
+                    ["type", "subtype", "meaning", "comment"].forEach((p) => {
+                        scenes.editMistake[p].oninput = function (event) {
+                            data.mistake[p] = this.value;
+                            updateStudentTranslation(data.studentIndex);
+                        };
+                    });
+
+                    // Deleting the mistake
+                    scenes.editMistake.delete.onclick = function (event) {
+                        /** @type {number} */
+                        const mistakeIndex = project.translations[
+                            data.studentIndex
+                        ].mistakes.findIndex((m) => m === data.mistake);
+
+                        if (mistakeIndex > -1) {
+                            project.translations[data.studentIndex].mistakes.splice(
+                                mistakeIndex,
+                                1,
+                            );
+                            updateStudentTranslation(data.studentIndex);
+                            switchScene(".");
+                        }
+                    };
+
+                    switchScene("edit-mistake");
+                },
+                /** * @param {HTMLElement} element */
+                deleteMistakeFromTable: function (element) {
+                    /** @type {RemoveMistakeFromTableInfo} */
+                    const data = scriptData.get(element);
+
+                    data.foundMistake.shouldBeAdded = false;
+                    data.deletedRow.remove();
+                },
+            };
 
             /** @type {Object.<string, number>} */
             const mistakeTypeWeight = {
@@ -2563,71 +2885,138 @@
             // | Events |
             // +--------+
             //
-            // Buttons
-            [
-                { id: "#adding-students-button", action: addStudents },
-                { id: "#fix-source", action: fixSource },
-                { id: "#fix-translations", action: fixTranslations },
-            ].forEach((b) => {
-                /** @type {HTMLButtonElement} */
-                const button = element(b.id);
-                if (button) button.onclick = b.action;
-            });
-
-            // Scene transitions
-            for (const button of document.querySelectorAll("[data-scene]")) {
-                button.addEventListener("click", function (event) {
-                    switchScene(this.dataset.scene);
-                });
-            }
-
-            // Global window hotkeys
+            // All key down events (EVENT DELEGATION)
             window.addEventListener("keydown", function (event) {
+                /** @type {HTMLElement} */
+                const target = event.target;
+
+                // General button events
                 switch (event.key) {
                     case "Escape":
-                        if (currentScene === "menu") {
-                            if (visitedScenes.length > 1) visitedScenes = ["menu"];
+                        // Go to the previous scene
+                        if (currentScene === "menu" && visitedScenes.length > 1) {
+                            // Fix sequence if something broke
+                            visitedScenes = ["menu"];
                             return;
                         }
                         switchScene(".");
-                        break;
+                        return;
                     case "s":
                     case "S":
+                        // Save the project
                         if (!event.ctrlKey && !event.metaKey) return;
 
                         event.preventDefault();
                         scenes.menu.saveProject.click();
-                        break;
+                        return;
+                }
+
+                // Role-specific behavior
+                switch (target.dataset.role) {
+                    case "new-mistake-keyboard":
+                        if (!event.ctrlKey || event.key !== "Enter") return;
+                        functions.newMistake(target);
+                        return;
+                    case "edit-mistake":
+                        if (event.key !== "Enter" && event.key !== " ") return;
+                        functions.editMistake(target);
+                        return;
                 }
             });
 
-            // Global click events
+            // All click events (EVENT DELEGATION)
             window.addEventListener("click", function (event) {
                 /** @type {HTMLElement} */
                 const target = event.target;
 
+                // Interactive elements' sounds
                 if (target.tagName && scenes.settings.defaultSounds.checked) {
                     switch (target.tagName) {
                         case "A":
                         case "BUTTON":
                         case "INPUT":
+                        case "LEGEND":
                         case "SELECT":
                         case "SUMMARY":
                         case "TEXTAREA":
                             playSound("sine", [250, 50, 100], 0.1);
                             break;
-                        case "LEGEND":
-                            window.scroll(0, target.offsetTop - 4);
-                            playSound("sine", [100, 50, 250], 0.1);
-                            break;
                     }
+                }
+
+                // Standard behaviour by tag
+                switch (target.tagName) {
+                    // Scene transitions
+                    case "BUTTON":
+                        if (target.dataset.scene) {
+                            switchScene(target.dataset.scene);
+                        }
+                        break;
+                    // Fit fieldset to screen
+                    case "LEGEND":
+                        window.scroll(0, target.offsetTop - 4);
+                        break;
+                }
+
+                // Individual elements' behaviour
+                switch (target) {
+                    // Load colours
+                    case scenes.settings.loadColours:
+                        scenes.settings.colourLoader.click();
+                        return;
+                    // Save colours
+                    case scenes.settings.saveColours:
+                        functions.saveColours();
+                        return;
+                    // Load project
+                    case scenes.menu.loadProjectButton:
+                        scenes.menu.loadProjectInput.click();
+                        return;
+                    // Save project
+                    case scenes.menu.saveProject:
+                        functions.saveProject();
+                        return;
+                    // Default settings
+                    case scenes.settings.defaultSettings:
+                        functions.defaultSettings();
+                        return;
+                    // Add students
+                    case scenes.addStudents.addButton:
+                        addStudents();
+                        return;
+                    // Fix source
+                    case scenes.editor.fixSource:
+                        fixSource();
+                        return;
+                    // Fix translations
+                    case scenes.editor.fixTranslations:
+                        fixTranslations();
+                        return;
+                    // Find mistake
+                    case scenes.findMistake.searchButton:
+                        functions.findMistake();
+                        return;
+                    // Add mistake button
+                    case scenes.addMistake.addButton:
+                        functions.addMistake();
+                        return;
+                }
+
+                // Role-specific behaviour
+                switch (target.dataset.role) {
+                    case "new-mistake":
+                        functions.newMistake(target);
+                        return;
+                    case "edit-mistake":
+                        functions.editMistake(target);
+                        return;
+                    case "delete-mistake-from-table":
+                        functions.deleteMistakeFromTable(target);
+                        return;
                 }
             });
 
             // Loading colours
-            scenes.settings.loadColours.addEventListener("click", function (event) {
-                scenes.settings.colourLoader.click();
-            });
             scenes.settings.colourLoader.addEventListener("change", async function (event) {
                 await scenes.settings.colourLoader.files[0].text().then((content) => {
                     try {
@@ -2648,24 +3037,7 @@
                 });
             });
 
-            // Saving colours
-            scenes.settings.saveColours.addEventListener("click", function (event) {
-                /** @type {Object.<string, string>} */
-                const savedColours = {};
-
-                Object.keys(allColours).forEach((c) => {
-                    savedColours[c] = document.body.style.getPropertyValue(c);
-                });
-
-                /** @type {string} */
-                const data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
-                this.href = `data:text/plain;charset=utf-8,${data}`;
-            });
-
             // Loading a project
-            scenes.menu.loadProjectButton.addEventListener("click", function (event) {
-                scenes.menu.loadProjectInput.click();
-            });
             scenes.menu.loadProjectInput.addEventListener("change", async function (event) {
                 await scenes.menu.loadProjectInput.files[0].text().then((content) => {
                     try {
@@ -2681,18 +3053,12 @@
                         updateItemsPerPageMax();
                         updateMainParagraphsList();
                         updateEditor();
+                        updateMain();
                         switchScene("editor");
                     } catch (error) {
                         alert(`Error while opening the project: ${error}`);
                     }
                 });
-            });
-
-            // Saving the project
-            scenes.menu.saveProject.addEventListener("click", function (event) {
-                /** @type {string} */
-                const data = encodeURIComponent(JSON.stringify(project, undefined, 4));
-                this.href = `data:text/plain;charset=utf-8,${data}`;
             });
 
             // Language selection
@@ -2710,24 +3076,6 @@
             // Toggling default sounds
             scenes.settings.defaultSounds.addEventListener("change", function (event) {
                 localStorage.setItem("default-sounds", this.checked);
-            });
-
-            // Default settings
-            scenes.settings.defaultSettings.addEventListener("click", function (event) {
-                // Volume
-                scenes.settings.volumeInput.value = "0.5";
-                localStorage.setItem("volume", scenes.settings.volumeInput.value);
-
-                // Default sounds
-                scenes.settings.defaultSounds.checked = true;
-                localStorage.setItem("default-sounds", "true");
-
-                // Colours
-                for (const c in allColours) {
-                    document.body.style.setProperty(c, allColours[c]);
-                    element(`#${c}`).value = allColours[c];
-                    localStorage.setItem(c, allColours[c]);
-                }
             });
 
             // Student selection (results)
@@ -2751,6 +3099,7 @@
             // Page selection (main)
             scenes.main.pageSelect.addEventListener("change", function (event) {
                 project.mainPage = +scenes.main.pageSelect.value;
+                mainLastStudentIndex = undefined;
                 updateMain();
             });
 
@@ -2758,12 +3107,14 @@
             scenes.main.itemsPerPageInput.addEventListener("change", function (event) {
                 clampInputNumber(this);
                 localStorage.setItem("mainStudentsPerPage", +scenes.main.itemsPerPageInput.value);
+                mainLastStudentIndex = undefined;
                 updateMain();
             });
 
             // Show students' names (main)
             scenes.main.showNames.addEventListener("change", function (event) {
                 localStorage.setItem("mainShowNames", this.checked);
+                mainLastStudentIndex = undefined;
                 updateMain();
             });
 
@@ -2783,366 +3134,13 @@
                 updateEditor();
             });
 
-            // Find mistake
-            scenes.findMistake.searchButton.addEventListener("click", function (event) {
-                if (!scenes.findMistake.query.value) return;
-                removeChildNodes(scenes.findMistake.table);
-                scenes.findMistake.addButton.style.display = "none";
-
-                /** @type {MistakeSearchResult[]} */
-                const mistakes = [];
-
-                /** @type {boolean} */
-                const isSimpleSearch = scenes.findMistake.mode.value === "simple";
-
-                /** @type {RegExp | string} */
-                const query = isSimpleSearch
-                    ? scenes.findMistake.query.value
-                    : new RegExp(scenes.findMistake.query.value, "u");
-
-                // Look for mistakes, add them to a temporary array, fill the results table
-                project.translations.forEach((t, i) => {
-                    /** @type {string} */
-                    const translation = getStudentTranslation(i);
-                    /** @type {RegExpMatchArray | number} */
-                    const result = isSimpleSearch
-                        ? translation.indexOf(query)
-                        : translation.match(query);
-
-                    if (result === null || result === -1) return;
-
-                    /** @type {number} */
-                    const start = isSimpleSearch
-                        ? result // A plain-text search
-                        : result[1] // Regular expression with or without a capturing group
-                          ? result.index + result[0].indexOf(result[1])
-                          : result.index;
-                    /** @type {number} */
-                    const end = isSimpleSearch
-                        ? start + query.length // A plain-text search
-                        : result[1] // Regular expression with or without a capturing group
-                          ? start + result[1].length
-                          : start + result[0].length;
-
-                    // Add the mistake to the array if it's new
-                    if (
-                        t.mistakes
-                            .filter((m) => m.paragraph === project.paragraph)
-                            .some((m) => start < m.endIndex && m.startIndex < end)
-                    ) {
-                        return;
-                    }
-
-                    /** @type {number} */
-                    const lastFoundMistakeId =
-                        mistakes.push({
-                            mistake: {
-                                source: isSimpleSearch ? query : result[1] || result[0],
-                                paragraph: project.paragraph,
-                                startIndex: start,
-                                endIndex: end,
-                            },
-                            studentIndex: i,
-                            shouldBeAdded: true,
-                        }) - 1;
-
-                    // Fill the results table
-                    /** @type {HTMLTableRowElement} */
-                    const row = newChild(scenes.findMistake.table, "tr");
-
-                    /** @type {HTMLTableCellElement} */
-                    const cell = newChild(row, "td");
-                    cell.classList.add("table-element-container");
-
-                    /** @type {HTMLDivElement} */
-                    const cellDiv = newChild(cell, "div");
-                    cellDiv.classList.add("student-div");
-
-                    /** @type {HTMLButtonElement} */
-                    const deleteButton = newChild(cellDiv, "button");
-                    deleteButton.classList.add("student-button", "tooltip-parent");
-                    deleteButton.textContent = "-";
-
-                    /** @type {HTMLSpanElement} */
-                    const deleteTooltip = newChild(deleteButton, "span");
-                    deleteTooltip.classList.add("tooltip");
-                    deleteTooltip.textContent = getText("mistake-delete");
-
-                    /** @type {HTMLDivElement} */
-                    const textDiv = newChild(cellDiv, "div");
-                    textDiv.classList.add("rich-text-div", "no-left-border");
-                    highlightMistakes(
-                        textDiv,
-                        translation,
-                        [mistakes[lastFoundMistakeId].mistake],
-                        mistakes[lastFoundMistakeId].studentIndex,
-                        false,
-                        false,
-                    );
-
-                    /** @type {DeleteMistakeInfo} */
-                    const info = {
-                        foundMistake: mistakes[lastFoundMistakeId],
-                        deletedRow: row,
-                    };
-                    scriptData.set(deleteButton, info);
-                });
-
-                // Check if at least one mistake is found
-                if (mistakes.length === 0) return;
-
-                scenes.findMistake.addButton.style.display = "flex";
-                scenes.findMistake.addButton.onclick = function (event) {
-                    mistakes
-                        .filter((m) => m.shouldBeAdded)
-                        .forEach((m) => {
-                            m.mistake.type = scenes.findMistake.type.value;
-                            m.mistake.subtype = scenes.findMistake.subtype.value;
-                            m.mistake.meaning = scenes.findMistake.meaning.value;
-                            m.mistake.comment = scenes.findMistake.comment.value;
-                            project.translations[m.studentIndex].mistakes.push(m.mistake);
-                        });
-                    switchScene(".");
-                };
-            });
-
             // Source text editing
             scenes.editor.sourceText.addEventListener("change", function (event) {
                 project.source = this.value;
                 updateMainParagraphsList();
                 updateEditor();
+                updateMain();
             });
-
-            // Adding mistake
-            scenes.addMistake.addButton.addEventListener("click", function (event) {
-                /** @type {AddMistakeInfo} */
-                const vars = scriptData.get(this);
-
-                newMistake.comment = scenes.addMistake.mistakeComment.value;
-                newMistake.type = getRadioInputValue("mistake-type");
-                newMistake.subtype = getRadioInputValue("mistake-subtype");
-                newMistake.meaning = getRadioInputValue("mistake-text-meaning");
-
-                vars.work.mistakes.push({
-                    source: newMistake.source,
-                    comment: newMistake.comment,
-                    paragraph: newMistake.paragraph,
-                    startIndex: newMistake.startIndex,
-                    endIndex: newMistake.endIndex,
-                    type: newMistake.type,
-                    subtype: newMistake.subtype,
-                    meaning: newMistake.meaning,
-                });
-                switchScene(".");
-            });
-
-            // +-------------------------+
-            // | Parent elements' events |
-            // +-------------------------+
-            //
-            // Adding a mistake (button)
-            scenes.main.translations.addEventListener("click", function (event) {
-                /** @type {HTMLElement} */
-                const target = event.target;
-
-                if (target.classList && target.classList.contains("student-button")) {
-                    eventAddMistake(target);
-                }
-            });
-
-            // Adding a mistake (Ctrl+Enter)
-            scenes.main.translations.addEventListener("keydown", function (event) {
-                /** @type {HTMLElement} */
-                const target = event.target;
-
-                if (
-                    target.classList &&
-                    target.classList.contains("rich-text-div") &&
-                    event.ctrlKey &&
-                    event.key === "Enter"
-                ) {
-                    eventAddMistake(target);
-                }
-            });
-
-            // Editing a mistake (click + Enter/Spacebar)
-            [
-                scenes.main.translations,
-                scenes.cancelMistake.table,
-                scenes.results.translation,
-            ].forEach((el) => {
-                el.addEventListener("click", function (event) {
-                    /** @type {HTMLElement} */
-                    const target = event.target;
-
-                    if (target.classList && target.classList.contains("mistake-text")) {
-                        eventEditMistake(target);
-                    }
-                });
-                el.addEventListener("keydown", function (event) {
-                    /** @type {HTMLElement} */
-                    const target = event.target;
-
-                    if (
-                        target.classList &&
-                        target.classList.contains("mistake-text") &&
-                        (event.key === "Enter" || event.key === " ")
-                    ) {
-                        eventEditMistake(target);
-                    }
-                });
-            });
-
-            // Deleting a mistake (search & undo scenes)
-            [scenes.findMistake.table, scenes.cancelMistake.table].forEach((el) => {
-                el.addEventListener("click", function (event) {
-                    /** @type {HTMLElement} */
-                    const target = event.target;
-
-                    if (target.classList && target.classList.contains("student-button")) {
-                        eventDeleteMistake(target);
-                    }
-                });
-            });
-
-            // +---------------------------+
-            // | Child elements' functions |
-            // +---------------------------+
-            //
-            /** @typedef AddMistakeInfo
-             * @property {HTMLTextAreaElement} textDiv
-             * @property {Work} work
-             * @property {string} translation
-             * @property {number} studentIndex
-             */
-            /**
-             * @param {HTMLElement} element
-             */
-            function eventAddMistake(element) {
-                // Thanks to Google's AI for the hint!
-                /** @type {Selection} */
-                const selection = window.getSelection();
-                if (!selection.rangeCount || selection.isCollapsed) return;
-
-                /** @type {AddMistakeInfo} */
-                const vars = scriptData.get(element);
-                if (!vars) return;
-
-                /** @type {Range} */
-                const range = selection.getRangeAt(0);
-
-                if (
-                    !vars.textDiv.contains(range.startContainer) ||
-                    !vars.textDiv.contains(range.endContainer)
-                ) {
-                    return;
-                }
-
-                /** @type {number} */
-                const start = getTextAbsoluteOffset(
-                    vars.textDiv,
-                    range.startContainer,
-                    range.startOffset,
-                );
-                /** @type {number} */
-                const end = getTextAbsoluteOffset(
-                    vars.textDiv,
-                    range.endContainer,
-                    range.endOffset,
-                );
-
-                // Exit conditions
-                if (
-                    start === end ||
-                    vars.work.mistakes
-                        .filter((m) => m.paragraph === project.paragraph)
-                        .some((m) => start < m.endIndex && m.startIndex < end)
-                ) {
-                    return;
-                }
-
-                newMistake.source = selection.toString();
-                newMistake.paragraph = project.paragraph;
-                newMistake.startIndex = Math.min(start, end);
-                newMistake.endIndex = Math.max(start, end);
-
-                // Go to adding a new mistake scene
-                highlightMistakes(
-                    scenes.addMistake.mistakeSource,
-                    vars.translation,
-                    [newMistake],
-                    vars.studentIndex,
-                    false,
-                    false,
-                );
-                scriptData.set(scenes.addMistake.addButton, vars);
-                scenes.addMistake.mistakeComment.value = "";
-                switchScene("add-mistake");
-            }
-
-            /** @typedef EditMistakeInfo
-             * @property {string} sourceText
-             * @property {Mistake} mistake
-             * @property {number} studentIndex
-             */
-            /**
-             * @param {HTMLElement} element
-             */
-            function eventEditMistake(element) {
-                /** @type {EditMistakeInfo} */
-                const vars = scriptData.get(element);
-                if (!vars) return;
-
-                highlightMistakes(
-                    scenes.editMistake.context,
-                    vars.sourceText,
-                    [vars.mistake],
-                    vars.studentIndex,
-                    false,
-                    false,
-                );
-                scenes.editMistake.type.value = vars.mistake.type;
-                scenes.editMistake.subtype.value = vars.mistake.subtype;
-                scenes.editMistake.meaning.value = vars.mistake.meaning;
-                scenes.editMistake.comment.value = vars.mistake.comment || "";
-
-                // Editing the mistake's parameters
-                ["type", "subtype", "meaning", "comment"].forEach((p) => {
-                    scenes.editMistake[p].oninput = function (event) {
-                        vars.mistake[p] = this.value;
-                    };
-                });
-
-                // Deleting the mistake
-                scenes.editMistake.delete.onclick = function (event) {
-                    /** @type {number} */
-                    const mistakeIndex = project.translations[vars.studentIndex].mistakes.findIndex(
-                        (m) => m === vars.mistake,
-                    );
-
-                    if (mistakeIndex > -1) {
-                        project.translations[vars.studentIndex].mistakes.splice(mistakeIndex, 1);
-                        switchScene(".");
-                    }
-                };
-
-                switchScene("edit-mistake");
-            }
-
-            /** @typedef DeleteMistakeInfo
-             * @property {MistakeSearchResult} foundMistake
-             * @property {HTMLTableRowElement} deletedRow
-             */
-            /**
-             * @param {HTMLElement} element
-             */
-            function eventDeleteMistake(element) {
-                /** @type {DeleteMistakeInfo} */
-                const vars = scriptData.get(element);
-
-                vars.foundMistake.shouldBeAdded = false;
-                vars.deletedRow.remove();
-            }
 
             // +-----------+
             // | Functions |
@@ -3478,11 +3476,13 @@
                             // Add mistake editing info
                             /** @type {EditMistakeInfo} */
                             const info = {
+                                textDiv: textDiv,
                                 sourceText: sourceText,
                                 mistake: mistake,
                                 studentIndex: studentIndex,
                             };
                             scriptData.set(mistakeText, info);
+                            mistakeText.dataset.role = "edit-mistake";
                         }
                     } else {
                         // This is a normal text
@@ -3599,17 +3599,13 @@
                 };
                 scriptData.set(newMistakeButton, info);
                 scriptData.set(textDiv, info);
+                newMistakeButton.dataset.role = "new-mistake";
+                textDiv.dataset.role = "new-mistake-keyboard";
 
                 // Updating the last student index
                 textDiv.addEventListener("focus", function (event) {
                     mainLastStudentIndex = studentIndex;
                 });
-
-                // Autofocusing the last student
-                if (studentIndex === mainLastStudentIndex) {
-                    textDiv.focus();
-                    window.scroll(0, scenes.main.legend.offsetTop - 4);
-                }
             }
 
             function updateMain() {
@@ -3718,12 +3714,13 @@
                         true,
                     );
 
-                    /** @type {DeleteMistakeInfo} */
+                    /** @type {RemoveMistakeFromTableInfo} */
                     const info = {
                         foundMistake: mistakes[i],
                         deletedRow: row,
                     };
                     scriptData.set(deleteButton, info);
+                    deleteButton.dataset.role = "delete-mistake-from-table";
                 });
 
                 // Set cancel button's behaviour
@@ -3737,6 +3734,7 @@
                                 m.mistake,
                             );
                             project.translations[m.studentIndex].mistakes.splice(index, 1);
+                            updateStudentTranslation(m.studentIndex);
                         });
                     removeChildNodes(scenes.cancelMistake.table);
                     scenes.cancelMistake.cancelButton.style.display = "none";
@@ -4142,7 +4140,15 @@
                 // Scene-specific actions
                 switch (targetScene) {
                     case "main":
-                        updateMain();
+                        if (mainLastStudentIndex) {
+                            /** @type {HTMLDivElement} */
+                            const textDiv = element(`#student${mainLastStudentIndex}`);
+
+                            if (textDiv) {
+                                textDiv.focus();
+                                window.scroll(0, scenes.main.legend.offsetTop - 4);
+                            }
+                        }
                         break;
                     case "add-mistake":
                         /** @type {HTMLInputElement} */
@@ -4351,6 +4357,7 @@
             updateItemsPerPageMax();
             updateMainParagraphsList();
             updateEditor();
+            updateMain();
         </script>
     </body>
 </html>
