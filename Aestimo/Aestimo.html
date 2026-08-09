@@ -588,7 +588,13 @@
                 white-space: pre-wrap;
                 padding: 0px 2px;
                 margin: 0px;
+                cursor: default;
+            }
+
+            .mistake-info {
                 cursor: help;
+                user-select: none;
+                -webkit-user-select: none;
             }
 
             .mistake-info:focus::after,
@@ -2029,6 +2035,13 @@
              * @property {HTMLTableRowElement} deletedRow
              */
 
+            /** @typedef EditStudentInfo
+             * @property {number} studentIndex
+             * @property {HTMLTextAreaElement} studentNameText
+             * @property {HTMLTextAreaElement} translationText
+             * @property {HTMLTableCellElement} paragraphCountCell
+             */
+
             // +-----------+
             // | Constants |
             // +-----------+
@@ -2659,6 +2672,7 @@
                 addMistake: function () {
                     /** @type {AddMistakeInfo} */
                     const data = scriptData.get(scenes.addMistake.addButton);
+                    if (!data) return;
 
                     newMistake.comment = scenes.addMistake.mistakeComment.value;
                     newMistake.type = getRadioInputValue("mistake-type");
@@ -2740,7 +2754,7 @@
                     scenes.addMistake.mistakeComment.value = "";
                     switchScene("add-mistake");
                 },
-                /** * @param {HTMLElement} element */
+                /** * @param {HTMLSpanElement} element */
                 editMistake: function (element) {
                     /** @type {EditMistakeInfo} */
                     const data = scriptData.get(element);
@@ -2786,13 +2800,67 @@
 
                     switchScene("edit-mistake");
                 },
-                /** * @param {HTMLElement} element */
+                /** * @param {HTMLButtonElement} element */
                 deleteMistakeFromTable: function (element) {
                     /** @type {RemoveMistakeFromTableInfo} */
                     const data = scriptData.get(element);
+                    if (!data) return;
 
                     data.foundMistake.shouldBeAdded = false;
                     data.deletedRow.remove();
+                },
+                /** * @param {HTMLTextAreaElement} element */
+                editTranslation: function (element) {
+                    /** @type {EditStudentInfo} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
+                    // Rewrite the translation
+                    project.translations[data.studentIndex].text = element.value;
+
+                    // Recalculate paragraphs number
+                    /** @type {number} */
+                    const pars = getParagraphsCount(element.value);
+                    data.paragraphCountCell.textContent = pars;
+
+                    if (pars !== sourceParaCount) {
+                        data.paragraphCountCell.classList.add("disabled");
+                    } else {
+                        data.paragraphCountCell.classList.remove("disabled");
+                    }
+                },
+                /** * @param {HTMLTextAreaElement} element */
+                renameStudent: function (element) {
+                    /** @type {EditStudentInfo} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
+                    project.translations[data.studentIndex].student = element.value;
+                    sortStudentsAlphabetically();
+                    updateEditor();
+                },
+                /** * @param {HTMLButtonElement} element */
+                deleteStudent: function (element) {
+                    /** @type {EditStudentInfo} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
+                    scenes.deleteStudent.studentName.textContent = data.studentNameText.value;
+                    scenes.deleteStudent.deleteButton.onclick = function (event) {
+                        project.translations.splice(data.studentIndex, 1);
+                        updateItemsPerPageMax();
+                        updateEditor();
+                        switchScene(".");
+                    };
+                    switchScene("deleting-student");
+                },
+                /** * @param {HTMLTableCellElement} element */
+                copyMark: function (element) {
+                    /** @type {Mark} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
+                    navigator.clipboard.writeText(data.number);
                 },
             };
 
@@ -3013,6 +3081,12 @@
                     case "delete-mistake-from-table":
                         functions.deleteMistakeFromTable(target);
                         return;
+                    case "delete-student":
+                        functions.deleteStudent(target);
+                        return;
+                    case "copy-mark":
+                        functions.copyMark(target);
+                        return;
                 }
             });
 
@@ -3076,6 +3150,22 @@
             // Toggling default sounds
             scenes.settings.defaultSounds.addEventListener("change", function (event) {
                 localStorage.setItem("default-sounds", this.checked);
+            });
+
+            // Editor events
+            scenes.editor.translations.addEventListener("change", function (event) {
+                /** @type {HTMLElement} */
+                const target = event.target;
+
+                // Role-specific behaviour
+                switch (target.dataset.role) {
+                    case "edit-translation":
+                        functions.editTranslation(target);
+                        return;
+                    case "rename-student":
+                        functions.renameStudent(target);
+                        return;
+                }
             });
 
             // Student selection (results)
@@ -3210,7 +3300,7 @@
 
                 subset.forEach((t, i) => {
                     /** @type {number} */
-                    const studentId =
+                    const studentIndex =
                         project.editorPage * +scenes.editor.itemsPerPageInput.value + i;
 
                     /** @type {HTMLTableRowElement} */
@@ -3269,43 +3359,22 @@
                         paragraphs.classList.add("disabled");
                     }
 
-                    // Events
-                    //
-                    // Translation changes
-                    translationText.addEventListener("change", function (event) {
-                        // Rewrite the translation
-                        project.translations[studentId].text = this.value;
+                    /** @type {EditStudentInfo} */
+                    const data = {
+                        studentIndex: studentIndex,
+                        studentNameText: studentName,
+                        translationText: translationText,
+                        paragraphCountCell: paragraphs,
+                    };
 
-                        // Recalculate paragraphs number
-                        /** @type {number} */
-                        const pars = getParagraphsCount(this.value);
-                        paragraphs.textContent = pars;
+                    translationText.dataset.role = "edit-translation";
+                    scriptData.set(translationText, data);
 
-                        if (pars !== sourceParaCount) {
-                            paragraphs.classList.add("disabled");
-                        } else {
-                            paragraphs.classList.remove("disabled");
-                        }
-                    });
+                    studentName.dataset.role = "rename-student";
+                    scriptData.set(studentName, data);
 
-                    // Renaming a student
-                    studentName.addEventListener("change", function (event) {
-                        project.translations[studentId].student = this.value;
-                        sortStudentsAlphabetically();
-                        updateEditor();
-                    });
-
-                    // Deleting a student
-                    studentDelButton.addEventListener("click", function (event) {
-                        scenes.deleteStudent.studentName.textContent = studentName.value;
-                        scenes.deleteStudent.deleteButton.onclick = function (event) {
-                            project.translations.splice(studentId, 1);
-                            updateItemsPerPageMax();
-                            updateEditor();
-                            switchScene(".");
-                        };
-                        switchScene("deleting-student");
-                    });
+                    studentDelButton.dataset.role = "delete-student";
+                    scriptData.set(studentDelButton, data);
                 });
             }
 
@@ -3772,9 +3841,9 @@
                     const markCell = newChild(row, "td");
                     markCell.classList.add("mark-cell");
                     markCell.textContent = `${mark.number} (${mark.letter})`;
-                    markCell.addEventListener("click", function (event) {
-                        navigator.clipboard.writeText(mark.number);
-                    });
+                    markCell.dataset.role = "copy-mark";
+
+                    scriptData.set(markCell, mark);
                 });
             }
 
@@ -4173,6 +4242,7 @@
                         break;
                     case "results":
                         updateResults();
+                        scenes.results.studentSelect.value = resultStudentIndex;
                         break;
                 }
             }
