@@ -578,6 +578,10 @@
                 align-content: center;
             }
 
+            .buttons-fieldset > button {
+                width: 100%;
+            }
+
             .mistake-text {
                 display: inline;
                 background-color: var(--colour-tooltip);
@@ -701,11 +705,6 @@
                 text-align: center;
                 font-weight: 600;
                 margin: 0;
-                width: 100%;
-            }
-
-            #main-actions-fieldset > button,
-            #editor-actions-fieldset > button {
                 width: 100%;
             }
 
@@ -929,7 +928,7 @@
             </fieldset>
 
             <!-- Actions menu -->
-            <fieldset id="main-actions-fieldset">
+            <fieldset class="buttons-fieldset">
                 <legend data-tk="actions-menu">Actions menu</legend>
 
                 <button data-tk="main-actions-find" data-scene="find-mistake">Find mistake</button>
@@ -1499,7 +1498,7 @@
             </fieldset>
 
             <!-- Actions menu -->
-            <fieldset id="editor-actions-fieldset">
+            <fieldset class="buttons-fieldset">
                 <legend data-tk="actions-menu">Actions menu</legend>
 
                 <button data-tk="add-students" data-scene="adding-students">Add students</button>
@@ -1531,10 +1530,14 @@
                 <table style="table-layout: auto">
                     <thead data-tk="results-group-table-header">
                         <tr>
-                            <th>Student</th>
+                            <th class="tooltip-parent"
+                                >Student<span class="tooltip"
+                                    >Click a student to go to their results</span
+                                ></th
+                            >
                             <th class="tooltip-parent"
                                 >Mark<span class="tooltip"
-                                    >Click a cell to copy the mark to the clipboard</span
+                                    >Click a mark to copy it to the clipboard</span
                                 ></th
                             >
                         </tr>
@@ -1546,7 +1549,9 @@
 
             <!-- Individual results -->
             <fieldset>
-                <legend data-tk="results-individual">Individual results</legend>
+                <legend id="results-individual-student-legend" data-tk="results-individual"
+                    >Individual results</legend
+                >
 
                 <table>
                     <thead>
@@ -1599,6 +1604,22 @@
                         </tr>
                     </tfoot>
                 </table>
+            </fieldset>
+
+            <!-- Actions menu -->
+            <fieldset class="buttons-fieldset">
+                <legend data-tk="actions-menu">Actions menu</legend>
+
+                <button data-tk="results-back-to-check" data-scene="main">Back to check</button>
+
+                <a
+                    id="results-save"
+                    data-tk="results-save"
+                    href=""
+                    download="Results.txt"
+                    class="pseudo-button"
+                    >Save the results</a
+                >
             </fieldset>
         </div>
 
@@ -1784,6 +1805,8 @@
                         ><b>Immediate context</b> = everything before the analysed sentence + this
                         sentence + one sentence after it.</li
                     >
+
+                    <li><b>Repeated mistake</b> counts as one mistake.</li>
                 </ol>
             </fieldset>
         </div>
@@ -1853,6 +1876,8 @@
                     self: element("#results"),
                     /** @type {HTMLTableSectionElement} */
                     groupTable: element("#results-group-table"),
+                    /** @type {HTMLLegendElement} */
+                    studentLegend: element("#results-individual-student-legend"),
                     /** @type {HTMLSelectElement} */
                     studentSelect: element("#results-individual-student-select"),
                     /** @type {HTMLTableSectionElement} */
@@ -1865,6 +1890,8 @@
                     mistakesWeight: element("#results-individual-mistakes-weight"),
                     /** @type {HTMLSpanElement} */
                     mark: element("#results-individual-mark"),
+                    /** @type {HTMLAnchorElement} */
+                    saveResults: element("#results-save"),
                 },
                 settings: {
                     /** @type {HTMLDivElement} */
@@ -2187,8 +2214,9 @@
                         "results-group": ["Group results"],
                         "results-group-table-header": [
                             "Student",
+                            "Click a student to go to their results",
                             "Mark",
-                            "Click a cell to copy the mark to the clipboard",
+                            "Click a mark to copy it to the clipboard",
                         ],
                         "results-individual": ["Individual results"],
                         "results-individual-stats": [
@@ -2197,6 +2225,8 @@
                             "Weight of mistakes: ",
                             "Mark: ",
                         ],
+                        "results-back-to-check": ["Back to check"],
+                        "results-save": ["Save the results"],
                         "sound-settings": ["Sound"],
                         volume: ["Sound volume"],
                         "default-sounds": ["Default sounds (buttons, inputs, etc.)"],
@@ -2292,6 +2322,8 @@
                             " = 1800 / total number of characters in the original text.",
                             "Immediate context",
                             " = everything before the analysed sentence + this sentence + one sentence after it.",
+                            "Repeated mistake",
+                            " counts as one mistake.",
                         ],
                     },
                     placeholders: {
@@ -2399,8 +2431,9 @@
                         "results-group": ["Итоги группы"],
                         "results-group-table-header": [
                             "Учащийся",
+                            "Нажмите по учащемуся, чтобы перейти к его итогам",
                             "Оценка",
-                            "Нажмите на клетку для копирования оценки в буфер обмена",
+                            "Нажмите по оценке, чтобы скопировать её в буфер обмена",
                         ],
                         "results-individual": ["Личные итоги"],
                         "results-individual-stats": [
@@ -2409,6 +2442,8 @@
                             "Вес ошибок: ",
                             "Оценка: ",
                         ],
+                        "results-back-to-check": ["Назад к проверке"],
+                        "results-save": ["Сохранить результаты"],
                         "sound-settings": ["Звук"],
                         volume: ["Громкость звука"],
                         "default-sounds": ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
@@ -2504,6 +2539,8 @@
                             " = 1800 / общее число знаков в исходном тексте.",
                             "Ближайший контекст",
                             " = всё до анализируемого предложения + это предложение + одно предложение после него.",
+                            "Повторяющаяся ошибка",
+                            " считается за одну.",
                         ],
                     },
                     placeholders: {
@@ -2517,18 +2554,13 @@
                     /** @type {Object.<string, string>} */
                     const savedColours = {};
 
-                    Object.keys(allColours).forEach((c) => {
+                    for (const c in allColours) {
                         savedColours[c] = document.body.style.getPropertyValue(c);
-                    });
-
-                    /** @type {string} */
-                    const data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
-                    scenes.settings.saveColours.href = `data:text/plain;charset=utf-8,${data}`;
+                    }
+                    setDownloadedContent(scenes.settings.saveColours, savedColours);
                 },
                 saveProject: function () {
-                    /** @type {string} */
-                    const data = encodeURIComponent(JSON.stringify(project, undefined, 4));
-                    scenes.menu.saveProject.href = `data:text/plain;charset=utf-8,${data}`;
+                    setDownloadedContent(scenes.menu.saveProject, project);
                 },
                 defaultSettings: function () {
                     // Volume
@@ -2691,6 +2723,39 @@
                     });
                     updateStudentTranslation(data.studentIndex);
                     switchScene(".");
+                },
+                saveResults: function () {
+                    /** @type {string} */
+                    let results = "";
+
+                    /** @type {string} */
+                    let table = "\n";
+                    /** @type {string} */
+                    let details = "";
+
+                    project.translations.forEach((t, i) => {
+                        /** @type {Mark} */
+                        const mark = getMark(t.mistakes);
+                        table += `${i + 1}. ${t.student} - ${mark.number} (${mark.letter})\n`;
+
+                        details += `\t${t.student}:\n`;
+                        details += `${t.text}\n`;
+
+                        t.mistakes.forEach((m, j) => {
+                            details += `${j + 1}. ${m.source} [${m.type} | ${m.subtype} | ${getText("mistake-text-meaning-title")}: ${m.meaning.toLowerCase()}].\n`;
+                        });
+                    });
+
+                    results += getText("title");
+                    results += `\n${getText("author")}\n\n`;
+                    results += `\t${getText("source-title")}:\n`;
+                    results += project.source;
+                    results += `\n\t${getText("results-group")}:\n`;
+
+                    results += table;
+                    results += details;
+
+                    setDownloadedContent(scenes.results.saveResults, results);
                 },
                 /** * @param {HTMLElement} element */
                 newMistake: function (element) {
@@ -2861,6 +2926,17 @@
                     if (!data) return;
 
                     navigator.clipboard.writeText(data.number);
+                },
+                /** * @param {HTMLTableCellElement} element */
+                showResults: function (element) {
+                    /** @type {number} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
+                    window.scroll(0, scenes.results.studentLegend.offsetTop - 4);
+                    scenes.results.studentSelect.value = data;
+                    resultStudentIndex = +data;
+                    updateIndividualResults();
                 },
             };
 
@@ -3068,6 +3144,10 @@
                     case scenes.addMistake.addButton:
                         functions.addMistake();
                         return;
+                    // Save results button
+                    case scenes.results.saveResults:
+                        functions.saveResults();
+                        return;
                 }
 
                 // Role-specific behaviour
@@ -3086,6 +3166,9 @@
                         return;
                     case "copy-mark":
                         functions.copyMark(target);
+                        return;
+                    case "show-results":
+                        functions.showResults(target);
                         return;
                 }
             });
@@ -3117,7 +3200,7 @@
                     try {
                         /** @type {string} */
                         const name = scenes.menu.loadProjectInput.files[0].name;
-                        scenes.menu.saveProject.download = `${name}`;
+                        scenes.menu.saveProject.download = name;
 
                         project = JSON.parse(content);
                         project.mainPage = 0;
@@ -3821,12 +3904,14 @@
                     option.value = i;
                     option.textContent = `${i + 1}. ${t.student}`;
                 });
+
+                scenes.results.studentSelect.value = resultStudentIndex;
             }
 
             function updateGroupResults() {
                 removeChildNodes(scenes.results.groupTable);
 
-                project.translations.forEach((t) => {
+                project.translations.forEach((t, i) => {
                     /** @type {Mark} */
                     const mark = getMark(t.mistakes);
 
@@ -3835,14 +3920,16 @@
 
                     /** @type {HTMLTableCellElement} */
                     const studentCell = newChild(row, "td");
+                    studentCell.style.cursor = "pointer";
                     studentCell.textContent = t.student;
+                    studentCell.dataset.role = "show-results";
+                    scriptData.set(studentCell, i);
 
                     /** @type {HTMLTableCellElement} */
                     const markCell = newChild(row, "td");
                     markCell.classList.add("mark-cell");
                     markCell.textContent = `${mark.number} (${mark.letter})`;
                     markCell.dataset.role = "copy-mark";
-
                     scriptData.set(markCell, mark);
                 });
             }
@@ -3979,6 +4066,18 @@
                 else letter = "F";
 
                 return mark;
+            }
+
+            /**
+             * @param {HTMLAnchorElement} anchor
+             * @param {any} value
+             * @param {Function} [replacer=undefined]
+             * @param {number} [space=4]
+             */
+            function setDownloadedContent(anchor, value, replacer = undefined, space = 4) {
+                /** @type {string} */
+                const data = encodeURIComponent(JSON.stringify(value, replacer, space));
+                anchor.href = `data:text/plain;charset=utf-8,${data}`;
             }
 
             /**
@@ -4196,11 +4295,10 @@
                 }
 
                 // Try to restore a previously saved offset
-                if (sceneOffsets[targetScene]) {
-                    window.scroll(
-                        sceneOffsets[targetScene].x || 0,
-                        sceneOffsets[targetScene].y || 0,
-                    );
+                try {
+                    window.scroll(sceneOffsets[targetScene].x, sceneOffsets[targetScene].y);
+                } catch (error) {
+                    window.scroll(0, 0);
                 }
 
                 // Keep track of the current scene
@@ -4242,7 +4340,6 @@
                         break;
                     case "results":
                         updateResults();
-                        scenes.results.studentSelect.value = resultStudentIndex;
                         break;
                 }
             }
