@@ -564,11 +564,6 @@
                 border-left: none;
             }
 
-            .shadow-border {
-                border: none;
-                box-shadow: inset 0px 0px 4px var(--colour-border);
-            }
-
             .bold-text {
                 font-weight: 600;
             }
@@ -607,6 +602,7 @@
                 background-color: var(--colour-hovered-bgr);
                 color: var(--colour-hovered-fgr);
                 border: 2px dashed var(--colour-hovered-border);
+                white-space: normal;
                 text-align: center;
                 font-weight: 600;
                 padding: 2px 4px;
@@ -1441,7 +1437,7 @@
                                 <textarea
                                     id="source-text"
                                     autocomplete="off"
-                                    class="table-text shadow-border"
+                                    class="table-text"
                                 ></textarea>
                             </td>
                         </tr>
@@ -1549,6 +1545,18 @@
                 </table>
             </fieldset>
 
+            <!-- Source text -->
+            <fieldset>
+                <legend data-tk="source-title">Source text</legend>
+
+                <textarea
+                    id="results-source-text"
+                    autocomplete="off"
+                    class="table-text"
+                    style="height: 50vh"
+                ></textarea>
+            </fieldset>
+
             <!-- Individual results -->
             <fieldset>
                 <legend id="results-individual-student-legend" data-tk="results-individual"
@@ -1612,7 +1620,7 @@
             <fieldset class="buttons-fieldset">
                 <legend data-tk="actions-menu">Actions menu</legend>
 
-                <button data-tk="results-back-to-check" data-scene="main">Back to check</button>
+                <button data-tk="results-go-to-check" data-scene="main">Go to check</button>
 
                 <a
                     id="results-save"
@@ -1878,6 +1886,8 @@
                     self: element("#results"),
                     /** @type {HTMLTableSectionElement} */
                     groupTable: element("#results-group-table"),
+                    /** @type {HTMLTextAreaElement} */
+                    sourceText: element("#results-source-text"),
                     /** @type {HTMLLegendElement} */
                     studentLegend: element("#results-individual-student-legend"),
                     /** @type {HTMLSelectElement} */
@@ -2046,10 +2056,11 @@
              */
 
             /** @typedef AddMistakeInfo
+             * @property {number} studentIndex
+             * @property {string} translation
+             * @property {number} paragraph
              * @property {HTMLTextAreaElement} textDiv
              * @property {Work} work
-             * @property {string} translation
-             * @property {number} studentIndex
              */
 
             /** @typedef EditMistakeInfo
@@ -2223,7 +2234,7 @@
                             "Weight of mistakes: ",
                             "Mark: ",
                         ],
-                        "results-back-to-check": ["Back to check"],
+                        "results-go-to-check": ["Go to check"],
                         "results-save": ["Save the results"],
                         "sound-settings": ["Sound"],
                         volume: ["Sound volume"],
@@ -2436,7 +2447,7 @@
                             "Вес ошибок: ",
                             "Оценка: ",
                         ],
-                        "results-back-to-check": ["Назад к проверке"],
+                        "results-go-to-check": ["Перейти к проверке"],
                         "results-save": ["Сохранить результаты"],
                         "sound-settings": ["Звук"],
                         volume: ["Громкость звука"],
@@ -2574,9 +2585,9 @@
                 },
                 findMistake: function () {
                     if (!scenes.findMistake.query.value) return;
+                    if (!project.translations) fixProject();
                     removeChildNodes(scenes.findMistake.table);
                     scenes.findMistake.addButton.style.display = "none";
-                    if (!project.translations) return;
 
                     /** @type {MistakeSearchResult[]} */
                     const mistakes = [];
@@ -2670,11 +2681,11 @@
                         );
 
                         /** @type {RemoveMistakeFromTableInfo} */
-                        const info = {
+                        const data = {
                             foundMistake: mistakes[lastFoundMistakeId],
                             deletedRow: row,
                         };
-                        scriptData.set(deleteButton, info);
+                        scriptData.set(deleteButton, data);
                         deleteButton.dataset.role = "delete-mistake-from-table";
                     });
 
@@ -2756,7 +2767,6 @@
                         paragraphs.forEach((p, i) => {
                             /** @type {Mistake[]} */
                             const mistakes = t.mistakes.filter((m) => m.paragraph === i);
-                            if (!mistakes || mistakes.length === 0) return;
 
                             /** @type {Set<number>} */
                             const boundaries = new Set([0, p.length]);
@@ -2805,6 +2815,7 @@
                                         notes += formatter.format(getMistakeWeight(mistake));
                                     } catch (error) {
                                         notes += `${getMistakeWeight(mistake).toFixed(2)}`;
+                                        console.log(error);
                                     }
                                 } else {
                                     student += textSlice;
@@ -2821,6 +2832,7 @@
                             notes += `\n>>> 100 - (${mark.mistakesWeight.toFixed(2)} `;
                             notes += `* ${lengthMult.toFixed(2)} = `;
                             notes += `${(mark.mistakesWeight * lengthMult).toFixed(2)}) = `;
+                            console.log(error);
                         }
                         notes += `${mark.number} (${mark.letter}).\n`;
 
@@ -2837,6 +2849,7 @@
                         results += `${formatter.format(lengthMult)} ---`;
                     } catch (error) {
                         results += `${lengthMult.toFixed(2)} ---`;
+                        console.log(error);
                     }
                     results += `\n\n${wrapText(getText("results-group"))}`;
 
@@ -2890,7 +2903,7 @@
                     }
 
                     newMistake.source = selection.toString();
-                    newMistake.paragraph = project.paragraph;
+                    newMistake.paragraph = data.paragraph;
                     newMistake.startIndex = Math.min(start, end);
                     newMistake.endIndex = Math.max(start, end);
 
@@ -2981,6 +2994,7 @@
                     } else {
                         data.paragraphCountCell.classList.remove("disabled");
                     }
+                    updateMain();
                 },
                 /** * @param {HTMLTextAreaElement} element */
                 renameStudent: function (element) {
@@ -2991,6 +3005,7 @@
                     project.translations[data.studentIndex].student = element.value;
                     sortStudentsAlphabetically();
                     updateEditor();
+                    updateMain();
                 },
                 /** * @param {HTMLButtonElement} element */
                 deleteStudent: function (element) {
@@ -3003,6 +3018,7 @@
                         project.translations.splice(data.studentIndex, 1);
                         updateItemsPerPageMax();
                         updateEditor();
+                        updateMain();
                         switchScene(".");
                     };
                     switchScene("deleting-student");
@@ -3030,9 +3046,9 @@
 
             /** @type {Object.<string, number>} */
             const mistakeTypeWeight = {
-                grammar: 3.75,
+                grammar: 4,
                 vocabulary: 3.5,
-                orthography: 3,
+                orthography: 3.2,
                 punctuation: 2.5,
                 complex: 6.5,
             };
@@ -3058,7 +3074,13 @@
             let formatter = undefined;
 
             /** @type {Project} */
-            let project = {};
+            let project = {
+                source: "",
+                translations: [],
+                paragraph: 0,
+                mainPage: 0,
+                editorPage: 0,
+            };
             /** @type {number} */
             let sourceParaCount = 0;
             /** @type {number} */
@@ -3248,11 +3270,15 @@
                         project.editorPage = 0;
                         fixProject();
                         sortStudentsAlphabetically();
-                        updateItemsPerPageMax();
                         updateMainParagraphsList();
+                        updateItemsPerPageMax();
                         updateEditor();
                         updateMain();
-                        switchScene("editor");
+                        if (project.translations.some((t) => t.mistakes.length > 0)) {
+                            switchScene("results");
+                        } else {
+                            switchScene("editor");
+                        }
                     } catch (error) {
                         alert(`Error while opening the project: ${error}`);
                     }
@@ -3463,11 +3489,11 @@
                     studentCell.classList.add("table-element-container");
 
                     /** @type {HTMLDivElement} */
-                    const studentDiv = newChild(studentCell, "div");
-                    studentDiv.classList.add("student-div");
+                    const cellDiv = newChild(studentCell, "div");
+                    cellDiv.classList.add("student-div");
 
                     /** @type {HTMLButtonElement} */
-                    const studentDelButton = newChild(studentDiv, "button");
+                    const studentDelButton = newChild(cellDiv, "button");
                     studentDelButton.classList.add("student-button", "tooltip-parent");
                     studentDelButton.textContent = "-";
 
@@ -3477,7 +3503,7 @@
                     studentDelTooltip.textContent = getText("deleting-student-confirm");
 
                     /** @type {HTMLTextAreaElement} */
-                    const studentName = newChild(studentDiv, "textarea");
+                    const studentName = newChild(cellDiv, "textarea");
                     studentName.id = `student${i}`;
                     studentName.value = t.student;
                     studentName.autocomplete = "off";
@@ -3680,6 +3706,16 @@
                         // Mistake information and editing
                         if (showInfo) {
                             /** @type {string} */
+                            let mistakeWeight = "0";
+
+                            try {
+                                mistakeWeight = formatter.format(getMistakeWeight(mistake));
+                            } catch (error) {
+                                mistakeWeight = getMistakeWeight(mistake).toFixed(2);
+                                console.log(error);
+                            }
+
+                            /** @type {string} */
                             const info =
                                 getText(mistake.type) +
                                 " | " +
@@ -3689,7 +3725,7 @@
                                 ": " +
                                 getText(mistake.meaning).toLowerCase() +
                                 " | -" +
-                                getMistakeWeight(mistake) +
+                                mistakeWeight +
                                 `${mistake.comment ? ` | ${mistake.comment}` : ""}`;
 
                             mistakeText.classList.add("mistake-info");
@@ -3700,13 +3736,13 @@
                         if (isEditable) {
                             // Add mistake editing info
                             /** @type {EditMistakeInfo} */
-                            const info = {
+                            const data = {
                                 textDiv: textDiv,
                                 sourceText: sourceText,
                                 mistake: mistake,
                                 studentIndex: studentIndex,
                             };
-                            scriptData.set(mistakeText, info);
+                            scriptData.set(mistakeText, data);
                             mistakeText.dataset.role = "edit-mistake";
                         }
                     } else {
@@ -3792,12 +3828,12 @@
                 cell.classList.add("table-element-container");
 
                 /** @type {HTMLDivElement} */
-                const container = newChild(cell, "div");
-                container.classList.add("student-div");
+                const cellDiv = newChild(cell, "div");
+                cellDiv.classList.add("student-div");
 
                 // Button to add a mistake
                 /** @type {HTMLButtonElement} */
-                const newMistakeButton = newChild(container, "button");
+                const newMistakeButton = newChild(cellDiv, "button");
                 newMistakeButton.classList.add("student-button", "tooltip-parent");
                 newMistakeButton.textContent = "+";
 
@@ -3808,7 +3844,7 @@
 
                 // Translation
                 /** @type {HTMLDivElement} */
-                const textDiv = newChild(container, "div");
+                const textDiv = newChild(cellDiv, "div");
                 textDiv.id = `student${studentIndex}`;
                 textDiv.classList.add("rich-text-div", "no-left-border");
                 textDiv.tabIndex = 0;
@@ -3816,16 +3852,18 @@
                 updateStudentTranslation(studentIndex);
 
                 /** @type {AddMistakeInfo} */
-                const info = {
+                const data = {
+                    studentIndex: studentIndex,
+                    translation: translation,
+                    paragraph: project.paragraph,
                     textDiv: textDiv,
                     work: work,
-                    translation: translation,
-                    studentIndex: studentIndex,
                 };
-                scriptData.set(newMistakeButton, info);
-                scriptData.set(textDiv, info);
                 newMistakeButton.dataset.role = "new-mistake";
+                scriptData.set(newMistakeButton, data);
+
                 textDiv.dataset.role = "new-mistake-keyboard";
+                scriptData.set(textDiv, data);
 
                 // Updating the last student index
                 textDiv.addEventListener("focus", function (event) {
@@ -3942,11 +3980,11 @@
                     );
 
                     /** @type {RemoveMistakeFromTableInfo} */
-                    const info = {
+                    const data = {
                         foundMistake: mistakes[i],
                         deletedRow: row,
                     };
-                    scriptData.set(deleteButton, info);
+                    scriptData.set(deleteButton, data);
                     deleteButton.dataset.role = "delete-mistake-from-table";
                 });
 
@@ -3986,6 +4024,7 @@
 
             function updateGroupResults() {
                 removeChildNodes(scenes.results.groupTable);
+                if (!project.translations) return;
 
                 project.translations.forEach((t, i) => {
                     /** @type {Mark} */
@@ -4012,6 +4051,7 @@
 
             function updateIndividualResults() {
                 removeChildNodes(scenes.results.translation);
+                if (!project.translations) return;
 
                 /** @type {Work} */
                 const work = project.translations[resultStudentIndex];
@@ -4032,10 +4072,40 @@
                     textCell.classList.add("table-element-container");
 
                     /** @type {HTMLDivElement} */
-                    const textDiv = newChild(textCell, "div");
-                    textDiv.classList.add("rich-text-div");
+                    const cellDiv = newChild(textCell, "div");
+                    cellDiv.classList.add("student-div");
+
+                    // Button to add a mistake
+                    /** @type {HTMLButtonElement} */
+                    const newMistakeButton = newChild(cellDiv, "button");
+                    newMistakeButton.classList.add("student-button", "tooltip-parent");
+                    newMistakeButton.textContent = "+";
+
+                    /** @type {HTMLSpanElement} */
+                    const newMistakeTooltip = newChild(newMistakeButton, "span");
+                    newMistakeTooltip.classList.add("tooltip");
+                    newMistakeTooltip.textContent = getText("add-mistake-button");
+
+                    /** @type {HTMLDivElement} */
+                    const textDiv = newChild(cellDiv, "div");
+                    textDiv.classList.add("rich-text-div", "no-left-border");
+                    textDiv.tabIndex = 0;
 
                     highlightMistakes(textDiv, p, mistakes, resultStudentIndex, true, true);
+
+                    /** @type {AddMistakeInfo} */
+                    const data = {
+                        studentIndex: resultStudentIndex,
+                        translation: p,
+                        paragraph: i,
+                        textDiv: textDiv,
+                        work: work,
+                    };
+                    newMistakeButton.dataset.role = "new-mistake";
+                    scriptData.set(newMistakeButton, data);
+
+                    textDiv.dataset.role = "new-mistake-keyboard";
+                    scriptData.set(textDiv, data);
                 });
 
                 /** @type {number} */
@@ -4069,17 +4139,36 @@
             }
 
             function updateResults() {
+                scenes.results.sourceText.value = project.source;
                 updateResultsSelect();
                 updateGroupResults();
                 updateIndividualResults();
             }
 
+            /**
+             * @returns {boolean}
+             */
+            function isProjectValid() {
+                if (!project.source) return false;
+                if (!project.translations) return false;
+                if (project.translations.length === 0) return false;
+                if (project.paragraph === undefined) return false;
+                if (project.mainPage === undefined) return false;
+                if (project.editorPage === undefined) return false;
+
+                for (const t of project.translations) {
+                    if (!t.student) return false;
+                    if (!t.text) return false;
+                }
+                return true;
+            }
+
             function fixProject() {
                 if (!project.source) project.source = "";
-                if (!project.paragraph) project.paragraph = 0;
-                if (!project.mainPage) project.mainPage = 0;
-                if (!project.editorPage) project.editorPage = 0;
                 if (!project.translations) project.translations = [];
+                if (project.paragraph === undefined) project.paragraph = 0;
+                if (project.mainPage === undefined) project.mainPage = 0;
+                if (project.editorPage === undefined) project.editorPage = 0;
 
                 project.translations.forEach((t, i) => {
                     if (!t.student) t.student = "";
@@ -4149,7 +4238,7 @@
                 else if (mark.number > 55) mark.letter = "D";
                 else if (mark.number > 49) mark.letter = "E";
                 else if (mark.number > 19) mark.letter = "FX";
-                else letter = "F";
+                else mark.letter = "F";
 
                 return mark;
             }
@@ -4362,6 +4451,12 @@
                         visitedScenes.push("menu");
                     }
                 } else {
+                    // Force the stage to editor if the project isn't ready
+                    if (requestedScene === "main" || requestedScene === "results") {
+                        if (!isProjectValid()) {
+                            requestedScene = "editor";
+                        }
+                    }
                     visitedScenes.push(requestedScene);
                 }
 
