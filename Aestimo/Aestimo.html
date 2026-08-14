@@ -1829,175 +1829,175 @@
             const scenes = {
                 menu: {
                     /** @type {HTMLDivElement} */
-                    self: element("#menu"),
+                    self: getElement("#menu"),
                     /** @type {HTMLSelectElement} */
-                    languageSelect: element("#lang"),
+                    languageSelect: getElement("#lang"),
                     /** @type {HTMLButtonElement} */
-                    loadProjectButton: element("#load-project-button"),
+                    loadProjectButton: getElement("#load-project-button"),
                     /** @type {HTMLInputElement} */
-                    loadProjectInput: element("#load-project-input"),
+                    loadProjectInput: getElement("#load-project-input"),
                     /** @type {HTMLAnchorElement} */
-                    saveProject: element("#save-project"),
+                    saveProject: getElement("#save-project"),
                     /** @type {HTMLParagraphElement} */
-                    author: element("#author"),
+                    author: getElement("#author"),
                 },
                 main: {
                     /** @type {HTMLDivElement} */
-                    self: element("#main"),
+                    self: getElement("#main"),
                     /** @type {HTMLInputElement} */
-                    itemsPerPageInput: element("#main-students-per-page-input"),
+                    itemsPerPageInput: getElement("#main-students-per-page-input"),
                     /** @type {HTMLInputElement} */
-                    showNames: element("#main-show-names-input"),
+                    showNames: getElement("#main-show-names-input"),
                     /** @type {HTMLLegendElement} */
-                    legend: element("#main-translations-legend"),
+                    legend: getElement("#main-translations-legend"),
                     /** @type {HTMLSelectElement} */
-                    paragraphSelect: element("#main-para-select"),
+                    paragraphSelect: getElement("#main-para-select"),
                     /** @type {HTMLTextAreaElement} */
-                    sourceParagraph: element("#main-source-paragraph"),
+                    sourceParagraph: getElement("#main-source-paragraph"),
                     /** @type {HTMLTableSectionElement} */
-                    translations: element("#main-translations-list"),
+                    translations: getElement("#main-translations-list"),
                     /** @type {HTMLTableSectionElement} */
-                    footer: element("#main-footer"),
+                    footer: getElement("#main-footer"),
                     /** @type {HTMLSelectElement} */
-                    pageSelect: element("#main-page-select"),
+                    pageSelect: getElement("#main-page-select"),
                 },
                 editor: {
                     /** @type {HTMLDivElement} */
-                    self: element("#editor"),
+                    self: getElement("#editor"),
                     /** @type {HTMLTextAreaElement} */
-                    sourceText: element("#source-text"),
+                    sourceText: getElement("#source-text"),
                     /** @type {HTMLTableCellElement} */
-                    sourceParaCountText: element("#source-para-count"),
+                    sourceParaCountText: getElement("#source-para-count"),
                     /** @type {HTMLTableSectionElement} */
-                    translations: element("#editor-translations-list"),
+                    translations: getElement("#editor-translations-list"),
                     /** @type {HTMLTableSectionElement} */
-                    footer: element("#editor-footer"),
+                    footer: getElement("#editor-footer"),
                     /** @type {HTMLSelectElement} */
-                    pageSelect: element("#editor-page-select"),
+                    pageSelect: getElement("#editor-page-select"),
                     /** @type {HTMLInputElement} */
-                    itemsPerPageInput: element("#editor-students-per-page-input"),
+                    itemsPerPageInput: getElement("#editor-students-per-page-input"),
                     /** @type {HTMLButtonElement} */
-                    fixSource: element("#fix-source"),
+                    fixSource: getElement("#fix-source"),
                     /** @type {HTMLButtonElement} */
-                    fixTranslations: element("#fix-translations"),
+                    fixTranslations: getElement("#fix-translations"),
                 },
                 results: {
                     /** @type {HTMLDivElement} */
-                    self: element("#results"),
+                    self: getElement("#results"),
                     /** @type {HTMLTableSectionElement} */
-                    groupTable: element("#results-group-table"),
+                    groupTable: getElement("#results-group-table"),
                     /** @type {HTMLTextAreaElement} */
-                    sourceText: element("#results-source-text"),
+                    sourceText: getElement("#results-source-text"),
                     /** @type {HTMLLegendElement} */
-                    studentLegend: element("#results-individual-student-legend"),
+                    studentLegend: getElement("#results-individual-student-legend"),
                     /** @type {HTMLSelectElement} */
-                    studentSelect: element("#results-individual-student-select"),
+                    studentSelect: getElement("#results-individual-student-select"),
                     /** @type {HTMLTableSectionElement} */
-                    translation: element("#results-individual-translation"),
+                    translation: getElement("#results-individual-translation"),
                     /** @type {HTMLSpanElement} */
-                    lengthMultiplier: element("#results-individual-length-mult"),
+                    lengthMultiplier: getElement("#results-individual-length-mult"),
                     /** @type {HTMLSpanElement} */
-                    mistakesNumber: element("#results-individual-mistakes-number"),
+                    mistakesNumber: getElement("#results-individual-mistakes-number"),
                     /** @type {HTMLSpanElement} */
-                    mistakesWeight: element("#results-individual-mistakes-weight"),
+                    mistakesWeight: getElement("#results-individual-mistakes-weight"),
                     /** @type {HTMLSpanElement} */
-                    mark: element("#results-individual-mark"),
+                    mark: getElement("#results-individual-mark"),
                     /** @type {HTMLAnchorElement} */
-                    saveResults: element("#results-save"),
+                    saveResults: getElement("#results-save"),
                 },
                 settings: {
                     /** @type {HTMLDivElement} */
-                    self: element("#settings"),
+                    self: getElement("#settings"),
                     /** @type {HTMLUListElement} */
-                    colours: element("#colours"),
+                    colours: getElement("#colours"),
                     /** @type {HTMLInputElement} */
-                    colourLoader: element("#colour-loader"),
+                    colourLoader: getElement("#colour-loader"),
                     /** @type {HTMLButtonElement} */
-                    loadColours: element("#load-colours"),
+                    loadColours: getElement("#load-colours"),
                     /** @type {HTMLAnchorElement} */
-                    saveColours: element("#save-colours"),
+                    saveColours: getElement("#save-colours"),
                     /** @type {HTMLInputElement} */
-                    volumeInput: element("#set-volume"),
+                    volumeInput: getElement("#set-volume"),
                     /** @type {HTMLInputElement} */
-                    defaultSounds: element("#set-def-sounds"),
+                    defaultSounds: getElement("#set-def-sounds"),
                     /** @type {HTMLButtonElement} */
-                    defaultSettings: element("#default-settings"),
+                    defaultSettings: getElement("#default-settings"),
                 },
                 addMistake: {
                     /** @type {HTMLDivElement} */
-                    self: element("#add-mistake"),
+                    self: getElement("#add-mistake"),
                     /** @type {HTMLButtonElement} */
-                    addButton: element("#add-mistake-button"),
+                    addButton: getElement("#add-mistake-button"),
                     /** @type {HTMLDivElement} */
-                    mistakeSource: element("#mistake-div"),
+                    mistakeSource: getElement("#mistake-div"),
                     /** @type {HTMLInputElement} */
-                    mistakeComment: element("#mistake-comment-input"),
+                    mistakeComment: getElement("#mistake-comment-input"),
                 },
                 editMistake: {
                     /** @type {HTMLDivElement} */
-                    self: element("#edit-mistake"),
+                    self: getElement("#edit-mistake"),
                     /** @type {HTMLDivElement} */
-                    context: element("#edit-mistake-context"),
+                    context: getElement("#edit-mistake-context"),
                     /** @type {HTMLSelectElement} */
-                    type: element("#edit-mistake-type"),
+                    type: getElement("#edit-mistake-type"),
                     /** @type {HTMLSelectElement} */
-                    subtype: element("#edit-mistake-subtype"),
+                    subtype: getElement("#edit-mistake-subtype"),
                     /** @type {HTMLSelectElement} */
-                    meaning: element("#edit-mistake-meaning"),
+                    meaning: getElement("#edit-mistake-meaning"),
                     /** @type {HTMLInputElement} */
-                    comment: element("#edit-mistake-comment"),
+                    comment: getElement("#edit-mistake-comment"),
                     /** @type {HTMLButtonElement} */
-                    delete: element("#edit-mistake-delete"),
+                    delete: getElement("#edit-mistake-delete"),
                 },
                 findMistake: {
                     /** @type {HTMLDivElement} */
-                    self: element("#find-mistake"),
+                    self: getElement("#find-mistake"),
                     /** @type {HTMLSelectElement} */
-                    mode: element("#find-mistake-mode"),
+                    mode: getElement("#find-mistake-mode"),
                     /** @type {HTMLInputElement} */
-                    query: element("#find-mistake-query-input"),
+                    query: getElement("#find-mistake-query-input"),
                     /** @type {HTMLSelectElement} */
-                    type: element("#find-mistake-type"),
+                    type: getElement("#find-mistake-type"),
                     /** @type {HTMLSelectElement} */
-                    subtype: element("#find-mistake-subtype"),
+                    subtype: getElement("#find-mistake-subtype"),
                     /** @type {HTMLSelectElement} */
-                    meaning: element("#find-mistake-meaning"),
+                    meaning: getElement("#find-mistake-meaning"),
                     /** @type {HTMLInputElement} */
-                    comment: element("#find-mistake-comment"),
+                    comment: getElement("#find-mistake-comment"),
                     /** @type {HTMLButtonElement} */
-                    searchButton: element("#find-mistake-search"),
+                    searchButton: getElement("#find-mistake-search"),
                     /** @type {HTMLTableSectionElement} */
-                    table: element("#find-mistake-table-body"),
+                    table: getElement("#find-mistake-table-body"),
                     /** @type {HTMLButtonElement} */
-                    addButton: element("#find-mistake-table-add"),
+                    addButton: getElement("#find-mistake-table-add"),
                 },
                 cancelMistake: {
                     /** @type {HTMLDivElement} */
-                    self: element("#cancel-mistake"),
+                    self: getElement("#cancel-mistake"),
                     /** @type {HTMLTableSectionElement} */
-                    table: element("#cancel-mistake-table-body"),
+                    table: getElement("#cancel-mistake-table-body"),
                     /** @type {HTMLButtonElement} */
-                    cancelButton: element("#cancel-mistake-table-cancel"),
+                    cancelButton: getElement("#cancel-mistake-table-cancel"),
                 },
                 addStudents: {
                     /** @type {HTMLDivElement} */
-                    self: element("#adding-students"),
+                    self: getElement("#adding-students"),
                     /** @type {HTMLTextAreaElement} */
-                    addedList: element("#added-students"),
+                    addedList: getElement("#added-students"),
                     /** @type {HTMLButtonElement} */
-                    addButton: element("#adding-students-button"),
+                    addButton: getElement("#adding-students-button"),
                 },
                 deleteStudent: {
                     /** @type {HTMLDivElement} */
-                    self: element("#deleting-student"),
+                    self: getElement("#deleting-student"),
                     /** @type {HTMLHeadingElement} */
-                    studentName: element("#deleted-student-name"),
+                    studentName: getElement("#deleted-student-name"),
                     /** @type {HTMLButtonElement} */
-                    deleteButton: element("#deleting-student-confirm"),
+                    deleteButton: getElement("#deleting-student-confirm"),
                 },
                 about: {
                     /** @type {HTMLDivElement} */
-                    self: element("#about"),
+                    self: getElement("#about"),
                 },
             };
 
@@ -2015,6 +2015,24 @@
             /** @typedef Offset
              * @property {number} x
              * @property {number} y
+             */
+
+            /** @typedef TableCell
+             * @property {string} id
+             * @property {string} [content]
+             * @property {string[]} [classList]
+             * @property {Object.<string, string>} [dataset]
+             * @property {number} [colspan]
+             * @property {number} [rowspan]
+             * @property {function(HTMLTableCellElement)} [callback]
+             */
+
+            /** @typedef TableRow
+             * @property {string} [id]
+             * @property {string[]} [classList]
+             * @property {Object.<string, string>} [dataset]
+             * @property {function(HTMLTableRowElement)} [callback]
+             * @property {TableCell[]} cells
              */
 
             /** @typedef Mistake
@@ -2059,27 +2077,23 @@
              * @property {number} studentIndex
              * @property {string} translation
              * @property {number} paragraph
-             * @property {HTMLTextAreaElement} textDiv
+             * @property {string} source
+             * @property {number} startIndex
+             * @property {number} endIndex
+             * @property {HTMLDivElement} textDiv
              * @property {Work} work
              */
 
             /** @typedef EditMistakeInfo
-             * @property {HTMLDivElement} textDiv
-             * @property {string} sourceText
-             * @property {Mistake} mistake
              * @property {number} studentIndex
+             * @property {string} sourceText
+             * @property {HTMLDivElement} textDiv
+             * @property {Mistake} mistake
              */
 
             /** @typedef RemoveMistakeFromTableInfo
              * @property {MistakeSearchResult} foundMistake
              * @property {HTMLTableRowElement} deletedRow
-             */
-
-            /** @typedef EditStudentInfo
-             * @property {number} studentIndex
-             * @property {HTMLTextAreaElement} studentNameText
-             * @property {HTMLTextAreaElement} translationText
-             * @property {HTMLTableCellElement} paragraphCountCell
              */
 
             // +-----------+
@@ -2579,7 +2593,7 @@
                     // Colours
                     for (const c in allColours) {
                         document.body.style.setProperty(c, allColours[c]);
-                        element(`#${c}`).value = allColours[c];
+                        getElement(`#${c}`).value = allColours[c];
                         localStorage.setItem(c, allColours[c]);
                     }
                 },
@@ -2712,20 +2726,15 @@
                     const data = scriptData.get(scenes.addMistake.addButton);
                     if (!data) return;
 
-                    newMistake.comment = scenes.addMistake.mistakeComment.value;
-                    newMistake.type = getRadioInputValue("mistake-type");
-                    newMistake.subtype = getRadioInputValue("mistake-subtype");
-                    newMistake.meaning = getRadioInputValue("mistake-text-meaning");
-
                     data.work.mistakes.push({
-                        source: newMistake.source,
-                        comment: newMistake.comment,
-                        paragraph: newMistake.paragraph,
-                        startIndex: newMistake.startIndex,
-                        endIndex: newMistake.endIndex,
-                        type: newMistake.type,
-                        subtype: newMistake.subtype,
-                        meaning: newMistake.meaning,
+                        source: data.source,
+                        paragraph: data.paragraph,
+                        startIndex: data.startIndex,
+                        endIndex: data.endIndex,
+                        type: getRadioInputValue("mistake-type"),
+                        subtype: getRadioInputValue("mistake-subtype"),
+                        meaning: getRadioInputValue("mistake-text-meaning"),
+                        comment: scenes.addMistake.mistakeComment.value,
                     });
                     updateStudentTranslation(data.studentIndex);
                     switchScene(".");
@@ -2860,14 +2869,14 @@
                 },
                 /** * @param {HTMLElement} element */
                 newMistake: function (element) {
+                    /** @type {AddMistakeInfo} */
+                    const data = scriptData.get(element);
+                    if (!data) return;
+
                     // Thanks to Google's AI for the hint!
                     /** @type {Selection} */
                     const selection = window.getSelection();
                     if (!selection.rangeCount || selection.isCollapsed) return;
-
-                    /** @type {AddMistakeInfo} */
-                    const data = scriptData.get(element);
-                    if (!data) return;
 
                     /** @type {Range} */
                     const range = selection.getRangeAt(0);
@@ -2902,16 +2911,26 @@
                         return;
                     }
 
-                    newMistake.source = selection.toString();
-                    newMistake.paragraph = data.paragraph;
-                    newMistake.startIndex = Math.min(start, end);
-                    newMistake.endIndex = Math.max(start, end);
+                    data.source = selection.toString();
+                    data.startIndex = Math.min(start, end);
+                    data.endIndex = Math.max(start, end);
 
                     // Go to adding a new mistake scene
                     highlightMistakes(
                         scenes.addMistake.mistakeSource,
-                        data.translation,
-                        [newMistake],
+                        data.textDiv.textContent,
+                        [
+                            {
+                                source: data.source,
+                                paragraph: data.paragraph,
+                                startIndex: data.startIndex,
+                                endIndex: data.endIndex,
+                                type: "",
+                                subtype: "",
+                                meaning: "",
+                                comment: "",
+                            },
+                        ],
                         data.studentIndex,
                         false,
                         false,
@@ -2977,45 +2996,53 @@
                 },
                 /** * @param {HTMLTextAreaElement} element */
                 editTranslation: function (element) {
-                    /** @type {EditStudentInfo} */
-                    const data = scriptData.get(element);
-                    if (!data) return;
+                    /** @type {number} */
+                    const index = scriptData.get(element);
+                    if (index === undefined) return;
 
                     // Rewrite the translation
-                    project.translations[data.studentIndex].text = element.value;
+                    project.translations[index].text = element.value;
 
                     // Recalculate paragraphs number
+                    /** @type {HTMLTableCellElement} */
+                    const counter = getElement(`#student-paragraphs-${index}`);
+                    if (!counter) return;
+
                     /** @type {number} */
                     const pars = getParagraphsCount(element.value);
-                    data.paragraphCountCell.textContent = pars;
+                    counter.textContent = pars;
 
                     if (pars !== sourceParaCount) {
-                        data.paragraphCountCell.classList.add("disabled");
+                        counter.classList.add("disabled");
                     } else {
-                        data.paragraphCountCell.classList.remove("disabled");
+                        counter.classList.remove("disabled");
                     }
                     updateMain();
                 },
                 /** * @param {HTMLTextAreaElement} element */
                 renameStudent: function (element) {
-                    /** @type {EditStudentInfo} */
-                    const data = scriptData.get(element);
-                    if (!data) return;
+                    /** @type {number} */
+                    const index = scriptData.get(element);
+                    if (index === undefined) return;
 
-                    project.translations[data.studentIndex].student = element.value;
+                    project.translations[index].student = element.value;
                     sortStudentsAlphabetically();
                     updateEditor();
                     updateMain();
                 },
                 /** * @param {HTMLButtonElement} element */
                 deleteStudent: function (element) {
-                    /** @type {EditStudentInfo} */
-                    const data = scriptData.get(element);
-                    if (!data) return;
+                    /** @type {number} */
+                    const index = scriptData.get(element);
+                    if (index === undefined) return;
 
-                    scenes.deleteStudent.studentName.textContent = data.studentNameText.value;
+                    /** @type {HTMLTextAreaElement} */
+                    const name = getElement(`#student-${index}`);
+                    if (!name) return;
+
+                    scenes.deleteStudent.studentName.textContent = name.value;
                     scenes.deleteStudent.deleteButton.onclick = function (event) {
-                        project.translations.splice(data.studentIndex, 1);
+                        project.translations.splice(index, 1);
                         updateItemsPerPageMax();
                         updateEditor();
                         updateMain();
@@ -3034,12 +3061,12 @@
                 /** * @param {HTMLTableCellElement} element */
                 showResults: function (element) {
                     /** @type {number} */
-                    const data = scriptData.get(element);
-                    if (data === undefined) return;
+                    const index = scriptData.get(element);
+                    if (index === undefined) return;
 
                     window.scroll(0, scenes.results.studentLegend.offsetTop - 4);
-                    scenes.results.studentSelect.value = data;
-                    resultStudentIndex = data;
+                    scenes.results.studentSelect.value = index;
+                    resultStudentIndex = index;
                     updateIndividualResults();
                 },
             };
@@ -3051,17 +3078,6 @@
                 orthography: 3.2,
                 punctuation: 2.5,
                 complex: 6.5,
-            };
-            /** @type {Mistake} */
-            const newMistake = {
-                source: "",
-                comment: "",
-                paragraph: 0,
-                startIndex: 0,
-                endIndex: 0,
-                type: "vocabulary",
-                subtype: "distortion",
-                meaning: "retained",
             };
 
             // +-----------+
@@ -3247,7 +3263,7 @@
 
                         for (const c in loadedColours) {
                             document.body.style.setProperty(c, loadedColours[c]);
-                            element(`#${c}`).value = loadedColours[c];
+                            getElement(`#${c}`).value = loadedColours[c];
                             localStorage.setItem(c, loadedColours[c]);
                             this.value = "";
                         }
@@ -3354,7 +3370,6 @@
             // Show students' names (main)
             scenes.main.showNames.addEventListener("change", function (event) {
                 localStorage.setItem("mainShowNames", this.checked);
-                mainLastStudentIndex = undefined;
                 updateMain();
             });
 
@@ -3436,9 +3451,6 @@
             }
 
             function updateEditor() {
-                // Cleanup
-                removeChildNodes(scenes.editor.translations);
-
                 // Source text
                 scenes.editor.sourceText.value = project.source || "";
                 updateSourceParagraphCounter();
@@ -3474,84 +3486,85 @@
                     +scenes.editor.itemsPerPageInput.value,
                 );
 
-                subset.forEach((t, i) => {
-                    /** @type {number} */
-                    const studentIndex =
-                        project.editorPage * +scenes.editor.itemsPerPageInput.value + i;
+                fillTableSection(
+                    scenes.editor.translations,
+                    subset.map((t, i) => {
+                        /** @type {number} */
+                        const studentIndex =
+                            project.editorPage * +scenes.editor.itemsPerPageInput.value + i;
 
-                    /** @type {HTMLTableRowElement} */
-                    const row = newChild(scenes.editor.translations, "tr");
-                    row.id = `editor-row${i}`;
+                        return {
+                            cells: [
+                                // Student
+                                {
+                                    classList: ["table-element-container"],
+                                    callback: function (studentCell) {
+                                        /** @type {HTMLDivElement} */
+                                        const cellDiv = newChild(studentCell, "div");
+                                        cellDiv.classList.add("student-div");
 
-                    // Student
-                    /** @type {HTMLTableCellElement} */
-                    const studentCell = newChild(row, "td");
-                    studentCell.classList.add("table-element-container");
+                                        /** @type {HTMLButtonElement} */
+                                        const studentDelButton = newChild(cellDiv, "button");
+                                        studentDelButton.classList.add(
+                                            "student-button",
+                                            "tooltip-parent",
+                                        );
+                                        studentDelButton.textContent = "-";
+                                        studentDelButton.dataset.role = "delete-student";
+                                        scriptData.set(studentDelButton, studentIndex);
 
-                    /** @type {HTMLDivElement} */
-                    const cellDiv = newChild(studentCell, "div");
-                    cellDiv.classList.add("student-div");
+                                        /** @type {HTMLSpanElement} */
+                                        const studentDelTooltip = newChild(
+                                            studentDelButton,
+                                            "span",
+                                        );
+                                        studentDelTooltip.classList.add("tooltip");
+                                        studentDelTooltip.textContent = getText(
+                                            "deleting-student-confirm",
+                                        );
 
-                    /** @type {HTMLButtonElement} */
-                    const studentDelButton = newChild(cellDiv, "button");
-                    studentDelButton.classList.add("student-button", "tooltip-parent");
-                    studentDelButton.textContent = "-";
-
-                    /** @type {HTMLSpanElement} */
-                    const studentDelTooltip = newChild(studentDelButton, "span");
-                    studentDelTooltip.classList.add("tooltip");
-                    studentDelTooltip.textContent = getText("deleting-student-confirm");
-
-                    /** @type {HTMLTextAreaElement} */
-                    const studentName = newChild(cellDiv, "textarea");
-                    studentName.id = `student${i}`;
-                    studentName.value = t.student;
-                    studentName.autocomplete = "off";
-                    studentName.classList.add("table-text", "no-left-border");
-
-                    // Translation
-                    /** @type {HTMLTableCellElement} */
-                    const translationCell = newChild(row, "td");
-                    translationCell.classList.add("table-element-container");
-
-                    /** @type {HTMLTextAreaElement} */
-                    const translationText = newChild(translationCell, "textarea");
-                    translationText.id = `translation${i}`;
-                    translationText.value = t.text;
-                    translationText.autocomplete = "off";
-                    translationText.classList.add("table-text");
-
-                    // Paragraphs count
-                    /** @type {HTMLTableCellElement} */
-                    const paragraphs = newChild(row, "td");
-                    /** @type {number} */
-                    const pars = getParagraphsCount(t.text);
-
-                    paragraphs.style.fontWeight = "600";
-                    paragraphs.classList.add("centred-text");
-                    paragraphs.textContent = pars;
-
-                    if (pars !== sourceParaCount) {
-                        paragraphs.classList.add("disabled");
-                    }
-
-                    /** @type {EditStudentInfo} */
-                    const data = {
-                        studentIndex: studentIndex,
-                        studentNameText: studentName,
-                        translationText: translationText,
-                        paragraphCountCell: paragraphs,
-                    };
-
-                    translationText.dataset.role = "edit-translation";
-                    scriptData.set(translationText, data);
-
-                    studentName.dataset.role = "rename-student";
-                    scriptData.set(studentName, data);
-
-                    studentDelButton.dataset.role = "delete-student";
-                    scriptData.set(studentDelButton, data);
-                });
+                                        /** @type {HTMLTextAreaElement} */
+                                        const studentName = newChild(cellDiv, "textarea");
+                                        studentName.id = `student-${studentIndex}`;
+                                        studentName.value = t.student;
+                                        studentName.autocomplete = "off";
+                                        studentName.classList.add("table-text", "no-left-border");
+                                        studentName.dataset.role = "rename-student";
+                                        scriptData.set(studentName, studentIndex);
+                                    },
+                                },
+                                // Translation
+                                {
+                                    classList: ["table-element-container"],
+                                    callback: function (translationCell) {
+                                        /** @type {HTMLTextAreaElement} */
+                                        const translationText = newChild(
+                                            translationCell,
+                                            "textarea",
+                                        );
+                                        translationText.id = `student-translation-${studentIndex}`;
+                                        translationText.value = t.text;
+                                        translationText.autocomplete = "off";
+                                        translationText.classList.add("table-text");
+                                        translationText.dataset.role = "edit-translation";
+                                        scriptData.set(translationText, studentIndex);
+                                    },
+                                },
+                                {
+                                    id: `student-paragraphs-${studentIndex}`,
+                                    classList: ["centred-text"],
+                                    content: getParagraphsCount(t.text),
+                                    callback: function (paragraphs) {
+                                        paragraphs.style.fontWeight = "600";
+                                        if (getParagraphsCount(t.text) !== sourceParaCount) {
+                                            paragraphs.classList.add("disabled");
+                                        }
+                                    },
+                                },
+                            ],
+                        };
+                    }),
+                );
             }
 
             /**
@@ -3773,7 +3786,7 @@
              */
             function updateStudentTranslation(studentIndex) {
                 /** @type {HTMLDivElement} */
-                const textDiv = element(`#student${studentIndex}`);
+                const textDiv = getElement(`#main-student-${studentIndex}`);
                 if (!textDiv) return;
 
                 /** @type {Work} */
@@ -3804,9 +3817,6 @@
                 /** @type {Work} */
                 const work = project.translations[studentIndex];
                 if (!work || !work.student) return;
-
-                /** @type {string} */
-                const translation = getStudentTranslation(studentIndex);
 
                 // Student's name
                 if (scenes.main.showNames.checked) {
@@ -3845,7 +3855,7 @@
                 // Translation
                 /** @type {HTMLDivElement} */
                 const textDiv = newChild(cellDiv, "div");
-                textDiv.id = `student${studentIndex}`;
+                textDiv.id = `main-student-${studentIndex}`;
                 textDiv.classList.add("rich-text-div", "no-left-border");
                 textDiv.tabIndex = 0;
 
@@ -3854,7 +3864,6 @@
                 /** @type {AddMistakeInfo} */
                 const data = {
                     studentIndex: studentIndex,
-                    translation: translation,
                     paragraph: project.paragraph,
                     textDiv: textDiv,
                     work: work,
@@ -4317,7 +4326,7 @@
              */
             function getElementText(query) {
                 /** @type {HTMLElement} */
-                const el = element(query);
+                const el = getElement(query);
                 return el ? el.textContent || query : query;
             }
 
@@ -4343,7 +4352,7 @@
              * @param {string} query
              * @returns {HTMLElement}
              */
-            function element(query) {
+            function getElement(query) {
                 return document.querySelector(query);
             }
 
@@ -4351,7 +4360,7 @@
              * Gets all element matching the query
              * @returns {NodeList}
              */
-            function elements(query) {
+            function getElements(query) {
                 return document.querySelectorAll(query);
             }
 
@@ -4373,6 +4382,54 @@
                 const child = newElement(childTag);
                 parent.appendChild(child);
                 return child;
+            }
+
+            /**
+             * @param {HTMLTableSectionElement} section
+             * @param {TableRow[]} data
+             * @param {boolean} [header=false]
+             * @returns {HTMLTableCellElement[][]}
+             */
+            function fillTableSection(section, data, header = false) {
+                // Clean-up
+                removeChildNodes(section);
+
+                /** @type {HTMLTableCellElement[][]} */
+                const result = [];
+
+                data.forEach((r, i) => {
+                    /** @type {HTMLTableRowElement} */
+                    const row = newChild(section, "tr");
+
+                    if (r.id) row.id = r.id;
+                    if (r.classList) row.classList.add(...r.classList);
+                    if (r.callback) r.callback(row);
+                    if (r.dataset) {
+                        for (const d in r.dataset) {
+                            row.dataset[d] = r.dataset[d];
+                        }
+                    }
+
+                    r.cells.forEach((c, j) => {
+                        /** @type {HTMLTableCellElement} */
+                        const cell = newChild(row, header ? "th" : "td");
+
+                        if (c.id) cell.id = c.id;
+                        if (c.colspan) cell.colSpan = c.colspan;
+                        if (c.rowspan) cell.rowSpan = c.rowspan;
+                        if (c.classList) cell.classList.add(...c.classList);
+                        if (c.content) cell.textContent = c.content;
+                        if (c.callback) c.callback(cell);
+                        if (c.dataset) {
+                            for (const d in c.dataset) {
+                                cell.dataset[d] = c.dataset[d];
+                            }
+                        }
+
+                        result.push(cell);
+                    });
+                });
+                return result;
             }
 
             function loadSettings() {
@@ -4465,7 +4522,7 @@
                 const targetScene = visitedScenes[visitedScenes.length - 1];
 
                 // Check if the scene exists
-                if (!element("#" + targetScene)) {
+                if (!getElement("#" + targetScene)) {
                     switchScene(".");
                     return;
                 }
@@ -4500,7 +4557,7 @@
                     case "main":
                         if (mainLastStudentIndex) {
                             /** @type {HTMLDivElement} */
-                            const textDiv = element(`#student${mainLastStudentIndex}`);
+                            const textDiv = getElement(`#student-${mainLastStudentIndex}`);
 
                             if (textDiv) {
                                 textDiv.focus();
@@ -4639,7 +4696,7 @@
                 // Translate placeholders
                 for (p in language.placeholders) {
                     /** @type {HTMLElement} */
-                    const el = element(`[data-tk="${p}"]`);
+                    const el = getElement(`[data-tk="${p}"]`);
                     if (!el) continue;
 
                     el.placeholder = language.placeholders[p];
@@ -4648,7 +4705,7 @@
                 // Translate texts
                 for (t in language.texts) {
                     /** @type {NodeList} */
-                    const els = elements(`[data-tk="${t}"]`);
+                    const els = getElements(`[data-tk="${t}"]`);
                     if (!els) continue;
 
                     for (const e of els) {
