@@ -119,6 +119,8 @@
                 padding: 2px;
                 min-height: 1.7em;
                 cursor: default;
+                user-select: none;
+                -webkit-user-select: none;
             }
 
             button:disabled,
@@ -2075,7 +2077,6 @@
 
             /** @typedef AddMistakeInfo
              * @property {number} studentIndex
-             * @property {string} translation
              * @property {number} paragraph
              * @property {string} source
              * @property {number} startIndex
@@ -3810,76 +3811,6 @@
                 );
             }
 
-            /**
-             * @param {number} studentIndex
-             */
-            function addStudentToMainTable(studentIndex) {
-                /** @type {Work} */
-                const work = project.translations[studentIndex];
-                if (!work || !work.student) return;
-
-                // Student's name
-                if (scenes.main.showNames.checked) {
-                    /** @type {HTMLTableRowElement} */
-                    const nameRow = newChild(scenes.main.translations, "tr");
-
-                    /** @type {HTMLTableCellElement} */
-                    const nameCell = newChild(nameRow, "td");
-                    nameCell.classList.add("main-student-name");
-                    nameCell.textContent = work.student;
-                }
-
-                // Row, cell, and container div
-                /** @type {HTMLTableRowElement} */
-                const textRow = newChild(scenes.main.translations, "tr");
-
-                /** @type {HTMLTableCellElement} */
-                const cell = newChild(textRow, "td");
-                cell.classList.add("table-element-container");
-
-                /** @type {HTMLDivElement} */
-                const cellDiv = newChild(cell, "div");
-                cellDiv.classList.add("student-div");
-
-                // Button to add a mistake
-                /** @type {HTMLButtonElement} */
-                const newMistakeButton = newChild(cellDiv, "button");
-                newMistakeButton.classList.add("student-button", "tooltip-parent");
-                newMistakeButton.textContent = "+";
-
-                /** @type {HTMLSpanElement} */
-                const newMistakeTooltip = newChild(newMistakeButton, "span");
-                newMistakeTooltip.classList.add("tooltip");
-                newMistakeTooltip.textContent = getText("add-mistake-button");
-
-                // Translation
-                /** @type {HTMLDivElement} */
-                const textDiv = newChild(cellDiv, "div");
-                textDiv.id = `main-student-${studentIndex}`;
-                textDiv.classList.add("rich-text-div", "no-left-border");
-                textDiv.tabIndex = 0;
-
-                updateStudentTranslation(studentIndex);
-
-                /** @type {AddMistakeInfo} */
-                const data = {
-                    studentIndex: studentIndex,
-                    paragraph: project.paragraph,
-                    textDiv: textDiv,
-                    work: work,
-                };
-                newMistakeButton.dataset.role = "new-mistake";
-                scriptData.set(newMistakeButton, data);
-
-                textDiv.dataset.role = "new-mistake-keyboard";
-                scriptData.set(textDiv, data);
-
-                // Updating the last student index
-                textDiv.addEventListener("focus", function (event) {
-                    mainLastStudentIndex = studentIndex;
-                });
-            }
-
             function updateMain() {
                 /** @type {string[]} */
                 const paragraphs = project.source.split("\n").filter((p) => p);
@@ -3887,9 +3818,6 @@
                 // Set source paragraph and update the list
                 project.paragraph = clamp(0, project.paragraph, paragraphs.length - 1);
                 scenes.main.sourceParagraph.value = paragraphs[project.paragraph] || "";
-
-                // Clean translations
-                removeChildNodes(scenes.main.translations);
 
                 // Manage pages
                 /** @type {number} */
@@ -3919,10 +3847,82 @@
                 const firstIndex = project.mainPage * +scenes.main.itemsPerPageInput.value;
                 /** @type {number} */
                 const lastIndex = +scenes.main.itemsPerPageInput.value + firstIndex;
+                /** @type {TableRow[]} */
+                const rows = [];
 
                 for (let i = firstIndex; i < lastIndex; i++) {
-                    addStudentToMainTable(i);
+                    /** @type {Work} */
+                    const work = project.translations[i];
+                    if (!work || !work.student) return;
+
+                    // Student's name
+                    if (scenes.main.showNames.checked) {
+                        rows.push({
+                            cells: [
+                                {
+                                    classList: ["main-student-name"],
+                                    content: work.student,
+                                },
+                            ],
+                        });
+                    }
+
+                    // Translation
+                    rows.push({
+                        cells: [
+                            {
+                                classList: ["table-element-container"],
+                                callback: function (cell) {
+                                    /** @type {HTMLDivElement} */
+                                    const cellDiv = newChild(cell, "div");
+                                    cellDiv.classList.add("student-div");
+
+                                    // Button to add a mistake
+                                    /** @type {HTMLButtonElement} */
+                                    const newMistakeButton = newChild(cellDiv, "button");
+                                    newMistakeButton.classList.add(
+                                        "student-button",
+                                        "tooltip-parent",
+                                    );
+                                    newMistakeButton.textContent = "+";
+
+                                    /** @type {HTMLSpanElement} */
+                                    const newMistakeTooltip = newChild(newMistakeButton, "span");
+                                    newMistakeTooltip.classList.add("tooltip");
+                                    newMistakeTooltip.textContent = getText("add-mistake-button");
+
+                                    // Translation
+                                    /** @type {HTMLDivElement} */
+                                    const textDiv = newChild(cellDiv, "div");
+                                    textDiv.id = `main-student-${i}`;
+                                    textDiv.classList.add("rich-text-div", "no-left-border");
+                                    textDiv.tabIndex = 0;
+
+                                    updateStudentTranslation(i);
+
+                                    /** @type {AddMistakeInfo} */
+                                    const data = {
+                                        studentIndex: i,
+                                        paragraph: project.paragraph,
+                                        textDiv: textDiv,
+                                        work: work,
+                                    };
+                                    newMistakeButton.dataset.role = "new-mistake";
+                                    scriptData.set(newMistakeButton, data);
+
+                                    textDiv.dataset.role = "new-mistake-keyboard";
+                                    scriptData.set(textDiv, data);
+
+                                    // Updating the last student index
+                                    textDiv.addEventListener("focus", function (event) {
+                                        mainLastStudentIndex = i;
+                                    });
+                                },
+                            },
+                        ],
+                    });
                 }
+                fillTableSection(scenes.main.translations, rows);
             }
 
             function updateUndoMistakes() {
@@ -4105,7 +4105,6 @@
                     /** @type {AddMistakeInfo} */
                     const data = {
                         studentIndex: resultStudentIndex,
-                        translation: p,
                         paragraph: i,
                         textDiv: textDiv,
                         work: work,
