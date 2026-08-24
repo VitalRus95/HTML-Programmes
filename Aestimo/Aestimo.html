@@ -3860,34 +3860,39 @@
       }
 
       function updateGroupResults() {
-        removeChildNodes(scenes.results.groupTable);
-        if (!project.translations) return;
+        fillTableSection(
+          scenes.results.groupTable,
+          project.translations.map((t, i) => {
+            /** @type {Mark} */
+            const mark = getMark(t.mistakes);
 
-        project.translations.forEach((t, i) => {
-          /** @type {Mark} */
-          const mark = getMark(t.mistakes);
-
-          /** @type {HTMLTableRowElement} */
-          const row = newChild(scenes.results.groupTable, "tr");
-
-          /** @type {HTMLTableCellElement} */
-          const studentCell = newChild(row, "td");
-          studentCell.style.cursor = "pointer";
-          studentCell.textContent = t.student;
-          studentCell.dataset.role = "show-results";
-          scriptData.set(studentCell, i);
-
-          /** @type {HTMLTableCellElement} */
-          const markCell = newChild(row, "td");
-          markCell.classList.add("mark-cell");
-          markCell.textContent = `${mark.number} (${mark.letter})`;
-          markCell.dataset.role = "copy-mark";
-          scriptData.set(markCell, mark);
-        });
+            return {
+              cells: [
+                // Student's name
+                {
+                  content: t.student,
+                  callback: function (studentCell) {
+                    studentCell.style.cursor = "pointer";
+                    studentCell.dataset.role = "show-results";
+                    scriptData.set(studentCell, i);
+                  },
+                },
+                // Student's mark
+                {
+                  classList: ["mark-cell"],
+                  content: `${mark.number} (${mark.letter})`,
+                  callback: function (markCell) {
+                    markCell.dataset.role = "copy-mark";
+                    scriptData.set(markCell, mark);
+                  },
+                },
+              ],
+            };
+          }),
+        );
       }
 
       function updateIndividualResults() {
-        removeChildNodes(scenes.results.translation);
         if (!project.translations) return;
 
         /** @type {Work} */
@@ -3897,52 +3902,57 @@
         /** @type {string[]} */
         const paragraphs = work.text.split("\n").filter((p) => p);
 
-        paragraphs.forEach((p, i) => {
-          /** @type {Mistake[]} */
-          const mistakes = work.mistakes.filter((m) => m.paragraph === i);
+        fillTableSection(
+          scenes.results.translation,
+          paragraphs.map((p, i) => {
+            /** @type {Mistake[]} */
+            const mistakes = work.mistakes.filter((m) => m.paragraph === i);
 
-          /** @type {HTMLTableRowElement} */
-          const row = newChild(scenes.results.translation, "tr");
+            return {
+              cells: [
+                {
+                  classList: ["table-element-container"],
+                  callback: function (textCell) {
+                    /** @type {HTMLDivElement} */
+                    const cellDiv = newChild(textCell, "div");
+                    cellDiv.classList.add("student-div");
 
-          /** @type {HTMLTableCellElement} */
-          const textCell = newChild(row, "td");
-          textCell.classList.add("table-element-container");
+                    // Button to add a mistake
+                    /** @type {HTMLButtonElement} */
+                    const newMistakeButton = newChild(cellDiv, "button");
+                    newMistakeButton.classList.add("student-button", "tooltip-parent");
+                    newMistakeButton.textContent = "+";
 
-          /** @type {HTMLDivElement} */
-          const cellDiv = newChild(textCell, "div");
-          cellDiv.classList.add("student-div");
+                    /** @type {HTMLSpanElement} */
+                    const newMistakeTooltip = newChild(newMistakeButton, "span");
+                    newMistakeTooltip.classList.add("tooltip");
+                    newMistakeTooltip.textContent = getText("add-mistake-button");
 
-          // Button to add a mistake
-          /** @type {HTMLButtonElement} */
-          const newMistakeButton = newChild(cellDiv, "button");
-          newMistakeButton.classList.add("student-button", "tooltip-parent");
-          newMistakeButton.textContent = "+";
+                    /** @type {HTMLDivElement} */
+                    const textDiv = newChild(cellDiv, "div");
+                    textDiv.classList.add("rich-text-div", "no-left-border");
+                    textDiv.tabIndex = 0;
 
-          /** @type {HTMLSpanElement} */
-          const newMistakeTooltip = newChild(newMistakeButton, "span");
-          newMistakeTooltip.classList.add("tooltip");
-          newMistakeTooltip.textContent = getText("add-mistake-button");
+                    highlightMistakes(textDiv, p, mistakes, resultStudentIndex, true, true);
 
-          /** @type {HTMLDivElement} */
-          const textDiv = newChild(cellDiv, "div");
-          textDiv.classList.add("rich-text-div", "no-left-border");
-          textDiv.tabIndex = 0;
+                    /** @type {AddMistakeInfo} */
+                    const data = {
+                      studentIndex: resultStudentIndex,
+                      paragraph: i,
+                      textDiv: textDiv,
+                      work: work,
+                    };
+                    newMistakeButton.dataset.role = "new-mistake";
+                    scriptData.set(newMistakeButton, data);
 
-          highlightMistakes(textDiv, p, mistakes, resultStudentIndex, true, true);
-
-          /** @type {AddMistakeInfo} */
-          const data = {
-            studentIndex: resultStudentIndex,
-            paragraph: i,
-            textDiv: textDiv,
-            work: work,
-          };
-          newMistakeButton.dataset.role = "new-mistake";
-          scriptData.set(newMistakeButton, data);
-
-          textDiv.dataset.role = "new-mistake-keyboard";
-          scriptData.set(textDiv, data);
-        });
+                    textDiv.dataset.role = "new-mistake-keyboard";
+                    scriptData.set(textDiv, data);
+                  },
+                },
+              ],
+            };
+          }),
+        );
 
         /** @type {number} */
         const lengthMult = getLengthMultiplier();
