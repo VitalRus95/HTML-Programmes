@@ -1027,9 +1027,9 @@
         </div>
       </fieldset>
 
-      <!-- Text's meaning -->
+      <!-- Fragment's meaning -->
       <fieldset>
-        <legend data-tk="mistake-text-meaning-title">Text's meaning</legend>
+        <legend data-tk="mistake-text-meaning-title">Fragment's meaning</legend>
 
         <div class="radio-div">
           <input
@@ -1118,7 +1118,7 @@
 
           <!-- Meaning -->
           <tr>
-            <td data-tk="mistake-text-meaning-title" class="bold-text">Text's meaning</td>
+            <td data-tk="mistake-text-meaning-title" class="bold-text">Fragment's meaning</td>
             <td class="table-element-container">
               <select id="edit-mistake-meaning" class="table-full-cell" autocomplete="off">
                 <option data-tk="retained" value="retained" selected>Retained</option>
@@ -1223,7 +1223,7 @@
 
             <!-- Meaning -->
             <tr>
-              <td data-tk="mistake-text-meaning-title" class="bold-text">Text's meaning</td>
+              <td data-tk="mistake-text-meaning-title" class="bold-text">Fragment's meaning</td>
               <td class="table-element-container">
                 <select id="find-mistake-meaning" class="table-full-cell" autocomplete="off">
                   <option data-tk="retained" value="retained" selected>Retained</option>
@@ -1662,15 +1662,18 @@
           <li><b>Lack of element</b>: a correct element is absent.</li>
         </ul>
 
-        <li><b>Text's meaning</b>:</li>
+        <li><b>Fragment's meaning</b>:</li>
         <ul>
-          <li><b>Retained</b>: the mistake does not make understanding the text harder.</li>
           <li
-            ><b>Obscured</b>: the text's meaning can be understood only with the help of the
+            ><b>Retained</b>: the mistake does not make understanding the current fragment (usually
+            a sentence) of the text harder.</li
+          >
+          <li
+            ><b>Obscured</b>: the fragment's meaning can be understood only with the help of the
             immediate context<sup>2</sup>.</li
           >
           <li
-            ><b>Lost</b>: the text's meaning is severely distorted and cannot be understood even
+            ><b>Lost</b>: the fragment's meaning is severely distorted and cannot be understood even
             with the help of the immediate context<sup>2</sup>.</li
           >
         </ul>
@@ -2063,7 +2066,7 @@
             addition: ["Redundant element"],
             distortion: ["Incorrect element"],
             deletion: ["Lack of element"],
-            "mistake-text-meaning-title": ["Text's meaning"],
+            "mistake-text-meaning-title": ["Fragment's meaning"],
             retained: ["Retained"],
             obscured: ["Obscured"],
             lost: ["Lost"],
@@ -2193,16 +2196,16 @@
               ": a correct element is replaced with a wrong one.",
               "Lack of element",
               ": a correct element is absent.",
-              "Text's meaning",
+              "Fragment's meaning",
               ":",
               "Retained",
-              ": the mistake does not make understanding the text harder.",
+              ": the mistake does not make understanding the current fragment (usually a sentence) of the text harder.",
               "Obscured",
-              ": the text's meaning can be understood only with the help of the immediate context",
+              ": the fragment's meaning can be understood only with the help of the immediate context",
               "2",
               ".",
               "Lost",
-              ": the text's meaning is severely distorted and cannot be understood even with the help of the immediate context",
+              ": the fragment's meaning is severely distorted and cannot be understood even with the help of the immediate context",
               "2",
               ".",
             ],
@@ -2270,7 +2273,7 @@
             addition: ["Лишний элемент"],
             distortion: ["Неверный элемент"],
             deletion: ["Отсутствие элемента"],
-            "mistake-text-meaning-title": ["Понимание текста"],
+            "mistake-text-meaning-title": ["Понимание фрагмента"],
             retained: ["Не затруднено"],
             obscured: ["Затруднено"],
             lost: ["Невозможно"],
@@ -2400,16 +2403,16 @@
               " — замена правильного элемента неправильным.",
               "Отсутствие элемента",
               " — недостаток нужного элемента.",
-              "Понимание текста",
+              "Понимание фрагмента",
               ":",
               "Не затруднено",
-              " — ошибка не усложняет понимание текста.",
+              " — ошибка не усложняет понимание текущего фрагмента (как правило, предложения) текста.",
               "Затруднено",
-              " — понимание текста возможно только при обращении к ближайшему контексту",
+              " — понимание фрагмента возможно только при обращении к ближайшему контексту",
               "2",
               ".",
               "Невозможно",
-              " — смысл сильно искажён, понимание текста невозможно даже при обращении к ближайшему контексту",
+              " — смысл сильно искажён, понимание фрагмента невозможно даже при обращении к ближайшему контексту",
               "2",
               ".",
             ],
