@@ -665,7 +665,6 @@
         font-size: 1em;
         margin-block: 2px;
         padding: 2px;
-        cursor: help;
         width: 100%;
       }
 
@@ -2442,8 +2441,52 @@
           }
           setDownloadedContent(scenes.settings.saveColours, savedColours);
         },
+        loadColours: async function () {
+          await scenes.settings.colourLoader.files[0].text().then((content) => {
+            try {
+              /** @type {Object.<string, string>} */
+              const loadedColours = JSON.parse(content);
+              scenes.settings.saveColours.download = scenes.settings.colourLoader.files[0].name;
+
+              for (const c in loadedColours) {
+                document.body.style.setProperty(c, loadedColours[c]);
+                getElement(`#${c}`).value = loadedColours[c];
+                localStorage.setItem(c, loadedColours[c]);
+                this.value = "";
+              }
+            } catch (error) {
+              alert(`Error while reading colours file: ${error}`);
+            }
+          });
+        },
         saveProject: function () {
           setDownloadedContent(scenes.menu.saveProject, project);
+        },
+        loadProject: async function () {
+          await scenes.menu.loadProjectInput.files[0].text().then((content) => {
+            try {
+              /** @type {string} */
+              const name = scenes.menu.loadProjectInput.files[0].name;
+              scenes.menu.saveProject.download = name;
+
+              project = JSON.parse(content);
+              project.mainPage = 0;
+              project.editorPage = 0;
+              fixProject();
+              sortStudentsAlphabetically();
+              updateMainParagraphsList();
+              updateItemsPerPageMax();
+              updateEditor();
+              updateMain();
+              if (project.translations.some((t) => t.mistakes.length > 0)) {
+                switchScene("results");
+              } else {
+                switchScene("editor");
+              }
+            } catch (error) {
+              alert(`Error while opening the project: ${error}`);
+            }
+          });
         },
         defaultSettings: function () {
           // Volume
@@ -2460,6 +2503,17 @@
             getElement(`#${c}`).value = allColours[c];
             localStorage.setItem(c, allColours[c]);
           }
+        },
+        selectLanguage: function () {
+          localStorage.setItem("lang", scenes.menu.languageSelect.value);
+          changeLanguage();
+        },
+        setSoundVolume: function () {
+          scenes.settings.volumeInput.value = clamp(0, +scenes.settings.volumeInput.value, 1);
+          localStorage.setItem("volume", scenes.settings.volumeInput.value);
+        },
+        toggleDefaultSounds: function () {
+          localStorage.setItem("default-sounds", scenes.settings.defaultSounds.checked);
         },
         findMistake: function () {
           if (!scenes.findMistake.query.value) return;
@@ -2729,6 +2783,50 @@
           results += student;
 
           setDownloadedContent(scenes.results.saveResults, results);
+        },
+        selectStudentInResults: function () {
+          resultStudentIndex = clamp(
+            0,
+            +scenes.results.studentSelect.value,
+            project.translations.length - 1,
+          );
+          updateIndividualResults();
+        },
+        selectParagraphInMain: function () {
+          project.paragraph = +scenes.main.paragraphSelect.value;
+          project.mainPage = 0;
+          mainLastStudentIndex = undefined;
+          updateMain();
+        },
+        selectPageInMain: function () {
+          project.mainPage = +scenes.main.pageSelect.value;
+          mainLastStudentIndex = undefined;
+          updateMain();
+        },
+        selectPageInEditor: function () {
+          project.editorPage = +scenes.editor.pageSelect.value;
+          updateEditor();
+        },
+        setItemsPerPageInMain: function () {
+          clampInputNumber(scenes.main.itemsPerPageInput);
+          localStorage.setItem("mainStudentsPerPage", +scenes.main.itemsPerPageInput.value);
+          mainLastStudentIndex = undefined;
+          updateMain();
+        },
+        setItemsPerPageInEditor: function () {
+          clampInputNumber(scenes.editor.itemsPerPageInput);
+          localStorage.setItem("editorStudentsPerPage", scenes.editor.itemsPerPageInput.value);
+          updateEditor();
+        },
+        showStudentsNamesInMain: function () {
+          localStorage.setItem("mainShowNames", scenes.main.showNames.checked);
+          updateMain();
+        },
+        editSourceText: function () {
+          project.source = scenes.editor.sourceText.value;
+          updateMainParagraphsList();
+          updateEditor();
+          updateMain();
         },
         /** * @param {HTMLElement} element */
         newMistake: function (element) {
@@ -3111,75 +3209,66 @@
         }
       });
 
-      // Loading colours
-      scenes.settings.colourLoader.addEventListener("change", async function (event) {
-        await scenes.settings.colourLoader.files[0].text().then((content) => {
-          try {
-            /** @type {Object.<string, string>} */
-            const loadedColours = JSON.parse(content);
-            scenes.settings.saveColours.download = scenes.settings.colourLoader.files[0].name;
-
-            for (const c in loadedColours) {
-              document.body.style.setProperty(c, loadedColours[c]);
-              getElement(`#${c}`).value = loadedColours[c];
-              localStorage.setItem(c, loadedColours[c]);
-              this.value = "";
-            }
-          } catch (error) {
-            alert(`Error while reading colours file: ${error}`);
-          }
-        });
-      });
-
-      // Loading a project
-      scenes.menu.loadProjectInput.addEventListener("change", async function (event) {
-        await scenes.menu.loadProjectInput.files[0].text().then((content) => {
-          try {
-            /** @type {string} */
-            const name = scenes.menu.loadProjectInput.files[0].name;
-            scenes.menu.saveProject.download = name;
-
-            project = JSON.parse(content);
-            project.mainPage = 0;
-            project.editorPage = 0;
-            fixProject();
-            sortStudentsAlphabetically();
-            updateMainParagraphsList();
-            updateItemsPerPageMax();
-            updateEditor();
-            updateMain();
-            if (project.translations.some((t) => t.mistakes.length > 0)) {
-              switchScene("results");
-            } else {
-              switchScene("editor");
-            }
-          } catch (error) {
-            alert(`Error while opening the project: ${error}`);
-          }
-        });
-      });
-
-      // Language selection
-      scenes.menu.languageSelect.addEventListener("change", function (event) {
-        localStorage.setItem("lang", this.value);
-        changeLanguage();
-      });
-
-      // Changing the sound volume
-      scenes.settings.volumeInput.addEventListener("change", function (event) {
-        scenes.settings.volumeInput.value = clamp(0, +scenes.settings.volumeInput.value, 1);
-        localStorage.setItem("volume", scenes.settings.volumeInput.value);
-      });
-
-      // Toggling default sounds
-      scenes.settings.defaultSounds.addEventListener("change", function (event) {
-        localStorage.setItem("default-sounds", this.checked);
-      });
-
-      // Editor events
-      scenes.editor.translations.addEventListener("change", function (event) {
+      // All change events (EVENT DELEGATION)
+      window.addEventListener("change", function (event) {
         /** @type {HTMLElement} */
         const target = event.target;
+
+        // Individual elements' behaviour
+        switch (target) {
+          // Load colours
+          case scenes.settings.colourLoader:
+            functions.loadColours();
+            return;
+          // Load project
+          case scenes.menu.loadProjectInput:
+            functions.loadProject();
+            return;
+          // Select language
+          case scenes.menu.languageSelect:
+            functions.selectLanguage();
+            return;
+          // Set sound volume
+          case scenes.settings.volumeInput:
+            functions.setSoundVolume();
+            return;
+          // Toggle default sounds
+          case scenes.settings.defaultSounds:
+            functions.toggleDefaultSounds();
+            return;
+          // Select student (in results)
+          case scenes.results.studentSelect:
+            functions.selectStudentInResults();
+            return;
+          // Select paragraph (in main)
+          case scenes.main.paragraphSelect:
+            functions.selectParagraphInMain();
+            return;
+          // Select page (in main)
+          case scenes.main.pageSelect:
+            functions.selectPageInMain();
+            return;
+          // Select page (in editor)
+          case scenes.editor.pageSelect:
+            functions.selectPageInEditor();
+            return;
+          // Set items per page (in main)
+          case scenes.main.itemsPerPageInput:
+            functions.setItemsPerPageInMain();
+            return;
+          // Set items per page (in editor)
+          case scenes.editor.itemsPerPageInput:
+            functions.setItemsPerPageInEditor();
+            return;
+          // Show students names (in main)
+          case scenes.main.showNames:
+            functions.showStudentsNamesInMain();
+            return;
+          // Edit source text
+          case scenes.editor.sourceText:
+            functions.editSourceText();
+            return;
+        }
 
         // Role-specific behaviour
         switch (target.dataset.role) {
@@ -3190,66 +3279,6 @@
             functions.renameStudent(target);
             return;
         }
-      });
-
-      // Student selection (results)
-      scenes.results.studentSelect.addEventListener("change", function (event) {
-        resultStudentIndex = clamp(
-          0,
-          +scenes.results.studentSelect.value,
-          project.translations.length - 1,
-        );
-        updateIndividualResults();
-      });
-
-      // Paragraph selection (main)
-      scenes.main.paragraphSelect.addEventListener("change", function (event) {
-        project.paragraph = +scenes.main.paragraphSelect.value;
-        project.mainPage = 0;
-        mainLastStudentIndex = undefined;
-        updateMain();
-      });
-
-      // Page selection (main)
-      scenes.main.pageSelect.addEventListener("change", function (event) {
-        project.mainPage = +scenes.main.pageSelect.value;
-        mainLastStudentIndex = undefined;
-        updateMain();
-      });
-
-      // Items per page (main)
-      scenes.main.itemsPerPageInput.addEventListener("change", function (event) {
-        clampInputNumber(this);
-        localStorage.setItem("mainStudentsPerPage", +scenes.main.itemsPerPageInput.value);
-        mainLastStudentIndex = undefined;
-        updateMain();
-      });
-
-      // Show students' names (main)
-      scenes.main.showNames.addEventListener("change", function (event) {
-        localStorage.setItem("mainShowNames", this.checked);
-        updateMain();
-      });
-
-      // Page selection (editor)
-      scenes.editor.pageSelect.addEventListener("change", function (event) {
-        project.editorPage = +scenes.editor.pageSelect.value;
-        updateEditor();
-      });
-
-      // Items per page (editor)
-      scenes.editor.itemsPerPageInput.addEventListener("change", function (event) {
-        clampInputNumber(this);
-        localStorage.setItem("editorStudentsPerPage", scenes.editor.itemsPerPageInput.value);
-        updateEditor();
-      });
-
-      // Source text editing
-      scenes.editor.sourceText.addEventListener("change", function (event) {
-        project.source = this.value;
-        updateMainParagraphsList();
-        updateEditor();
-        updateMain();
       });
 
       // +-----------+
