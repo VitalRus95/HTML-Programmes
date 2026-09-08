@@ -1,9 +1,20 @@
 :root {
     --accent1: #774936;
-    --accent2: #D69F7E;
+    --accent2: #d69f7e;
     --primary-colour: #eeebbd;
     --secondary-colour: #050609;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        "Open Sans",
+        "Helvetica Neue",
+        sans-serif;
 }
 
 * {
@@ -158,18 +169,18 @@ input::placeholder {
     color: var(--accent1);
 }
 
-input[type='file'] {
+input[type="file"] {
     border-style: none;
 }
 
-input[type='number'] {
+input[type="number"] {
     border-color: var(--accent1);
     border-radius: 4px;
     text-align: center;
     font-weight: 600;
 }
 
-input[type='number']:focus {
+input[type="number"]:focus {
     color: var(--secondary-colour);
     background-color: var(--accent2);
 }
@@ -327,14 +338,25 @@ textarea::placeholder {
     min-width: min-content;
     width: max-content;
     max-width: 75vw;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        "Open Sans",
+        "Helvetica Neue",
+        sans-serif;
     font-weight: 600;
     text-align: left;
     text-wrap: wrap;
 }
 
 .tooltip::before {
-    content: 'i';
+    content: "i";
     background-color: var(--primary-colour);
     color: var(--secondary-colour);
     border-radius: 4px;

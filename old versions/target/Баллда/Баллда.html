@@ -1,1103 +1,1092 @@
-<!DOCTYPE html>
-<html lang='ru'>
-    <head>
-        <meta charset='utf-8' />
-        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <title>Баллда</title>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Баллда</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <style>
-            :root {
-                --accent1: #774936;
-                --accent2: #D69F7E;
-                --primary-colour: #eeebbd;
-                --secondary-colour: #050609;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
-            
-            * {
-                background-color: inherit;
-                box-sizing: border-box;
-                color: inherit;
-                font-family: inherit;
-                font-size: 14pt;
-                margin-top: 1.5px;
-                margin-bottom: 1.5px;
-            }
-            
-            body {
-                display: flex;
-                flex-direction: column;
-                accent-color: var(--accent1);
-                background-color: var(--primary-colour);
-                color: var(--secondary-colour);
-                margin: auto;
-                min-width: 85%;
-                max-width: 85%;
-            }
-            
-            b {
-                background-color: transparent;
-            }
-            
-            .menuButton {
-                cursor: pointer;
-                display: flex;
-                flex-grow: 1;
-                align-items: center;
-                justify-content: center;
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
-                box-shadow: inset 0px 0px 6px var(--accent1);
-                border: 2px outset var(--accent1);
-                font-weight: 600;
-                text-align: center;
-                text-decoration: none;
-                text-wrap: nowrap;
-                overflow: auto;
-                padding: 2px;
-            }
-            
-            .menuButton:hover,
-            .menuButton:focus {
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-            }
-            
-            a.button,
-            button {
-                display: inline-flex;
-                background-color: var(--accent2);
-                color: var(--secondary-colour);
-                box-shadow: inset 0px 0px 6px var(--accent1);
-                border: 2px outset var(--accent1);
-                border-radius: 4px;
-                cursor: pointer;
-                padding-inline: 6px;
-                align-items: center;
-                justify-content: center;
-            }
-            
-            button:disabled {
-                background-color: var(--primary-colour);
-                color: var(--secondary-colour);
-                cursor: not-allowed;
-            }
-            
-            button:focus,
-            button:hover {
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-            }
-            
-            details {
-                display: flex;
-                flex-direction: column;
-                cursor: default;
-                width: 100%;
-            }
-            
-            details > summary {
-                background-color: var(--primary-colour);
-                box-shadow: inset -1px 1px 4px var(--secondary-colour);
-                border-top: 2px inset var(--secondary-colour);
-                border-radius: 4px;
-                cursor: pointer;
-                padding: 2px 6px;
-            }
-            
-            details > summary:focus,
-            details > summary:hover,
-            details[open] > summary:focus,
-            details[open] > summary:hover {
-                background-color: var(--secondary-colour);
-                color: var(--accent2);
-            }
-            
-            details[open] > summary {
-                background-color: var(--accent2);
-                border-radius: 0px 0px 4px 4px;
-                font-size: 1.05em;
-                margin: 0px;
-                padding-bottom: 2px;
-                position: sticky;
-                top: 0px;
-                z-index: 2;
-            }
-            
-            h1 {
-                align-self: center;
-                border-bottom: 4px dotted var(--accent1);
-                margin: 4px 0px 4px 0px;
-                padding: 8px 12px 4px 12px;
-                font-size: 1.7em;
-                text-align: center;
-            }
-            
-            h2 {
-                box-shadow: 0px 0px 3px var(--secondary-colour);
-                border-left: 6px solid var(--secondary-colour);
-                border-radius: 4px;
-                margin: 4px 0px 4px 0px;
-                padding-left: 4px;
-                font-size: 1.5em;
-            }
-            
-            h3 {
-                box-shadow: 0px 0px 4px var(--accent1);
-                border-left: 6px solid var(--accent1);
-                border-radius: 4px;
-                margin: 4px 0px 4px 6px;
-                padding-left: 4px;
-                font-size: 1.3em;
-            }
-            
-            hr {
-                border: 2px ridge var(--accent1);
-                border-radius: 4px;
-                width: 100%;
-            }
-            
-            input {
-                border: 2px outset var(--secondary-colour);
-                accent-color: var(--accent2);
-            }
-            
-            input::placeholder {
-                color: var(--accent1);
-            }
-            
-            input[type='file'] {
-                border-style: none;
-            }
-            
-            input[type='number'] {
-                border-color: var(--accent1);
-                border-radius: 4px;
-                text-align: center;
-                font-weight: 600;
-            }
-            
-            input[type='number']:focus {
-                color: var(--secondary-colour);
-                background-color: var(--accent2);
-            }
-            
-            kbd {
-                background-color: var(--primary-colour);
-                color: var(--secondary-colour);
-                border: 1px solid var(--accent1);
-                border-radius: 3px;
-                border-bottom-width: 2px;
-                font-weight: 600;
-                padding: 1px 2px;
-            }
-            
-            option:checked {
-                background-color: var(--accent2);
-            }
-            
-            select {
-                background-color: var(--primary-colour);
-                border: 2px inset var(--accent1);
-                border-radius: 4px;
-                color: var(--secondary-colour);
-                overflow: auto;
-            }
-            
-            table {
-                width: 100%;
-                border-collapse: separate;
-            }
-            
-            thead {
-                position: sticky;
-                top: 0px;
-                z-index: 1;
-            }
-            
-            td,
-            th {
-                border: 2px solid var(--secondary-colour);
-                padding-inline: 4px;
-                text-align: center;
-                font-weight: 600;
-            }
-            
-            th {
-                background-image: linear-gradient(45deg, var(--accent2), transparent 20% 80%, var(--accent2));
-                background-color: var(--primary-colour);
-                border-color: var(--accent1);
-                color: var(--accent1);
-                font-size: 1.05em;
-            }
-            
-            th:focus,
-            th:hover,
-            tr:focus,
-            tr:hover,
-            tbody > tr:nth-of-type(even):focus,
-            tbody > tr:nth-of-type(even):hover {
-                border-color: var(--accent1);
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-            }
-            
-            tbody > tr:nth-of-type(even) {
-                background-color: var(--accent1);
-                color: var(--primary-colour);
-            }
-            
-            textarea {
-                border: 2px outset var(--secondary-colour);
-                border-radius: 4px;
-            }
-            
-            textarea::placeholder {
-                color: var(--accent1);
-            }
-            
-            .box {
-                display: flex;
-                flex-direction: row;
-                border: 2px outset var(--accent1);
-                border-radius: 4px;
-                padding: 2px;
-            }
-            
-            .box:focus,
-            .box:hover {
-                background-color: var(--accent1);
-                color: var(--primary-colour);
-            }
-            
-            @keyframes tooltipFadeIn {
-                from {
-                    opacity: 0;
+    <style>
+      :root {
+        --accent1: #774936;
+        --accent2: #d69f7e;
+        --primary-colour: #eeebbd;
+        --secondary-colour: #050609;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          Oxygen,
+          Ubuntu,
+          Cantarell,
+          "Open Sans",
+          "Helvetica Neue",
+          sans-serif;
+      }
+
+      * {
+        background-color: inherit;
+        box-sizing: border-box;
+        color: inherit;
+        font-family: inherit;
+        font-size: 14pt;
+        margin-top: 1.5px;
+        margin-bottom: 1.5px;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        accent-color: var(--accent1);
+        background-color: var(--primary-colour);
+        color: var(--secondary-colour);
+        margin: auto;
+        min-width: 85%;
+        max-width: 85%;
+      }
+
+      b {
+        background-color: transparent;
+      }
+
+      .menuButton {
+        cursor: pointer;
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--accent2);
+        color: var(--secondary-colour);
+        box-shadow: inset 0px 0px 6px var(--accent1);
+        border: 2px outset var(--accent1);
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        text-wrap: nowrap;
+        overflow: auto;
+        padding: 2px;
+      }
+
+      .menuButton:hover,
+      .menuButton:focus {
+        background-color: var(--secondary-colour);
+        color: var(--primary-colour);
+      }
+
+      a.button,
+      button {
+        display: inline-flex;
+        background-color: var(--accent2);
+        color: var(--secondary-colour);
+        box-shadow: inset 0px 0px 6px var(--accent1);
+        border: 2px outset var(--accent1);
+        border-radius: 4px;
+        cursor: pointer;
+        padding-inline: 6px;
+        align-items: center;
+        justify-content: center;
+      }
+
+      button:disabled {
+        background-color: var(--primary-colour);
+        color: var(--secondary-colour);
+        cursor: not-allowed;
+      }
+
+      button:focus,
+      button:hover {
+        background-color: var(--secondary-colour);
+        color: var(--primary-colour);
+      }
+
+      details {
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+        width: 100%;
+      }
+
+      details > summary {
+        background-color: var(--primary-colour);
+        box-shadow: inset -1px 1px 4px var(--secondary-colour);
+        border-top: 2px inset var(--secondary-colour);
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 2px 6px;
+      }
+
+      details > summary:focus,
+      details > summary:hover,
+      details[open] > summary:focus,
+      details[open] > summary:hover {
+        background-color: var(--secondary-colour);
+        color: var(--accent2);
+      }
+
+      details[open] > summary {
+        background-color: var(--accent2);
+        border-radius: 0px 0px 4px 4px;
+        font-size: 1.05em;
+        margin: 0px;
+        padding-bottom: 2px;
+        position: sticky;
+        top: 0px;
+        z-index: 2;
+      }
+
+      h1 {
+        align-self: center;
+        border-bottom: 4px dotted var(--accent1);
+        margin: 4px 0px 4px 0px;
+        padding: 8px 12px 4px 12px;
+        font-size: 1.7em;
+        text-align: center;
+      }
+
+      h2 {
+        box-shadow: 0px 0px 3px var(--secondary-colour);
+        border-left: 6px solid var(--secondary-colour);
+        border-radius: 4px;
+        margin: 4px 0px 4px 0px;
+        padding-left: 4px;
+        font-size: 1.5em;
+      }
+
+      h3 {
+        box-shadow: 0px 0px 4px var(--accent1);
+        border-left: 6px solid var(--accent1);
+        border-radius: 4px;
+        margin: 4px 0px 4px 6px;
+        padding-left: 4px;
+        font-size: 1.3em;
+      }
+
+      hr {
+        border: 2px ridge var(--accent1);
+        border-radius: 4px;
+        width: 100%;
+      }
+
+      input {
+        border: 2px outset var(--secondary-colour);
+        accent-color: var(--accent2);
+      }
+
+      input::placeholder {
+        color: var(--accent1);
+      }
+
+      input[type="file"] {
+        border-style: none;
+      }
+
+      input[type="number"] {
+        border-color: var(--accent1);
+        border-radius: 4px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      input[type="number"]:focus {
+        color: var(--secondary-colour);
+        background-color: var(--accent2);
+      }
+
+      kbd {
+        background-color: var(--primary-colour);
+        color: var(--secondary-colour);
+        border: 1px solid var(--accent1);
+        border-radius: 3px;
+        border-bottom-width: 2px;
+        font-weight: 600;
+        padding: 1px 2px;
+      }
+
+      option:checked {
+        background-color: var(--accent2);
+      }
+
+      select {
+        background-color: var(--primary-colour);
+        border: 2px inset var(--accent1);
+        border-radius: 4px;
+        color: var(--secondary-colour);
+        overflow: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+      }
+
+      thead {
+        position: sticky;
+        top: 0px;
+        z-index: 1;
+      }
+
+      td,
+      th {
+        border: 2px solid var(--secondary-colour);
+        padding-inline: 4px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      th {
+        background-image: linear-gradient(
+          45deg,
+          var(--accent2),
+          transparent 20% 80%,
+          var(--accent2)
+        );
+        background-color: var(--primary-colour);
+        border-color: var(--accent1);
+        color: var(--accent1);
+        font-size: 1.05em;
+      }
+
+      th:focus,
+      th:hover,
+      tr:focus,
+      tr:hover,
+      tbody > tr:nth-of-type(even):focus,
+      tbody > tr:nth-of-type(even):hover {
+        border-color: var(--accent1);
+        background-color: var(--secondary-colour);
+        color: var(--primary-colour);
+      }
+
+      tbody > tr:nth-of-type(even) {
+        background-color: var(--accent1);
+        color: var(--primary-colour);
+      }
+
+      textarea {
+        border: 2px outset var(--secondary-colour);
+        border-radius: 4px;
+      }
+
+      textarea::placeholder {
+        color: var(--accent1);
+      }
+
+      .box {
+        display: flex;
+        flex-direction: row;
+        border: 2px outset var(--accent1);
+        border-radius: 4px;
+        padding: 2px;
+      }
+
+      .box:focus,
+      .box:hover {
+        background-color: var(--accent1);
+        color: var(--primary-colour);
+      }
+
+      @keyframes tooltipFadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 0.95;
+        }
+      }
+
+      .modalButtonContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
+
+      .modalButton {
+        border-radius: 4px;
+      }
+
+      .modalText {
+        overflow: auto;
+      }
+
+      .modalWindow {
+        display: none;
+        flex-direction: column;
+        align-self: center;
+        text-align: center;
+        box-shadow: 0px 0px 10px 2px var(--secondary-colour);
+        border: 4px inset var(--accent1);
+        border-radius: 4px;
+        padding: 4px;
+        max-height: 50vh;
+        position: fixed;
+        z-index: 9;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .tooltipParent {
+        position: relative;
+      }
+
+      .tooltipParent:focus > .tooltip,
+      .tooltipParent:hover > .tooltip {
+        display: flex;
+        animation: tooltipFadeIn 0.7s ease;
+      }
+
+      .tooltip {
+        display: none;
+        background-color: var(--secondary-colour);
+        color: var(--primary-colour);
+        opacity: 0.95;
+        border: 2px outset var(--accent1);
+        border-radius: 4px;
+        padding: 3px;
+        position: fixed;
+        top: 5px;
+        left: 5px;
+        z-index: 10;
+        min-width: min-content;
+        width: max-content;
+        max-width: 75vw;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          Oxygen,
+          Ubuntu,
+          Cantarell,
+          "Open Sans",
+          "Helvetica Neue",
+          sans-serif;
+        font-weight: 600;
+        text-align: left;
+        text-wrap: wrap;
+      }
+
+      .tooltip::before {
+        content: "i";
+        background-color: var(--primary-colour);
+        color: var(--secondary-colour);
+        border-radius: 4px;
+        margin-right: 4px;
+        height: 100%;
+        padding-inline: 0.5em;
+        font-style: italic;
+        font-weight: 600;
+      }
+
+      #author {
+        display: block;
+      }
+
+      .listItemLabel {
+        margin-left: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 title="Подсчёт баллов за письменный перевод">Баллда</h1>
+
+    <!-- Settings -->
+    <details id="settings">
+      <summary>Настройки</summary>
+    </details>
+
+    <label>Виды ошибок:</label>
+
+    <!-- #region Mistakes -->
+    <div>
+      <div class="box">
+        <input
+          id="meaning"
+          type="number"
+          min="0"
+          max="100"
+          onmouseenter="focus()"
+          onmouseleave="blur()"
+          onchange="valueChange()"
+          value="0"
+        />
+        <label for="meaning" class="listItemLabel">Смысловая</label>
+      </div>
+
+      <div class="box">
+        <input
+          id="inaccuracy"
+          type="number"
+          min="0"
+          max="100"
+          onmouseenter="focus()"
+          onmouseleave="blur()"
+          onchange="valueChange()"
+          value="0"
+        />
+        <label for="inaccuracy" class="listItemLabel">Неточность</label>
+      </div>
+
+      <div class="box">
+        <input
+          id="grammar"
+          type="number"
+          min="0"
+          max="100"
+          onmouseenter="focus()"
+          onmouseleave="blur()"
+          onchange="valueChange()"
+          value="0"
+        />
+        <label for="grammar" class="listItemLabel">Грамматика</label>
+      </div>
+
+      <div class="box">
+        <input
+          id="vocabulary"
+          type="number"
+          min="0"
+          max="100"
+          onmouseenter="focus()"
+          onmouseleave="blur()"
+          onchange="valueChange()"
+          value="0"
+        />
+        <label for="vocabulary" class="listItemLabel">Лексика</label>
+      </div>
+
+      <div class="box">
+        <input
+          id="style"
+          type="number"
+          min="0"
+          max="100"
+          onmouseenter="focus()"
+          onmouseleave="blur()"
+          onchange="valueChange()"
+          value="0"
+        />
+        <label for="style" class="listItemLabel">Стиль</label>
+      </div>
+
+      <div class="box">
+        <input
+          id="orthpunc"
+          type="number"
+          min="0"
+          max="100"
+          onmouseenter="focus()"
+          onmouseleave="blur()"
+          onchange="valueChange()"
+          value="0"
+        />
+        <label for="orthpunc" class="listItemLabel">Орфография и пунктуация</label>
+      </div>
+    </div>
+    <!-- #endregion -->
+
+    <hr />
+
+    <!-- #region Clear button -->
+    <button id="reset" onclick="resetValues()">Сброс</button>
+    <!-- #endregion -->
+
+    <hr />
+
+    <!-- #region Results -->
+    <div>
+      <table style="width: 100%">
+        <tr>
+          <th>Число ошибок</th>
+          <th>Вес ошибок</th>
+          <th>Итоговый балл</th>
+        </tr>
+
+        <tr>
+          <td id="mistakesCount">…</td>
+          <td id="mistakesWeight">…</td>
+          <td id="resultingMark">…</td>
+        </tr>
+      </table>
+    </div>
+    <!-- #endregion -->
+
+    <div class="box" style="font-style: italic">
+      Автор — Виталий Павлович Ульянов. За помощь спасибо Максиму Чинкину и wmysterio!
+    </div>
+
+    <!-- #region Help -->
+    <details>
+      <summary>Справка по видам ошибок</summary>
+      <ul>
+        <li>
+          <b>Смысловая ошибка</b> — полное искажение смысла, опущение существенной информации,
+          привнесение неверной информации.
+        </li>
+        <li>
+          <b>Неточность</b> — опущение несущественной информации, привнесение лишней информации, не
+          приводящее к существенному изменению смысла (не совсем точное толкование текста, не
+          ведущее к его искажению).
+        </li>
+        <li>
+          <b>Грамматическая ошибка</b> — ошибка в передаче значения грамматической формы
+          (несогласование членов предложения, неправильное употребление артикля, неправильное
+          оформление временных форм глагола, не приводящее к существенному изменению смысла, и
+          т.п.).
+        </li>
+        <li>
+          <b>Лексическая ошибка</b> — ошибка в передаче контекстуального значения слова, не носящего
+          стилистического характера (использование слова в его наиболее распространённом словарном
+          значении, отсутствие необходимой адекватности замены, обусловленной контекстом и нормами
+          данного языка).
+        </li>
+        <li>
+          <b>Стилистическая ошибка</b> — отступление от стилистических норм языка для данного стиля
+          речи (ошибочное употребление синонимов, нарушение правил сочетаемости и т.п.).
+        </li>
+        <li>
+          <b>Орфографическая/пунктуационная ошибка</b> — нарушение норм орфографии или пунктуации.
+        </li>
+        <li><b>Повторяющаяся ошибка</b> считается за одну ошибку.</li>
+      </ul>
+    </details>
+    <!-- #endregion -->
+
+    <script>
+      /**
+       * JavaScript logic for HTML programmes by Vital (Vitaly Pavlovich Ulyanov)
+       */
+
+      // Stored values and style variables
+      let storedPrimaryColour =
+        localStorage.getItem("--primary-colour") ??
+        getComputedStyle(document.body).getPropertyValue("--primary-colour");
+      let storedSecondaryColour =
+        localStorage.getItem("--secondary-colour") ??
+        getComputedStyle(document.body).getPropertyValue("--secondary-colour");
+      let storedAccentColour1 =
+        localStorage.getItem("--accent1") ??
+        getComputedStyle(document.body).getPropertyValue("--accent1");
+      let storedAccentColour2 =
+        localStorage.getItem("--accent2") ??
+        getComputedStyle(document.body).getPropertyValue("--accent2");
+
+      document.body.style.setProperty("--primary-colour", storedPrimaryColour);
+      document.body.style.setProperty("--secondary-colour", storedSecondaryColour);
+      document.body.style.setProperty("--accent1", storedAccentColour1);
+      document.body.style.setProperty("--accent2", storedAccentColour2);
+
+      /** @type {HTMLDetailsElement} */
+      let settings = document.getElementById("settings");
+
+      // Append settings with unified ones
+      let fullscreen = settings.parentElement.appendChild(document.createElement("button"));
+      let font = settings.appendChild(document.createElement("div"));
+      let setDiv = settings.appendChild(document.createElement("div"));
+      let primDiv = setDiv.appendChild(document.createElement("div"));
+      let secDiv = setDiv.appendChild(document.createElement("div"));
+      let acc1Div = setDiv.appendChild(document.createElement("div"));
+      let acc2Div = setDiv.appendChild(document.createElement("div"));
+      let load = settings.appendChild(document.createElement("div"));
+      let save = settings.appendChild(document.createElement("a"));
+
+      setDiv.style.display = "flex";
+      setDiv.style.flexWrap = "wrap";
+
+      //#region Fullscreen button
+      const up = "&#9650;";
+      const down = "&#9660;";
+
+      fullscreen.id = "fullscreenButton";
+      fullscreen.classList = "tooltipParent";
+      fullscreen.innerHTML = up;
+      fullscreen.style.fontWeight = 600;
+      fullscreen.style.borderWidth = 0;
+      fullscreen.style.opacity = "0.9";
+      fullscreen.style.position = "fixed";
+      fullscreen.style.paddingInline = "2px";
+      fullscreen.style.top = "5px";
+      fullscreen.style.right = "5px";
+      fullscreen.addEventListener("click", function () {
+        let page = document.documentElement;
+        if (document.fullscreenElement) {
+          if (document.exitFullscreen) document.exitFullscreen();
+        } else {
+          if (page.requestFullscreen) page.requestFullscreen();
+        }
+      });
+
+      let fullscreenTooltip = document.createElement("span");
+      fullscreenTooltip.className = "tooltip";
+      fullscreenTooltip.textContent = "Fullscreen";
+
+      fullscreen.appendChild(fullscreenTooltip);
+
+      document.addEventListener("fullscreenchange", function () {
+        if (document.fullscreenElement) fullscreen.innerHTML = down;
+        else fullscreen.innerHTML = up;
+        fullscreen.appendChild(fullscreenTooltip);
+      });
+      //#endregion
+
+      //#region Font
+      let fontDiv = font.appendChild(document.createElement("div"));
+      fontDiv.style.display = "flex";
+      fontDiv.style.alignItems = "baseline";
+      fontDiv.style.columnGap = "4px";
+
+      let fontLabel = fontDiv.appendChild(document.createElement("label"));
+      let fontInput = fontDiv.appendChild(document.createElement("input"));
+
+      fontLabel.id = "fontLabel";
+      fontLabel.htmlFor = "fontInput";
+      fontLabel.textContent = "Font";
+
+      fontInput.id = "fontInput";
+      fontInput.type = "text";
+      fontInput.placeholder = "Type a font's name and press Enter";
+      fontInput.style.width = "100%";
+      fontInput.addEventListener("change", function () {
+        localStorage.setItem("pageFont", this.value);
+        loadFont();
+      });
+      //#endregion
+
+      //#region Primary colour
+      primDiv.style.display = "flex";
+      primDiv.style.minWidth = "50%";
+      primDiv.style.alignItems = "center";
+      primDiv.style.columnGap = "4px";
+
+      let primInput = primDiv.appendChild(document.createElement("input"));
+      primInput.id = "primCol";
+      primInput.type = "color";
+      primInput.value = storedPrimaryColour;
+      primInput.addEventListener("input", function () {
+        colourChange("primary", this.value);
+      });
+
+      let primLabel = primDiv.appendChild(document.createElement("label"));
+      primLabel.id = "primLabel";
+      primLabel.htmlFor = primInput.id;
+      primLabel.textContent = "Background colour";
+      primLabel.style.verticalAlign = "center";
+      //#endregion
+
+      //#region Secondary colour
+      secDiv.style.display = "flex";
+      secDiv.style.alignItems = "center";
+      secDiv.style.columnGap = "4px";
+
+      let secInput = secDiv.appendChild(document.createElement("input"));
+      secInput.id = "secCol";
+      secInput.type = "color";
+      secInput.value = storedSecondaryColour;
+      secInput.addEventListener("input", function () {
+        colourChange("secondary", this.value);
+      });
+
+      let secLabel = secDiv.appendChild(document.createElement("label"));
+      secLabel.id = "secLabel";
+      secLabel.htmlFor = secInput.id;
+      secLabel.textContent = "Text colour";
+      secLabel.style.verticalAlign = "center";
+      //#endregion
+
+      //#region Accent colour 1
+      acc1Div.style.display = "flex";
+      acc1Div.style.minWidth = "50%";
+      acc1Div.style.alignItems = "center";
+      acc1Div.style.columnGap = "4px";
+
+      let acc1Input = acc1Div.appendChild(document.createElement("input"));
+      acc1Input.id = "acc1Col";
+      acc1Input.type = "color";
+      acc1Input.value = storedAccentColour1;
+      acc1Input.addEventListener("input", function () {
+        colourChange("accent1", this.value);
+      });
+
+      let acc1Label = acc1Div.appendChild(document.createElement("label"));
+      acc1Label.id = "acc1Label";
+      acc1Label.htmlFor = acc1Input.id;
+      acc1Label.textContent = "Accent colour 1";
+      acc1Label.style.verticalAlign = "center";
+      //#endregion
+
+      //#region Accent colour 2
+      acc2Div.style.display = "flex";
+      acc2Div.style.alignItems = "center";
+      acc2Div.style.columnGap = "4px";
+
+      let acc2Input = acc2Div.appendChild(document.createElement("input"));
+      acc2Input.id = "acc2Col";
+      acc2Input.type = "color";
+      acc2Input.value = storedAccentColour2;
+      acc2Input.addEventListener("input", function () {
+        colourChange("accent2", this.value);
+      });
+
+      let acc2Label = acc2Div.appendChild(document.createElement("label"));
+      acc2Label.id = "acc2Label";
+      acc2Label.htmlFor = acc2Input.id;
+      acc2Label.textContent = "Accent colour 2";
+      acc2Label.style.verticalAlign = "center";
+      //#endregion
+
+      //#region Load button
+      load.className = "box";
+      load.style.display = "flex";
+      load.style.flexWrap = "wrap";
+      load.style.alignItems = "center";
+      load.style.justifyContent = "space-between";
+
+      let loadLabel = load.appendChild(document.createElement("label"));
+      loadLabel.id = "loadLabel";
+      loadLabel.htmlFor = "loadColoursButton";
+      loadLabel.innerHTML = "&#128193; Load colours";
+      loadLabel.style.flexGrow = 1;
+      loadLabel.style.cursor = "pointer";
+
+      let loadInput = load.appendChild(document.createElement("input"));
+      loadInput.id = "loadColoursButton";
+      loadInput.type = "file";
+      loadInput.accept = ".json";
+      loadInput.style.display = "none";
+      loadInput.addEventListener("change", loadColours);
+      //#endregion
+
+      //#region Save button
+      save.id = "saveColoursButton";
+      save.href = "";
+      save.download = "ColourScheme.json";
+      save.className = "box";
+      save.innerHTML = "&#128190; Save colours";
+      save.style.textDecoration = "none";
+      save.addEventListener("click", saveColours);
+      //#endregion
+
+      //#region Export texts for translation
+      let exportLang = settings.appendChild(document.createElement("a"));
+
+      exportLang.id = "exportLang";
+      exportLang.href = "";
+      exportLang.download = "TranslationTemplate.json";
+      exportLang.className = "box";
+      exportLang.innerHTML = "&#127760; Export texts for translation";
+      exportLang.style.textDecoration = "none";
+      exportLang.addEventListener("click", exportTranslationTemplate);
+      //#endregion
+
+      function colourChange(colourType, colour) {
+        switch (colourType) {
+          case "primary":
+            document.body.style.setProperty("--primary-colour", colour);
+            localStorage.setItem("--primary-colour", colour);
+            break;
+          case "secondary":
+            document.body.style.setProperty("--secondary-colour", colour);
+            localStorage.setItem("--secondary-colour", colour);
+            break;
+          case "accent1":
+            document.body.style.setProperty("--accent1", colour);
+            localStorage.setItem("--accent1", colour);
+            break;
+          case "accent2":
+            document.body.style.setProperty("--accent2", colour);
+            localStorage.setItem("--accent2", colour);
+            break;
+          default:
+            break;
+        }
+      }
+
+      /**
+       * @typedef {Object} ColourScheme
+       * @property {string} primary
+       * @property {string} secondary
+       * @property {string} accent1
+       * @property {string} accent2
+       */
+
+      function saveColours() {
+        /** @type {ColourScheme}  */
+        let colours = {
+          primary: document.body.style.getPropertyValue("--primary-colour"),
+          secondary: document.body.style.getPropertyValue("--secondary-colour"),
+          accent1: document.body.style.getPropertyValue("--accent1"),
+          accent2: document.body.style.getPropertyValue("--accent2"),
+        };
+        let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
+        saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
+      }
+
+      /**
+       * @typedef {Object} LangElement
+       * @property {string} id
+       * @property {string} textContent
+       * @property {string} placeholder
+       * @property {string[]} childNodesTexts
+       */
+      function exportTranslationTemplate() {
+        /** @type {LangElement[]} */
+        let elements = [];
+
+        document.querySelectorAll("body *").forEach((e) => {
+          if (
+            e.tagName !== "DIV" &&
+            e.tagName !== "DETAILS" &&
+            e.tagName !== "TABLE" &&
+            e.id &&
+            e.id !== "lang"
+          ) {
+            /** @type {LangElement} */
+            let newEl = {};
+
+            newEl.id = e.id;
+
+            if (e.childNodes) {
+              newEl.childNodesTexts = [];
+
+              for (let n of e.childNodes) {
+                if (n.textContent && n.textContent.trim() !== "") {
+                  newEl.childNodesTexts.push(n.textContent.trim());
                 }
-                to {
-                    opacity: 0.95;
+              }
+            } else {
+              if (e.textContent) {
+                newEl.textContent = e.textContent;
+              }
+            }
+
+            if (e.placeholder) {
+              newEl.placeholder = e.placeholder;
+            }
+
+            if (newEl.textContent || newEl.placeholder || newEl?.childNodesTexts.length > 0) {
+              elements.push(newEl);
+            }
+          }
+        });
+
+        let data = encodeURIComponent(JSON.stringify(elements, undefined, 4));
+        exportLang.href = `data:text/plain;charset=utf-8,${data}`;
+      }
+
+      async function loadColours() {
+        await loadColoursButton.files[0].text().then((content) => {
+          try {
+            /** @type {ColourScheme} */
+            let data = JSON.parse(content);
+            if (data) {
+              if (data.primary) {
+                colourChange("primary", data.primary);
+                primInput.value = data.primary;
+              }
+              if (data.secondary) {
+                colourChange("secondary", data.secondary);
+                secInput.value = data.secondary;
+              }
+              if (data.accent1) {
+                colourChange("accent1", data.accent1);
+                acc1Input.value = data.accent1;
+              }
+              if (data.accent2) {
+                colourChange("accent2", data.accent2);
+                acc2Input.value = data.accent2;
+              }
+            }
+          } catch (error) {
+            alert(`Ошибка при чтении файла цветов: ${error}`);
+          }
+        });
+      }
+
+      function loadFont() {
+        let font = localStorage.getItem("pageFont");
+        document.getElementById("fontInput").value = font;
+        document.documentElement.style.fontFamily = font;
+      }
+
+      /**
+       * @typedef {Object} Translation
+       * @property {string} name
+       * @property {string[]} langTags
+       * @property {LangElement[]} elements
+       */
+      /**
+       * @param {Translation[]} languages
+       */
+      function generateLanguagesList(languages) {
+        /** @type {HTMLSelectElement} */
+        let list = document.body.insertBefore(document.createElement("select"), settings);
+        list.id = "lang";
+        list.style.borderRadius = "7px 0px 0px 7px";
+        list.addEventListener("change", function (event) {
+          selectLanguage(languages, true);
+        });
+
+        for (let l of languages) {
+          /** @type {HTMLOptionElement} */
+          let option = list.appendChild(document.createElement("option"));
+          option.value = l.name;
+          option.textContent = l.name;
+        }
+
+        selectLanguage(languages, false);
+      }
+
+      /**
+       * @param {Translation[]} languages
+       * @param {boolean} fromMenu
+       */
+      function selectLanguage(languages, fromMenu) {
+        /** @type {HTMLSelectElement} */
+        let menu = document.getElementById("lang");
+        /** @type {string} */
+        let selection = undefined;
+
+        if (fromMenu === false) {
+          if (localStorage.getItem("lang")) {
+            selection = localStorage.getItem("lang");
+            menu.value = selection;
+          } else if (navigator.language) {
+            // Iterate over translations
+            for (const l of languages) {
+              // If the valid option is finally found, exit
+              if (selection) {
+                break;
+              } else if (l.langTags) {
+                // Otherwise iterate over the tags and
+                // compare them to the browser language
+                for (const t of l.langTags) {
+                  if (navigator.language === t) {
+                    menu.value = l.name;
+                    selection = l.name;
+                    break;
+                  }
                 }
+              }
             }
-            
-            .modalButtonContainer {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-evenly;
+          }
+        } else {
+          selection = menu.value;
+        }
+
+        if (selection) {
+          /** @type {Translation} */
+          let translation = {};
+
+          for (const l of languages) {
+            if (l.name === selection) {
+              translation = l;
+              break;
             }
-            
-            .modalButton {
-                border-radius: 4px;
-            }
-            
-            .modalText {
-                overflow: auto;
-            }
-            
-            .modalWindow {
-                display: none;
-                flex-direction: column;
-                align-self: center;
-                text-align: center;
-                box-shadow: 0px 0px 10px 2px var(--secondary-colour);
-                border: 4px inset var(--accent1);
-                border-radius: 4px;
-                padding: 4px;
-                max-height: 50vh;
-                position: fixed;
-                z-index: 9;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
-            
-            .tooltipParent {
-                position: relative;
-            }
-            
-            .tooltipParent:focus > .tooltip,
-            .tooltipParent:hover > .tooltip {
-                display: flex;
-                animation: tooltipFadeIn 0.7s ease;
-            }
-            
-            .tooltip {
-                display: none;
-                background-color: var(--secondary-colour);
-                color: var(--primary-colour);
-                opacity: 0.95;
-                border: 2px outset var(--accent1);
-                border-radius: 4px;
-                padding: 3px;
-                position: fixed;
-                top: 5px;
-                left: 5px;
-                z-index: 10;
-                min-width: min-content;
-                width: max-content;
-                max-width: 75vw;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                font-weight: 600;
-                text-align: left;
-                text-wrap: wrap;
-            }
-            
-            .tooltip::before {
-                content: 'i';
-                background-color: var(--primary-colour);
-                color: var(--secondary-colour);
-                border-radius: 4px;
-                margin-right: 4px;
-                height: 100%;
-                padding-inline: 0.5em;
-                font-style: italic;
-                font-weight: 600;
-            }
-            
-            #author {
-                display: block;
-            }
+          }
 
-            .listItemLabel {
-                margin-left: 5px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1 title='Подсчёт баллов за письменный перевод'>Баллда</h1>
+          if (translation) {
+            localStorage.setItem("lang", selection);
 
-        <!-- Settings -->
-        <details id='settings'>
-            <summary>Настройки</summary>
-        </details>
+            for (const e of translation.elements) {
+              let target = document.getElementById(e.id);
 
-        <label>Виды ошибок:</label>
-
-        <!-- #region Mistakes -->
-        <div>
-            <div class='box'>
-                <input
-                    id='meaning'
-                    type='number'
-                    min='0'
-                    max='100'
-                    onmouseenter='focus()'
-                    onmouseleave='blur()'
-                    onchange='valueChange()'
-                    value='0'
-                />
-                <label for='meaning' class='listItemLabel'>Смысловая</label>
-            </div>
-
-            <div class='box'>
-                <input
-                    id='inaccuracy'
-                    type='number'
-                    min='0'
-                    max='100'
-                    onmouseenter='focus()'
-                    onmouseleave='blur()'
-                    onchange='valueChange()'
-                    value='0'
-                />
-                <label for='inaccuracy' class='listItemLabel'>Неточность</label>
-            </div>
-
-            <div class='box'>
-                <input
-                    id='grammar'
-                    type='number'
-                    min='0'
-                    max='100'
-                    onmouseenter='focus()'
-                    onmouseleave='blur()'
-                    onchange='valueChange()'
-                    value='0'
-                />
-                <label for='grammar' class='listItemLabel'>Грамматика</label>
-            </div>
-
-            <div class='box'>
-                <input
-                    id='vocabulary'
-                    type='number'
-                    min='0'
-                    max='100'
-                    onmouseenter='focus()'
-                    onmouseleave='blur()'
-                    onchange='valueChange()'
-                    value='0'
-                />
-                <label for='vocabulary' class='listItemLabel'>Лексика</label>
-            </div>
-
-            <div class='box'>
-                <input
-                    id='style'
-                    type='number'
-                    min='0'
-                    max='100'
-                    onmouseenter='focus()'
-                    onmouseleave='blur()'
-                    onchange='valueChange()'
-                    value='0'
-                />
-                <label for='style' class='listItemLabel'>Стиль</label>
-            </div>
-
-            <div class='box'>
-                <input
-                    id='orthpunc'
-                    type='number'
-                    min='0'
-                    max='100'
-                    onmouseenter='focus()'
-                    onmouseleave='blur()'
-                    onchange='valueChange()'
-                    value='0'
-                />
-                <label for='orthpunc' class='listItemLabel'
-                    >Орфография и пунктуация</label
-                >
-            </div>
-        </div>
-        <!-- #endregion -->
-
-        <hr />
-
-        <!-- #region Clear button -->
-        <button id='reset' onclick='resetValues()'>Сброс</button>
-        <!-- #endregion -->
-
-        <hr />
-
-        <!-- #region Results -->
-        <div>
-            <table style='width: 100%'>
-                <tr>
-                    <th>Число ошибок</th>
-                    <th>Вес ошибок</th>
-                    <th>Итоговый балл</th>
-                </tr>
-
-                <tr>
-                    <td id='mistakesCount'>…</td>
-                    <td id='mistakesWeight'>…</td>
-                    <td id='resultingMark'>…</td>
-                </tr>
-            </table>
-        </div>
-        <!-- #endregion -->
-
-        <div class='box' style='font-style: italic'>
-            Автор — Виталий Павлович Ульянов. За помощь спасибо Максиму Чинкину
-            и wmysterio!
-        </div>
-
-        <!-- #region Help -->
-        <details>
-            <summary>Справка по видам ошибок</summary>
-            <ul>
-                <li>
-                    <b>Смысловая ошибка</b> — полное искажение смысла, опущение
-                    существенной информации, привнесение неверной информации.
-                </li>
-                <li>
-                    <b>Неточность</b> — опущение несущественной информации,
-                    привнесение лишней информации, не приводящее к существенному
-                    изменению смысла (не совсем точное толкование текста, не
-                    ведущее к его искажению).
-                </li>
-                <li>
-                    <b>Грамматическая ошибка</b> — ошибка в передаче значения
-                    грамматической формы (несогласование членов предложения,
-                    неправильное употребление артикля, неправильное оформление
-                    временных форм глагола, не приводящее к существенному
-                    изменению смысла, и т.п.).
-                </li>
-                <li>
-                    <b>Лексическая ошибка</b> — ошибка в передаче
-                    контекстуального значения слова, не носящего стилистического
-                    характера (использование слова в его наиболее
-                    распространённом словарном значении, отсутствие необходимой
-                    адекватности замены, обусловленной контекстом и нормами
-                    данного языка).
-                </li>
-                <li>
-                    <b>Стилистическая ошибка</b> — отступление от стилистических
-                    норм языка для данного стиля речи (ошибочное употребление
-                    синонимов, нарушение правил сочетаемости и т.п.).
-                </li>
-                <li>
-                    <b>Орфографическая/пунктуационная ошибка</b> — нарушение
-                    норм орфографии или пунктуации.
-                </li>
-                <li><b>Повторяющаяся ошибка</b> считается за одну ошибку.</li>
-            </ul>
-        </details>
-        <!-- #endregion -->
-
-        <script>
-            /**
-             * JavaScript logic for HTML programmes by Vital (Vitaly Pavlovich Ulyanov)
-             */
-            
-            // Stored values and style variables
-            let storedPrimaryColour =
-                localStorage.getItem('--primary-colour') ??
-                getComputedStyle(document.body).getPropertyValue('--primary-colour');
-            let storedSecondaryColour =
-                localStorage.getItem('--secondary-colour') ??
-                getComputedStyle(document.body).getPropertyValue('--secondary-colour');
-            let storedAccentColour1 =
-                localStorage.getItem('--accent1') ??
-                getComputedStyle(document.body).getPropertyValue('--accent1');
-            let storedAccentColour2 =
-                localStorage.getItem('--accent2') ??
-                getComputedStyle(document.body).getPropertyValue('--accent2');
-            
-            document.body.style.setProperty('--primary-colour', storedPrimaryColour);
-            document.body.style.setProperty('--secondary-colour', storedSecondaryColour);
-            document.body.style.setProperty('--accent1', storedAccentColour1);
-            document.body.style.setProperty('--accent2', storedAccentColour2);
-            
-            /** @type {HTMLDetailsElement} */
-            let settings = document.getElementById('settings');
-            
-            // Append settings with unified ones
-            let fullscreen = settings.parentElement.appendChild(
-                document.createElement('button')
-            );
-            let font = settings.appendChild(document.createElement('div'));
-            let setDiv = settings.appendChild(document.createElement('div'));
-            let primDiv = setDiv.appendChild(document.createElement('div'));
-            let secDiv = setDiv.appendChild(document.createElement('div'));
-            let acc1Div = setDiv.appendChild(document.createElement('div'));
-            let acc2Div = setDiv.appendChild(document.createElement('div'));
-            let load = settings.appendChild(document.createElement('div'));
-            let save = settings.appendChild(document.createElement('a'));
-            
-            setDiv.style.display = 'flex';
-            setDiv.style.flexWrap = 'wrap';
-            
-            //#region Fullscreen button
-            const up = '&#9650;';
-            const down = '&#9660;';
-            
-            fullscreen.id = 'fullscreenButton';
-            fullscreen.classList = 'tooltipParent';
-            fullscreen.innerHTML = up;
-            fullscreen.style.fontWeight = 600;
-            fullscreen.style.borderWidth = 0;
-            fullscreen.style.opacity = '0.9';
-            fullscreen.style.position = 'fixed';
-            fullscreen.style.paddingInline = '2px';
-            fullscreen.style.top = '5px';
-            fullscreen.style.right = '5px';
-            fullscreen.addEventListener('click', function () {
-                let page = document.documentElement;
-                if (document.fullscreenElement) {
-                    if (document.exitFullscreen) document.exitFullscreen();
-                } else {
-                    if (page.requestFullscreen) page.requestFullscreen();
+              if (target) {
+                if (e.textContent) {
+                  target.textContent = e.textContent;
                 }
-            });
-            
-            let fullscreenTooltip = document.createElement('span');
-            fullscreenTooltip.className = 'tooltip';
-            fullscreenTooltip.textContent = 'Fullscreen';
-            
-            fullscreen.appendChild(fullscreenTooltip);
-            
-            document.addEventListener('fullscreenchange', function () {
-                if (document.fullscreenElement) fullscreen.innerHTML = down;
-                else fullscreen.innerHTML = up;
-                fullscreen.appendChild(fullscreenTooltip);
-            });
-            //#endregion
-            
-            //#region Font
-            let fontDiv = font.appendChild(document.createElement('div'));
-            fontDiv.style.display = 'flex';
-            fontDiv.style.alignItems = 'baseline';
-            fontDiv.style.columnGap = '4px';
-            
-            let fontLabel = fontDiv.appendChild(document.createElement('label'));
-            let fontInput = fontDiv.appendChild(document.createElement('input'));
-            
-            fontLabel.id = 'fontLabel';
-            fontLabel.htmlFor = 'fontInput';
-            fontLabel.textContent = 'Font';
-            
-            fontInput.id = 'fontInput';
-            fontInput.type = 'text';
-            fontInput.placeholder = 'Type a font\'s name and press Enter';
-            fontInput.style.width = '100%';
-            fontInput.addEventListener('change', function () {
-                localStorage.setItem('pageFont', this.value);
-                loadFont();
-            });
-            //#endregion
-            
-            //#region Primary colour
-            primDiv.style.display = 'flex';
-            primDiv.style.minWidth = '50%';
-            primDiv.style.alignItems = 'center';
-            primDiv.style.columnGap = '4px';
-            
-            let primInput = primDiv.appendChild(document.createElement('input'));
-            primInput.id = 'primCol';
-            primInput.type = 'color';
-            primInput.value = storedPrimaryColour;
-            primInput.addEventListener('input', function () {
-                colourChange('primary', this.value);
-            });
-            
-            let primLabel = primDiv.appendChild(document.createElement('label'));
-            primLabel.id = 'primLabel';
-            primLabel.htmlFor = primInput.id;
-            primLabel.textContent = 'Background colour';
-            primLabel.style.verticalAlign = 'center';
-            //#endregion
-            
-            //#region Secondary colour
-            secDiv.style.display = 'flex';
-            secDiv.style.alignItems = 'center';
-            secDiv.style.columnGap = '4px';
-            
-            let secInput = secDiv.appendChild(document.createElement('input'));
-            secInput.id = 'secCol';
-            secInput.type = 'color';
-            secInput.value = storedSecondaryColour;
-            secInput.addEventListener('input', function () {
-                colourChange('secondary', this.value);
-            });
-            
-            let secLabel = secDiv.appendChild(document.createElement('label'));
-            secLabel.id = 'secLabel';
-            secLabel.htmlFor = secInput.id;
-            secLabel.textContent = 'Text colour';
-            secLabel.style.verticalAlign = 'center';
-            //#endregion
-            
-            //#region Accent colour 1
-            acc1Div.style.display = 'flex';
-            acc1Div.style.minWidth = '50%';
-            acc1Div.style.alignItems = 'center';
-            acc1Div.style.columnGap = '4px';
-            
-            let acc1Input = acc1Div.appendChild(document.createElement('input'));
-            acc1Input.id = 'acc1Col';
-            acc1Input.type = 'color';
-            acc1Input.value = storedAccentColour1;
-            acc1Input.addEventListener('input', function () {
-                colourChange('accent1', this.value);
-            });
-            
-            let acc1Label = acc1Div.appendChild(document.createElement('label'));
-            acc1Label.id = 'acc1Label';
-            acc1Label.htmlFor = acc1Input.id;
-            acc1Label.textContent = 'Accent colour 1';
-            acc1Label.style.verticalAlign = 'center';
-            //#endregion
-            
-            //#region Accent colour 2
-            acc2Div.style.display = 'flex';
-            acc2Div.style.alignItems = 'center';
-            acc2Div.style.columnGap = '4px';
-            
-            let acc2Input = acc2Div.appendChild(document.createElement('input'));
-            acc2Input.id = 'acc2Col';
-            acc2Input.type = 'color';
-            acc2Input.value = storedAccentColour2;
-            acc2Input.addEventListener('input', function () {
-                colourChange('accent2', this.value);
-            });
-            
-            let acc2Label = acc2Div.appendChild(document.createElement('label'));
-            acc2Label.id = 'acc2Label';
-            acc2Label.htmlFor = acc2Input.id;
-            acc2Label.textContent = 'Accent colour 2';
-            acc2Label.style.verticalAlign = 'center';
-            //#endregion
-            
-            //#region Load button
-            load.className = 'box';
-            load.style.display = 'flex';
-            load.style.flexWrap = 'wrap';
-            load.style.alignItems = 'center';
-            load.style.justifyContent = 'space-between';
-            
-            let loadLabel = load.appendChild(document.createElement('label'));
-            loadLabel.id = 'loadLabel';
-            loadLabel.htmlFor = 'loadColoursButton';
-            loadLabel.innerHTML = '&#128193; Load colours';
-            loadLabel.style.flexGrow = 1;
-            loadLabel.style.cursor = 'pointer';
-            
-            let loadInput = load.appendChild(document.createElement('input'));
-            loadInput.id = 'loadColoursButton';
-            loadInput.type = 'file';
-            loadInput.accept = '.json';
-            loadInput.style.display = 'none';
-            loadInput.addEventListener('change', loadColours);
-            //#endregion
-            
-            //#region Save button
-            save.id = 'saveColoursButton';
-            save.href = '';
-            save.download = 'ColourScheme.json';
-            save.className = 'box';
-            save.innerHTML = '&#128190; Save colours';
-            save.style.textDecoration = 'none';
-            save.addEventListener('click', saveColours);
-            //#endregion
-            
-            //#region Export texts for translation
-            let exportLang = settings.appendChild(document.createElement('a'));
-            
-            exportLang.id = 'exportLang';
-            exportLang.href = '';
-            exportLang.download = 'TranslationTemplate.json';
-            exportLang.className = 'box';
-            exportLang.innerHTML = '&#127760; Export texts for translation';
-            exportLang.style.textDecoration = 'none';
-            exportLang.addEventListener('click', exportTranslationTemplate);
-            //#endregion
-            
-            function colourChange(colourType, colour) {
-                switch (colourType) {
-                    case 'primary':
-                        document.body.style.setProperty('--primary-colour', colour);
-                        localStorage.setItem('--primary-colour', colour);
-                        break;
-                    case 'secondary':
-                        document.body.style.setProperty('--secondary-colour', colour);
-                        localStorage.setItem('--secondary-colour', colour);
-                        break;
-                    case 'accent1':
-                        document.body.style.setProperty('--accent1', colour);
-                        localStorage.setItem('--accent1', colour);
-                        break;
-                    case 'accent2':
-                        document.body.style.setProperty('--accent2', colour);
-                        localStorage.setItem('--accent2', colour);
-                        break;
-                    default:
-                        break;
+
+                if (e.placeholder) {
+                  target.placeholder = e.placeholder;
                 }
-            }
-            
-            /**
-             * @typedef {Object} ColourScheme
-             * @property {string} primary
-             * @property {string} secondary
-             * @property {string} accent1
-             * @property {string} accent2
-             */
-            
-            function saveColours() {
-                /** @type {ColourScheme}  */
-                let colours = {
-                    primary: document.body.style.getPropertyValue('--primary-colour'),
-                    secondary: document.body.style.getPropertyValue('--secondary-colour'),
-                    accent1: document.body.style.getPropertyValue('--accent1'),
-                    accent2: document.body.style.getPropertyValue('--accent2'),
-                };
-                let data = encodeURIComponent(JSON.stringify(colours, undefined, 2));
-                saveColoursButton.href = `data:text/plain;charset=utf-8,${data}`;
-            }
-            
-            /**
-             * @typedef {Object} LangElement
-             * @property {string} id
-             * @property {string} textContent
-             * @property {string} placeholder
-             * @property {string[]} childNodesTexts
-             */
-            function exportTranslationTemplate() {
-                /** @type {LangElement[]} */
-                let elements = [];
-            
-                document.querySelectorAll('body *').forEach((e) => {
-                    if (e.tagName !== 'DIV'
-                        && e.tagName !== 'DETAILS'
-                        && e.tagName !== 'TABLE'
-                        && e.id
-                        && e.id !== 'lang'
-                    ) {
-                        /** @type {LangElement} */
-                        let newEl = {};
-            
-                        newEl.id = e.id;
-            
-                        if (e.childNodes) {
-                            newEl.childNodesTexts = [];
-            
-                            for (let n of e.childNodes) {
-                                if (n.textContent && n.textContent.trim() !== '') {
-                                    newEl.childNodesTexts.push(n.textContent.trim());
-                                }
-                            }
-                        } else {
-                            if (e.textContent) {
-                                newEl.textContent = e.textContent;
-                            }
-                        }
-            
-                        if (e.placeholder) {
-                            newEl.placeholder = e.placeholder;
-                        }
-            
-                        if (newEl.textContent
-                            || newEl.placeholder
-                            || newEl?.childNodesTexts.length > 0
-                        ) {
-                            elements.push(newEl);
-                        }
+
+                if (e.childNodesTexts) {
+                  /** @type {number} */
+                  let index = 0;
+
+                  for (const c of target.childNodes) {
+                    if (c.textContent && c.textContent.trim() !== "" && e.childNodesTexts[index]) {
+                      c.textContent = e.childNodesTexts[index];
+                      index++;
                     }
-                });
-            
-                let data = encodeURIComponent(JSON.stringify(elements, undefined, 4));
-                exportLang.href = `data:text/plain;charset=utf-8,${data}`;
-            }
-            
-            async function loadColours() {
-                await loadColoursButton.files[0].text().then((content) => {
-                    try {
-                        /** @type {ColourScheme} */
-                        let data = JSON.parse(content);
-                        if (data) {
-                            if (data.primary) {
-                                colourChange('primary', data.primary);
-                                primInput.value = data.primary;
-                            }
-                            if (data.secondary) {
-                                colourChange('secondary', data.secondary);
-                                secInput.value = data.secondary;
-                            }
-                            if (data.accent1) {
-                                colourChange('accent1', data.accent1);
-                                acc1Input.value = data.accent1;
-                            }
-                            if (data.accent2) {
-                                colourChange('accent2', data.accent2);
-                                acc2Input.value = data.accent2;
-                            }
-                        }
-                    } catch (error) {
-                        alert(
-                            `Ошибка при чтении файла цветов: ${error}`
-                        );
-                    }
-                });
-            }
-            
-            function loadFont() {
-                let font = localStorage.getItem('pageFont');
-                document.getElementById('fontInput').value = font;
-                document.documentElement.style.fontFamily = font;
-            }
-            
-            /**
-             * @typedef {Object} Translation
-             * @property {string} name
-             * @property {string[]} langTags
-             * @property {LangElement[]} elements
-             */
-            /**
-             * @param {Translation[]} languages
-             */
-            function generateLanguagesList(languages) {
-                /** @type {HTMLSelectElement} */
-                let list = document.body.insertBefore(
-                    document.createElement('select'), settings
-                );
-                list.id = 'lang';
-                list.style.borderRadius = '7px 0px 0px 7px';
-                list.addEventListener('change', function (event) {
-                    selectLanguage(languages, true);
-                });
-            
-                for (let l of languages) {
-                    /** @type {HTMLOptionElement} */
-                    let option = list.appendChild(
-                        document.createElement('option')
-                    );
-                    option.value = l.name;
-                    option.textContent = l.name;
+                  }
                 }
-            
-                selectLanguage(languages, false);
+              }
             }
-            
-            /**
-             * @param {Translation[]} languages
-             * @param {boolean} fromMenu
-             */
-            function selectLanguage(languages, fromMenu) {
-                /** @type {HTMLSelectElement} */
-                let menu = document.getElementById('lang');
-                /** @type {string} */
-                let selection = undefined;
-            
-                if (fromMenu === false) {
-                    if (localStorage.getItem('lang')) {
-                        selection = localStorage.getItem('lang');
-                        menu.value = selection;
-                    } else if (navigator.language) {
-                        // Iterate over translations
-                        for (const l of languages) {
-                            // If the valid option is finally found, exit
-                            if (selection) {
-                                break;
-                            } else if (l.langTags) {
-                                // Otherwise iterate over the tags and
-                                // compare them to the browser language
-                                for (const t of l.langTags) {
-                                    if (navigator.language === t) {
-                                        menu.value = l.name;
-                                        selection = l.name;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    selection = menu.value;
-                }
-            
-                if (selection) {
-                    /** @type {Translation} */
-                    let translation = {};
-            
-                    for (const l of languages) {
-                        if (l.name === selection) {
-                            translation = l;
-                            break;
-                        }
-                    }
-            
-                    if (translation) {
-                        localStorage.setItem('lang', selection);
-            
-                        for (const e of translation.elements) {
-                            let target = document.getElementById(e.id);
-            
-                            if (target) {
-                                if (e.textContent) {
-                                    target.textContent = e.textContent;
-                                }
-            
-                                if (e.placeholder) {
-                                    target.placeholder = e.placeholder;
-                                }
-            
-                                if (e.childNodesTexts) {
-                                    /** @type {number} */
-                                    let index = 0;
-            
-                                    for (const c of target.childNodes) {
-                                        if (c.textContent
-                                            && c.textContent.trim() !== ''
-                                            && e.childNodesTexts[index]
-                                        ) {
-                                            c.textContent = e.childNodesTexts[index];
-                                            index ++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            
-            loadFont();
+          }
+        }
+      }
 
-        </script>
-        <script>
-            // Elements
-            let meaning = document.getElementById('meaning'),
-                inaccuracy = document.getElementById('inaccuracy'),
-                grammar = document.getElementById('grammar'),
-                vocabulary = document.getElementById('vocabulary'),
-                style = document.getElementById('style'),
-                orthpunc = document.getElementById('orthpunc'),
-                mistakesCount = document.getElementById('mistakesCount'),
-                mistakesWeight = document.getElementById('mistakesWeight'),
-                resultingMark = document.getElementById('resultingMark');
+      loadFont();
+    </script>
+    <script>
+      // Elements
+      let meaning = document.getElementById("meaning"),
+        inaccuracy = document.getElementById("inaccuracy"),
+        grammar = document.getElementById("grammar"),
+        vocabulary = document.getElementById("vocabulary"),
+        style = document.getElementById("style"),
+        orthpunc = document.getElementById("orthpunc"),
+        mistakesCount = document.getElementById("mistakesCount"),
+        mistakesWeight = document.getElementById("mistakesWeight"),
+        resultingMark = document.getElementById("resultingMark");
 
-            // Constants
-            const FULL_MISTAKE_WEIGHT = 18
-            
-            // Script variables
-            let inputFields = [
-                meaning,
-                inaccuracy,
-                grammar,
-                vocabulary,
-                style,
-                orthpunc,
-            ];
-            valueChange();
+      // Constants
+      const FULL_MISTAKE_WEIGHT = 18;
 
-            function valueChange() {
-                inputFields.forEach((field) => {
-                    field.value =
-                        field.value > 0
-                            ? field.value < 101
-                                ? field.value
-                                : 100
-                            : 0;
-                    field.innerHTML = field.value;
-                });
+      // Script variables
+      let inputFields = [meaning, inaccuracy, grammar, vocabulary, style, orthpunc];
+      valueChange();
 
-                let totalMistakesNumber, totalMistakesWeight;
+      function valueChange() {
+        inputFields.forEach((field) => {
+          field.value = field.value > 0 ? (field.value < 101 ? field.value : 100) : 0;
+          field.innerHTML = field.value;
+        });
 
-                totalMistakesNumber =
-                    parseInt(meaning.value) +
-                    parseInt(inaccuracy.value) +
-                    parseInt(grammar.value) +
-                    parseInt(vocabulary.value) +
-                    parseInt(style.value) +
-                    parseInt(orthpunc.value);
+        let totalMistakesNumber, totalMistakesWeight;
 
-                totalMistakesWeight = 
-                    parseInt(meaning.value) * FULL_MISTAKE_WEIGHT +
-                    parseInt(inaccuracy.value) * FULL_MISTAKE_WEIGHT * 0.333  +
-                    parseInt(grammar.value) * FULL_MISTAKE_WEIGHT * 0.333 +
-                    parseInt(vocabulary.value) * FULL_MISTAKE_WEIGHT * 0.333 +
-                    parseInt(style.value) * FULL_MISTAKE_WEIGHT * 0.25 +
-                    parseInt(orthpunc.value) * FULL_MISTAKE_WEIGHT * 0.2;
+        totalMistakesNumber =
+          parseInt(meaning.value) +
+          parseInt(inaccuracy.value) +
+          parseInt(grammar.value) +
+          parseInt(vocabulary.value) +
+          parseInt(style.value) +
+          parseInt(orthpunc.value);
 
-                mistakesCount.innerHTML = totalMistakesNumber;
-                mistakesWeight.innerHTML = totalMistakesWeight
-                    .toFixed(1)
-                    .replace('.', ',');
+        totalMistakesWeight =
+          parseInt(meaning.value) * FULL_MISTAKE_WEIGHT +
+          parseInt(inaccuracy.value) * FULL_MISTAKE_WEIGHT * 0.333 +
+          parseInt(grammar.value) * FULL_MISTAKE_WEIGHT * 0.333 +
+          parseInt(vocabulary.value) * FULL_MISTAKE_WEIGHT * 0.333 +
+          parseInt(style.value) * FULL_MISTAKE_WEIGHT * 0.25 +
+          parseInt(orthpunc.value) * FULL_MISTAKE_WEIGHT * 0.2;
 
-                let mark = Math.round(100 - totalMistakesWeight),
-                    letter = '';
+        mistakesCount.innerHTML = totalMistakesNumber;
+        mistakesWeight.innerHTML = totalMistakesWeight.toFixed(1).replace(".", ",");
 
-                if (mark > 94) letter = 'A';
-                else if (mark > 82) letter = 'B';
-                else if (mark > 67) letter = 'C';
-                else if (mark > 55) letter = 'D';
-                else if (mark > 49) letter = 'E';
-                else if (mark > 19) letter = 'FX';
-                else letter = 'F';
+        let mark = Math.round(100 - totalMistakesWeight),
+          letter = "";
 
-                resultingMark.innerHTML = `${mark > 0 ? mark : 0} (${letter})`;
-            }
+        if (mark > 94) letter = "A";
+        else if (mark > 82) letter = "B";
+        else if (mark > 67) letter = "C";
+        else if (mark > 55) letter = "D";
+        else if (mark > 49) letter = "E";
+        else if (mark > 19) letter = "FX";
+        else letter = "F";
 
-            function resetValues() {
-                inputFields.forEach((field) => {
-                    field.value = '0';
-                });
-                valueChange();
-            }
-        </script>
-    </body>
+        resultingMark.innerHTML = `${mark > 0 ? mark : 0} (${letter})`;
+      }
+
+      function resetValues() {
+        inputFields.forEach((field) => {
+          field.value = "0";
+        });
+        valueChange();
+      }
+    </script>
+  </body>
 </html>
