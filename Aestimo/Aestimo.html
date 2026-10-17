@@ -204,6 +204,7 @@
         border: 3px groove var(--colour-border);
         margin: 4px 0px;
         padding: 4px;
+        min-width: 0;
         max-height: calc(100vh - 8px);
         overflow: auto;
       }
@@ -680,6 +681,10 @@
         color: var(--colour-hovered-fgr);
       }
 
+      #export-lang {
+        display: none;
+      }
+
       #add-mistake-fieldset,
       #editor-notes-fieldset {
         background-color: var(--colour-tooltip);
@@ -820,7 +825,9 @@
       <select id="lang"></select>
 
       <!-- Export language -->
-      <button data-tk="export-lang" onclick="exportLanguage()">Export current language</button>
+      <button id="export-lang" data-tk="export-lang" onclick="exportLanguage()"
+        >Export current language</button
+      >
     </div>
 
     <!-- MAIN DIV -->
@@ -1911,6 +1918,12 @@
        * @property {TableCell[]} cells
        */
 
+      /** @typedef Sound
+       * @property {'square' | 'sawtooth' | 'triangle' | 'sine'} type
+       * @property {number[]} frequencies
+       * @property {number} duration
+       */
+
       /** @typedef Mistake
        * @property {string} source
        * @property {string} comment
@@ -2509,7 +2522,7 @@
           changeLanguage();
         },
         setSoundVolume: function () {
-          scenes.settings.volumeInput.value = clamp(0, +scenes.settings.volumeInput.value, 1);
+          clampInputNumber(scenes.settings.volumeInput);
           localStorage.setItem("volume", scenes.settings.volumeInput.value);
         },
         toggleDefaultSounds: function () {
@@ -3119,7 +3132,7 @@
             case "SELECT":
             case "SUMMARY":
             case "TEXTAREA":
-              playSound("sine", [250, 50, 100], 0.1);
+              playSound({ type: "sine", frequencies: [250, 50, 100], duration: 0.1 });
               break;
           }
         }
@@ -4450,11 +4463,9 @@
       }
 
       /**
-       * @param {'square' | 'sawtooth' | 'triangle' | 'sine'} type
-       * @param {number[]} frequencies
-       * @param {number} duration
+       * @param {Sound} sound
        */
-      function playSound(type, frequencies, duration) {
+      function playSound(sound) {
         if (!audio || +scenes.settings.volumeInput.value === 0) return;
 
         /** @type {OscillatorNode} */
@@ -4462,21 +4473,43 @@
         /** @type {GainNode} */
         const volume = audio.createGain();
 
-        oscillator.type = type;
-        oscillator.frequency.value = frequencies[0];
-        oscillator.frequency.setValueCurveAtTime(frequencies, audio.currentTime, duration);
+        oscillator.type = sound.type;
+        oscillator.frequency.value = sound.frequencies[0];
+        if (sound.frequencies.length > 1) {
+          oscillator.frequency.setValueCurveAtTime(
+            sound.frequencies,
+            audio.currentTime,
+            sound.duration,
+          );
+        }
         oscillator.connect(volume);
 
         volume.gain.value = +scenes.settings.volumeInput.value;
         volume.gain.setValueCurveAtTime(
           [0, +scenes.settings.volumeInput.value, 0],
           audio.currentTime,
-          duration,
+          sound.duration,
         );
         volume.connect(audio.destination);
 
         oscillator.start();
-        oscillator.stop(audio.currentTime + duration);
+        oscillator.stop(audio.currentTime + sound.duration);
+      }
+
+      /**
+       * @param {Sound[]} sounds
+       */
+      function playSoundSequence(sounds) {
+        /** @type {number} */
+        let delay = 0;
+
+        sounds.forEach((s, i) => {
+          setTimeout(function () {
+            playSound(s);
+          }, delay);
+
+          delay += s.duration * 1000;
+        });
       }
 
       /**

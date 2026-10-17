@@ -1058,11 +1058,11 @@
 
         totalMistakesWeight =
           parseInt(meaning.value) * FULL_MISTAKE_WEIGHT +
-          parseInt(inaccuracy.value) * FULL_MISTAKE_WEIGHT * 0.333 +
+          parseInt(inaccuracy.value) * FULL_MISTAKE_WEIGHT * 0.5 +
           parseInt(grammar.value) * FULL_MISTAKE_WEIGHT * 0.333 +
           parseInt(vocabulary.value) * FULL_MISTAKE_WEIGHT * 0.333 +
           parseInt(style.value) * FULL_MISTAKE_WEIGHT * 0.25 +
-          parseInt(orthpunc.value) * FULL_MISTAKE_WEIGHT * 0.2;
+          parseInt(orthpunc.value) * FULL_MISTAKE_WEIGHT * 0.15;
 
         mistakesCount.innerHTML = totalMistakesNumber;
         mistakesWeight.innerHTML = totalMistakesWeight.toFixed(1).replace(".", ",");
