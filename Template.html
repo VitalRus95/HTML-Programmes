@@ -112,7 +112,7 @@
         text-decoration: none;
         background-color: var(--colour-button);
         color: var(--colour-text);
-        border: 2px outset var(--colour-border);
+        border: 3px outset var(--colour-border);
         font-size: 1em;
         font-weight: 600;
         margin-block: 2px;
@@ -133,8 +133,7 @@
 
       button:focus:active:not(:disabled),
       .pseudo-button:focus:active:not(.disabled) {
-        border: 2px inset var(--colour-input);
-        box-shadow: 0px 0px 0px 2px var(--colour-text);
+        border: 3px inset var(--colour-input);
         transition: all 0s ease;
       }
 
@@ -154,7 +153,7 @@
       details {
         background-color: transparent;
         color: var(--colour-text);
-        border: 2px outset var(--colour-border);
+        border: 3px outset var(--colour-border);
         margin-block: 2px;
         padding: 2px 4px;
         max-height: 55vh;
@@ -163,10 +162,11 @@
 
       details[open] {
         animation: details-show 0.6s ease-in;
+        border-style: inset;
       }
 
       details[open] > summary {
-        border: 2px outset var(--colour-border);
+        border: 3px outset var(--colour-border);
         background-color: var(--colour-bgr-2);
         background-image: linear-gradient(
           60deg,
@@ -201,7 +201,7 @@
       }
 
       fieldset {
-        border: 3px groove var(--colour-border);
+        border: 4px groove var(--colour-border);
         margin: 4px 0px;
         padding: 4px;
         min-width: 0;
@@ -211,7 +211,7 @@
 
       legend {
         background-color: var(--colour-tooltip);
-        border: 3px groove var(--colour-border);
+        border: 4px groove var(--colour-border);
         font-size: 1.05em;
         font-weight: 600;
         margin-inline: 0.5em;
@@ -250,7 +250,7 @@
       input,
       textarea {
         background-color: var(--colour-input);
-        border: 2px outset var(--colour-border);
+        border: 3px outset var(--colour-border);
         font-size: 1em;
         margin-block: 2px;
         padding-inline: 4px;
@@ -307,7 +307,7 @@
       select {
         background-color: var(--colour-input);
         color: var(--colour-text);
-        border: 2px outset var(--colour-border);
+        border: 3px outset var(--colour-border);
         font-size: 1em;
         margin-block: 2px;
         padding-inline: 4px;
@@ -356,7 +356,7 @@
 
       td,
       th {
-        border: 2px outset var(--colour-border);
+        border: 2px inset var(--colour-border);
         padding-inline: 4px;
         overflow: auto;
         height: 100%;
@@ -531,7 +531,7 @@
       #author {
         background-color: var(--colour-tooltip);
         color: var(--colour-text);
-        border: 2px outset var(--colour-border);
+        border: 2px inset var(--colour-border);
         text-align: center;
         text-indent: 0px;
         font-size: 1em;

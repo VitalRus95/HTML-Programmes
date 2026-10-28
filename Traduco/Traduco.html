@@ -1,1079 +1,990 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Traduco</title>
-        <style>
-            /* Animations */
-            @keyframes scene-show {
-                from {
-                    opacity: 0;
-                    transform: translateX(-10%);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(0%);
-                }
-            }
-
-            @keyframes details-show {
-                from {
-                    background-color: var(--colour-border);
-                }
-                to {
-                    background-color: transparent;
-                }
-            }
-
-            /* All elements */
-            :root {
-                --colour-bgr-1: #ff9696;
-                --colour-bgr-2: #fff5d2;
-                --colour-bgr-3: #d7d2ff;
-                --colour-text: #000000;
-                --colour-button: #ebebff;
-                --colour-border: #00557d;
-                --colour-input: #ffffd7;
-                --colour-tooltip: #ffb4b4;
-                --colour-hovered-bgr: #191919;
-                --colour-hovered-fgr: #ebebeb;
-                --colour-hovered-border: #b4b4b4;
-                --colour-disabled-bgr: #afafaf;
-                --colour-disabled-fgr: #1e1e1e;
-            }
-
-            * {
-                color: var(--colour-text);
-                border-radius: 4px;
-                box-sizing: border-box;
-                -moz-box-sizing: border-box;
-                -webkit-box-sizing: border-box;
-                font-family:
-                    system-ui,
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "Segoe UI",
-                    Roboto,
-                    Oxygen,
-                    Ubuntu,
-                    Cantarell,
-                    "Open Sans",
-                    "Helvetica Neue",
-                    sans-serif;
-                transition: background-color 0.4s ease;
-                -moz-transition: background-color 0.4s ease;
-                -webkit-transition: background-color 0.4s ease;
-            }
-
-            /* Elements by tag */
-            html {
-                align-content: center;
-                height: 100%;
-            }
-
-            body {
-                display: flex;
-                flex-direction: column;
-                background-color: var(--colour-bgr-2);
-                background-image: linear-gradient(
-                    60deg,
-                    var(--colour-bgr-1),
-                    transparent,
-                    var(--colour-bgr-3)
-                );
-                background-attachment: fixed;
-                margin: auto;
-                font-size: 14pt;
-                min-width: 40%;
-                max-width: 90%;
-                transition: none;
-                -moz-transition: none;
-                -webkit-transition: none;
-            }
-
-            a {
-                background-color: transparent;
-                color: var(--colour-text);
-            }
-
-            blockquote {
-                background-color: var(--colour-input);
-                background-image: linear-gradient(
-                    60deg,
-                    var(--colour-tooltip),
-                    transparent
-                );
-                border: 2px outset var(--colour-border);
-                border-left: 4px inset var(--colour-border);
-                border-radius: 0px 4px 4px 0px;
-                margin-block: 4px;
-                margin-inline: 0px;
-                padding: 2px 4px;
-            }
-
-            br {
-                margin-block: 8px;
-            }
-
-            button,
-            .pseudo-button {
-                display: flex;
-                flex-grow: 1;
-                flex-direction: row;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
-                background-color: var(--colour-button);
-                color: var(--colour-text);
-                border: 2px outset var(--colour-border);
-                font-size: 1em;
-                font-weight: 600;
-                margin-block: 2px;
-                padding: 2px;
-                min-height: 1.7em;
-                cursor: default;
-            }
-
-            button:disabled,
-            .pseudo-button:disabled,
-            input:disabled,
-            textarea:disabled {
-                background-color: var(--colour-disabled-bgr);
-                color: var(--colour-disabled-fgr);
-                cursor: not-allowed;
-            }
-
-            caption {
-                font-size: 1.1em;
-                font-style: italic;
-                font-weight: 600;
-            }
-
-            code,
-            pre {
-                font-family: monospace;
-                margin-block: 1px;
-                padding-left: 2px;
-            }
-
-            details {
-                background-color: transparent;
-                color: var(--colour-text);
-                border: 2px outset var(--colour-border);
-                margin-block: 2px;
-                padding: 2px 4px;
-                max-height: 55vh;
-                overflow: auto;
-            }
-
-            details[open] {
-                animation: details-show 0.6s ease-in;
-            }
-
-            details[open] > summary {
-                border: 2px outset var(--colour-border);
-                background-color: var(--colour-bgr-2);
-                background-image: linear-gradient(
-                    60deg,
-                    var(--colour-bgr-1),
-                    transparent,
-                    var(--colour-bgr-3)
-                );
-                color: var(--colour-text);
-                opacity: 0.95;
-                margin-bottom: 4px;
-                padding: 2px;
-                position: sticky;
-                top: 2px;
-                z-index: 9;
-            }
-
-            details[open]:focus > summary,
-            details[open]:hover > summary {
-                background-color: var(--colour-button);
-                background-image: linear-gradient(
-                    60deg,
-                    var(--colour-input),
-                    transparent,
-                    var(--colour-tooltip)
-                );
-                color: var(--colour-text);
-                transition: background-color 0.7s ease;
-                -moz-transition: background-color 0.7s ease;
-                -webkit-transition: background-color 0.7s ease;
-            }
-
-            details[open] > summary::marker {
-                content: "< ";
-            }
-
-            h1,
-            h2,
-            h3 {
-                text-align: center;
-                margin-block: 4px;
-            }
-
-            h1 {
-                border-bottom: 3px inset var(--colour-border);
-                border-radius: 0px;
-                font-size: 1.9em;
-            }
-
-            h2 {
-                font-size: 1.5em;
-            }
-
-            h3 {
-                font-size: 1.25em;
-            }
-
-            hr {
-                border-style: none;
-                border-top: 4px double var(--colour-border);
-                margin-block: 4px;
-                width: 100%;
-            }
-
-            input,
-            textarea {
-                background-color: var(--colour-input);
-                border: 2px outset var(--colour-border);
-                font-size: 1em;
-                margin-block: 2px;
-                min-height: 1.7em;
-            }
-
-            input[type="text"] {
-                display: flex;
-                flex-direction: row;
-                flex-grow: 1;
-            }
-
-            kbd {
-                font-family: monospace;
-                font-size: 0.99em;
-                border: 2px outset var(--colour-border);
-                box-shadow: 1px 1px 1px var(--colour-text);
-                padding-inline: 2px;
-                margin-inline: 2px;
-                cursor: default;
-            }
-
-            li {
-                margin-block: 2px;
-            }
-
-            ol,
-            ul {
-                margin-block: 4px;
-            }
-
-            p {
-                margin-block: 8px;
-                line-height: 1.5;
-                text-indent: 0.6em;
-            }
-
-            samp {
-                font-size: 0.98em;
-                border: 2px outset var(--colour-border);
-                border-radius: 0px;
-                padding-inline: 2px;
-                margin-inline: 1px;
-                cursor: default;
-            }
-
-            select {
-                background-color: var(--colour-input);
-                color: var(--colour-text);
-                border: 2px outset var(--colour-border);
-                font-size: 1em;
-                margin-block: 2px;
-                padding-inline: 4px;
-                min-height: 1.7em;
-            }
-
-            select:focus > option,
-            select:hover > option {
-                background-color: var(--colour-hovered-bgr);
-                color: var(--colour-hovered-fgr);
-            }
-
-            strong {
-                box-shadow: 0px 0px 3px 0px var(--colour-text);
-                margin-inline: 2px;
-                padding-inline: 4px;
-                font-weight: 400;
-            }
-
-            summary {
-                border-radius: 4px;
-                font-weight: 600;
-                cursor: pointer;
-            }
-
-            summary::marker {
-                font-family: monospace;
-                content: "> ";
-            }
-
-            table {
-                border-collapse: separate;
-                table-layout: fixed;
-                margin-block: 4px;
-                width: 100%;
-            }
-
-            thead {
-                position: sticky;
-                top: 0px;
-                z-index: 8;
-            }
-
-            tfoot {
-                position: sticky;
-                bottom: 0px;
-                z-index: 8;
-            }
-
-            tfoot > tr > td,
-            tfoot > tr > th {
-                background-color: var(--colour-input);
-                font-weight: 600;
-            }
-
-            td,
-            th {
-                border: 2px outset var(--colour-border);
-                width: 100%;
-            }
-
-            td {
-                padding-left: 4px;
-            }
-
-            th {
-                background-color: var(--colour-tooltip);
-                font-weight: 600;
-                text-align: center;
-            }
-
-            tr {
-                display: flex;
-                flex-direction: row;
-                column-gap: 2px;
-                margin-block: 2px;
-                width: 100%;
-            }
-
-            tr:nth-of-type(even) > td {
-                background-color: var(--colour-button);
-            }
-
-            /* Hovering and focusing */
-            b:focus,
-            b:hover,
-            i:focus,
-            i:hover,
-            u:focus,
-            u:hover,
-            button:focus,
-            button:hover,
-            input:focus,
-            input:hover,
-            kbd:focus,
-            kbd:hover,
-            legend:focus,
-            legend:hover,
-            samp:focus,
-            samp:hover,
-            select:focus,
-            select:hover,
-            strong:focus,
-            strong:hover,
-            summary:focus,
-            summary:focus > *,
-            summary:hover,
-            summary:hover > *,
-            textarea:focus,
-            textarea:hover,
-            td:focus,
-            td:hover,
-            th:focus,
-            th:hover,
-            tr:nth-of-type(even) > td:focus,
-            tr:nth-of-type(even) > td:hover,
-            .pseudo-button:focus,
-            .pseudo-button:hover {
-                background-color: var(--colour-hovered-bgr) !important;
-                background-image: none !important;
-                color: var(--colour-hovered-fgr) !important;
-                border-color: var(--colour-hovered-border);
-                transition: background-color 0.4s ease;
-                -moz-transition: background-color 0.4s ease;
-                -webkit-transition: background-color 0.4s ease;
-            }
-
-            /* Classes */
-            .button-container {
-                display: flex;
-                flex-wrap: wrap;
-                flex-direction: row;
-                column-gap: 4px;
-            }
-
-            .codeblock {
-                display: flex;
-                flex-direction: column;
-                background-color: var(--colour-input);
-                border-left: 3px outset var(--colour-border);
-                border-radius: 0px 4px 4px 0px;
-                font-family: monospace;
-                margin-block: 4px;
-                padding-left: 2px;
-                overflow: auto;
-            }
-
-            .scene {
-                display: none;
-                flex-direction: column;
-                animation: scene-show 0.4s ease;
-            }
-
-            .setting-div {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: wrap;
-                column-gap: 4px;
-                align-items: center;
-            }
-
-            .settings-list {
-                display: flex;
-                flex-direction: column;
-                margin-block: 4px;
-                row-gap: 2px;
-            }
-
-            .table-text {
-                display: flex;
-                flex-direction: row;
-                background-color: transparent;
-                resize: vertical;
-                min-height: 100%;
-                max-height: 50vh;
-                height: 100%;
-                width: 100%;
-                margin: 0px;
-                padding-left: 4px;
-            }
-
-            .tooltip-parent {
-                position: relative;
-            }
-
-            .tooltip-parent:focus > .tooltip,
-            .tooltip-parent:hover > .tooltip {
-                display: flex;
-            }
-
-            .tooltip {
-                display: none;
-                flex-direction: row;
-                background-color: var(--colour-tooltip);
-                color: var(--colour-text);
-                border: 2px outset var(--colour-border);
-                padding: 0px 6px 0px 0px;
-                max-height: 60%;
-                max-width: 50%;
-                cursor: help;
-                font-style: italic;
-                font-size: 14pt;
-                font-weight: 400;
-                text-align: left;
-                opacity: 0.95;
-                position: fixed;
-                top: 8px;
-                left: 8px;
-                z-index: 10;
-                overflow: auto;
-            }
-
-            .tooltip::before {
-                content: "i";
-                background-color: var(--colour-text);
-                color: var(--colour-tooltip);
-                border-radius: 0px;
-                margin-right: 4px;
-                height: fit-content;
-                padding-inline: 0.5em;
-                font-style: italic;
-                font-weight: 600;
-            }
-
-            /* Elements by ID */
-            #lang {
-                margin-bottom: 10px;
-            }
-
-            #menu {
-                display: flex;
-            }
-
-            #author {
-                background-color: var(--colour-tooltip);
-                color: var(--colour-text);
-                border: 2px outset var(--colour-border);
-                text-align: center;
-                text-indent: 0px;
-                font-size: 1em;
-                margin-block: 2px;
-                margin-top: 10px;
-                padding: 2px;
-                cursor: help;
-                width: 100%;
-            }
-
-            #author:focus,
-            #author:hover {
-                background-color: var(--colour-hovered-bgr);
-                color: var(--colour-hovered-fgr);
-                border-color: var(--colour-hovered-border);
-            }
-
-            #author:focus > a,
-            #author:hover > a {
-                color: var(--colour-hovered-fgr);
-            }
-
-            #notes {
-                resize: none;
-                height: 100%;
-                width: 100%;
-                margin: 0px;
-                padding-left: 8px;
-                font-weight: 600;
-                overflow: hidden;
-            }
-
-            #notes-container {
-                display: flex;
-                flex-direction: row;
-                background-color: transparent;
-                border: none;
-                padding: 0px;
-                opacity: 0.8;
-                height: 1.5em;
-                transition: height 0.4s ease;
-            }
-
-            #notes-container:focus,
-            #notes-container:hover {
-                opacity: 0.95;
-                height: 30vh;
-            }
-
-            #notes-container:focus > #notes,
-            #notes-container:hover > #notes {
-                overflow: auto;
-            }
-
-            #pages-container {
-                display: flex;
-                flex-direction: row;
-                column-gap: 2px;
-                background-color: transparent;
-                border: none;
-                padding: 0px;
-                max-width: 100%;
-                overflow: auto;
-                opacity: 0.95;
-            }
-
-            #pages-container > button {
-                font-family: "Courier New", Courier, monospace;
-                font-weight: 900;
-                margin-bottom: 0px;
-            }
-
-            #pages-container > div {
-                max-width: 50%;
-            }
-
-            #pages-container > div > input {
-                font-weight: 600;
-                text-align: center;
-                margin-bottom: 0px;
-                width: 100%;
-            }
-
-            #table-source-stats,
-            #table-target-stats {
-                border-left: none;
-                padding: 0px 4px 0px 0px;
-                border-top: 2px outset var(--colour-border);
-                border-bottom: 2px outset var(--colour-border);
-                border-right: 2px outset var(--colour-border);
-                white-space: nowrap;
-                overflow: auto;
-                text-overflow: ellipsis;
-                opacity: 0.95;
-            }
-
-            #table-source-stats:before,
-            #table-target-stats:before {
-                content: "Aa:";
-                background-color: var(--colour-text);
-                color: var(--colour-bgr-2);
-                border-radius: 2px 0px 0px 2px;
-                padding-inline: 4px;
-                margin-right: 4px;
-            }
-
-            /* Media queries */
-            @media (min-width: 720px) {
-                body {
-                    max-width: 70%;
-                }
-            }
-
-            @media (min-width: 1080px) {
-                body {
-                    max-width: 70%;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <!-- <button id="exportLang" onclick="exportTranslationTemplate()">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Traduco</title>
+    <style>
+      /* Animations */
+      @keyframes scene-show {
+        from {
+          opacity: 0;
+          transform: translateX(-10%);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0%);
+        }
+      }
+
+      @keyframes details-show {
+        from {
+          background-color: var(--colour-border);
+        }
+        to {
+          background-color: transparent;
+        }
+      }
+
+      /* All elements */
+      :root {
+        --colour-bgr-1: #ff9696;
+        --colour-bgr-2: #fff5d2;
+        --colour-bgr-3: #d7d2ff;
+        --colour-text: #000000;
+        --colour-button: #ebebff;
+        --colour-border: #00557d;
+        --colour-input: #ffffd7;
+        --colour-tooltip: #ffb4b4;
+        --colour-hovered-bgr: #191919;
+        --colour-hovered-fgr: #ebebeb;
+        --colour-hovered-border: #b4b4b4;
+        --colour-disabled-bgr: #afafaf;
+        --colour-disabled-fgr: #1e1e1e;
+      }
+
+      * {
+        color: var(--colour-text);
+        border-radius: 4px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          Oxygen,
+          Ubuntu,
+          Cantarell,
+          "Open Sans",
+          "Helvetica Neue",
+          sans-serif;
+        transition: background-color 0.4s ease;
+        -moz-transition: background-color 0.4s ease;
+        -webkit-transition: background-color 0.4s ease;
+      }
+
+      /* Elements by tag */
+      html {
+        align-content: center;
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--colour-bgr-2);
+        background-image: linear-gradient(
+          60deg,
+          var(--colour-bgr-1),
+          transparent,
+          var(--colour-bgr-3)
+        );
+        background-attachment: fixed;
+        margin: auto;
+        font-size: 14pt;
+        min-width: 40%;
+        max-width: 90%;
+        transition: none;
+        -moz-transition: none;
+        -webkit-transition: none;
+      }
+
+      a {
+        background-color: transparent;
+        color: var(--colour-text);
+      }
+
+      blockquote {
+        background-color: var(--colour-input);
+        background-image: linear-gradient(60deg, var(--colour-tooltip), transparent);
+        border: 2px outset var(--colour-border);
+        border-left: 4px inset var(--colour-border);
+        border-radius: 0px 4px 4px 0px;
+        margin-block: 4px;
+        margin-inline: 0px;
+        padding: 2px 4px;
+      }
+
+      br {
+        margin-block: 8px;
+      }
+
+      button,
+      .pseudo-button {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        background-color: var(--colour-button);
+        color: var(--colour-text);
+        border: 3px outset var(--colour-border);
+        font-size: 1em;
+        font-weight: 600;
+        margin-block: 2px;
+        padding: 2px;
+        min-height: 1.7em;
+        cursor: default;
+      }
+
+      button:disabled,
+      .pseudo-button:disabled,
+      input:disabled,
+      textarea:disabled {
+        background-color: var(--colour-disabled-bgr);
+        color: var(--colour-disabled-fgr);
+        cursor: not-allowed;
+      }
+
+      button:focus:active:not(:disabled),
+      .pseudo-button:focus:active:not(.disabled) {
+        border: 3px inset var(--colour-input);
+        transition: all 0s ease;
+      }
+
+      caption {
+        font-size: 1.1em;
+        font-style: italic;
+        font-weight: 600;
+      }
+
+      code,
+      pre {
+        font-family: monospace;
+        margin-block: 1px;
+        padding-left: 2px;
+      }
+
+      details {
+        background-color: transparent;
+        color: var(--colour-text);
+        border: 3px outset var(--colour-border);
+        margin-block: 2px;
+        padding: 2px 4px;
+        max-height: 55vh;
+        overflow: auto;
+      }
+
+      details[open] {
+        animation: details-show 0.6s ease-in;
+        border-style: inset;
+      }
+
+      details[open] > summary {
+        border: 3px outset var(--colour-border);
+        background-color: var(--colour-bgr-2);
+        background-image: linear-gradient(
+          60deg,
+          var(--colour-bgr-1),
+          transparent,
+          var(--colour-bgr-3)
+        );
+        color: var(--colour-text);
+        opacity: 0.95;
+        margin-bottom: 4px;
+        padding: 2px;
+        position: sticky;
+        top: 2px;
+        z-index: 9;
+      }
+
+      details[open]:focus > summary,
+      details[open]:hover > summary {
+        background-color: var(--colour-button);
+        background-image: linear-gradient(
+          60deg,
+          var(--colour-input),
+          transparent,
+          var(--colour-tooltip)
+        );
+        color: var(--colour-text);
+        transition: background-color 0.7s ease;
+        -moz-transition: background-color 0.7s ease;
+        -webkit-transition: background-color 0.7s ease;
+      }
+
+      details[open] > summary::marker {
+        content: "< ";
+      }
+
+      h1,
+      h2,
+      h3 {
+        text-align: center;
+        margin-block: 4px;
+      }
+
+      h1 {
+        border-bottom: 3px inset var(--colour-border);
+        border-radius: 0px;
+        font-size: 1.9em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      h3 {
+        font-size: 1.25em;
+      }
+
+      hr {
+        border-style: none;
+        border-top: 4px double var(--colour-border);
+        margin-block: 4px;
+        width: 100%;
+      }
+
+      input,
+      textarea {
+        background-color: var(--colour-input);
+        border: 3px outset var(--colour-border);
+        font-size: 1em;
+        margin-block: 2px;
+        min-height: 1.7em;
+      }
+
+      input[type="text"] {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+      }
+
+      kbd {
+        font-family: monospace;
+        font-size: 0.99em;
+        border: 2px outset var(--colour-border);
+        box-shadow: 1px 1px 1px var(--colour-text);
+        padding-inline: 2px;
+        margin-inline: 2px;
+        cursor: default;
+      }
+
+      li {
+        margin-block: 4px;
+      }
+
+      ol,
+      ul {
+        margin-block: 4px;
+      }
+
+      p {
+        margin-block: 8px;
+        line-height: 1.5;
+        text-indent: 0.6em;
+      }
+
+      samp {
+        font-size: 0.98em;
+        border: 2px outset var(--colour-border);
+        border-radius: 0px;
+        padding-inline: 2px;
+        margin-inline: 1px;
+        cursor: default;
+      }
+
+      select {
+        background-color: var(--colour-input);
+        color: var(--colour-text);
+        border: 3px outset var(--colour-border);
+        font-size: 1em;
+        margin-block: 2px;
+        padding-inline: 4px;
+        min-height: 1.7em;
+      }
+
+      select:focus > option,
+      select:hover > option {
+        background-color: var(--colour-hovered-bgr);
+        color: var(--colour-hovered-fgr);
+      }
+
+      strong {
+        box-shadow: 0px 0px 3px 0px var(--colour-text);
+        margin-inline: 2px;
+        padding-inline: 4px;
+        font-weight: 400;
+      }
+
+      summary {
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      summary::marker {
+        font-family: monospace;
+        content: "> ";
+      }
+
+      table {
+        border-collapse: separate;
+        table-layout: fixed;
+        margin-block: 4px;
+        width: 100%;
+      }
+
+      thead {
+        position: sticky;
+        top: 0px;
+        z-index: 8;
+      }
+
+      tfoot {
+        position: sticky;
+        bottom: 0px;
+        z-index: 8;
+      }
+
+      tfoot > tr > td,
+      tfoot > tr > th {
+        background-color: var(--colour-input);
+        font-weight: 600;
+      }
+
+      td,
+      th {
+        border: 2px inset var(--colour-border);
+        width: 100%;
+      }
+
+      td {
+        padding-left: 4px;
+      }
+
+      th {
+        background-color: var(--colour-tooltip);
+        font-weight: 600;
+        text-align: center;
+      }
+
+      tr {
+        display: flex;
+        flex-direction: row;
+        column-gap: 2px;
+        margin-block: 2px;
+        width: 100%;
+      }
+
+      tr:nth-of-type(even) > td {
+        background-color: var(--colour-button);
+      }
+
+      /* Hovering and focusing */
+      b:focus,
+      b:hover,
+      i:focus,
+      i:hover,
+      u:focus,
+      u:hover,
+      button:focus,
+      button:hover,
+      input:focus,
+      input:hover,
+      kbd:focus,
+      kbd:hover,
+      legend:focus,
+      legend:hover,
+      samp:focus,
+      samp:hover,
+      select:focus,
+      select:hover,
+      strong:focus,
+      strong:hover,
+      summary:focus,
+      summary:focus > *,
+      summary:hover,
+      summary:hover > *,
+      textarea:focus,
+      textarea:hover,
+      td:focus,
+      td:hover,
+      th:focus,
+      th:hover,
+      tr:nth-of-type(even) > td:focus,
+      tr:nth-of-type(even) > td:hover,
+      .pseudo-button:focus,
+      .pseudo-button:hover {
+        background-color: var(--colour-hovered-bgr) !important;
+        background-image: none !important;
+        color: var(--colour-hovered-fgr) !important;
+        border-color: var(--colour-hovered-border);
+        transition: background-color 0.4s ease;
+        -moz-transition: background-color 0.4s ease;
+        -webkit-transition: background-color 0.4s ease;
+      }
+
+      /* Classes */
+      .button-container {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        column-gap: 4px;
+      }
+
+      .codeblock {
+        display: flex;
+        flex-direction: column;
+        background-color: var(--colour-input);
+        border-left: 3px outset var(--colour-border);
+        border-radius: 0px 4px 4px 0px;
+        font-family: monospace;
+        margin-block: 4px;
+        padding-left: 2px;
+        overflow: auto;
+      }
+
+      .scene {
+        display: none;
+        flex-direction: column;
+        animation: scene-show 0.4s ease;
+      }
+
+      .setting-div {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 4px;
+        align-items: center;
+      }
+
+      .settings-list {
+        display: flex;
+        flex-direction: column;
+        margin-block: 4px;
+        row-gap: 2px;
+      }
+
+      .table-text {
+        display: flex;
+        flex-direction: row;
+        background-color: transparent;
+        resize: vertical;
+        min-height: 100%;
+        max-height: 50vh;
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+        padding-inline: 6px;
+      }
+
+      .tooltip-parent {
+        position: relative;
+      }
+
+      .tooltip-parent:focus > .tooltip,
+      .tooltip-parent:hover > .tooltip {
+        display: flex;
+      }
+
+      .tooltip {
+        display: none;
+        flex-direction: row;
+        background-color: var(--colour-tooltip);
+        color: var(--colour-text);
+        border: 2px outset var(--colour-border);
+        padding: 0px 6px 0px 0px;
+        max-height: 60%;
+        max-width: 50%;
+        cursor: help;
+        font-style: italic;
+        font-size: 14pt;
+        font-weight: 400;
+        text-align: left;
+        opacity: 0.95;
+        position: fixed;
+        top: 8px;
+        left: 8px;
+        z-index: 10;
+        overflow: auto;
+      }
+
+      .tooltip::before {
+        content: "i";
+        background-color: var(--colour-text);
+        color: var(--colour-tooltip);
+        border-radius: 0px;
+        margin-right: 4px;
+        height: fit-content;
+        padding-inline: 0.5em;
+        font-style: italic;
+        font-weight: 600;
+      }
+
+      /* Elements by ID */
+      #lang {
+        margin-bottom: 10px;
+      }
+
+      #menu {
+        display: flex;
+      }
+
+      #author {
+        background-color: var(--colour-tooltip);
+        color: var(--colour-text);
+        border: 2px inset var(--colour-border);
+        text-align: center;
+        text-indent: 0px;
+        font-size: 1em;
+        margin-block: 2px;
+        margin-top: 10px;
+        padding: 2px;
+        cursor: help;
+        width: 100%;
+      }
+
+      #author:focus,
+      #author:hover {
+        background-color: var(--colour-hovered-bgr);
+        color: var(--colour-hovered-fgr);
+        border-color: var(--colour-hovered-border);
+      }
+
+      #author:focus > a,
+      #author:hover > a {
+        color: var(--colour-hovered-fgr);
+      }
+
+      #notes {
+        resize: none;
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+        padding-left: 8px;
+        font-weight: 600;
+        overflow: hidden;
+      }
+
+      #notes-container {
+        display: flex;
+        flex-direction: row;
+        background-color: transparent;
+        border: none;
+        padding: 0px;
+        opacity: 0.8;
+        height: 1.5em;
+        transition: height 0.4s ease;
+      }
+
+      #notes-container:focus,
+      #notes-container:hover {
+        opacity: 0.95;
+        height: 30vh;
+      }
+
+      #notes-container:focus > #notes,
+      #notes-container:hover > #notes {
+        overflow: auto;
+      }
+
+      #pages-container {
+        display: flex;
+        flex-direction: row;
+        column-gap: 2px;
+        background-color: transparent;
+        border: none;
+        padding: 0px;
+        max-width: 100%;
+        overflow: auto;
+        opacity: 0.95;
+      }
+
+      #pages-container > button {
+        font-family: "Courier New", Courier, monospace;
+        font-weight: 900;
+        margin-bottom: 0px;
+      }
+
+      #pages-container > div {
+        max-width: 50%;
+      }
+
+      #pages-container > div > input {
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 0px;
+        width: 100%;
+      }
+
+      #table-source-stats,
+      #table-target-stats {
+        border-left: none;
+        padding: 0px 4px 0px 0px;
+        border-top: 2px outset var(--colour-border);
+        border-bottom: 2px outset var(--colour-border);
+        border-right: 2px outset var(--colour-border);
+        white-space: nowrap;
+        overflow: auto;
+        text-overflow: ellipsis;
+        opacity: 0.95;
+      }
+
+      #table-source-stats:before,
+      #table-target-stats:before {
+        content: "Aa:";
+        background-color: var(--colour-text);
+        color: var(--colour-bgr-2);
+        border-radius: 2px 0px 0px 2px;
+        padding-inline: 4px;
+        margin-right: 4px;
+      }
+
+      /* Media queries */
+      @media (min-width: 720px) {
+        body {
+          max-width: 70%;
+        }
+      }
+
+      @media (min-width: 1080px) {
+        body {
+          max-width: 70%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <button id="exportLang" onclick="exportTranslationTemplate()">
             Export texts for translation
         </button> -->
 
-        <!-- Menu div -->
-        <div id="menu" class="scene" tabindex="1">
-            <h1 id="title" tabindex="1" class="tooltip-parent">
-                Traduco
-                <span class="tooltip">&gt;(^o.o^)&lt;</span>
-            </h1>
+    <!-- Menu div -->
+    <div id="menu" class="scene" tabindex="1">
+      <h1 id="title" tabindex="1" class="tooltip-parent">
+        Traduco
+        <span class="tooltip">&gt;(^o.o^)&lt;</span>
+      </h1>
 
-            <select id="lang" tabindex="0"></select>
+      <select id="lang" tabindex="0"></select>
 
-            <input
-                type="file"
-                id="load-project"
-                accept=".txt,.json"
-                style="display: none"
-            />
+      <input type="file" id="load-project" accept=".txt,.json" style="display: none" />
 
-            <button id="start-button" tabindex="1" class="tooltip-parent">
-                Open
-                <span class="tooltip">Open a text (.txt) or a project (.json)</span>
-            </button>
-            <button id="continue-button" tabindex="1" disabled>Continue</button>
-            <button
-                id="save-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'saving')"
-                disabled
-            >
-                Save
-            </button>
-            <button
-                id="settings-button"
-                tabindex="1"
-                onclick="switchScene('menu', 'settings')"
-            >
-                Settings
-            </button>
-            <button id="about-button" tabindex="1" onclick="switchScene('menu', 'about')">
-                About
-            </button>
+      <button id="start-button" tabindex="1" class="tooltip-parent">
+        Open
+        <span class="tooltip">Open a text (.txt) or a project (.json)</span>
+      </button>
+      <button id="continue-button" tabindex="1" disabled>Continue</button>
+      <button id="save-button" tabindex="1" onclick="switchScene('menu', 'saving')" disabled>
+        Save
+      </button>
+      <button id="settings-button" tabindex="1" onclick="switchScene('menu', 'settings')">
+        Settings
+      </button>
+      <button id="about-button" tabindex="1" onclick="switchScene('menu', 'about')"> About </button>
 
-            <!-- Author -->
-            <p id="author" tabindex="0" class="tooltip-parent">
-                Made by
-                <a href="https://github.com/VitalRus95" target="_blank"
-                    >Vitaly Pavlovich Ulyanov (Vital)</a
-                >.
-                <span class="tooltip">Learn more on my GitHub page!</span>
-            </p>
+      <!-- Author -->
+      <p id="author" tabindex="0" class="tooltip-parent">
+        Made by
+        <a href="https://github.com/VitalRus95" target="_blank">Vitaly Pavlovich Ulyanov (Vital)</a
+        >.
+        <span class="tooltip">Learn more on my GitHub page!</span>
+      </p>
+    </div>
+
+    <!-- Main div -->
+    <div id="main" class="scene" tabindex="0">
+      <button id="main-back" onclick="switchScene('main', 'menu')">Back</button>
+
+      <h3 id="project-name" tabindex="0" contenteditable="true">...</h3>
+
+      <table>
+        <thead>
+          <tr style="margin: 0px">
+            <th id="table-source" tabindex="0">Source</th>
+            <th id="table-target" tabindex="0">Target</th>
+          </tr>
+
+          <tr>
+            <th id="notes-container" colspan="2">
+              <textarea id="notes" autocomplete="off" placeholder="Notes"></textarea>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody id="table-body"></tbody>
+
+        <tfoot>
+          <tr style="margin-bottom: 0px">
+            <td id="table-source-stats" tabindex="0"></td>
+            <td id="table-target-stats" tabindex="0"></td>
+          </tr>
+
+          <tr style="margin: 0px">
+            <td id="pages-container" colspan="2">
+              <button class="tooltip-parent" onclick="setPage('first')">
+                &lt;&lt;
+                <span id="first-page-tooltip" class="tooltip">First page</span>
+              </button>
+
+              <button class="tooltip-parent" onclick="setPage('previous')">
+                &lt;
+                <span id="prev-page-tooltip" class="tooltip">Previous page</span>
+              </button>
+
+              <div class="tooltip-parent">
+                <input
+                  type="number"
+                  id="page-input"
+                  min="1"
+                  step="1"
+                  value="1"
+                  onchange="setPage('input')"
+                />
+                <span id="cur-page-tooltip" class="tooltip">Current page</span>
+              </div>
+
+              <button class="tooltip-parent" onclick="setPage('next')">
+                &gt;
+                <span id="next-page-tooltip" class="tooltip">Next page</span>
+              </button>
+
+              <button class="tooltip-parent" onclick="setPage('last')">
+                &gt;&gt;
+                <span id="last-page-tooltip" class="tooltip">Last page</span>
+              </button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Saving div -->
+    <div id="saving" class="scene" tabindex="0">
+      <button id="saving-back" onclick="switchScene('saving', 'menu')">Back</button>
+
+      <h2 id="saving-title" tabindex="0">Save</h2>
+
+      <a id="save-project" href="" download="Project.json" class="pseudo-button">Project</a>
+      <a id="save-source" href="" download="Source.txt" class="pseudo-button">Source</a>
+      <a id="save-target" href="" download="Target.txt" class="pseudo-button">Target</a>
+      <a id="save-notes" href="" download="Notes.txt" class="pseudo-button">Notes</a>
+    </div>
+
+    <!-- Settings div -->
+    <div id="settings" class="scene" tabindex="0">
+      <h2 id="settings-title" tabindex="0">Settings</h2>
+
+      <button id="settings-back" onclick="switchScene('settings', 'menu')">Back</button>
+
+      <!-- Sound settings -->
+      <details>
+        <summary id="sound-settings">Sound</summary>
+
+        <ul class="settings-list">
+          <!-- Volume -->
+          <li>
+            <label for="set-volume" id="volume-label">Sound volume</label>
+            <input type="number" id="set-volume" min="0" max="1" step="0.1" value="0.5" />
+          </li>
+
+          <!-- Default sounds (buttons, inputs, etc.) -->
+          <li>
+            <div class="setting-div">
+              <label for="set-def-sounds" id="def-sounds-label"
+                >Default sounds (buttons, inputs, etc.)</label
+              >
+              <input type="checkbox" id="set-def-sounds" checked />
+            </div>
+          </li>
+        </ul>
+      </details>
+
+      <!-- Colour scheme settings -->
+      <details>
+        <summary id="colour-settings">Colours</summary>
+
+        <div class="button-container">
+          <input type="file" id="colour-loader" accept=".json" style="display: none" />
+          <button id="load-colours">Load colours</button>
+          <a id="save-colours" href="" download="Colours.json" class="pseudo-button"
+            >Save colours</a
+          >
         </div>
 
-        <!-- Main div -->
-        <div id="main" class="scene" tabindex="0">
-            <button id="main-back" onclick="switchScene('main', 'menu')">Back</button>
+        <ul id="colours" class="settings-list"></ul>
 
-            <h3 id="project-name" tabindex="0" contenteditable="true">...</h3>
-
-            <table>
-                <thead>
-                    <tr style="margin: 0px">
-                        <th id="table-source" tabindex="0">Source</th>
-                        <th id="table-target" tabindex="0">Target</th>
-                    </tr>
-
-                    <tr>
-                        <th id="notes-container" colspan="2">
-                            <textarea
-                                id="notes"
-                                autocomplete="off"
-                                placeholder="Notes"
-                            ></textarea>
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody id="table-body"></tbody>
-
-                <tfoot>
-                    <tr style="margin-bottom: 0px">
-                        <td id="table-source-stats" tabindex="0"></td>
-                        <td id="table-target-stats" tabindex="0"></td>
-                    </tr>
-
-                    <tr style="margin: 0px">
-                        <td id="pages-container" colspan="2">
-                            <button class="tooltip-parent" onclick="setPage('first')">
-                                &lt;&lt;
-                                <span id="first-page-tooltip" class="tooltip"
-                                    >First page</span
-                                >
-                            </button>
-
-                            <button class="tooltip-parent" onclick="setPage('previous')">
-                                &lt;
-                                <span id="prev-page-tooltip" class="tooltip"
-                                    >Previous page</span
-                                >
-                            </button>
-
-                            <div class="tooltip-parent">
-                                <input
-                                    type="number"
-                                    id="page-input"
-                                    min="1"
-                                    step="1"
-                                    value="1"
-                                    onchange="setPage('input')"
-                                />
-                                <span id="cur-page-tooltip" class="tooltip"
-                                    >Current page</span
-                                >
-                            </div>
-
-                            <button class="tooltip-parent" onclick="setPage('next')">
-                                &gt;
-                                <span id="next-page-tooltip" class="tooltip"
-                                    >Next page</span
-                                >
-                            </button>
-
-                            <button class="tooltip-parent" onclick="setPage('last')">
-                                &gt;&gt;
-                                <span id="last-page-tooltip" class="tooltip"
-                                    >Last page</span
-                                >
-                            </button>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="button-container">
+          <button id="example-button">Button example</button>
+          <button id="example-disabled-button" disabled>Disabled button example</button>
+          <input type="text" id="example-input" placeholder="Input example" value="12345 ABCDE" />
         </div>
 
-        <!-- Saving div -->
-        <div id="saving" class="scene" tabindex="0">
-            <button id="saving-back" onclick="switchScene('saving', 'menu')">Back</button>
+        <blockquote>
+          <p id="example-buttons"
+            >Text example with keyboard buttons (such as <kbd>Enter</kbd>) and programmes' interface
+            buttons (for example, <samp>Apply</samp>).</p
+          >
+          <p id="example-formatting"
+            >Examples of <strong>important</strong>, <b>boldface</b>, <i>italicised</i>, and
+            <u>underlined</u> text.</p
+          >
+        </blockquote>
+        <span class="codeblock">
+          <pre id="example-code">Пример кода</pre>
+          <pre>print("Hello, world!")</pre>
+          <br />
+          <pre>if (a > b) {</pre>
+          <pre>    ...</pre>
+          <pre>}</pre>
+        </span>
+      </details>
 
-            <h2 id="saving-title" tabindex="0">Save</h2>
+      <!-- Translation settings -->
+      <details>
+        <summary id="translation-settings">Translation</summary>
 
-            <a id="save-project" href="" download="Project.json" class="pseudo-button"
-                >Project</a
+        <ul class="settings-list">
+          <li>
+            <label for="set-newlines" id="newlines-label"
+              >Number of new lines between paragraphs in saved texts</label
             >
-            <a id="save-source" href="" download="Source.txt" class="pseudo-button"
-                >Source</a
-            >
-            <a id="save-target" href="" download="Target.txt" class="pseudo-button"
-                >Target</a
-            >
-            <a id="save-notes" href="" download="Notes.txt" class="pseudo-button"
-                >Notes</a
-            >
-        </div>
+            <input type="number" id="set-newlines" min="1" max="10" step="1" value="2" />
+          </li>
+        </ul>
+      </details>
 
-        <!-- Settings div -->
-        <div id="settings" class="scene" tabindex="0">
-            <h2 id="settings-title" tabindex="0">Settings</h2>
+      <button id="default-settings">Restore default settings</button>
+    </div>
 
-            <button id="settings-back" onclick="switchScene('settings', 'menu')"
-                >Back</button
-            >
+    <!-- About div -->
+    <div id="about" class="scene" tabindex="0">
+      <h2 id="about-title" tabindex="0">About</h2>
 
-            <!-- Sound settings -->
-            <details>
-                <summary id="sound-settings">Sound</summary>
+      <button id="about-back" onclick="switchScene('about', 'menu')">Back</button>
 
-                <ul class="settings-list">
-                    <!-- Volume -->
-                    <li>
-                        <label for="set-volume" id="volume-label">Sound volume</label>
-                        <input
-                            type="number"
-                            id="set-volume"
-                            min="0"
-                            max="1"
-                            step="0.1"
-                            value="0.5"
-                        />
-                    </li>
+      <p id="about-p" tabindex="0">
+        Named after a Latin word meaning ‘I translate’, <b>Traduco</b> is a simple yet powerful
+        translation tool. Open either a plain text file (<i>.txt</i>, for example) to start a
+        translation, or a project (stored in <i>.json</i>) to continue the work. While translating,
+        you can make and consult notes using the text input field at the top of the screen. At the
+        bottom of the screen, you will find source and target texts' symbol count in the following
+        format:
+        <i
+          >selection / parapgraph / whole text (proportion of the target text's length to that of
+          the source one in %)</i
+        >. To make the process easier, <b>Traduco</b> offers a number of hotkeys:
+      </p>
+      <ul tabindex="0">
+        <li id="hotkey-0"><kbd>Alt</kbd>+<kbd>left arrow</kbd> - select previous cell</li>
+        <li id="hotkey-1"><kbd>Alt</kbd>+<kbd>right arrow</kbd> - select next cell</li>
+        <li id="hotkey-2"><kbd>Alt</kbd>+<kbd>up arrow</kbd> - select cell above</li>
+        <li id="hotkey-3"><kbd>Alt</kbd>+<kbd>down arrow</kbd> - select cell below</li>
+        <li id="hotkey-4"><kbd>Alt</kbd>+<kbd>Page Up</kbd> - go to the previous page</li>
+        <li id="hotkey-5"><kbd>Alt</kbd>+<kbd>Page Down</kbd> - go to the next page</li>
+        <li id="hotkey-6">
+          <kbd>Alt</kbd>+<kbd>Home</kbd> - switch between notes and current cell
+        </li>
+        <li id="hotkey-7">
+          <kbd>Alt</kbd>+<kbd>End</kbd> - switch between statistics and current cell
+        </li>
+        <li id="hotkey-8"><kbd>Alt</kbd>+<kbd>Insert</kbd> - copy source to target*</li>
+        <li id="hotkey-9"><kbd>Alt</kbd>+<kbd>Delete</kbd> - clear current cell*</li>
+      </ul>
+      <p id="cell-copy-hint"> * The cell's previous content will be copied to the clipboard. </p>
+    </div>
 
-                    <!-- Default sounds (buttons, inputs, etc.) -->
-                    <li>
-                        <div class="setting-div">
-                            <label for="set-def-sounds" id="def-sounds-label"
-                                >Default sounds (buttons, inputs, etc.)</label
-                            >
-                            <input type="checkbox" id="set-def-sounds" checked />
-                        </div>
-                    </li>
-                </ul>
-            </details>
+    <script>
+      // Elements
+      /** @type {HTMLDivElement} */
+      let menu = document.getElementById("menu");
+      /** @type {HTMLDivElement} */
+      let main = document.getElementById("main");
+      /** @type {HTMLDivElement} */
+      let saving = document.getElementById("saving");
+      /** @type {HTMLHeadingElement} */
+      let projectName = document.getElementById("project-name");
+      /** @type {HTMLTextAreaElement} */
+      let notes = document.getElementById("notes");
+      /** @type {HTMLTableCellElement} */
+      let tableSource = document.getElementById("table-source");
+      /** @type {HTMLTableCellElement} */
+      let tableTarget = document.getElementById("table-target");
+      /** @type {HTMLTableSectionElement} */
+      let tableBody = document.getElementById("table-body");
+      /** @type {HTMLTableSectionElement} */
+      let tableSourceStats = document.getElementById("table-source-stats");
+      /** @type {HTMLTableSectionElement} */
+      let tableTargetStats = document.getElementById("table-target-stats");
+      /** @type {HTMLInputElement} */
+      let pageInput = document.getElementById("page-input");
+      /** @type {HTMLDivElement} */
+      let settings = document.getElementById("settings");
+      /** @type {HTMLUListElement} */
+      let colours = document.getElementById("colours");
+      /** @type {HTMLDivElement} */
+      let about = document.getElementById("about");
+      /** @type {HTMLInputElement} */
+      let colourLoader = document.getElementById("colour-loader");
+      /** @type {HTMLButtonElement} */
+      let loadColours = document.getElementById("load-colours");
+      /** @type {HTMLAnchorElement} */
+      let saveColours = document.getElementById("save-colours");
+      /** @type {HTMLButtonElement} */
+      let startButton = document.getElementById("start-button");
+      /** @type {HTMLButtonElement} */
+      let continueButton = document.getElementById("continue-button");
+      /** @type {HTMLInputElement} */
+      let loadProjectInput = document.getElementById("load-project");
+      /** @type {HTMLButtonElement} */
+      let saveButton = document.getElementById("save-button");
+      /** @type {HTMLAnchorElement} */
+      let saveProject = document.getElementById("save-project");
+      /** @type {HTMLAnchorElement} */
+      let saveSource = document.getElementById("save-source");
+      /** @type {HTMLAnchorElement} */
+      let saveTarget = document.getElementById("save-target");
+      /** @type {HTMLAnchorElement} */
+      let saveNotes = document.getElementById("save-notes");
 
-            <!-- Colour scheme settings -->
-            <details>
-                <summary id="colour-settings">Colours</summary>
+      /** @type {HTMLInputElement} */
+      let volumeInput = document.getElementById("set-volume");
+      /** @type {HTMLInputElement} */
+      let defaultSounds = document.getElementById("set-def-sounds");
+      /** @type {HTMLButtonElement} */
+      let defaultSettings = document.getElementById("default-settings");
+      /** @type {HTMLInputElement} */
+      let newLines = document.getElementById("set-newlines");
 
-                <div class="button-container">
-                    <input
-                        type="file"
-                        id="colour-loader"
-                        accept=".json"
-                        style="display: none"
-                    />
-                    <button id="load-colours">Load colours</button>
-                    <a
-                        id="save-colours"
-                        href=""
-                        download="Colours.json"
-                        class="pseudo-button"
-                        >Save colours</a
-                    >
-                </div>
+      continueButton.disabled = true;
+      saveButton.disabled = true;
 
-                <ul id="colours" class="settings-list"></ul>
+      // Types
+      /** @typedef Paragraph
+       * @property {string} source;
+       * @property {string} target;
+       */
 
-                <div class="button-container">
-                    <button id="example-button">Button example</button>
-                    <button id="example-disabled-button" disabled
-                        >Disabled button example</button
-                    >
-                    <input
-                        type="text"
-                        id="example-input"
-                        placeholder="Input example"
-                        value="12345 ABCDE"
-                    />
-                </div>
+      // Objects
+      const allColours = {
+        "--colour-bgr-1": "#ff9696",
+        "--colour-bgr-2": "#fff5d2",
+        "--colour-bgr-3": "#d7d2ff",
+        "--colour-text": "#000000",
+        "--colour-button": "#ebebff",
+        "--colour-border": "#00557d",
+        "--colour-input": "#ffffd7",
+        "--colour-tooltip": "#ffb4b4",
+        "--colour-hovered-bgr": "#191919",
+        "--colour-hovered-fgr": "#ebebeb",
+        "--colour-hovered-border": "#b4b4b4",
+        "--colour-disabled-bgr": "#afafaf",
+        "--colour-disabled-fgr": "#1e1e1e",
+      };
 
-                <blockquote>
-                    <p id="example-buttons"
-                        >Text example with keyboard buttons (such as <kbd>Enter</kbd>) and
-                        programmes' interface buttons (for example,
-                        <samp>Apply</samp>).</p
-                    >
-                    <p id="example-formatting"
-                        >Examples of <strong>important</strong>, <b>boldface</b>,
-                        <i>italicised</i>, and <u>underlined</u> text.</p
-                    >
-                </blockquote>
-                <span class="codeblock">
-                    <pre id="example-code">Пример кода</pre>
-                    <pre>print("Hello, world!")</pre>
-                    <br />
-                    <pre>if (a > b) {</pre>
-                    <pre>    ...</pre>
-                    <pre>}</pre>
-                </span>
-            </details>
+      // Constants
+      const PARAGRAPHS_PER_PAGE = 25;
 
-            <!-- Translation settings -->
-            <details>
-                <summary id="translation-settings">Translation</summary>
+      // Variables
+      /** @type {AudioContext} */
+      let audio = new (window.AudioContext || window.webkitAudioContext)();
 
-                <ul class="settings-list">
-                    <li>
-                        <label for="set-newlines" id="newlines-label"
-                            >Number of new lines between paragraphs in saved texts</label
-                        >
-                        <input
-                            type="number"
-                            id="set-newlines"
-                            min="1"
-                            max="10"
-                            step="1"
-                            value="2"
-                        />
-                    </li>
-                </ul>
-            </details>
-
-            <button id="default-settings">Restore default settings</button>
-        </div>
-
-        <!-- About div -->
-        <div id="about" class="scene" tabindex="0">
-            <h2 id="about-title" tabindex="0">About</h2>
-
-            <button id="about-back" onclick="switchScene('about', 'menu')">Back</button>
-
-            <p id="about-p" tabindex="0">
-                Named after a Latin word meaning ‘I translate’, <b>Traduco</b> is a simple
-                yet powerful translation tool. Open either a plain text file (<i>.txt</i>,
-                for example) to start a translation, or a project (stored in <i>.json</i>)
-                to continue the work. While translating, you can make and consult notes
-                using the text input field at the top of the screen. At the bottom of the
-                screen, you will find source and target texts' symbol count in the
-                following format:
-                <i
-                    >selection / parapgraph / whole text (proportion of the target text's
-                    length to that of the source one in %)</i
-                >. To make the process easier, <b>Traduco</b> offers a number of hotkeys:
-            </p>
-            <ul tabindex="0">
-                <li id="hotkey-0"
-                    ><kbd>Alt</kbd>+<kbd>left arrow</kbd> - select previous cell</li
-                >
-                <li id="hotkey-1"
-                    ><kbd>Alt</kbd>+<kbd>right arrow</kbd> - select next cell</li
-                >
-                <li id="hotkey-2"
-                    ><kbd>Alt</kbd>+<kbd>up arrow</kbd> - select cell above</li
-                >
-                <li id="hotkey-3"
-                    ><kbd>Alt</kbd>+<kbd>down arrow</kbd> - select cell below</li
-                >
-                <li id="hotkey-4"
-                    ><kbd>Alt</kbd>+<kbd>Page Up</kbd> - go to the previous page</li
-                >
-                <li id="hotkey-5"
-                    ><kbd>Alt</kbd>+<kbd>Page Down</kbd> - go to the next page</li
-                >
-                <li id="hotkey-6">
-                    <kbd>Alt</kbd>+<kbd>Home</kbd> - switch between notes and current cell
-                </li>
-                <li id="hotkey-7">
-                    <kbd>Alt</kbd>+<kbd>End</kbd> - switch between statistics and current
-                    cell
-                </li>
-                <li id="hotkey-8"
-                    ><kbd>Alt</kbd>+<kbd>Insert</kbd> - copy source to target*</li
-                >
-                <li id="hotkey-9"
-                    ><kbd>Alt</kbd>+<kbd>Delete</kbd> - clear current cell*</li
-                >
-            </ul>
-            <p id="cell-copy-hint">
-                * The cell's previous content will be copied to the clipboard.
-            </p>
-        </div>
-
-        <script>
-            // Elements
-            /** @type {HTMLDivElement} */
-            let menu = document.getElementById("menu");
-            /** @type {HTMLDivElement} */
-            let main = document.getElementById("main");
-            /** @type {HTMLDivElement} */
-            let saving = document.getElementById("saving");
-            /** @type {HTMLHeadingElement} */
-            let projectName = document.getElementById("project-name");
-            /** @type {HTMLTextAreaElement} */
-            let notes = document.getElementById("notes");
-            /** @type {HTMLTableCellElement} */
-            let tableSource = document.getElementById("table-source");
-            /** @type {HTMLTableCellElement} */
-            let tableTarget = document.getElementById("table-target");
-            /** @type {HTMLTableSectionElement} */
-            let tableBody = document.getElementById("table-body");
-            /** @type {HTMLTableSectionElement} */
-            let tableSourceStats = document.getElementById("table-source-stats");
-            /** @type {HTMLTableSectionElement} */
-            let tableTargetStats = document.getElementById("table-target-stats");
-            /** @type {HTMLInputElement} */
-            let pageInput = document.getElementById("page-input");
-            /** @type {HTMLDivElement} */
-            let settings = document.getElementById("settings");
-            /** @type {HTMLUListElement} */
-            let colours = document.getElementById("colours");
-            /** @type {HTMLDivElement} */
-            let about = document.getElementById("about");
-            /** @type {HTMLInputElement} */
-            let colourLoader = document.getElementById("colour-loader");
-            /** @type {HTMLButtonElement} */
-            let loadColours = document.getElementById("load-colours");
-            /** @type {HTMLAnchorElement} */
-            let saveColours = document.getElementById("save-colours");
-            /** @type {HTMLButtonElement} */
-            let startButton = document.getElementById("start-button");
-            /** @type {HTMLButtonElement} */
-            let continueButton = document.getElementById("continue-button");
-            /** @type {HTMLInputElement} */
-            let loadProjectInput = document.getElementById("load-project");
-            /** @type {HTMLButtonElement} */
-            let saveButton = document.getElementById("save-button");
-            /** @type {HTMLAnchorElement} */
-            let saveProject = document.getElementById("save-project");
-            /** @type {HTMLAnchorElement} */
-            let saveSource = document.getElementById("save-source");
-            /** @type {HTMLAnchorElement} */
-            let saveTarget = document.getElementById("save-target");
-            /** @type {HTMLAnchorElement} */
-            let saveNotes = document.getElementById("save-notes");
-
-            /** @type {HTMLInputElement} */
-            let volumeInput = document.getElementById("set-volume");
-            /** @type {HTMLInputElement} */
-            let defaultSounds = document.getElementById("set-def-sounds");
-            /** @type {HTMLButtonElement} */
-            let defaultSettings = document.getElementById("default-settings");
-            /** @type {HTMLInputElement} */
-            let newLines = document.getElementById("set-newlines");
-
-            continueButton.disabled = true;
-            saveButton.disabled = true;
-
-            // Types
-            /** @typedef Paragraph
-             * @property {string} source;
-             * @property {string} target;
-             */
-
-            // Objects
-            const allColours = {
-                "--colour-bgr-1": "#ff9696",
-                "--colour-bgr-2": "#fff5d2",
-                "--colour-bgr-3": "#d7d2ff",
-                "--colour-text": "#000000",
-                "--colour-button": "#ebebff",
-                "--colour-border": "#00557d",
-                "--colour-input": "#ffffd7",
-                "--colour-tooltip": "#ffb4b4",
-                "--colour-hovered-bgr": "#191919",
-                "--colour-hovered-fgr": "#ebebeb",
-                "--colour-hovered-border": "#b4b4b4",
-                "--colour-disabled-bgr": "#afafaf",
-                "--colour-disabled-fgr": "#1e1e1e",
-            };
-
-            // Constants
-            const PARAGRAPHS_PER_PAGE = 25;
-
-            // Variables
-            /** @type {AudioContext} */
-            let audio = new (window.AudioContext || window.webkitAudioContext)();
-
-            /** @type {{
+      /** @type {{
                 name: string;
                 page: nubmer;
                 notes: string;
@@ -1081,1600 +992,1440 @@
                 selection: [number, number];
                 paragraphs: Paragraph[];
             }} */
-            let project = {};
-            /** @type {number} */
-            let totalSourceLength = 0;
-            /** @type {number} */
-            let totalTargetLength = 0;
+      let project = {};
+      /** @type {number} */
+      let totalSourceLength = 0;
+      /** @type {number} */
+      let totalTargetLength = 0;
 
-            // Settings' events
-            volumeInput.addEventListener("change", function (event) {
-                volumeInput.value = clamp(0, +volumeInput.value, 1);
-                localStorage.setItem("volume", volumeInput.value);
-            });
+      // Settings' events
+      volumeInput.addEventListener("change", function (event) {
+        volumeInput.value = clamp(0, +volumeInput.value, 1);
+        localStorage.setItem("volume", volumeInput.value);
+      });
 
-            defaultSounds.addEventListener("change", function (event) {
-                localStorage.setItem("default-sounds", this.checked);
-            });
+      defaultSounds.addEventListener("change", function (event) {
+        localStorage.setItem("default-sounds", this.checked);
+      });
 
-            defaultSettings.addEventListener("click", function (event) {
-                // Volume
-                volumeInput.value = "0.5";
-                localStorage.setItem("volume", volumeInput.value);
+      defaultSettings.addEventListener("click", function (event) {
+        // Volume
+        volumeInput.value = "0.5";
+        localStorage.setItem("volume", volumeInput.value);
 
-                // Default sounds
-                defaultSounds.checked = true;
-                localStorage.setItem("default-sounds", "true");
+        // Default sounds
+        defaultSounds.checked = true;
+        localStorage.setItem("default-sounds", "true");
 
-                // Colours
-                for (const c in allColours) {
-                    document.body.style.setProperty(c, allColours[c]);
-                    document.getElementById(c).value = allColours[c];
-                    localStorage.setItem(c, allColours[c]);
-                }
-            });
+        // Colours
+        for (const c in allColours) {
+          document.body.style.setProperty(c, allColours[c]);
+          document.getElementById(c).value = allColours[c];
+          localStorage.setItem(c, allColours[c]);
+        }
+      });
 
-            // Colour settings
-            Object.keys(allColours).forEach((c) => {
-                document.body.style.setProperty(
-                    c,
-                    localStorage.getItem(c) ||
-                        getComputedStyle(document.body).getPropertyValue(c),
-                );
+      // Colour settings
+      Object.keys(allColours).forEach((c) => {
+        document.body.style.setProperty(
+          c,
+          localStorage.getItem(c) || getComputedStyle(document.body).getPropertyValue(c),
+        );
 
-                /** @type {HTMLLIElement} */
-                let item = colours.appendChild(document.createElement("li"));
-                /** @type {HTMLLabelElement} */
-                let label = item.appendChild(document.createElement("label"));
-                /** @type {HTMLInputElement} */
-                let input = item.appendChild(document.createElement("input"));
+        /** @type {HTMLLIElement} */
+        let item = colours.appendChild(document.createElement("li"));
+        /** @type {HTMLLabelElement} */
+        let label = item.appendChild(document.createElement("label"));
+        /** @type {HTMLInputElement} */
+        let input = item.appendChild(document.createElement("input"));
 
-                label.id = `${c}-label`;
-                label.htmlFor = c;
-                label.textContent = c;
-                label.style.marginRight = "4px";
+        label.id = `${c}-label`;
+        label.htmlFor = c;
+        label.textContent = c;
+        label.style.marginRight = "4px";
 
-                input.id = c;
-                input.type = "color";
-                input.value = document.body.style.getPropertyValue(c);
-                input.addEventListener("input", function () {
-                    document.body.style.setProperty(c, this.value);
-                    localStorage.setItem(c, this.value);
-                });
+        input.id = c;
+        input.type = "color";
+        input.value = document.body.style.getPropertyValue(c);
+        input.addEventListener("input", function () {
+          document.body.style.setProperty(c, this.value);
+          localStorage.setItem(c, this.value);
+        });
 
-                if (c === "--colour-tooltip") {
-                    item.classList.add("tooltip-parent");
-                    /** @type {HTMLSpanElement} */
-                    let tooltip = item.appendChild(document.createElement("span"));
+        if (c === "--colour-tooltip") {
+          item.classList.add("tooltip-parent");
+          /** @type {HTMLSpanElement} */
+          let tooltip = item.appendChild(document.createElement("span"));
 
-                    tooltip.id = "example-tooltip";
-                    tooltip.classList.add("tooltip");
-                    tooltip.textContent = "Tooltip example";
-                }
-            });
+          tooltip.id = "example-tooltip";
+          tooltip.classList.add("tooltip");
+          tooltip.textContent = "Tooltip example";
+        }
+      });
 
-            // Loading colours
-            loadColours.addEventListener("click", function (event) {
-                colourLoader.click();
-            });
+      // Loading colours
+      loadColours.addEventListener("click", function (event) {
+        colourLoader.click();
+      });
 
-            colourLoader.addEventListener("change", async function (event) {
-                await colourLoader.files[0].text().then((content) => {
-                    try {
-                        let loadedColours = JSON.parse(content);
-                        saveColours.download = colourLoader.files[0].name;
+      colourLoader.addEventListener("change", async function (event) {
+        await colourLoader.files[0].text().then((content) => {
+          try {
+            let loadedColours = JSON.parse(content);
+            saveColours.download = colourLoader.files[0].name;
 
-                        for (const c in loadedColours) {
-                            document.body.style.setProperty(c, loadedColours[c]);
-                            document.getElementById(c).value = loadedColours[c];
-                            localStorage.setItem(c, loadedColours[c]);
-                            this.value = "";
-                        }
-                    } catch (error) {
-                        alert(`Error while reading colours file: ${error}`);
-                    }
-                });
-            });
-
-            // Saving colours
-            saveColours.addEventListener("click", function (event) {
-                let savedColours = {};
-
-                Object.keys(allColours).forEach((c) => {
-                    savedColours[c] = document.body.style.getPropertyValue(c);
-                });
-
-                let data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
-                this.href = `data:text/plain;charset=utf-8,${data}`;
-            });
-
-            // Translation settings
-            newLines.addEventListener("change", function (event) {
-                localStorage.setItem(
-                    "new-lines",
-                    clamp(+newLines.min, +newLines.value, +newLines.max),
-                );
-            });
-
-            // Exiting on pressing Escape
-            main.addEventListener("keydown", function (event) {
-                if (event.key === "Escape") switchScene("main", "menu");
-            });
-            saving.addEventListener("keydown", function (event) {
-                if (event.key === "Escape") switchScene("saving", "menu");
-            });
-            settings.addEventListener("keydown", function (event) {
-                if (event.key === "Escape") switchScene("settings", "menu");
-            });
-            about.addEventListener("keydown", function (event) {
-                if (event.key === "Escape") switchScene("about", "menu");
-            });
-
-            // Default sounds
-            document
-                .querySelectorAll("button, input, select, textarea, summary, a")
-                .forEach((e) => {
-                    e.addEventListener("click", function (event) {
-                        if (!defaultSounds.checked) return;
-                        playSound("sine", [250, 50, 100], 0.1);
-                    });
-                });
-
-            // Project name
-            projectName.addEventListener("input", function (event) {
-                project.name = projectName.textContent;
-            });
-
-            // Project notes
-            notes.addEventListener("input", function (event) {
-                project.notes = notes.value;
-            });
-            notes.addEventListener("keydown", function (event) {
-                if (!event.altKey) return;
-                if (event.key === "Home") {
-                    event.preventDefault();
-                    if (document.getElementById(project.lastId)) {
-                        document.getElementById(project.lastId).focus();
-                    }
-                }
-            });
-
-            // Project statistics
-            [tableSourceStats, tableTargetStats].forEach((e) => {
-                e.addEventListener("keydown", function (event) {
-                    if (!event.altKey) return;
-                    if (event.key === "End") {
-                        event.preventDefault();
-                        if (document.getElementById(project.lastId)) {
-                            document.getElementById(project.lastId).focus();
-                        }
-                    }
-                });
-            });
-
-            // Loading project
-            startButton.addEventListener("click", function (event) {
-                loadProjectInput.click();
-            });
-
-            continueButton.addEventListener("click", function (event) {
-                switchScene("menu", "main");
-                /** @type {HTMLTextAreaElement} */
-                let lastText = document.getElementById(project.lastId);
-                if (lastText) {
-                    lastText.setSelectionRange(...project.selection);
-                    lastText.focus();
-                }
-            });
-
-            loadProjectInput.addEventListener("change", async function (event) {
-                await loadProjectInput.files[0].text().then((content) => {
-                    try {
-                        let name = loadProjectInput.files[0].name;
-                        project = {};
-
-                        if (name.endsWith(".json")) {
-                            // A project is loaded
-                            project = JSON.parse(content);
-                        } else {
-                            // A source text is loaded
-                            project.name = loadProjectInput.files[0].name.replace(
-                                ".txt",
-                                "",
-                            );
-                            project.paragraphs = [];
-                            content.split("\n").forEach((p) => {
-                                if (p.trim() === "") return;
-                                project.paragraphs.push({
-                                    source: p.trimEnd(),
-                                    target: "",
-                                });
-                            });
-                        }
-                        verifyProject();
-                        fillCurrentPage();
-                        continueButton.disabled = false;
-                        saveButton.disabled = false;
-                        projectName.textContent = project.name;
-                        pageInput.value = project.page;
-                        notes.value = project.notes;
-                    } catch (error) {
-                        alert(`Error while opening the file: ${error}`);
-                    }
-                });
-            });
-
-            // Saving project, source, target, and notes
-            saveProject.addEventListener("click", function (event) {
-                let data = encodeURIComponent(JSON.stringify(project, undefined, 4));
-                this.download = `${project.name}.json`;
-                this.href = `data:text/plain;charset=utf-8,${data}`;
-            });
-
-            saveSource.addEventListener("click", function (event) {
-                let numNewLines = clamp(+newLines.min, +newLines.value, +newLines.max);
-                let data = "";
-                project.paragraphs.forEach((p, i) => {
-                    if (p.source === "") return;
-                    if (i > 0) {
-                        data += `${"\n".repeat(numNewLines)}${p.source}`;
-                    } else {
-                        data += `${p.source}`;
-                    }
-                });
-                this.download = `${project.name} [${tableSource.textContent}].txt`;
-                this.href = `data:text/plain;charset=utf-8,${data}`;
-            });
-
-            saveTarget.addEventListener("click", function (event) {
-                let numNewLines = clamp(+newLines.min, +newLines.value, +newLines.max);
-                let data = "";
-                project.paragraphs.forEach((p, i) => {
-                    if (p.target === "") return;
-                    if (i > 0) {
-                        data += `${"\n".repeat(numNewLines)}${p.target}`;
-                    } else {
-                        data += `${p.target}`;
-                    }
-                });
-                this.download = `${project.name} [${tableTarget.textContent}].txt`;
-                this.href = `data:text/plain;charset=utf-8,${data}`;
-            });
-
-            saveNotes.addEventListener("click", function (event) {
-                let data = encodeURIComponent(project.notes);
-                this.download = `${project.name} [${notes.placeholder}].txt`;
-                this.href = `data:text/plain;charset=utf-8,${data}`;
-            });
-
-            // Functions
-            function verifyProject() {
-                if (!project.name) project.name = "";
-                if (!project.page) project.page = 0;
-                if (!project.notes) project.notes = "";
-                if (!project.lastId) project.lastId = "t0";
-                if (!project.paragraphs) project.paragraphs = [];
-                if (!project.selection) project.selection = [0, 0];
+            for (const c in loadedColours) {
+              document.body.style.setProperty(c, loadedColours[c]);
+              document.getElementById(c).value = loadedColours[c];
+              localStorage.setItem(c, loadedColours[c]);
+              this.value = "";
             }
+          } catch (error) {
+            alert(`Error while reading colours file: ${error}`);
+          }
+        });
+      });
 
-            /**
-             * @param {boolean} isSource
-             * @param {number} index
-             * @param {"up"|"down"|"left"|"right"} direction
-             */
-            function getNeighbourCell(isSource, index, direction) {
-                /** @type {HTMLTextAreaElement} */
-                let result = undefined;
+      // Saving colours
+      saveColours.addEventListener("click", function (event) {
+        let savedColours = {};
 
-                switch (direction) {
-                    case "up":
-                        result = document.getElementById(
-                            isSource ? `s${index - 1}` : `t${index - 1}`,
-                        );
-                        break;
-                    case "down":
-                        result = document.getElementById(
-                            isSource ? `s${index + 1}` : `t${index + 1}`,
-                        );
-                        break;
-                    case "left":
-                        result = document.getElementById(
-                            isSource ? `t${index - 1}` : `s${index}`,
-                        );
-                        break;
-                    case "right":
-                        result = document.getElementById(
-                            isSource ? `t${index}` : `s${index + 1}`,
-                        );
-                        break;
-                    default:
-                        break;
-                }
+        Object.keys(allColours).forEach((c) => {
+          savedColours[c] = document.body.style.getPropertyValue(c);
+        });
 
-                return result;
+        let data = encodeURIComponent(JSON.stringify(savedColours, undefined, 4));
+        this.href = `data:text/plain;charset=utf-8,${data}`;
+      });
+
+      // Translation settings
+      newLines.addEventListener("change", function (event) {
+        localStorage.setItem("new-lines", clamp(+newLines.min, +newLines.value, +newLines.max));
+      });
+
+      // Exiting on pressing Escape
+      main.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") switchScene("main", "menu");
+      });
+      saving.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") switchScene("saving", "menu");
+      });
+      settings.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") switchScene("settings", "menu");
+      });
+      about.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") switchScene("about", "menu");
+      });
+
+      // Default sounds
+      document.querySelectorAll("button, input, select, textarea, summary, a").forEach((e) => {
+        e.addEventListener("click", function (event) {
+          if (!defaultSounds.checked) return;
+          playSound("sine", [250, 50, 100], 0.1);
+        });
+      });
+
+      // Project name
+      projectName.addEventListener("input", function (event) {
+        project.name = projectName.textContent;
+      });
+
+      // Project notes
+      notes.addEventListener("input", function (event) {
+        project.notes = notes.value;
+      });
+      notes.addEventListener("keydown", function (event) {
+        if (!event.altKey) return;
+        if (event.key === "Home") {
+          event.preventDefault();
+          if (document.getElementById(project.lastId)) {
+            document.getElementById(project.lastId).focus();
+          }
+        }
+      });
+
+      // Project statistics
+      [tableSourceStats, tableTargetStats].forEach((e) => {
+        e.addEventListener("keydown", function (event) {
+          if (!event.altKey) return;
+          if (event.key === "End") {
+            event.preventDefault();
+            if (document.getElementById(project.lastId)) {
+              document.getElementById(project.lastId).focus();
             }
+          }
+        });
+      });
 
-            /**
-             * @param {number} index
-             */
-            function addCell(index) {
-                /** @type {Paragraph} */
-                const p = project.paragraphs[index];
+      // Loading project
+      startButton.addEventListener("click", function (event) {
+        loadProjectInput.click();
+      });
 
-                /** @type {HTMLTableRowElement} */
-                let row = tableBody.appendChild(document.createElement("tr"));
+      continueButton.addEventListener("click", function (event) {
+        switchScene("menu", "main");
+        /** @type {HTMLTextAreaElement} */
+        let lastText = document.getElementById(project.lastId);
+        if (lastText) {
+          lastText.setSelectionRange(...project.selection);
+          lastText.focus();
+        }
+      });
 
-                /** @type {HTMLTableDataCellElement} */
-                let dataSource = row.appendChild(document.createElement("td"));
-                dataSource.style.border = "none";
-                dataSource.style.padding = "0px";
+      loadProjectInput.addEventListener("change", async function (event) {
+        await loadProjectInput.files[0].text().then((content) => {
+          try {
+            let name = loadProjectInput.files[0].name;
+            project = {};
 
-                /** @type {HTMLTextAreaElement} */
-                let textSource = dataSource.appendChild(
-                    document.createElement("textarea"),
-                );
-                textSource.id = `s${index}`;
-                textSource.value = p.source;
-                textSource.dataset.type = "source";
-                textSource.classList.add("table-text");
-                textSource.style.height = textSource.scrollHeight * 2 + "px";
-
-                /** @type {HTMLTableDataCellElement} */
-                let dataTarget = row.appendChild(document.createElement("td"));
-                dataTarget.style.border = "none";
-                dataTarget.style.padding = "0px";
-
-                /** @type {HTMLTextAreaElement */
-                let textTarget = dataTarget.appendChild(
-                    document.createElement("textarea"),
-                );
-                textTarget.id = `t${index}`;
-                textTarget.value = p.target;
-                textTarget.dataset.type = "target";
-                textTarget.classList.add("table-text");
-
-                // Common source & target text areas' events
-                [textSource, textTarget].forEach((t) => {
-                    // Input actions
-                    t.addEventListener("input", function (event) {
-                        if (t === textSource) {
-                            project.paragraphs[index].source = this.value;
-                        } else {
-                            project.paragraphs[index].target = this.value;
-                        }
-                        updateTotalLengths();
-                        updateStatistics(this);
-                    });
-
-                    // Actions with Alt
-                    t.addEventListener("keydown", function (event) {
-                        if (!event.altKey) return;
-
-                        /** @type {HTMLTextAreaElement} */
-                        let neighbour = undefined;
-
-                        switch (event.key) {
-                            case "ArrowUp":
-                                event.preventDefault();
-                                neighbour = getNeighbourCell(
-                                    this === textSource,
-                                    index,
-                                    "up",
-                                );
-                                if (neighbour) neighbour.focus();
-                                break;
-                            case "ArrowDown":
-                                event.preventDefault();
-                                neighbour = getNeighbourCell(
-                                    this === textSource,
-                                    index,
-                                    "down",
-                                );
-                                if (neighbour) neighbour.focus();
-                                break;
-                            case "ArrowLeft":
-                                event.preventDefault();
-                                neighbour = getNeighbourCell(
-                                    this === textSource,
-                                    index,
-                                    "left",
-                                );
-                                if (neighbour) neighbour.focus();
-                                break;
-                            case "ArrowRight":
-                                event.preventDefault();
-                                neighbour = getNeighbourCell(
-                                    this === textSource,
-                                    index,
-                                    "right",
-                                );
-                                if (neighbour) neighbour.focus();
-                                break;
-                            case "PageUp":
-                                event.preventDefault();
-                                setPage("previous");
-                                break;
-                            case "PageDown":
-                                event.preventDefault();
-                                setPage("next");
-                                break;
-                            case "Home":
-                                event.preventDefault();
-                                notes.focus();
-                                break;
-                            case "End":
-                                event.preventDefault();
-                                if (this === textSource) {
-                                    tableSourceStats.focus();
-                                } else {
-                                    tableTargetStats.focus();
-                                }
-                                break;
-                            case "Insert":
-                                event.preventDefault();
-                                navigator.clipboard.writeText(textTarget.value);
-                                textTarget.value = textSource.value;
-                                textTarget.dispatchEvent(new Event("input"));
-                                break;
-                            case "Delete":
-                                event.preventDefault();
-                                navigator.clipboard.writeText(this.value);
-                                this.value = "";
-                                this.dispatchEvent(new Event("input"));
-                                break;
-                            default:
-                                break;
-                        }
-                    });
-
-                    // Update stats on focus and selection
-                    ["click", "focus", "select"].forEach((e) => {
-                        t.addEventListener(e, function (event) {
-                            updateStatistics(textSource);
-                            updateStatistics(textTarget);
-
-                            // Update last selected table cell
-                            project.lastId = this.id;
-                            project.selection = [this.selectionStart, this.selectionEnd];
-                        });
-                    });
+            if (name.endsWith(".json")) {
+              // A project is loaded
+              project = JSON.parse(content);
+            } else {
+              // A source text is loaded
+              project.name = loadProjectInput.files[0].name.replace(".txt", "");
+              project.paragraphs = [];
+              content.split("\n").forEach((p) => {
+                if (p.trim() === "") return;
+                project.paragraphs.push({
+                  source: p.trimEnd(),
+                  target: "",
                 });
+              });
             }
+            verifyProject();
+            fillCurrentPage();
+            continueButton.disabled = false;
+            saveButton.disabled = false;
+            projectName.textContent = project.name;
+            pageInput.value = project.page;
+            notes.value = project.notes;
+          } catch (error) {
+            alert(`Error while opening the file: ${error}`);
+          }
+        });
+      });
 
-            function getLastPage() {
-                return Math.ceil(project.paragraphs.length / PARAGRAPHS_PER_PAGE);
+      // Saving project, source, target, and notes
+      saveProject.addEventListener("click", function (event) {
+        let data = encodeURIComponent(JSON.stringify(project, undefined, 4));
+        this.download = `${project.name}.json`;
+        this.href = `data:text/plain;charset=utf-8,${data}`;
+      });
+
+      saveSource.addEventListener("click", function (event) {
+        let numNewLines = clamp(+newLines.min, +newLines.value, +newLines.max);
+        let data = "";
+        project.paragraphs.forEach((p, i) => {
+          if (p.source === "") return;
+          if (i > 0) {
+            data += `${"\n".repeat(numNewLines)}${p.source}`;
+          } else {
+            data += `${p.source}`;
+          }
+        });
+        this.download = `${project.name} [${tableSource.textContent}].txt`;
+        this.href = `data:text/plain;charset=utf-8,${data}`;
+      });
+
+      saveTarget.addEventListener("click", function (event) {
+        let numNewLines = clamp(+newLines.min, +newLines.value, +newLines.max);
+        let data = "";
+        project.paragraphs.forEach((p, i) => {
+          if (p.target === "") return;
+          if (i > 0) {
+            data += `${"\n".repeat(numNewLines)}${p.target}`;
+          } else {
+            data += `${p.target}`;
+          }
+        });
+        this.download = `${project.name} [${tableTarget.textContent}].txt`;
+        this.href = `data:text/plain;charset=utf-8,${data}`;
+      });
+
+      saveNotes.addEventListener("click", function (event) {
+        let data = encodeURIComponent(project.notes);
+        this.download = `${project.name} [${notes.placeholder}].txt`;
+        this.href = `data:text/plain;charset=utf-8,${data}`;
+      });
+
+      // Functions
+      function verifyProject() {
+        if (!project.name) project.name = "";
+        if (!project.page) project.page = 0;
+        if (!project.notes) project.notes = "";
+        if (!project.lastId) project.lastId = "t0";
+        if (!project.paragraphs) project.paragraphs = [];
+        if (!project.selection) project.selection = [0, 0];
+      }
+
+      /**
+       * @param {boolean} isSource
+       * @param {number} index
+       * @param {"up"|"down"|"left"|"right"} direction
+       */
+      function getNeighbourCell(isSource, index, direction) {
+        /** @type {HTMLTextAreaElement} */
+        let result = undefined;
+
+        switch (direction) {
+          case "up":
+            result = document.getElementById(isSource ? `s${index - 1}` : `t${index - 1}`);
+            break;
+          case "down":
+            result = document.getElementById(isSource ? `s${index + 1}` : `t${index + 1}`);
+            break;
+          case "left":
+            result = document.getElementById(isSource ? `t${index - 1}` : `s${index}`);
+            break;
+          case "right":
+            result = document.getElementById(isSource ? `t${index}` : `s${index + 1}`);
+            break;
+          default:
+            break;
+        }
+
+        return result;
+      }
+
+      /**
+       * @param {number} index
+       */
+      function addCell(index) {
+        /** @type {Paragraph} */
+        const p = project.paragraphs[index];
+
+        /** @type {HTMLTableRowElement} */
+        let row = tableBody.appendChild(document.createElement("tr"));
+
+        /** @type {HTMLTableDataCellElement} */
+        let dataSource = row.appendChild(document.createElement("td"));
+        dataSource.style.border = "none";
+        dataSource.style.padding = "0px";
+
+        /** @type {HTMLTextAreaElement} */
+        let textSource = dataSource.appendChild(document.createElement("textarea"));
+        textSource.id = `s${index}`;
+        textSource.value = p.source;
+        textSource.dataset.type = "source";
+        textSource.classList.add("table-text");
+        textSource.style.height = textSource.scrollHeight * 2 + "px";
+
+        /** @type {HTMLTableDataCellElement} */
+        let dataTarget = row.appendChild(document.createElement("td"));
+        dataTarget.style.border = "none";
+        dataTarget.style.padding = "0px";
+
+        /** @type {HTMLTextAreaElement */
+        let textTarget = dataTarget.appendChild(document.createElement("textarea"));
+        textTarget.id = `t${index}`;
+        textTarget.value = p.target;
+        textTarget.dataset.type = "target";
+        textTarget.classList.add("table-text");
+
+        // Common source & target text areas' events
+        [textSource, textTarget].forEach((t) => {
+          // Input actions
+          t.addEventListener("input", function (event) {
+            if (t === textSource) {
+              project.paragraphs[index].source = this.value;
+            } else {
+              project.paragraphs[index].target = this.value;
             }
+            updateTotalLengths();
+            updateStatistics(this);
+          });
 
-            /**
-             * @param {"first"|"previous"|"input"|"next"|"last"} page
-             */
-            function setPage(page) {
-                /** @type {number} */
-                let newPage = project.page;
+          // Actions with Alt
+          t.addEventListener("keydown", function (event) {
+            if (!event.altKey) return;
 
-                switch (page) {
-                    case "first":
-                        newPage = 1;
-                        break;
-                    case "previous":
-                        newPage--;
-                        break;
-                    case "input":
-                        newPage = +pageInput.value;
-                        break;
-                    case "next":
-                        newPage++;
-                        break;
-                    case "last":
-                        newPage = getLastPage();
-                        break;
-                    default:
-                        break;
-                }
+            /** @type {HTMLTextAreaElement} */
+            let neighbour = undefined;
 
-                newPage = clamp(1, newPage, getLastPage());
-
-                if (newPage !== project.page) {
-                    project.page = newPage;
-                    pageInput.value = newPage;
-                    fillCurrentPage();
-                }
-            }
-
-            function fillCurrentPage() {
-                switchScene("menu", "main");
-                while (tableBody.hasChildNodes()) tableBody.lastChild.remove();
-
-                project.page = clamp(1, project.page, getLastPage());
-
-                /** @type {number} */
-                const firstIndex = (project.page - 1) * PARAGRAPHS_PER_PAGE;
-                /** @type {number} */
-                const lastIndex = firstIndex + PARAGRAPHS_PER_PAGE;
-
-                for (let i = firstIndex; i < lastIndex; i++) {
-                    if (!project.paragraphs[i]) break;
-                    addCell(i);
-                }
-
-                updateStatistics();
-
-                /** @type {HTMLTextAreaElement} */
-                let lastText = document.getElementById(project.lastId);
-                if (lastText) {
-                    lastText.setSelectionRange(...project.selection);
-                    lastText.focus();
+            switch (event.key) {
+              case "ArrowUp":
+                event.preventDefault();
+                neighbour = getNeighbourCell(this === textSource, index, "up");
+                if (neighbour) neighbour.focus();
+                break;
+              case "ArrowDown":
+                event.preventDefault();
+                neighbour = getNeighbourCell(this === textSource, index, "down");
+                if (neighbour) neighbour.focus();
+                break;
+              case "ArrowLeft":
+                event.preventDefault();
+                neighbour = getNeighbourCell(this === textSource, index, "left");
+                if (neighbour) neighbour.focus();
+                break;
+              case "ArrowRight":
+                event.preventDefault();
+                neighbour = getNeighbourCell(this === textSource, index, "right");
+                if (neighbour) neighbour.focus();
+                break;
+              case "PageUp":
+                event.preventDefault();
+                setPage("previous");
+                break;
+              case "PageDown":
+                event.preventDefault();
+                setPage("next");
+                break;
+              case "Home":
+                event.preventDefault();
+                notes.focus();
+                break;
+              case "End":
+                event.preventDefault();
+                if (this === textSource) {
+                  tableSourceStats.focus();
                 } else {
-                    if (document.getElementById(`t${firstIndex}`)) {
-                        document.getElementById(`t${firstIndex}`).focus();
+                  tableTargetStats.focus();
+                }
+                break;
+              case "Insert":
+                event.preventDefault();
+                navigator.clipboard.writeText(textTarget.value);
+                textTarget.value = textSource.value;
+                textTarget.dispatchEvent(new Event("input"));
+                break;
+              case "Delete":
+                event.preventDefault();
+                navigator.clipboard.writeText(this.value);
+                this.value = "";
+                this.dispatchEvent(new Event("input"));
+                break;
+              default:
+                break;
+            }
+          });
+
+          // Update stats on focus and selection
+          ["click", "focus", "select"].forEach((e) => {
+            t.addEventListener(e, function (event) {
+              updateStatistics(textSource);
+              updateStatistics(textTarget);
+
+              // Update last selected table cell
+              project.lastId = this.id;
+              project.selection = [this.selectionStart, this.selectionEnd];
+            });
+          });
+        });
+      }
+
+      function getLastPage() {
+        return Math.ceil(project.paragraphs.length / PARAGRAPHS_PER_PAGE);
+      }
+
+      /**
+       * @param {"first"|"previous"|"input"|"next"|"last"} page
+       */
+      function setPage(page) {
+        /** @type {number} */
+        let newPage = project.page;
+
+        switch (page) {
+          case "first":
+            newPage = 1;
+            break;
+          case "previous":
+            newPage--;
+            break;
+          case "input":
+            newPage = +pageInput.value;
+            break;
+          case "next":
+            newPage++;
+            break;
+          case "last":
+            newPage = getLastPage();
+            break;
+          default:
+            break;
+        }
+
+        newPage = clamp(1, newPage, getLastPage());
+
+        if (newPage !== project.page) {
+          project.page = newPage;
+          pageInput.value = newPage;
+          fillCurrentPage();
+        }
+      }
+
+      function fillCurrentPage() {
+        switchScene("menu", "main");
+        while (tableBody.hasChildNodes()) tableBody.lastChild.remove();
+
+        project.page = clamp(1, project.page, getLastPage());
+
+        /** @type {number} */
+        const firstIndex = (project.page - 1) * PARAGRAPHS_PER_PAGE;
+        /** @type {number} */
+        const lastIndex = firstIndex + PARAGRAPHS_PER_PAGE;
+
+        for (let i = firstIndex; i < lastIndex; i++) {
+          if (!project.paragraphs[i]) break;
+          addCell(i);
+        }
+
+        updateStatistics();
+
+        /** @type {HTMLTextAreaElement} */
+        let lastText = document.getElementById(project.lastId);
+        if (lastText) {
+          lastText.setSelectionRange(...project.selection);
+          lastText.focus();
+        } else {
+          if (document.getElementById(`t${firstIndex}`)) {
+            document.getElementById(`t${firstIndex}`).focus();
+          }
+        }
+      }
+
+      function updateTotalLengths() {
+        totalSourceLength = 0;
+        totalTargetLength = 0;
+
+        project.paragraphs.forEach((p) => {
+          totalSourceLength += p.source.length;
+          totalTargetLength += p.target.length;
+        });
+      }
+
+      function getTargetToSourceRatio() {
+        let percent = (totalTargetLength / totalSourceLength) * 100;
+        return percent > 0 && percent < 1000 ? percent : undefined;
+      }
+
+      /**
+       * @param {HTMLTextAreaElement} text
+       */
+      function updateStatistics(text = undefined) {
+        // If no text area is given, only show total lengths
+        if (!text) {
+          updateTotalLengths();
+          tableSourceStats.textContent = totalSourceLength;
+          tableTargetStats.textContent = totalTargetLength;
+
+          let percent = getTargetToSourceRatio();
+          if (percent) {
+            tableTargetStats.textContent += ` (${percent.toFixed(0)}%)`;
+          }
+          return;
+        }
+
+        // If a text area is given, proceed normally
+        /** @type {string} */
+        let result = "";
+        /** @type {number} */
+        let textLength = text.value.length;
+        /** @type {number} */
+        let selection = text.selectionEnd - text.selectionStart;
+        /** @type {number} */
+        let totalLength = text.dataset.type === "source" ? totalSourceLength : totalTargetLength;
+        /** @type {HTMLTableDataCellElement} */
+        let cell = text.dataset.type === "source" ? tableSourceStats : tableTargetStats;
+
+        if (selection > 0) result += `${selection}/`;
+        result += `${textLength}/`;
+        result += `${totalLength}`;
+
+        if (text.dataset.type === "target") {
+          let percent = getTargetToSourceRatio();
+          if (percent) {
+            result += ` (${percent.toFixed(0)}%)`;
+          }
+        }
+
+        cell.textContent = result;
+      }
+
+      function loadSettings() {
+        // Volume
+        volumeInput.value = localStorage.getItem("volume") || "0.5";
+
+        // Default sounds
+        if (localStorage.getItem("default-sounds")) {
+          defaultSounds.checked = localStorage.getItem("default-sounds") === "true";
+        } else {
+          defaultSounds.checked = true;
+          localStorage.setItem("default-sounds", "true");
+        }
+
+        // Translation settings
+        newLines.value = localStorage.getItem("new-lines") || "2";
+      }
+
+      function switchScene(from, to) {
+        if (from === to) return;
+
+        try {
+          document.getElementById(from).style.display = "none";
+          document.getElementById(to).style.display = "flex";
+          document.getElementById(to).focus();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      /**
+       * @param {'square' | 'sawtooth' | 'triangle' | 'sine'} type
+       * @param {number[]} frequencies
+       * @param {number} duration
+       */
+      function playSound(type, frequencies, duration) {
+        if (!audio || +volumeInput.value === 0) return;
+
+        /** @type {OscillatorNode} */
+        let oscillator = audio.createOscillator();
+        /** @type {GainNode} */
+        let volume = audio.createGain();
+
+        oscillator.type = type;
+        oscillator.frequency.value = frequencies[0];
+        oscillator.frequency.setValueCurveAtTime(frequencies, audio.currentTime, duration);
+        oscillator.connect(volume);
+
+        volume.gain.value = +volumeInput.value;
+        volume.gain.setValueCurveAtTime([0, +volumeInput.value, 0], audio.currentTime, duration);
+        volume.connect(audio.destination);
+
+        oscillator.start();
+        oscillator.stop(audio.currentTime + duration);
+      }
+
+      /**
+       * @param {number} min
+       * @param {number} value
+       * @param {number} max
+       * @returns {number}
+       */
+      function ringClamp(min, value, max) {
+        return value < min ? max : value > max ? min : value;
+      }
+
+      /**
+       * @param {number} min
+       * @param {number} value
+       * @param {number} max
+       * @returns {number}
+       */
+      function clamp(min, value, max) {
+        return value < min ? min : value > max ? max : value;
+      }
+
+      /**
+       * @typedef {Object} Translation
+       * @property {string} name
+       * @property {string[]} langTags
+       * @property {LangElement[]} elements
+       */
+      /**
+       * @param {Translation[]} languages
+       */
+      function generateLanguagesList(languages) {
+        /** @type {HTMLSelectElement} */
+        let list = document.getElementById("lang");
+        list.addEventListener("change", function (event) {
+          selectLanguage(languages, true);
+        });
+
+        for (let l of languages) {
+          /** @type {HTMLOptionElement} */
+          let option = list.appendChild(document.createElement("option"));
+          option.value = l.name;
+          option.textContent = l.name;
+        }
+
+        selectLanguage(languages, false);
+      }
+
+      /**
+       * @param {Translation[]} languages
+       * @param {boolean} fromMenu
+       */
+      function selectLanguage(languages, fromMenu) {
+        /** @type {HTMLSelectElement} */
+        let menu = document.getElementById("lang");
+        /** @type {string} */
+        let selection = null;
+
+        if (!fromMenu) {
+          if (localStorage.getItem("lang")) {
+            selection = localStorage.getItem("lang");
+            menu.value = selection;
+          } else if (navigator.language) {
+            // Iterate over translations
+            for (let l of languages) {
+              // If the valid option is finally found, exit
+              if (selection) {
+                break;
+              } else if (l.langTags) {
+                // Otherwise iterate over the tags and
+                // compare them to the browser language
+                for (let t of l.langTags) {
+                  if (navigator.language === t) {
+                    menu.value = l.name;
+                    selection = l.name;
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          selection = menu.value;
+        }
+
+        if (selection) {
+          /** @type {Translation} */
+          let translation = {};
+
+          for (let l of languages) {
+            if (l.name === selection) {
+              translation = l;
+              break;
+            }
+          }
+
+          if (translation) {
+            localStorage.setItem("lang", selection);
+
+            for (let e of translation.elements) {
+              let target = document.getElementById(e.id);
+
+              if (target) {
+                if (e.textContent) {
+                  target.textContent = e.textContent;
+                }
+
+                if (e.placeholder) {
+                  target.placeholder = e.placeholder;
+                }
+
+                if (e.childNodesTexts) {
+                  /** @type {number} */
+                  let index = 0;
+
+                  for (let c of target.childNodes) {
+                    if (c.textContent && c.textContent.trim() !== "" && e.childNodesTexts[index]) {
+                      c.textContent = e.childNodesTexts[index];
+                      index++;
                     }
+                  }
                 }
+              }
             }
+          }
+        }
+      }
 
-            function updateTotalLengths() {
-                totalSourceLength = 0;
-                totalTargetLength = 0;
+      /**
+       * @typedef {Object} LangElement
+       * @property {string} id
+       * @property {string} textContent
+       * @property {string} placeholder
+       * @property {string[]} childNodesTexts
+       */
+      function exportTranslationTemplate() {
+        /** @type {LangElement[]} */
+        let elements = [];
 
-                project.paragraphs.forEach((p) => {
-                    totalSourceLength += p.source.length;
-                    totalTargetLength += p.target.length;
-                });
-            }
+        document.querySelectorAll("body *").forEach((e) => {
+          if (
+            e.tagName !== "DIV" &&
+            e.tagName !== "DETAILS" &&
+            e.tagName !== "TABLE" &&
+            e.id &&
+            e.id !== "lang"
+          ) {
+            /** @type {LangElement} */
+            let newEl = {};
 
-            function getTargetToSourceRatio() {
-                let percent = (totalTargetLength / totalSourceLength) * 100;
-                return percent > 0 && percent < 1000 ? percent : undefined;
-            }
+            newEl.id = e.id;
 
-            /**
-             * @param {HTMLTextAreaElement} text
-             */
-            function updateStatistics(text = undefined) {
-                // If no text area is given, only show total lengths
-                if (!text) {
-                    updateTotalLengths();
-                    tableSourceStats.textContent = totalSourceLength;
-                    tableTargetStats.textContent = totalTargetLength;
+            if (e.childNodes) {
+              newEl.childNodesTexts = [];
 
-                    let percent = getTargetToSourceRatio();
-                    if (percent) {
-                        tableTargetStats.textContent += ` (${percent.toFixed(0)}%)`;
-                    }
-                    return;
+              for (let n of e.childNodes) {
+                if (n.textContent && n.textContent.trim() !== "") {
+                  newEl.childNodesTexts.push(n.textContent.trim());
                 }
-
-                // If a text area is given, proceed normally
-                /** @type {string} */
-                let result = "";
-                /** @type {number} */
-                let textLength = text.value.length;
-                /** @type {number} */
-                let selection = text.selectionEnd - text.selectionStart;
-                /** @type {number} */
-                let totalLength =
-                    text.dataset.type === "source"
-                        ? totalSourceLength
-                        : totalTargetLength;
-                /** @type {HTMLTableDataCellElement} */
-                let cell =
-                    text.dataset.type === "source" ? tableSourceStats : tableTargetStats;
-
-                if (selection > 0) result += `${selection}/`;
-                result += `${textLength}/`;
-                result += `${totalLength}`;
-
-                if (text.dataset.type === "target") {
-                    let percent = getTargetToSourceRatio();
-                    if (percent) {
-                        result += ` (${percent.toFixed(0)}%)`;
-                    }
-                }
-
-                cell.textContent = result;
+              }
+            } else {
+              if (e.textContent) {
+                newEl.textContent = e.textContent;
+              }
             }
 
-            function loadSettings() {
-                // Volume
-                volumeInput.value = localStorage.getItem("volume") || "0.5";
-
-                // Default sounds
-                if (localStorage.getItem("default-sounds")) {
-                    defaultSounds.checked =
-                        localStorage.getItem("default-sounds") === "true";
-                } else {
-                    defaultSounds.checked = true;
-                    localStorage.setItem("default-sounds", "true");
-                }
-
-                // Translation settings
-                newLines.value = localStorage.getItem("new-lines") || "2";
+            if (e.placeholder) {
+              newEl.placeholder = e.placeholder;
             }
 
-            function switchScene(from, to) {
-                if (from === to) return;
-
-                try {
-                    document.getElementById(from).style.display = "none";
-                    document.getElementById(to).style.display = "flex";
-                    document.getElementById(to).focus();
-                } catch (error) {
-                    console.log(error);
-                }
+            if (
+              newEl.textContent ||
+              newEl.placeholder ||
+              (newEl.childNodesTexts && newEl.childNodesTexts.length > 0)
+            ) {
+              elements.push(newEl);
             }
+          }
+        });
 
-            /**
-             * @param {'square' | 'sawtooth' | 'triangle' | 'sine'} type
-             * @param {number[]} frequencies
-             * @param {number} duration
-             */
-            function playSound(type, frequencies, duration) {
-                if (!audio || +volumeInput.value === 0) return;
+        navigator.clipboard.writeText(JSON.stringify(elements, null, 4));
+        alert("Translation template copied to clipboard!");
+      }
 
-                /** @type {OscillatorNode} */
-                let oscillator = audio.createOscillator();
-                /** @type {GainNode} */
-                let volume = audio.createGain();
-
-                oscillator.type = type;
-                oscillator.frequency.value = frequencies[0];
-                oscillator.frequency.setValueCurveAtTime(
-                    frequencies,
-                    audio.currentTime,
-                    duration,
-                );
-                oscillator.connect(volume);
-
-                volume.gain.value = +volumeInput.value;
-                volume.gain.setValueCurveAtTime(
-                    [0, +volumeInput.value, 0],
-                    audio.currentTime,
-                    duration,
-                );
-                volume.connect(audio.destination);
-
-                oscillator.start();
-                oscillator.stop(audio.currentTime + duration);
-            }
-
-            /**
-             * @param {number} min
-             * @param {number} value
-             * @param {number} max
-             * @returns {number}
-             */
-            function ringClamp(min, value, max) {
-                return value < min ? max : value > max ? min : value;
-            }
-
-            /**
-             * @param {number} min
-             * @param {number} value
-             * @param {number} max
-             * @returns {number}
-             */
-            function clamp(min, value, max) {
-                return value < min ? min : value > max ? max : value;
-            }
-
-            /**
-             * @typedef {Object} Translation
-             * @property {string} name
-             * @property {string[]} langTags
-             * @property {LangElement[]} elements
-             */
-            /**
-             * @param {Translation[]} languages
-             */
-            function generateLanguagesList(languages) {
-                /** @type {HTMLSelectElement} */
-                let list = document.getElementById("lang");
-                list.addEventListener("change", function (event) {
-                    selectLanguage(languages, true);
-                });
-
-                for (let l of languages) {
-                    /** @type {HTMLOptionElement} */
-                    let option = list.appendChild(document.createElement("option"));
-                    option.value = l.name;
-                    option.textContent = l.name;
-                }
-
-                selectLanguage(languages, false);
-            }
-
-            /**
-             * @param {Translation[]} languages
-             * @param {boolean} fromMenu
-             */
-            function selectLanguage(languages, fromMenu) {
-                /** @type {HTMLSelectElement} */
-                let menu = document.getElementById("lang");
-                /** @type {string} */
-                let selection = null;
-
-                if (!fromMenu) {
-                    if (localStorage.getItem("lang")) {
-                        selection = localStorage.getItem("lang");
-                        menu.value = selection;
-                    } else if (navigator.language) {
-                        // Iterate over translations
-                        for (let l of languages) {
-                            // If the valid option is finally found, exit
-                            if (selection) {
-                                break;
-                            } else if (l.langTags) {
-                                // Otherwise iterate over the tags and
-                                // compare them to the browser language
-                                for (let t of l.langTags) {
-                                    if (navigator.language === t) {
-                                        menu.value = l.name;
-                                        selection = l.name;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    selection = menu.value;
-                }
-
-                if (selection) {
-                    /** @type {Translation} */
-                    let translation = {};
-
-                    for (let l of languages) {
-                        if (l.name === selection) {
-                            translation = l;
-                            break;
-                        }
-                    }
-
-                    if (translation) {
-                        localStorage.setItem("lang", selection);
-
-                        for (let e of translation.elements) {
-                            let target = document.getElementById(e.id);
-
-                            if (target) {
-                                if (e.textContent) {
-                                    target.textContent = e.textContent;
-                                }
-
-                                if (e.placeholder) {
-                                    target.placeholder = e.placeholder;
-                                }
-
-                                if (e.childNodesTexts) {
-                                    /** @type {number} */
-                                    let index = 0;
-
-                                    for (let c of target.childNodes) {
-                                        if (
-                                            c.textContent &&
-                                            c.textContent.trim() !== "" &&
-                                            e.childNodesTexts[index]
-                                        ) {
-                                            c.textContent = e.childNodesTexts[index];
-                                            index++;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            /**
-             * @typedef {Object} LangElement
-             * @property {string} id
-             * @property {string} textContent
-             * @property {string} placeholder
-             * @property {string[]} childNodesTexts
-             */
-            function exportTranslationTemplate() {
-                /** @type {LangElement[]} */
-                let elements = [];
-
-                document.querySelectorAll("body *").forEach((e) => {
-                    if (
-                        e.tagName !== "DIV" &&
-                        e.tagName !== "DETAILS" &&
-                        e.tagName !== "TABLE" &&
-                        e.id &&
-                        e.id !== "lang"
-                    ) {
-                        /** @type {LangElement} */
-                        let newEl = {};
-
-                        newEl.id = e.id;
-
-                        if (e.childNodes) {
-                            newEl.childNodesTexts = [];
-
-                            for (let n of e.childNodes) {
-                                if (n.textContent && n.textContent.trim() !== "") {
-                                    newEl.childNodesTexts.push(n.textContent.trim());
-                                }
-                            }
-                        } else {
-                            if (e.textContent) {
-                                newEl.textContent = e.textContent;
-                            }
-                        }
-
-                        if (e.placeholder) {
-                            newEl.placeholder = e.placeholder;
-                        }
-
-                        if (
-                            newEl.textContent ||
-                            newEl.placeholder ||
-                            (newEl.childNodesTexts && newEl.childNodesTexts.length > 0)
-                        ) {
-                            elements.push(newEl);
-                        }
-                    }
-                });
-
-                navigator.clipboard.writeText(JSON.stringify(elements, null, 4));
-                alert("Translation template copied to clipboard!");
-            }
-
-            // Resetting some elements & loading settings
-            loadSettings();
-            generateLanguagesList([
-                {
-                    name: "English [Vitaly Ulyanov]",
-                    langTags: [
-                        "en",
-                        "en-AU",
-                        "en-BZ",
-                        "en-CA",
-                        "en-CB",
-                        "en-GB",
-                        "en-IE",
-                        "en-JM",
-                        "en-NZ",
-                        "en-PH",
-                        "en-TT",
-                        "en-US",
-                        "en-ZA",
-                        "en-ZW",
-                    ],
-                    elements: [
-                        {
-                            id: "exportLang",
-                            childNodesTexts: ["Export texts for translation"],
-                        },
-                        {
-                            id: "start-button",
-                            childNodesTexts: [
-                                "Open",
-                                "Open a text (.txt) or a project (.json)",
-                            ],
-                        },
-                        {
-                            id: "continue-button",
-                            childNodesTexts: ["Continue"],
-                        },
-                        {
-                            id: "save-button",
-                            childNodesTexts: ["Save"],
-                        },
-                        {
-                            id: "settings-button",
-                            childNodesTexts: ["Settings"],
-                        },
-                        {
-                            id: "about-button",
-                            childNodesTexts: ["About"],
-                        },
-                        {
-                            id: "author",
-                            childNodesTexts: [
-                                "Made by ",
-                                "Vitaly Pavlovich Ulyanov (Vital)",
-                                ".",
-                                "Learn more on my GitHub page!",
-                            ],
-                        },
-                        {
-                            id: "main-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "table-source",
-                            childNodesTexts: ["Source"],
-                        },
-                        {
-                            id: "table-target",
-                            childNodesTexts: ["Target"],
-                        },
-                        {
-                            id: "notes",
-                            childNodesTexts: [],
-                            placeholder: "Notes",
-                        },
-                        {
-                            id: "first-page-tooltip",
-                            childNodesTexts: ["First page"],
-                        },
-                        {
-                            id: "prev-page-tooltip",
-                            childNodesTexts: ["Previous page"],
-                        },
-                        {
-                            id: "cur-page-tooltip",
-                            childNodesTexts: ["Current page"],
-                        },
-                        {
-                            id: "next-page-tooltip",
-                            childNodesTexts: ["Next page"],
-                        },
-                        {
-                            id: "last-page-tooltip",
-                            childNodesTexts: ["Last page"],
-                        },
-                        {
-                            id: "saving-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "saving-title",
-                            childNodesTexts: ["Save"],
-                        },
-                        {
-                            id: "save-project",
-                            childNodesTexts: ["Project"],
-                        },
-                        {
-                            id: "save-source",
-                            childNodesTexts: ["Source"],
-                        },
-                        {
-                            id: "save-target",
-                            childNodesTexts: ["Target"],
-                        },
-                        {
-                            id: "save-notes",
-                            childNodesTexts: ["Notes"],
-                        },
-                        {
-                            id: "settings-title",
-                            childNodesTexts: ["Settings"],
-                        },
-                        {
-                            id: "settings-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "sound-settings",
-                            childNodesTexts: ["Sound"],
-                        },
-                        {
-                            id: "volume-label",
-                            childNodesTexts: ["Sound volume"],
-                        },
-                        {
-                            id: "def-sounds-label",
-                            childNodesTexts: ["Default sounds (buttons, inputs, etc.)"],
-                        },
-                        {
-                            id: "colour-settings",
-                            childNodesTexts: ["Colours"],
-                        },
-                        {
-                            id: "load-colours",
-                            childNodesTexts: ["Load colours"],
-                        },
-                        {
-                            id: "save-colours",
-                            childNodesTexts: ["Save colours"],
-                        },
-                        {
-                            id: "--colour-bgr-1-label",
-                            childNodesTexts: ["Background (left)"],
-                        },
-                        {
-                            id: "--colour-bgr-2-label",
-                            childNodesTexts: ["Background (centre)"],
-                        },
-                        {
-                            id: "--colour-bgr-3-label",
-                            childNodesTexts: ["Background (right)"],
-                        },
-                        {
-                            id: "--colour-text-label",
-                            childNodesTexts: ["Text"],
-                        },
-                        {
-                            id: "--colour-button-label",
-                            childNodesTexts: ["Buttons"],
-                        },
-                        {
-                            id: "--colour-border-label",
-                            childNodesTexts: ["Borders"],
-                        },
-                        {
-                            id: "--colour-input-label",
-                            childNodesTexts: ["Inputs"],
-                        },
-                        {
-                            id: "--colour-tooltip-label",
-                            childNodesTexts: ["Tooltip's background"],
-                        },
-                        {
-                            id: "example-tooltip",
-                            childNodesTexts: ["Tooltip example"],
-                        },
-                        {
-                            id: "--colour-hovered-bgr-label",
-                            childNodesTexts: ["Hovered element's background"],
-                        },
-                        {
-                            id: "--colour-hovered-fgr-label",
-                            childNodesTexts: ["Hovered element's text"],
-                        },
-                        {
-                            id: "--colour-hovered-border-label",
-                            childNodesTexts: ["Hovered element's border"],
-                        },
-                        {
-                            id: "--colour-disabled-bgr-label",
-                            childNodesTexts: ["Disabled element's background"],
-                        },
-                        {
-                            id: "--colour-disabled-fgr-label",
-                            childNodesTexts: ["Disabled element's text"],
-                        },
-                        {
-                            id: "example-button",
-                            childNodesTexts: ["Button example"],
-                        },
-                        {
-                            id: "example-disabled-button",
-                            childNodesTexts: ["Disabled button example"],
-                        },
-                        {
-                            id: "example-input",
-                            childNodesTexts: [],
-                            placeholder: "Input example",
-                        },
-                        {
-                            id: "example-buttons",
-                            childNodesTexts: [
-                                "Text example with keyboard buttons (such as ",
-                                "Enter",
-                                ") and programmes' interface buttons (for example, ",
-                                "Apply",
-                                ").",
-                            ],
-                        },
-                        {
-                            id: "example-formatting",
-                            childNodesTexts: [
-                                "Examples of ",
-                                "important",
-                                ", ",
-                                "boldface",
-                                ", ",
-                                "italicised",
-                                ", and ",
-                                "underlined",
-                                " text.",
-                            ],
-                        },
-                        {
-                            id: "example-code",
-                            childNodesTexts: ["Code example"],
-                        },
-                        {
-                            id: "translation-settings",
-                            childNodesTexts: ["Translation"],
-                        },
-                        {
-                            id: "newlines-label",
-                            childNodesTexts: [
-                                "Number of new lines between paragraphs in saved texts",
-                            ],
-                        },
-                        {
-                            id: "default-settings",
-                            childNodesTexts: ["Restore default settings"],
-                        },
-                        {
-                            id: "about-title",
-                            childNodesTexts: ["About"],
-                        },
-                        {
-                            id: "about-back",
-                            childNodesTexts: ["Back"],
-                        },
-                        {
-                            id: "about-p",
-                            childNodesTexts: [
-                                "Named after a Latin word meaning ‘I translate’, ",
-                                "Traduco ",
-                                "is a simple yet powerful translation tool. Open either a plain text file (",
-                                ".txt",
-                                ", for example) to start a translation, or a project (stored in ",
-                                ".json",
-                                ") to continue the work. While translating, you can make and consult notes using the text input field at the top of the screen. At the bottom of the screen, you will find source and target texts' symbol count in the following format: ",
-                                "selection / parapgraph / whole text (proportion of the target text's length to that of the source one in %)",
-                                ". To make the process easier, ",
-                                "Traduco ",
-                                "offers a number of hotkeys:",
-                            ],
-                        },
-                        {
-                            id: "hotkey-0",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "left arrow",
-                                " - select previous cell",
-                            ],
-                        },
-                        {
-                            id: "hotkey-1",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "right arrow",
-                                " - select next cell",
-                            ],
-                        },
-                        {
-                            id: "hotkey-2",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "up arrow",
-                                " - select cell above",
-                            ],
-                        },
-                        {
-                            id: "hotkey-3",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "down arrow",
-                                " - select cell below",
-                            ],
-                        },
-                        {
-                            id: "hotkey-4",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Page Up",
-                                " - go to the previous page",
-                            ],
-                        },
-                        {
-                            id: "hotkey-5",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Page Down",
-                                " - go to the next page",
-                            ],
-                        },
-                        {
-                            id: "hotkey-6",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Home",
-                                " - switch between notes and current cell",
-                            ],
-                        },
-                        {
-                            id: "hotkey-7",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "End",
-                                " - switch between statistics and current cell",
-                            ],
-                        },
-                        {
-                            id: "hotkey-8",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Insert",
-                                " - copy source to target*",
-                            ],
-                        },
-                        {
-                            id: "hotkey-9",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Delete",
-                                " - clear current cell*",
-                            ],
-                        },
-                        {
-                            id: "cell-copy-hint",
-                            childNodesTexts: [
-                                "* The cell's previous content will be copied to the clipboard.",
-                            ],
-                        },
-                    ],
-                },
-                {
-                    name: "Русский [Виталий Ульянов]",
-                    langTags: ["ru", "ru-RU"],
-                    elements: [
-                        {
-                            id: "exportLang",
-                            childNodesTexts: ["Экспорт текстов для перевода"],
-                        },
-                        {
-                            id: "start-button",
-                            childNodesTexts: [
-                                "Открыть",
-                                "Открыть текст (.txt) или проект (.json)",
-                            ],
-                        },
-                        {
-                            id: "continue-button",
-                            childNodesTexts: ["Продолжить"],
-                        },
-                        {
-                            id: "save-button",
-                            childNodesTexts: ["Сохранить"],
-                        },
-                        {
-                            id: "settings-button",
-                            childNodesTexts: ["Настройки"],
-                        },
-                        {
-                            id: "about-button",
-                            childNodesTexts: ["О программе"],
-                        },
-                        {
-                            id: "author",
-                            childNodesTexts: [
-                                "Автор — ",
-                                "Виталий Павлович Ульянов (Vital)",
-                                ".",
-                                "Узнайте больше на GitHub!",
-                            ],
-                        },
-                        {
-                            id: "main-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "table-source",
-                            childNodesTexts: ["Оригинал"],
-                        },
-                        {
-                            id: "table-target",
-                            childNodesTexts: ["Перевод"],
-                        },
-                        {
-                            id: "notes",
-                            childNodesTexts: [],
-                            placeholder: "Заметки",
-                        },
-                        {
-                            id: "first-page-tooltip",
-                            childNodesTexts: ["Первая страница"],
-                        },
-                        {
-                            id: "prev-page-tooltip",
-                            childNodesTexts: ["Предыдущая страница"],
-                        },
-                        {
-                            id: "cur-page-tooltip",
-                            childNodesTexts: ["Текущая страница"],
-                        },
-                        {
-                            id: "next-page-tooltip",
-                            childNodesTexts: ["Следующая страница"],
-                        },
-                        {
-                            id: "last-page-tooltip",
-                            childNodesTexts: ["Последняя страница"],
-                        },
-                        {
-                            id: "saving-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "saving-title",
-                            childNodesTexts: ["Сохранить"],
-                        },
-                        {
-                            id: "save-project",
-                            childNodesTexts: ["Проект"],
-                        },
-                        {
-                            id: "save-source",
-                            childNodesTexts: ["Оригинал"],
-                        },
-                        {
-                            id: "save-target",
-                            childNodesTexts: ["Перевод"],
-                        },
-                        {
-                            id: "save-notes",
-                            childNodesTexts: ["Заметки"],
-                        },
-                        {
-                            id: "settings-title",
-                            childNodesTexts: ["Настройки"],
-                        },
-                        {
-                            id: "settings-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "sound-settings",
-                            childNodesTexts: ["Звук"],
-                        },
-                        {
-                            id: "volume-label",
-                            childNodesTexts: ["Громкость звука"],
-                        },
-                        {
-                            id: "def-sounds-label",
-                            childNodesTexts: [
-                                "Стандартные звуки (кнопки, поля ввода и т.п.)",
-                            ],
-                        },
-                        {
-                            id: "colour-settings",
-                            childNodesTexts: ["Цвета"],
-                        },
-                        {
-                            id: "load-colours",
-                            childNodesTexts: ["Загрузить цвета"],
-                        },
-                        {
-                            id: "save-colours",
-                            childNodesTexts: ["Сохранить цвета"],
-                        },
-                        {
-                            id: "--colour-bgr-1-label",
-                            childNodesTexts: ["Фон (левая часть)"],
-                        },
-                        {
-                            id: "--colour-bgr-2-label",
-                            childNodesTexts: ["Фон (средняя часть)"],
-                        },
-                        {
-                            id: "--colour-bgr-3-label",
-                            childNodesTexts: ["Фон (правая часть)"],
-                        },
-                        {
-                            id: "--colour-text-label",
-                            childNodesTexts: ["Текст"],
-                        },
-                        {
-                            id: "--colour-button-label",
-                            childNodesTexts: ["Кнопки"],
-                        },
-                        {
-                            id: "--colour-border-label",
-                            childNodesTexts: ["Рамки"],
-                        },
-                        {
-                            id: "--colour-input-label",
-                            childNodesTexts: ["Поля ввода"],
-                        },
-                        {
-                            id: "--colour-tooltip-label",
-                            childNodesTexts: ["Фон подсказок"],
-                        },
-                        {
-                            id: "example-tooltip",
-                            childNodesTexts: ["Пример подсказки"],
-                        },
-                        {
-                            id: "--colour-hovered-bgr-label",
-                            childNodesTexts: ["Фон элемента при наведении"],
-                        },
-                        {
-                            id: "--colour-hovered-fgr-label",
-                            childNodesTexts: ["Текст элемента при наведении"],
-                        },
-                        {
-                            id: "--colour-hovered-border-label",
-                            childNodesTexts: ["Рамки элемента при наведении"],
-                        },
-                        {
-                            id: "--colour-disabled-bgr-label",
-                            childNodesTexts: ["Фон отключённого элемента"],
-                        },
-                        {
-                            id: "--colour-disabled-fgr-label",
-                            childNodesTexts: ["Текст отключённого элемента"],
-                        },
-                        {
-                            id: "example-button",
-                            childNodesTexts: ["Пример кнопки"],
-                        },
-                        {
-                            id: "example-disabled-button",
-                            childNodesTexts: ["Пример отключённой кнопки"],
-                        },
-                        {
-                            id: "example-input",
-                            childNodesTexts: [],
-                            placeholder: "Пример поля ввода",
-                        },
-                        {
-                            id: "example-buttons",
-                            childNodesTexts: [
-                                "Пример текста с кнопками клавиатуры (например, ",
-                                "Enter",
-                                ") и\n интерфейса программ (например, ",
-                                "Применить",
-                                ").",
-                            ],
-                        },
-                        {
-                            id: "example-formatting",
-                            childNodesTexts: [
-                                "Пример ",
-                                "важного",
-                                ", ",
-                                "полужирного",
-                                ", ",
-                                "курсивного",
-                                " и ",
-                                "подчёркнутого",
-                                " текста.",
-                            ],
-                        },
-                        {
-                            id: "example-code",
-                            childNodesTexts: ["Пример кода"],
-                        },
-                        {
-                            id: "translation-settings",
-                            childNodesTexts: ["Перевод"],
-                        },
-                        {
-                            id: "newlines-label",
-                            childNodesTexts: [
-                                "Число разрывов строки между абзацами в сохраняемых текстах",
-                            ],
-                        },
-                        {
-                            id: "default-settings",
-                            childNodesTexts: ["Сбросить все настройки"],
-                        },
-                        {
-                            id: "about-title",
-                            childNodesTexts: ["О программе"],
-                        },
-                        {
-                            id: "about-back",
-                            childNodesTexts: ["Назад"],
-                        },
-                        {
-                            id: "about-p",
-                            childNodesTexts: [
-                                "Названная латинским словом, означающим «я перевожу», программа ",
-                                "Traduco ",
-                                "— это простой, но мощный инструмент для перевода. Откройте обычный текстовый файл (например, ",
-                                ".txt",
-                                ") для начала работы или файл проекта (с расширением ",
-                                ".json",
-                                ") для её продолжения. Во время перевода Вы можете вести заметки, пользуясь полем ввода вверху экрана. А в нижней его части находится число знаков в оригинале и переводе в следующем формате: ",
-                                "выделение / абзац / весь текст (соотношение длины перевода и длины оригинала в %)",
-                                ". Для упрощения переводческой работы в ",
-                                "Traduco ",
-                                "доступны следующие сочетания кнопок:",
-                            ],
-                        },
-                        {
-                            id: "hotkey-0",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "стрелка влево",
-                                " — выбрать предыдущую ячейку",
-                            ],
-                        },
-                        {
-                            id: "hotkey-1",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "стрелка вправо",
-                                " — выбрать следующую ячейку",
-                            ],
-                        },
-                        {
-                            id: "hotkey-2",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "стрелка вверх",
-                                " — выбрать ячейку выше",
-                            ],
-                        },
-                        {
-                            id: "hotkey-3",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "стрелка вниз",
-                                " — выбрать ячейку ниже",
-                            ],
-                        },
-                        {
-                            id: "hotkey-4",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Page Up",
-                                " — переход к предыдущей странице",
-                            ],
-                        },
-                        {
-                            id: "hotkey-5",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Page Down",
-                                " — переход к следующей странице",
-                            ],
-                        },
-                        {
-                            id: "hotkey-6",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Home",
-                                " — переключение между заметками и текущей ячейкой",
-                            ],
-                        },
-                        {
-                            id: "hotkey-7",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "End",
-                                " — переключение между статистикой и текущей ячейкой",
-                            ],
-                        },
-                        {
-                            id: "hotkey-8",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Insert",
-                                " — копировать оригинал в перевод*",
-                            ],
-                        },
-                        {
-                            id: "hotkey-9",
-                            childNodesTexts: [
-                                "Alt",
-                                "+",
-                                "Delete",
-                                " — очистить текущую ячейку*",
-                            ],
-                        },
-                        {
-                            id: "cell-copy-hint",
-                            childNodesTexts: [
-                                "* Предыдущий текст ячейки будет скопирован в буфер обмена.",
-                            ],
-                        },
-                    ],
-                },
-            ]);
-        </script>
-    </body>
+      // Resetting some elements & loading settings
+      loadSettings();
+      generateLanguagesList([
+        {
+          name: "English [Vitaly Ulyanov]",
+          langTags: [
+            "en",
+            "en-AU",
+            "en-BZ",
+            "en-CA",
+            "en-CB",
+            "en-GB",
+            "en-IE",
+            "en-JM",
+            "en-NZ",
+            "en-PH",
+            "en-TT",
+            "en-US",
+            "en-ZA",
+            "en-ZW",
+          ],
+          elements: [
+            {
+              id: "exportLang",
+              childNodesTexts: ["Export texts for translation"],
+            },
+            {
+              id: "start-button",
+              childNodesTexts: ["Open", "Open a text (.txt) or a project (.json)"],
+            },
+            {
+              id: "continue-button",
+              childNodesTexts: ["Continue"],
+            },
+            {
+              id: "save-button",
+              childNodesTexts: ["Save"],
+            },
+            {
+              id: "settings-button",
+              childNodesTexts: ["Settings"],
+            },
+            {
+              id: "about-button",
+              childNodesTexts: ["About"],
+            },
+            {
+              id: "author",
+              childNodesTexts: [
+                "Made by ",
+                "Vitaly Pavlovich Ulyanov (Vital)",
+                ".",
+                "Learn more on my GitHub page!",
+              ],
+            },
+            {
+              id: "main-back",
+              childNodesTexts: ["Back"],
+            },
+            {
+              id: "table-source",
+              childNodesTexts: ["Source"],
+            },
+            {
+              id: "table-target",
+              childNodesTexts: ["Target"],
+            },
+            {
+              id: "notes",
+              childNodesTexts: [],
+              placeholder: "Notes",
+            },
+            {
+              id: "first-page-tooltip",
+              childNodesTexts: ["First page"],
+            },
+            {
+              id: "prev-page-tooltip",
+              childNodesTexts: ["Previous page"],
+            },
+            {
+              id: "cur-page-tooltip",
+              childNodesTexts: ["Current page"],
+            },
+            {
+              id: "next-page-tooltip",
+              childNodesTexts: ["Next page"],
+            },
+            {
+              id: "last-page-tooltip",
+              childNodesTexts: ["Last page"],
+            },
+            {
+              id: "saving-back",
+              childNodesTexts: ["Back"],
+            },
+            {
+              id: "saving-title",
+              childNodesTexts: ["Save"],
+            },
+            {
+              id: "save-project",
+              childNodesTexts: ["Project"],
+            },
+            {
+              id: "save-source",
+              childNodesTexts: ["Source"],
+            },
+            {
+              id: "save-target",
+              childNodesTexts: ["Target"],
+            },
+            {
+              id: "save-notes",
+              childNodesTexts: ["Notes"],
+            },
+            {
+              id: "settings-title",
+              childNodesTexts: ["Settings"],
+            },
+            {
+              id: "settings-back",
+              childNodesTexts: ["Back"],
+            },
+            {
+              id: "sound-settings",
+              childNodesTexts: ["Sound"],
+            },
+            {
+              id: "volume-label",
+              childNodesTexts: ["Sound volume"],
+            },
+            {
+              id: "def-sounds-label",
+              childNodesTexts: ["Default sounds (buttons, inputs, etc.)"],
+            },
+            {
+              id: "colour-settings",
+              childNodesTexts: ["Colours"],
+            },
+            {
+              id: "load-colours",
+              childNodesTexts: ["Load colours"],
+            },
+            {
+              id: "save-colours",
+              childNodesTexts: ["Save colours"],
+            },
+            {
+              id: "--colour-bgr-1-label",
+              childNodesTexts: ["Background (left)"],
+            },
+            {
+              id: "--colour-bgr-2-label",
+              childNodesTexts: ["Background (centre)"],
+            },
+            {
+              id: "--colour-bgr-3-label",
+              childNodesTexts: ["Background (right)"],
+            },
+            {
+              id: "--colour-text-label",
+              childNodesTexts: ["Text"],
+            },
+            {
+              id: "--colour-button-label",
+              childNodesTexts: ["Buttons"],
+            },
+            {
+              id: "--colour-border-label",
+              childNodesTexts: ["Borders"],
+            },
+            {
+              id: "--colour-input-label",
+              childNodesTexts: ["Inputs"],
+            },
+            {
+              id: "--colour-tooltip-label",
+              childNodesTexts: ["Tooltip's background"],
+            },
+            {
+              id: "example-tooltip",
+              childNodesTexts: ["Tooltip example"],
+            },
+            {
+              id: "--colour-hovered-bgr-label",
+              childNodesTexts: ["Hovered element's background"],
+            },
+            {
+              id: "--colour-hovered-fgr-label",
+              childNodesTexts: ["Hovered element's text"],
+            },
+            {
+              id: "--colour-hovered-border-label",
+              childNodesTexts: ["Hovered element's border"],
+            },
+            {
+              id: "--colour-disabled-bgr-label",
+              childNodesTexts: ["Disabled element's background"],
+            },
+            {
+              id: "--colour-disabled-fgr-label",
+              childNodesTexts: ["Disabled element's text"],
+            },
+            {
+              id: "example-button",
+              childNodesTexts: ["Button example"],
+            },
+            {
+              id: "example-disabled-button",
+              childNodesTexts: ["Disabled button example"],
+            },
+            {
+              id: "example-input",
+              childNodesTexts: [],
+              placeholder: "Input example",
+            },
+            {
+              id: "example-buttons",
+              childNodesTexts: [
+                "Text example with keyboard buttons (such as ",
+                "Enter",
+                ") and programmes' interface buttons (for example, ",
+                "Apply",
+                ").",
+              ],
+            },
+            {
+              id: "example-formatting",
+              childNodesTexts: [
+                "Examples of ",
+                "important",
+                ", ",
+                "boldface",
+                ", ",
+                "italicised",
+                ", and ",
+                "underlined",
+                " text.",
+              ],
+            },
+            {
+              id: "example-code",
+              childNodesTexts: ["Code example"],
+            },
+            {
+              id: "translation-settings",
+              childNodesTexts: ["Translation"],
+            },
+            {
+              id: "newlines-label",
+              childNodesTexts: ["Number of new lines between paragraphs in saved texts"],
+            },
+            {
+              id: "default-settings",
+              childNodesTexts: ["Restore default settings"],
+            },
+            {
+              id: "about-title",
+              childNodesTexts: ["About"],
+            },
+            {
+              id: "about-back",
+              childNodesTexts: ["Back"],
+            },
+            {
+              id: "about-p",
+              childNodesTexts: [
+                "Named after a Latin word meaning ‘I translate’, ",
+                "Traduco ",
+                "is a simple yet powerful translation tool. Open either a plain text file (",
+                ".txt",
+                ", for example) to start a translation, or a project (stored in ",
+                ".json",
+                ") to continue the work. While translating, you can make and consult notes using the text input field at the top of the screen. At the bottom of the screen, you will find source and target texts' symbol count in the following format: ",
+                "selection / parapgraph / whole text (proportion of the target text's length to that of the source one in %)",
+                ". To make the process easier, ",
+                "Traduco ",
+                "offers a number of hotkeys:",
+              ],
+            },
+            {
+              id: "hotkey-0",
+              childNodesTexts: ["Alt", "+", "left arrow", " - select previous cell"],
+            },
+            {
+              id: "hotkey-1",
+              childNodesTexts: ["Alt", "+", "right arrow", " - select next cell"],
+            },
+            {
+              id: "hotkey-2",
+              childNodesTexts: ["Alt", "+", "up arrow", " - select cell above"],
+            },
+            {
+              id: "hotkey-3",
+              childNodesTexts: ["Alt", "+", "down arrow", " - select cell below"],
+            },
+            {
+              id: "hotkey-4",
+              childNodesTexts: ["Alt", "+", "Page Up", " - go to the previous page"],
+            },
+            {
+              id: "hotkey-5",
+              childNodesTexts: ["Alt", "+", "Page Down", " - go to the next page"],
+            },
+            {
+              id: "hotkey-6",
+              childNodesTexts: ["Alt", "+", "Home", " - switch between notes and current cell"],
+            },
+            {
+              id: "hotkey-7",
+              childNodesTexts: ["Alt", "+", "End", " - switch between statistics and current cell"],
+            },
+            {
+              id: "hotkey-8",
+              childNodesTexts: ["Alt", "+", "Insert", " - copy source to target*"],
+            },
+            {
+              id: "hotkey-9",
+              childNodesTexts: ["Alt", "+", "Delete", " - clear current cell*"],
+            },
+            {
+              id: "cell-copy-hint",
+              childNodesTexts: ["* The cell's previous content will be copied to the clipboard."],
+            },
+          ],
+        },
+        {
+          name: "Русский [Виталий Ульянов]",
+          langTags: ["ru", "ru-RU"],
+          elements: [
+            {
+              id: "exportLang",
+              childNodesTexts: ["Экспорт текстов для перевода"],
+            },
+            {
+              id: "start-button",
+              childNodesTexts: ["Открыть", "Открыть текст (.txt) или проект (.json)"],
+            },
+            {
+              id: "continue-button",
+              childNodesTexts: ["Продолжить"],
+            },
+            {
+              id: "save-button",
+              childNodesTexts: ["Сохранить"],
+            },
+            {
+              id: "settings-button",
+              childNodesTexts: ["Настройки"],
+            },
+            {
+              id: "about-button",
+              childNodesTexts: ["О программе"],
+            },
+            {
+              id: "author",
+              childNodesTexts: [
+                "Автор — ",
+                "Виталий Павлович Ульянов (Vital)",
+                ".",
+                "Узнайте больше на GitHub!",
+              ],
+            },
+            {
+              id: "main-back",
+              childNodesTexts: ["Назад"],
+            },
+            {
+              id: "table-source",
+              childNodesTexts: ["Оригинал"],
+            },
+            {
+              id: "table-target",
+              childNodesTexts: ["Перевод"],
+            },
+            {
+              id: "notes",
+              childNodesTexts: [],
+              placeholder: "Заметки",
+            },
+            {
+              id: "first-page-tooltip",
+              childNodesTexts: ["Первая страница"],
+            },
+            {
+              id: "prev-page-tooltip",
+              childNodesTexts: ["Предыдущая страница"],
+            },
+            {
+              id: "cur-page-tooltip",
+              childNodesTexts: ["Текущая страница"],
+            },
+            {
+              id: "next-page-tooltip",
+              childNodesTexts: ["Следующая страница"],
+            },
+            {
+              id: "last-page-tooltip",
+              childNodesTexts: ["Последняя страница"],
+            },
+            {
+              id: "saving-back",
+              childNodesTexts: ["Назад"],
+            },
+            {
+              id: "saving-title",
+              childNodesTexts: ["Сохранить"],
+            },
+            {
+              id: "save-project",
+              childNodesTexts: ["Проект"],
+            },
+            {
+              id: "save-source",
+              childNodesTexts: ["Оригинал"],
+            },
+            {
+              id: "save-target",
+              childNodesTexts: ["Перевод"],
+            },
+            {
+              id: "save-notes",
+              childNodesTexts: ["Заметки"],
+            },
+            {
+              id: "settings-title",
+              childNodesTexts: ["Настройки"],
+            },
+            {
+              id: "settings-back",
+              childNodesTexts: ["Назад"],
+            },
+            {
+              id: "sound-settings",
+              childNodesTexts: ["Звук"],
+            },
+            {
+              id: "volume-label",
+              childNodesTexts: ["Громкость звука"],
+            },
+            {
+              id: "def-sounds-label",
+              childNodesTexts: ["Стандартные звуки (кнопки, поля ввода и т.п.)"],
+            },
+            {
+              id: "colour-settings",
+              childNodesTexts: ["Цвета"],
+            },
+            {
+              id: "load-colours",
+              childNodesTexts: ["Загрузить цвета"],
+            },
+            {
+              id: "save-colours",
+              childNodesTexts: ["Сохранить цвета"],
+            },
+            {
+              id: "--colour-bgr-1-label",
+              childNodesTexts: ["Фон (левая часть)"],
+            },
+            {
+              id: "--colour-bgr-2-label",
+              childNodesTexts: ["Фон (средняя часть)"],
+            },
+            {
+              id: "--colour-bgr-3-label",
+              childNodesTexts: ["Фон (правая часть)"],
+            },
+            {
+              id: "--colour-text-label",
+              childNodesTexts: ["Текст"],
+            },
+            {
+              id: "--colour-button-label",
+              childNodesTexts: ["Кнопки"],
+            },
+            {
+              id: "--colour-border-label",
+              childNodesTexts: ["Рамки"],
+            },
+            {
+              id: "--colour-input-label",
+              childNodesTexts: ["Поля ввода"],
+            },
+            {
+              id: "--colour-tooltip-label",
+              childNodesTexts: ["Фон подсказок"],
+            },
+            {
+              id: "example-tooltip",
+              childNodesTexts: ["Пример подсказки"],
+            },
+            {
+              id: "--colour-hovered-bgr-label",
+              childNodesTexts: ["Фон элемента при наведении"],
+            },
+            {
+              id: "--colour-hovered-fgr-label",
+              childNodesTexts: ["Текст элемента при наведении"],
+            },
+            {
+              id: "--colour-hovered-border-label",
+              childNodesTexts: ["Рамки элемента при наведении"],
+            },
+            {
+              id: "--colour-disabled-bgr-label",
+              childNodesTexts: ["Фон отключённого элемента"],
+            },
+            {
+              id: "--colour-disabled-fgr-label",
+              childNodesTexts: ["Текст отключённого элемента"],
+            },
+            {
+              id: "example-button",
+              childNodesTexts: ["Пример кнопки"],
+            },
+            {
+              id: "example-disabled-button",
+              childNodesTexts: ["Пример отключённой кнопки"],
+            },
+            {
+              id: "example-input",
+              childNodesTexts: [],
+              placeholder: "Пример поля ввода",
+            },
+            {
+              id: "example-buttons",
+              childNodesTexts: [
+                "Пример текста с кнопками клавиатуры (например, ",
+                "Enter",
+                ") и\n интерфейса программ (например, ",
+                "Применить",
+                ").",
+              ],
+            },
+            {
+              id: "example-formatting",
+              childNodesTexts: [
+                "Пример ",
+                "важного",
+                ", ",
+                "полужирного",
+                ", ",
+                "курсивного",
+                " и ",
+                "подчёркнутого",
+                " текста.",
+              ],
+            },
+            {
+              id: "example-code",
+              childNodesTexts: ["Пример кода"],
+            },
+            {
+              id: "translation-settings",
+              childNodesTexts: ["Перевод"],
+            },
+            {
+              id: "newlines-label",
+              childNodesTexts: ["Число разрывов строки между абзацами в сохраняемых текстах"],
+            },
+            {
+              id: "default-settings",
+              childNodesTexts: ["Сбросить все настройки"],
+            },
+            {
+              id: "about-title",
+              childNodesTexts: ["О программе"],
+            },
+            {
+              id: "about-back",
+              childNodesTexts: ["Назад"],
+            },
+            {
+              id: "about-p",
+              childNodesTexts: [
+                "Названная латинским словом, означающим «я перевожу», программа ",
+                "Traduco ",
+                "— это простой, но мощный инструмент для перевода. Откройте обычный текстовый файл (например, ",
+                ".txt",
+                ") для начала работы или файл проекта (с расширением ",
+                ".json",
+                ") для её продолжения. Во время перевода Вы можете вести заметки, пользуясь полем ввода вверху экрана. А в нижней его части находится число знаков в оригинале и переводе в следующем формате: ",
+                "выделение / абзац / весь текст (соотношение длины перевода и длины оригинала в %)",
+                ". Для упрощения переводческой работы в ",
+                "Traduco ",
+                "доступны следующие сочетания кнопок:",
+              ],
+            },
+            {
+              id: "hotkey-0",
+              childNodesTexts: ["Alt", "+", "стрелка влево", " — выбрать предыдущую ячейку"],
+            },
+            {
+              id: "hotkey-1",
+              childNodesTexts: ["Alt", "+", "стрелка вправо", " — выбрать следующую ячейку"],
+            },
+            {
+              id: "hotkey-2",
+              childNodesTexts: ["Alt", "+", "стрелка вверх", " — выбрать ячейку выше"],
+            },
+            {
+              id: "hotkey-3",
+              childNodesTexts: ["Alt", "+", "стрелка вниз", " — выбрать ячейку ниже"],
+            },
+            {
+              id: "hotkey-4",
+              childNodesTexts: ["Alt", "+", "Page Up", " — переход к предыдущей странице"],
+            },
+            {
+              id: "hotkey-5",
+              childNodesTexts: ["Alt", "+", "Page Down", " — переход к следующей странице"],
+            },
+            {
+              id: "hotkey-6",
+              childNodesTexts: [
+                "Alt",
+                "+",
+                "Home",
+                " — переключение между заметками и текущей ячейкой",
+              ],
+            },
+            {
+              id: "hotkey-7",
+              childNodesTexts: [
+                "Alt",
+                "+",
+                "End",
+                " — переключение между статистикой и текущей ячейкой",
+              ],
+            },
+            {
+              id: "hotkey-8",
+              childNodesTexts: ["Alt", "+", "Insert", " — копировать оригинал в перевод*"],
+            },
+            {
+              id: "hotkey-9",
+              childNodesTexts: ["Alt", "+", "Delete", " — очистить текущую ячейку*"],
+            },
+            {
+              id: "cell-copy-hint",
+              childNodesTexts: ["* Предыдущий текст ячейки будет скопирован в буфер обмена."],
+            },
+          ],
+        },
+      ]);
+    </script>
+  </body>
 </html>
